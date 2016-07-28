@@ -25,6 +25,7 @@ public class TestFunTvFilm {
     @Test
     public void testPlayFilm() {
 
+        // back to launcher home
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
         mDevice.pressHome();
