@@ -26,7 +26,7 @@ import java.util.Random;
 /**
  * Created by zhengjin on 2016/7/28.
  *
- * Include the test cases for film.
+ * Test playing film video.
  */
 @RunWith(AndroidJUnit4.class)
 public class TestFunTvFilm {
@@ -52,11 +52,6 @@ public class TestFunTvFilm {
     }
 
     @Test
-    public void testDemo() {
-        // for test
-    }
-
-    @Test
     public void testPlayFilm() {
         UiObject2 tabText = this.getTabFromLauncherHomeByText(mDevice, "电影");
         this.openTabFromLauncherHomeByText(mDevice, tabText);
@@ -66,12 +61,13 @@ public class TestFunTvFilm {
         this.verifyPauseVideoPlayer(mDevice, filmTitle);
 
         int replayTimes = 3;
-        int playTime = 60;
+        int playTime = 3 * 60;
         for (int i = 0; i < replayTimes; i++) {
             this.verifyFilmPlaying(mDevice, playTime);
         }
 
-        this.takeScreenCapture();
+        this.resetFilmProcess(mDevice);
+        this.verifyPlayerProcessReset(mDevice);
     }
 
     private UiObject2 getTabFromLauncherHomeByText(UiDevice device, String tabText) {
@@ -84,7 +80,7 @@ public class TestFunTvFilm {
                 retTitle = title;
             }
         }
-        Assert.assertNotNull(String.format("Get tab: %s.", retTitle.getText()), retTitle);
+        Assert.assertNotNull(retTitle);
 
         return retTitle;
     }
@@ -175,11 +171,18 @@ public class TestFunTvFilm {
         assertAndCaptureForFailed(ret, "Verify playing film.");
     }
 
-    private void assertAndCaptureForFailed(boolean ret, String message) {
-        if (!ret) {
-            this.takeScreenCapture();
-        }
-        Assert.assertTrue(message, ret);
+    private void verifyPlayerProcessReset(UiDevice device) {
+        // pause player
+        device.pressEnter();
+        systemWait(SHORT_WAIT);
+
+        String curTime = device.findObject(By.res("com.bestv.ott:id/time_current")).getText();
+        Log.d(TAG, String.format("The player process is reset to %s", curTime));
+
+        int timeAfterReset = 30;
+        int playTime = this.formatFilmPlayTime(curTime);
+        this.assertAndCaptureForFailed(
+                (playTime <= timeAfterReset), "Verify player process is reset.");
     }
 
     private void backToLauncherHome(UiDevice device) {
@@ -189,6 +192,25 @@ public class TestFunTvFilm {
 
         boolean ret = device.wait(Until.hasObject(By.pkg("com.bestv.ott").depth(0)), WAIT);
         Assert.assertTrue("Verify back to launcher home.", ret);
+    }
+
+    private void resetFilmProcess(UiDevice device) {
+        // play film
+        device.pressEnter();
+        this.systemWait(SHORT_WAIT);
+
+        int moveTimes = 60;
+        for (int i = 0; i <= moveTimes; i++) {
+            device.pressDPadLeft();
+            SystemClock.sleep(500);
+        }
+    }
+
+    private void assertAndCaptureForFailed(boolean ret, String message) {
+        if (!ret) {
+            this.takeScreenCapture();
+        }
+        Assert.assertTrue(message, ret);
     }
 
     private int formatFilmPlayTime(String paramString) {
@@ -216,14 +238,14 @@ public class TestFunTvFilm {
         return Integer.parseInt(paramString);
     }
 
-    public void systemWait(int paramInt) {
+    private void systemWait(int paramInt) {
         SystemClock.sleep(paramInt * 1000);
     }
 
     private void takeScreenCapture() {
         File localFile = new File("/data/local/tmp/captures");
         if (!localFile.exists())
-            localFile.mkdirs();
+            Assert.assertTrue(localFile.mkdirs());
 
         String path = String.format("%s/capture_%s.png", CAPTURES_PATH, this.getCurrentTime());
 
