@@ -2,10 +2,13 @@ package tv.fun.appsautotest.common;
 
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.support.test.uiautomator.UiWatcher;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -24,7 +27,7 @@ public class Common {
 	public final int BY_TEXT = 1;
 	public final int BY_DESC = 2;
 	public final int BY_RESID = 3;
-	
+
 	public UiDevice getDevice(){
 		return device;
 	}
@@ -525,4 +528,26 @@ public class Common {
         Funcs.Print("Exec finished!");
         return sRes;
     }
+
+    public void setRefreshFailWatcher(){
+        device.registerWatcher("BufferRefreshFailWatcher", new BufferRefreshFailWatcher());
+    }
+
+    private class BufferRefreshFailWatcher implements UiWatcher {
+        @Override
+        public boolean checkForCondition() {
+            Funcs.Print("Invoke BufferRefreshFailedWatcher.checkForCondition().");
+
+            UiObject2 errorText = device.findObject(By.textContains("缓冲失败"));
+            if (errorText != null) {
+                // if buffer refresh error occur, stop testing process
+                Funcs.Print("Found error(Buffer Refresh Failed), force exit testing process.");
+                int existCode = 0;
+                System.exit(existCode);
+                return true;
+            }
+            return false;
+        }
+    }
 }
+

@@ -22,7 +22,7 @@ public class TestEnterPage {
 
     @Test
     public void enterFilmPage(){
-        Funcs.Print("==============case: enter tv play page=================");
+        Funcs.Print("==============case: enter film page=================");
         com.Navigation(new int[]{-1, 2, 4});
         com.Sleep(iWaitSec);
     }
@@ -42,7 +42,7 @@ public class TestEnterPage {
 
     @Test
     public void enterChildPage(){
-        Funcs.Print("==============case: enter tv play page=================");
+        Funcs.Print("==============case: enter children page=================");
         com.Navigation(new int[]{-1, 2, 1, 1, 4});
         com.Sleep(iWaitSec);
     }

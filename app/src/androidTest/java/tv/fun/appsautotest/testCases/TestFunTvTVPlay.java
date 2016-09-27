@@ -3,6 +3,7 @@ package tv.fun.appsautotest.testCases;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,6 +27,11 @@ public class TestFunTvTVPlay {
     String sDetailTitleID = "com.bestv.ott:id/detail_title";
     String sEpisodeID = "com.bestv.ott:id/tv_cell";
     //String sEpisodeTipID = "com.bestv.ott:id/detail_tip_button";
+
+    @Before
+    public void setUp() {
+        com.setRefreshFailWatcher();
+    }
 
     @Test
     public void collectOnePlay(){
@@ -220,6 +226,7 @@ public class TestFunTvTVPlay {
     public void test(){
 //        String[] cmd = {"/system/bin/sh", "-c", "/data/local/tmp/sh/right_long_press.sh 1"};
 //        com.executeCommand(cmd);
-        Funcs.Print("T: " + com.isUiObjExists(com.BY_TEXT, "缓冲失败，请检查网络设置后重新播放", ""));
+//        Funcs.Print("T: " + com.isUiObjExists(com.BY_TEXT, "缓冲失败，请检查网络设置后重新播放", ""));
+        exitPlaying("1:00");
     }
 }
