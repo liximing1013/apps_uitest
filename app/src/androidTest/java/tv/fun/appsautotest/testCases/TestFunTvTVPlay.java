@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import tv.fun.appassisttest.common.Funcs;
-import tv.fun.appsautotest.common.Common;
+import tv.fun.appsautotest.common.TvCommon;
 
 /**
  * Created by xuzx on 2016/8/10.
@@ -19,7 +19,7 @@ import tv.fun.appsautotest.common.Common;
 public class TestFunTvTVPlay {
     int iOneSecond = 1000;
     int iWaitSec = 8 * iOneSecond;
-    Common com = new Common();
+    TvCommon com = new TvCommon();
     TestEnterPage enterPage = new TestEnterPage();
     String sPauseBtnID = "com.bestv.ott:id/control_panel_pause_layout_btn";
     String sPlayedTimeID = "com.bestv.ott:id/time_current";
@@ -92,12 +92,14 @@ public class TestFunTvTVPlay {
 
     @Test
     public void playOnePlay(){
-        Funcs.Print("==============case: play one play=================");
+        Funcs.Print("==============case: play one play START=================");
         enterPage.enterTVPlayPage();
+        com.Sleep(iWaitSec);
         com.Left();
-        com.Sleep(iOneSecond * 5);
+        com.Sleep(iOneSecond * 10);
         com.Down();
-        com.Navigation(new int[]{2, 1, 1, 1, 4});
+        //com.Navigation(new int[]{2, 1, 1, 1, 4});
+        com.Navigation("21114");
 
         com.waitTillOccur(com.BY_TEXT, "收藏", 0, 10);
         String sTitle = com.getUiObjText(com.getUiObject(com.BY_RESID, sDetailTitleID, 0));
@@ -205,7 +207,7 @@ public class TestFunTvTVPlay {
         Funcs.Print("==============case: play one play some minutes=================");
         playOnePlay();
         com.Sleep(iWaitSec);
-        exitPlaying("5:00");
+        exitPlaying("1:00");
     }
 
     @Test
@@ -218,7 +220,7 @@ public class TestFunTvTVPlay {
             chooseNextEpisode(1);
             com.Enter();
             com.Sleep(iOneSecond * 5);
-            exitPlaying("1:00");
+            exitPlaying("5:00");
         }
     }
 

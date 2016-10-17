@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiWatcher;
 
 import tv.fun.appassisttest.common.Funcs;
 
+
 /**
  * Created by xuzx on 2016/10/14.
  * 通用函数，手机或者电视上都可以使用的函数就写在这里
