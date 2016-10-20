@@ -3,6 +3,9 @@
     package="tv.fun.appsautotest"
     android:versionCode="1"
     android:versionName="Service_1.0">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <uses-sdk android:minSdkVersion="10" />
 

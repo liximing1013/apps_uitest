@@ -1,5 +1,6 @@
 package tv.fun.common;
 
+import android.os.Environment;
 import android.util.Log;
 
 import junit.framework.Assert;
@@ -81,7 +82,9 @@ public class Utils {
 	}
 
     public static void Log(String sFileName, String sLogText) {
-        Log("/data/local/tmp/log/", sFileName, sLogText);
+        String sPath = Environment.getExternalStorageDirectory().getPath();
+        Print(sPath);
+        Log(sPath + "/autotest/log/", sFileName, sLogText);
     }
 	public static void Log(String sFolderName, String sFileName, String sLogText) {
 		String sHead = String.format("[%s][%s]", getCurDate(), getCurTime());
