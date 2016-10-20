@@ -52,11 +52,13 @@ public class Utils {
 		Log.d(sTAG, sHead + String.format(sFormat, args));
 	}
 	
-	/*if iSeed exists, the random is pseudo random
+	/* random int range: [0, iMax)
+	if iSeed exists, the random is pseudo random
 	everytime you run this code, you will get a same result
 	so you should choose which is your purpose
 		int iSeed = 10;
-		Random ra = new Random(iSeed); */
+		Random ra = new Random(iSeed);
+	*/
 	public static int randInt(int iMax){
 		Random ra = new Random();
 		return ra.nextInt(iMax);
@@ -100,12 +102,19 @@ public class Utils {
 		Log("runtime_log.log", sContent);
 		switch (iLevel) {
 		case 0:
-			Log("runtime_log_error.log", sContent + "  ToT");
+			Log("runtime_log_error.log", "[ERROR]" + sContent + "  ToT");
 			break;
 		default:
 			break;
 		}
 	}
+
+    public static String getMethodName(int iLevel) {
+        StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+        StackTraceElement e = stacktrace[iLevel];
+        String methodName = e.getMethodName();
+        return methodName;
+    }
 
     // 条件判断结果为false时记录脚本的error log
     // sErrorMsg  : error log
@@ -114,6 +123,17 @@ public class Utils {
         if(!bCondition){
             writeLogs(sErrorMsg, 0);
             Assert.assertTrue(sErrorMsg, bCondition);
+        }
+    }
+
+    public static void writeCaseLog(String sCaseName, String sOK, String sError, boolean bCondition){
+        if(!bCondition){
+            String sErrorText = String.format("[%s] %s", sCaseName, sError);
+            Utils.funAssert(sErrorText, bCondition);
+        }
+        else{
+            String sOKText = String.format("[%s] %s", sCaseName, sOK);
+            Utils.writeLogs(sOKText);
         }
     }
 }

@@ -79,7 +79,8 @@ public class Common {
     }
 
     public void Enter(){
-        device.pressEnter();
+        // device.pressEnter();
+        device.pressDPadCenter();
         Sleep(iDelay * 4);
     }
 

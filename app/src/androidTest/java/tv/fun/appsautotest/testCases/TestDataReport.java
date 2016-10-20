@@ -96,6 +96,7 @@ public class TestDataReport {
         m_com.Down();
         m_com.Right(7); // 推荐-专题（专题的位置编号：7 可能会发生变化）
         m_com.Enter();
+        m_com.Sleep(m_iOneSecond * 4);
         m_sObjId = Infos.S_SPECIAL_PLAYER; // 专题播放器
         m_uiObj = m_com.getUiObjByResId(m_sObjId);
         Utils.funAssert("进入[视频-电影-推荐]7号位的专题失败", m_uiObj.exists());
@@ -105,18 +106,19 @@ public class TestDataReport {
 
     @Test
     public void case05_06_playHistoryPlay(){
-        Utils.Print("play case5 6 播放视频历史记录");
+        Utils.Print("play case5 6 播放视频历史记录 START");
         m_tfttp.playOnePlay(); // case5
         m_com.Sleep(m_iWaitSec);
         m_com.Back(2);
         m_enterPage.enterHistoryPage(); // case6
         // com.Down(); 2.3版本开始不需要按下方向键
         m_com.Enter();
-        m_com.Sleep(m_iOneSecond * 2);
+        m_com.Sleep(m_iOneSecond * 8);
         m_com.Enter();
         m_com.Sleep(m_iWaitSec);
         m_com.Enter();
         m_com.isUiObjExists(m_com.BY_RESID, Infos.S_CONTROL_PAUSE_BTN, "没有开始播放观看记录！");
+        Utils.Print("play case5 6 播放视频历史记录 START");
     }
 
     @Test
@@ -125,7 +127,7 @@ public class TestDataReport {
         m_enterPage.enterFilmPage();
         m_com.Down();
         m_com.Enter();
-        m_com.Sleep(m_iOneSecond * 4);
+        m_com.Sleep(m_iOneSecond * 8);
         m_com.Enter();
         m_com.isUiObjExists(m_com.BY_RESID, Infos.S_CONTROL_PAUSE_BTN,
                 "没有播放电影-推荐里的大图视频");
@@ -224,7 +226,7 @@ public class TestDataReport {
     public void case17_playNewsInClassification(){
         Utils.Print("play case17 播放“视频分类”里的新闻");
         m_enterPage.enterVideoClassificationPage();
-        m_com.Right(3); // 新闻的位置会变化
+        m_com.Right(2); // 新闻的位置会变化
         m_com.Enter();
         m_com.Sleep(m_iWaitSec);
     }
@@ -362,7 +364,7 @@ public class TestDataReport {
         m_com.Sleep(m_iWaitSec);
     }
 
-    @Test
+    //@Test
     public void testUntilFail(){
         m_com.Navigation("hh99991249999");
         m_com.Navigation("11111499991249904");
