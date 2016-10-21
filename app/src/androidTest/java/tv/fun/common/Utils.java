@@ -89,11 +89,11 @@ public class Utils {
 	public static void Log(String sFolderName, String sFileName, String sLogText) {
 		String sHead = String.format("[%s][%s]", getCurDate(), getCurTime());
 		makeDir(sFolderName);
-		writeLine(String.format("%s%s_%s", sFolderName, sFileName, getCurDate()), sHead + sLogText + "\r\n", true);
+		writeLine(String.format("%s%s_%s.log", sFolderName, sFileName, getCurDate()), sHead + sLogText + "\r\n", true);
 	}
 
     public static void writeLogs(String sContent){
-        writeLogs("runtime_log.log", sContent);
+        writeLogs("runtime_log", sContent);
     }
 	public static void writeLogs(String sLogName, String sContent){
 		Print(sContent);
@@ -102,10 +102,10 @@ public class Utils {
 	
 	public static void writeLogs(String sContent, int iLevel){
 		Print(sContent);
-		Log("runtime_log.log", sContent);
+		Log("runtime_log", sContent);
 		switch (iLevel) {
 		case 0:
-			Log("runtime_log_error.log", "[ERROR]" + sContent + "  ToT");
+			Log("runtime_log_error", "[ERROR]" + sContent + "  ToT");
 			break;
 		default:
 			break;

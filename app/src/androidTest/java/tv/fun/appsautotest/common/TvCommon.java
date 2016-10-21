@@ -1,8 +1,12 @@
 package tv.fun.appsautotest.common;
 
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.support.test.uiautomator.UiWatcher;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -13,7 +17,8 @@ import tv.fun.common.Utils;
 import tv.fun.common.Common;
 
 public class TvCommon extends Common{
-    int m_iDelay = 1000;
+    private int m_iDelay = 1000;
+    private UiDevice device = getDevice();
 //	public UiObject getUiObjByResId(String resId){
 //		UiObject uiObj = null;
 //		try {
@@ -78,7 +83,7 @@ public class TvCommon extends Common{
 //}
 
     public boolean isUiObjExists(String sResId){
-        UiObject uiObj = null;
+        UiObject uiObj;
         uiObj = getUiObjByResId(sResId);  // 根据id查找obj
         return uiObj.exists();
     }
@@ -90,7 +95,7 @@ public class TvCommon extends Common{
             exists = false;
             if(!sError.equalsIgnoreCase("")){
                 Utils.writeLogs(sError, ERR_CODE);
-                Utils.funAssert(sError, exists);
+                Utils.funAssert(sError, false);
             }
         }
         return exists;
@@ -305,7 +310,11 @@ public class TvCommon extends Common{
         return bGone;
 	}
 
-    // h - home
+    // 根据字符串来进行对应的遥控操作，eg：Navigation("h901234995");
+    // 上面的例子表示：按home，延时1秒后，按上、右、下、左方向键，按确定键，延时2秒后按返回键
+    // 0 1 2 3 - up right down left
+    // h 4 5 - home enter back
+    // 9 - 表示延时1秒
     public void Navigation(String sPath){
         int iLen = sPath.length();
         int[] liPath = new int[iLen];
@@ -320,6 +329,12 @@ public class TvCommon extends Common{
             }
         }
         Navigation(liPath);
+    }
+
+    // 操作完成后，Sleep iWaitSec秒
+    public void Navigation(String sPath, int iWaiSec){
+        Navigation(sPath);
+        Sleep(iWaiSec);
     }
 
     // 0 1 2 3 - up right down left
@@ -357,37 +372,26 @@ public class TvCommon extends Common{
         }
     }
 
-	public void Navigation(int[] liPath, int iWaiSec){
-		int iDirect;
-		for(int i = 0; i < liPath.length; ++i){
-			iDirect = liPath[i];
-			if(-1 == iDirect){
-				Home();
-			}
-			else if(0 == iDirect){
-				Up();
-			}
-			else if(1 == iDirect){
-				Right();
-			}
-			else if(2 == iDirect){
-				Down();
-			}
-			else if(3 == iDirect){
-				Left();
-			}
-			else if(4 == iDirect){
-				Enter();
-			}
-			else if(5 == iDirect){
-				Back();
-			}
-            else if(9 == iDirect){
-                Sleep(m_iDelay);
+    public void setRefreshFailWatcher(){
+        device.registerWatcher("BufferRefreshFailWatcher", new BufferRefreshFailWatcher());
+    }
+
+    private class BufferRefreshFailWatcher implements UiWatcher {
+        @Override
+        public boolean checkForCondition() {
+            Utils.Print("Invoke BufferRefreshFailedWatcher.checkForCondition().");
+
+            UiObject2 errorText = device.findObject(By.textContains("缓冲失败"));
+            if (errorText != null) {
+                // if buffer refresh error occur, stop testing process
+                Utils.Print("Found error(Buffer Refresh Failed), force exit testing process.");
+                int existCode = 0;
+                System.exit(existCode);
+                return true;
             }
-            Sleep(iWaiSec);
-		}
-	}
+            return false;
+        }
+    }
 
     public String executeCommand(String[] cmd) {
         Utils.Print("Exec started!");

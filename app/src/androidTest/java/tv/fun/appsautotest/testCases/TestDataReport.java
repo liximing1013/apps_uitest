@@ -364,11 +364,11 @@ public class TestDataReport {
         m_com.Sleep(m_iWaitSec);
     }
 
-    //@Test
+//    @Test
     public void testUntilFail(){
-        m_com.Navigation("hh99991249999");
-        m_com.Navigation("11111499991249904");
+//        m_com.Navigation("11111499991249904");
 //        while(true) {
+            m_com.Navigation("hh99091929191900");
 //            clickDataReport();
 //        }
     }

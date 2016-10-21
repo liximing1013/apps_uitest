@@ -2,12 +2,7 @@ package tv.fun.common;
 
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject2;
-import android.support.test.uiautomator.UiWatcher;
-
-import tv.fun.appassisttest.common.Funcs;
 
 
 /**
@@ -131,26 +126,5 @@ public class Common {
 
     public int Width(){
         return device.getDisplayWidth();
-    }
-
-    public void setRefreshFailWatcher(){
-        device.registerWatcher("BufferRefreshFailWatcher", new BufferRefreshFailWatcher());
-    }
-
-    private class BufferRefreshFailWatcher implements UiWatcher {
-        @Override
-        public boolean checkForCondition() {
-            Funcs.Print("Invoke BufferRefreshFailedWatcher.checkForCondition().");
-
-            UiObject2 errorText = device.findObject(By.textContains("缓冲失败"));
-            if (errorText != null) {
-                // if buffer refresh error occur, stop testing process
-                Funcs.Print("Found error(Buffer Refresh Failed), force exit testing process.");
-                int existCode = 0;
-                System.exit(existCode);
-                return true;
-            }
-            return false;
-        }
     }
 }

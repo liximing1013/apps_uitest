@@ -36,6 +36,7 @@ public class TestEnterPage {
         //int iSeconds = 1;
         //boolean bEnterHome = com.waitTillOccur(com.BY_TEXT, "播放记录", 0, iWaitSec);
         com.Home(2);
+
         m_sExpect = "播放记录";
         m_sActual = com.getUiObjText(com.getUiObjByText(m_sExpect));
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
@@ -46,10 +47,9 @@ public class TestEnterPage {
     }
 
     @Test
-    // 焦点选择体育Tab页
+    // 焦点选择电视Tab页
     public void enterTvTabPage(){
-        com.Navigation("h93");
-        com.Sleep(iWaitSec);
+        com.Navigation("hh9903");
     }
 
     @Test
