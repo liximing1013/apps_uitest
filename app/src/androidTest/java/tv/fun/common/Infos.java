@@ -20,6 +20,7 @@ public class Infos {
     public static String S_EPISODES_CELL_ID = S_ID_PREFIX + "tv_cell";  // 电视剧剧集控件
     public static String S_SELECT_EPISODE_ID = "com.bestv.ott:id/detail_select_button"; // 选集控件
 
+    public static String S_PROCESS_BAR_ID = S_ID_PREFIX + "progressBar"; // 加载转圈动画
 
     // class info
     public static String S_VIDEO_PLAYER_CLASS = "com.funshion.player.play.funshionplayer.VideoViewPlayer";
