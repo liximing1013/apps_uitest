@@ -18,6 +18,7 @@ import java.util.Random;
  */
 
 public class Utils {
+//    public static MysqlUtils m_sqlUtils = new MysqlUtils();
 	public static final String sTAG = "Utils";
 
     public static String getCurDate(){
@@ -119,24 +120,56 @@ public class Utils {
         return methodName;
     }
 
+//    public static void insertMainData(Object... args){
+//        if(args.length < 6){
+//            return;
+//        }
+//        String sSql = "insert into autotest_main(app_name, case_num, start_time, " +
+//                "consume_time, pass_rate, other) values(\"%s\", %d, \"%s\", " +
+//                "%d, %f, \"%s\");";
+//        sSql = String.format(sSql, args);
+////        m_sqlUtils.getDBConnection("qa");
+////        m_sqlUtils.operateSQL2(m_sqlUtils.m_Conn, sSql);
+//    }
+//
+//    public static void insertModuleData(Object... args){
+//        if(args.length < 6){
+//            return;
+//        }
+//        String sSql = "insert into autotest_module(module_name, case_name, start_time, " +
+//                "consume_time, pass, other) values(\"%s\", \"%s\", \"%s\"," +
+//                "%d, \"%s\", \"%s\");";
+//        sSql = String.format(sSql, args);
+//        MysqlUtils.insert();
+////        m_sqlUtils.getDBConnection("qa");
+////        m_sqlUtils.operateSQL2(m_sqlUtils.m_Conn, sSql);
+//    }
+
     // 条件判断结果为false时记录脚本的error log
     // sErrorMsg  : error log
     // bCondition : 条件判断的结果
     public static void funAssert(String sErrorMsg, boolean bCondition){
         if(!bCondition){
             writeLogs(sErrorMsg, 0);
-            Assert.assertTrue(sErrorMsg, bCondition);
+            Assert.assertTrue(sErrorMsg, false);
         }
     }
 
-    public static void writeCaseLog(String sCaseName, String sOK, String sError, boolean bCondition){
-        if(!bCondition){
-            String sErrorText = String.format("[%s] %s", sCaseName, sError);
-            Utils.funAssert(sErrorText, bCondition);
+    // 写case运行的log，如果bCondition为真，则记录sOK内容，否则记录sError内容
+    public static void writeCaseResult(String sModuleName, String sCaseName,
+                                       String sOK, String sError, boolean bCondition,
+                                       String sStart, long lConsume, String sOther){
+        if(!bCondition){ // 条件假
+            String sErrorText = String.format("[%s][%s] %s %d %s %s",
+                    sModuleName, sCaseName, sStart, lConsume, sError, sOther);
+//            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sError, sOther);
+            Utils.funAssert(sErrorText, false);
         }
         else{
-            String sOKText = String.format("[%s] %s", sCaseName, sOK);
+            String sOKText = String.format("[%s][%s] %s %d %s %s",
+                    sModuleName, sCaseName, sStart, lConsume, sOK, sOther);
             Utils.writeLogs(sOKText);
+//            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sOK, sOther);
         }
     }
 }

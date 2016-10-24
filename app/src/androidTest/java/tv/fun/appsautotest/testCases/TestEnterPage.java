@@ -19,6 +19,7 @@ public class TestEnterPage {
     TvCommon com = new TvCommon();
 
     boolean m_bPass = false;
+    long m_lConsumeTime = -1;
     String m_sExpect = "";
     String m_sActual = "";
     String m_sObjId = "";
@@ -27,14 +28,16 @@ public class TestEnterPage {
 
     @After
     public void clearUp() {
+        com.Home(2);
         com.Sleep(iOneSecond * 4);
     }
 
     @Test
     public void enterHomePage(){
-        Utils.Print("case 进入主页 START");
+        //Utils.Print("case 进入主页 START");
         //int iSeconds = 1;
         //boolean bEnterHome = com.waitTillOccur(com.BY_TEXT, "播放记录", 0, iWaitSec);
+        m_lConsumeTime = Utils.getCurSecond();
         com.Home(2);
 
         m_sExpect = "播放记录";
@@ -42,53 +45,73 @@ public class TestEnterPage {
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
 
         m_sCaseName = Utils.getMethodName(3); // 第3层函数名
-        Utils.writeCaseLog(m_sCaseName, "Success", "进入主页失败", m_bPass);
-        Utils.Print("case 进入主页 END");
+        Utils.writeCaseResult("LC", m_sCaseName, "Success", "进入[视频]主页失败", m_bPass,
+                Utils.getCurDate() + " " + Utils.getCurTime(),
+                Utils.getCurSecond() - m_lConsumeTime, "");
+        //Utils.Print("case 进入主页 END");
     }
 
     @Test
     // 焦点选择电视Tab页
     public void enterTvTabPage(){
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation("hh9903");
+
+        m_sExpect = "轮播";
+        m_sActual = com.getUiObjText(com.getUiObjByText(m_sExpect));
+        m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
+
+        m_sCaseName = Utils.getMethodName(3); // 第3层函数名
+        Utils.writeCaseResult("LC", m_sCaseName, "Success", "进入[轮播]页失败", m_bPass,
+                Utils.getCurDate() + " " + Utils.getCurTime(),
+                Utils.getCurSecond() - m_lConsumeTime, "");
     }
 
     @Test
     // 焦点选择体育Tab页
     public void enterSportsTabPage(){
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation("hh9901");
-        com.Sleep(iWaitSec);
     }
 
     @Test
     public void enterFilmPage(){
-        Utils.Print("case 进入电影页 START");
-        com.Navigation("hh999924");
+//        Utils.Print("case 进入电影页 START");
+        m_lConsumeTime = Utils.getCurSecond();
+        com.Navigation("hh9999249999");
         com.Sleep(iWaitSec);
+
         String sTitle1 = "好莱坞";
         String sTitle2 = "最新上线";
         m_bPass = com.isUiObjExists(com.BY_TEXT, sTitle1, "") ||
                 com.isUiObjExists(com.BY_TEXT, sTitle2, "");
+
         m_sCaseName = Utils.getMethodName(3); // 第3层函数名
-        Utils.writeCaseLog(m_sCaseName, "Success", "进入[电影]页失败！", m_bPass);
-        Utils.Print("case 进入电影页 END");
+        Utils.writeCaseResult("LC", m_sCaseName, "Success", "进入[电影]页失败！", m_bPass,
+                Utils.getCurDate() + " "+ Utils.getCurTime(),
+                Utils.getCurSecond() - m_lConsumeTime, "");
+//        Utils.Print("case 进入电影页 END");
     }
 
     @Test
     public void enterTVPlayPage(){
-        Utils.Print("case 进入电视剧页面 START");
+//        Utils.Print("case 进入电视剧页面 START");
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation("hh9999214"); //new int[]{-1, 2, 1, 4});
         String sTitle1 = "香港TVB";
         String sTitle2 = "都市喜剧";
         Utils.funAssert("进入[电视剧]页失败！", com.isUiObjExists(com.BY_TEXT, sTitle1, "") ||
                 com.isUiObjExists(com.BY_TEXT, sTitle2, ""));
         com.Sleep(iOneSecond * 4);
-        Utils.Print("case 进入电视剧页面 END");
+//        Utils.Print("case 进入电视剧页面 END");
     }
 
     @Test
     public void enterHistoryPage(){
-        Utils.Print("case 进入观看记录 START");
+//        Utils.Print("case 进入观看记录 START");
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation("hh9914"); //new int[]{-1, -1, 1, 4});
+
         String sTitle1 = "播放记录";
         String sTitle2 = "猜你喜欢";
         Utils.funAssert("进入[电视剧]页失败！", com.isUiObjExists(com.BY_TEXT, sTitle1, "") ||
@@ -99,14 +122,14 @@ public class TestEnterPage {
 
     @Test
     public void enterChildPage(){
-        Utils.Print("==============case: enter children page=================");
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation(new int[]{-1, 2, 1, 1, 4});
-        com.Sleep(iWaitSec);
     }
 
     @Test
     public void enterVIPPage(){
-        Utils.Print("case 进入金卡会员页面 START");
+//        Utils.Print("case 进入金卡会员页面 START");
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation("hh99124"); // new int[]{-1, 1, 2, 4}); // 视频-金卡会员页小窗口自动播放
         m_sExpect = "续费金卡会员";
         m_sObjId = Infos.S_VIP_ID;
@@ -120,12 +143,14 @@ public class TestEnterPage {
 
     @Test
     public void enterVideoClassificationPage(){
+        m_lConsumeTime = Utils.getCurSecond();
         com.Navigation(new int[]{-1, 1, 2, 2, 4});
         com.Sleep(iWaitSec);
     }
 
     @Test
     public void enterBestvLivePage(){ // 百视通直播大厅
+        m_lConsumeTime = Utils.getCurSecond();
         enterSportsTabPage();
         com.Down(4);
         com.Enter();
