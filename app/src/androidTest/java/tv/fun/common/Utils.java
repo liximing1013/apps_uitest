@@ -1,12 +1,20 @@
 package tv.fun.common;
 
 import android.os.Environment;
+import android.os.SystemClock;
+import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject2;
 import android.util.Log;
 
 import junit.framework.Assert;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -172,12 +180,151 @@ public class Utils {
 //            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sOK, sOther);
         }
     }
+    public static void writeCaseResult(String sError, boolean bPass, long lStartTime) {
+        String sCaseName = getMethodName(4); // 第4层函数名才是用例名
+        String sModuleName = sCaseName.split("_")[0];
+        writeCaseResult(sModuleName, sCaseName, "Success", sError, bPass,
+                getCurDate() + " " + getCurTime(),
+                getCurSecond() - lStartTime, "");
+    }
 
-	public static void writeCaseResult(String sError, boolean bPass, long lStartTime){
-		String sCaseName = getMethodName(4); // 第4层函数名才是用例名
-		String sModuleName = sCaseName.split("_")[0];
-		writeCaseResult(sModuleName, sCaseName, "Success", sError, bPass,
-				getCurDate() + " " + getCurTime(),
-				getCurSecond() - lStartTime, "");
+	private static final String COMMAND_SU = "su";
+	private static final String COMMAND_SH = "sh";
+	private static final String COMMAND_EXIT = "exit\n";
+	private static final String COMMAND_LINE_END = "\n";
+
+	public static CommandResult execCommand(
+			String command, boolean isRoot, boolean isNeedResultMsg) {
+		return execCommand(new String[]{command}, isRoot, isNeedResultMsg);
+	}
+
+	public static CommandResult execCommand(
+			String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+		int result = -1;
+		if (commands == null || commands.length == 0) {
+			return new CommandResult(result, null, null);
+		}
+
+		Process process = null;
+		BufferedReader successResult = null;
+		BufferedReader errorResult = null;
+		StringBuilder successMsg = null;
+		StringBuilder errorMsg = null;
+		DataOutputStream os = null;
+
+		try {
+			process = Runtime.getRuntime().exec(isRoot ? COMMAND_SU : COMMAND_SH);
+			os = new DataOutputStream(process.getOutputStream());
+			for (String command : commands) {
+				if (isEmpty(command)) {
+					continue;
+				}
+				os.write(command.getBytes());
+				os.writeBytes(COMMAND_LINE_END);
+				os.flush();
+			}
+			os.writeBytes(COMMAND_EXIT);
+			os.flush();
+
+			result = process.waitFor();
+			if (isNeedResultMsg) {
+				successMsg = new StringBuilder();
+				errorMsg = new StringBuilder();
+				successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+				String tmpStr;
+				while ((tmpStr = successResult.readLine()) != null) {
+					successMsg.append(tmpStr);
+				}
+				while ((tmpStr = errorResult.readLine()) != null) {
+					errorMsg.append(tmpStr);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (os != null) {
+					os.close();
+				}
+				if (successResult != null) {
+					successResult.close();
+				}
+				if (errorResult != null) {
+					errorResult.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			if (process != null) {
+				process.destroy();
+			}
+		}
+
+		return new CommandResult(result, (successMsg != null ? successMsg.toString() : null),
+				(errorMsg != null ? errorMsg.toString() : null));
+	}
+
+	public static class CommandResult {
+		public int mResult;
+		public String mSuccessMsg;
+		public String mErrorMsg;
+
+		CommandResult(int results, String successMsg, String errorMsg) {
+			mResult = results;
+			mSuccessMsg = successMsg;
+			mErrorMsg = errorMsg;
+		}
+	}
+
+    public static boolean isEmpty(String str) {
+        return (str == null || str.length() == 0);
+    }
+
+    public static int stopProcess(String packageName) {
+		String cmd = String.format("am force-stop %s", packageName);
+		CommandResult result = execCommand(cmd, false, false);
+		return result.mResult;
+	}
+
+	public static int stopAndClearProcess(String packageName) {
+		String cmd = String.format("pm clear %s", packageName);
+		CommandResult result = execCommand(cmd, false, false);
+		return result.mResult;
+	}
+
+	public static int startActivity(String packageName, String componentName) {
+        String cmd = String.format("am start %s/%s", packageName, componentName);
+        CommandResult result = execCommand(cmd, false, false);
+        return result.mResult;
+    }
+
+    public static void waitForPackageOpened(UiDevice device, String pkgName, long wait) {
+        for (int i = 0; i < wait; i++) {
+            SystemClock.sleep(1000);
+            if (pkgName.equals(device.getCurrentPackageName())) {
+                return;
+            }
+        }
+    }
+
+    public static void waitForPackageOpened(UiDevice device, String pkgName) {
+        waitForPackageOpened(device, pkgName, 5);
+    }
+
+	public static void waitForLoadingComplete(UiDevice device) {
+		UiObject2 loading = device.findObject(By.res(Infos.S_PROCESS_BAR_ID));
+
+		int tryTimes = 3;
+		for (int i = 0, waitTimes = 20; i < waitTimes; i++) {
+			SystemClock.sleep(1000);
+			if (tryTimes == 0) {
+				return;
+			}
+			if (loading == null) {
+				tryTimes--;
+			}
+		}
 	}
 }
