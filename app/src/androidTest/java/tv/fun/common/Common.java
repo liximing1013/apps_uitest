@@ -4,6 +4,8 @@ import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.UiDevice;
 
+import java.lang.reflect.Method;
+
 /**
  * Created by xuzx on 2016/10/14.
  * 通用函数，手机或者电视上都可以使用的函数就写在这里
@@ -127,4 +129,18 @@ public class Common {
         return device.getDisplayWidth();
     }
 
+    // 反射机制获取类的所有方法
+    public static void printAllMethods(String sClassName){
+        try {
+            Class classType = Class.forName(sClassName);
+            Method[] methods = classType.getDeclaredMethods();
+            for (Method method : methods) {
+                Utils.Print(method.getName());
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            Utils.Print(e);
+        }
+    }
 }

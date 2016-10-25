@@ -26,7 +26,6 @@ import java.util.Random;
  */
 
 public class Utils {
-//    public static MysqlUtils m_sqlUtils = new MysqlUtils();
 	public static final String sTAG = "Utils";
 
     public static String getCurDate(){
@@ -92,7 +91,6 @@ public class Utils {
 
     public static void Log(String sFileName, String sLogText) {
         String sPath = Environment.getExternalStorageDirectory().getPath();
-        Print(sPath);
         Log(sPath + "/autotest/log/", sFileName, sLogText);
     }
 	public static void Log(String sFolderName, String sFileName, String sLogText) {
