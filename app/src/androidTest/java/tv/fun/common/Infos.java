@@ -22,6 +22,8 @@ public class Infos {
 
     public static String S_PROCESS_BAR_ID = S_ID_PREFIX + "progressBar"; // 加载转圈动画
 
+    public static String S_BEST_LIVE_HALL_ID = S_ID_PREFIX + "live_hall_title"; // 百视通直播大厅左上角图片
+
     // class info
     public static String S_VIDEO_PLAYER_CLASS = "com.funshion.player.play.funshionplayer.VideoViewPlayer";
 }

@@ -172,4 +172,12 @@ public class Utils {
 //            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sOK, sOther);
         }
     }
+
+	public static void writeCaseResult(String sError, boolean bPass, long lStartTime){
+		String sCaseName = getMethodName(4); // 第4层函数名才是用例名
+		String sModuleName = sCaseName.split("_")[0];
+		writeCaseResult(sModuleName, sCaseName, "Success", sError, bPass,
+				getCurDate() + " " + getCurTime(),
+				getCurSecond() - lStartTime, "");
+	}
 }
