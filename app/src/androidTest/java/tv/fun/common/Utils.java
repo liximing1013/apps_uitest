@@ -294,7 +294,7 @@ public class Utils {
 		return result.mResult;
 	}
 
-	public static int startActivity(String packageName, String componentName) {
+    public static int startActivity(String packageName, String componentName) {
         String cmd = String.format("am start %s/%s", packageName, componentName);
         CommandResult result = execCommand(cmd, false, false);
         return result.mResult;
