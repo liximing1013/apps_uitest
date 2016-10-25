@@ -24,7 +24,6 @@ import tv.fun.common.Utils;
 import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
 import static tv.fun.common.Constants.SETTINGS_HOME_ACTIVITY;
 import static tv.fun.common.Constants.SETTINGS_PKG_NAME;
-import static tv.fun.common.Constants.SHORT_NAME_SETTINGS;
 
 /**
  * Created by zhengjin on 2016/10/25.
@@ -68,7 +67,6 @@ public final class TestCommonSettings {
     @Test
     public void SET_Common_01_01_testSettingsPageTitle() {
         UiObject2 settingsTitle = mDevice.findObject(By.res("tv.fun.settings:id/setting_title"));
-        Assert.assertNotNull(settingsTitle);
         String message = "Verify the title name of common settings page.";
 //        Utils.writeCaseResult(SHORT_NAME_SETTINGS, );
         Assert.assertEquals(message, "通用设置", settingsTitle.getText());
