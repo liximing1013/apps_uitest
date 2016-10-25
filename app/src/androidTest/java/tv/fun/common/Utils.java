@@ -271,16 +271,40 @@ public class Utils {
 		}
 	}
 
-	public static int stopProcess(String packageName) {
-		String cmdStopProcess = String.format("am force-stop %s", packageName);
+    public static boolean isEmpty(String str) {
+        return (str == null || str.length() == 0);
+    }
 
-		CommandResult result = execCommand(cmdStopProcess, false, false);
+    public static int stopProcess(String packageName) {
+		String cmd = String.format("am force-stop %s", packageName);
+		CommandResult result = execCommand(cmd, false, false);
 		return result.mResult;
 	}
 
-	public static boolean isEmpty(String str) {
-		return (str == null || str.length() == 0);
+	public static int stopAndClearProcess(String packageName) {
+		String cmd = String.format("pm clear %s", packageName);
+		CommandResult result = execCommand(cmd, false, false);
+		return result.mResult;
 	}
+
+	public static int startActivity(String packageName, String componentName) {
+        String cmd = String.format("am start %s/%s", packageName, componentName);
+        CommandResult result = execCommand(cmd, false, false);
+        return result.mResult;
+    }
+
+    public static void waitForPackageOpened(UiDevice device, String pkgName, long wait) {
+        for (int i = 0; i < wait; i++) {
+            SystemClock.sleep(1000);
+            if (pkgName.equals(device.getCurrentPackageName())) {
+                return;
+            }
+        }
+    }
+
+    public static void waitForPackageOpened(UiDevice device, String pkgName) {
+        waitForPackageOpened(device, pkgName, 5);
+    }
 
 	public static void waitForLoadingComplete(UiDevice device) {
 		UiObject2 loading = device.findObject(By.res(Infos.S_PROCESS_BAR_ID));
