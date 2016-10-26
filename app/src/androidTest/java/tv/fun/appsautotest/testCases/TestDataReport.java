@@ -60,7 +60,7 @@ public class TestDataReport {
         m_com.Sleep(m_iWaitSec);
         m_com.Enter(); // 调出轮播菜单
 
-        m_sObjId = Infos.S_CAROUSEL_CHANNLE; // 轮播菜单里的控件
+        m_sObjId = Infos.S_LC_CAROUSEL_CHANNLE; // 轮播菜单里的控件
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId, 0); // 第一个节目: 24小时热播
 
         Utils.writeCaseResult("轮播视频打开失败", m_uiObj.exists(), m_lConsumeTime);
@@ -74,7 +74,7 @@ public class TestDataReport {
 
         //TODO 需要程序提供小窗口播放状态获取的接口
         m_sExpect = "续费金卡会员";
-        m_sObjId = Infos.S_VIP_ID;
+        m_sObjId = Infos.S_LC_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
@@ -90,7 +90,7 @@ public class TestDataReport {
         // 顶部Tabs列表，可能会变化
         String [] aExpectTabs = new String []{"全部", "电影", "电视剧", "少儿", "综艺", "纪实"};
 
-        m_sObjId = Infos.S_TAB_TITLE_ID; // 视频分类-最新页面的Tab id
+        m_sObjId = Infos.S_LC_TAB_TITLE_ID; // 视频分类-最新页面的Tab id
         for (int i = 0; i < aExpectTabs.length; ++i){
             m_sActual = m_com.getUiObjText(m_com.getUiObject(m_com.BY_RESID, m_sObjId, i));
 //            Utils.Print(sTabText);
@@ -105,7 +105,7 @@ public class TestDataReport {
         m_com.Sleep(m_iWaitSec);
         m_com.Enter(); // 暂停
 
-        m_sObjId = Infos.S_CONTROL_PAUSE_BTN; // 暂停按钮的id
+        m_sObjId = Infos.S_LC_CONTROL_PAUSE_BTN; // 暂停按钮的id
         m_uiObj = m_com.getUiObjByResId(m_sObjId);
         m_bPass = m_uiObj.exists();
         Utils.writeCaseResult("播放[视频分类-最新]里的视频失败", m_bPass, m_lConsumeTime);
@@ -121,7 +121,7 @@ public class TestDataReport {
         m_com.Right(7); // 推荐-专题（专题的位置编号：7 可能会发生变化）
         m_com.Enter();
         m_com.Sleep(m_iOneSecond * 4);
-        m_sObjId = Infos.S_SPECIAL_PLAYER; // 专题播放器
+        m_sObjId = Infos.S_LC_SPECIAL_PLAYER; // 专题播放器
         m_uiObj = m_com.getUiObjByResId(m_sObjId);
         m_bPass = m_uiObj.exists();
         Utils.writeCaseResult("进入[视频-电影-推荐]7号位的专题失败", m_bPass, m_lConsumeTime);
@@ -146,7 +146,7 @@ public class TestDataReport {
         m_com.Enter();
         m_com.Sleep(m_iWaitSec);
         m_com.Enter();
-        m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_CONTROL_PAUSE_BTN, "");
+        m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_LC_CONTROL_PAUSE_BTN, "");
         Utils.writeCaseResult("没有开始播放观看记录", m_bPass, m_lConsumeTime);
 //        Utils.Print("play case6 播放视频历史记录 END");
     }
@@ -159,7 +159,7 @@ public class TestDataReport {
         m_com.Enter();
         m_com.Sleep(m_iOneSecond * 8);
         m_com.Enter();
-        m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_CONTROL_PAUSE_BTN, "");
+        m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_LC_CONTROL_PAUSE_BTN, "");
         Utils.writeCaseResult("没有播放电影-推荐里的大图视频", m_bPass, m_lConsumeTime);
     }
 
@@ -170,7 +170,7 @@ public class TestDataReport {
         m_com.Navigation("991149999"); // 点击视频分类 - 看看新闻
 
         m_sExpect = "看看新闻";
-        m_sObjId = Infos.S_KANKAN_NEWS_LOG_ID;
+        m_sObjId = Infos.S_LC_KANKAN_NEWS_LOG_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
@@ -211,7 +211,7 @@ public class TestDataReport {
         m_enterPage.enterBestvLivePage();
 
         m_sExpect = "看看新闻";
-        m_sObjId = Infos.S_BEST_LIVE_HALL_ID;
+        m_sObjId = Infos.S_LC_BEST_LIVE_HALL_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
@@ -364,7 +364,7 @@ public class TestDataReport {
         m_com.Navigation("h12499"); // case9 点击金卡会员卡片
 
         m_sExpect = Infos.S_TEXT_VIP_TITLE;
-        m_sObjId = Infos.S_VIP_ID;
+        m_sObjId = Infos.S_LC_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();

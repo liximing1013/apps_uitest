@@ -164,7 +164,7 @@ public class TestEnterPage {
         enterVIPPage();
 
         m_sExpect = Infos.S_TEXT_VIP_TITLE;
-        m_sObjId = Infos.S_VIP_ID;
+        m_sObjId = Infos.S_LC_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
@@ -196,7 +196,7 @@ public class TestEnterPage {
         enterBestvLivePage();
 
         m_sExpect = "看看新闻";
-        m_sObjId = Infos.S_BEST_LIVE_HALL_ID;
+        m_sObjId = Infos.S_LC_BEST_LIVE_HALL_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
         m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();

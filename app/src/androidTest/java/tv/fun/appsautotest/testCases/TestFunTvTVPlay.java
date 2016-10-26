@@ -25,11 +25,11 @@ public class TestFunTvTVPlay {
     TestEnterPage m_enterPage = new TestEnterPage();
     UiObject m_uiObj = null;
 
-    String sPauseBtnID = Infos.S_CONTROL_PAUSE_BTN; // 播放器上暂停按钮
-    String sPlayedTimeID = Infos.S_PLAYED_TIME_ID; // 当前播放时长
+    String sPauseBtnID = Infos.S_LC_CONTROL_PAUSE_BTN; // 播放器上暂停按钮
+    String sPlayedTimeID = Infos.S_LC_PLAYED_TIME_ID; // 当前播放时长
     String sPlayerClass = Infos.S_CLASS_VIDEO_PLAYER; // 播放器的类名
-    String sDetailTitleID = Infos.S_DETAIL_TITLE_ID; // 详情页标题
-    String sEpisodeID = Infos.S_EPISODES_CELL_ID; // 电视剧剧集控件
+    String sDetailTitleID = Infos.S_LC_DETAIL_TITLE_ID; // 详情页标题
+    String sEpisodeID = Infos.S_LC_EPISODES_CELL_ID; // 电视剧剧集控件
 
     @Before
     public void setUp() {
@@ -110,14 +110,14 @@ public class TestFunTvTVPlay {
         m_com.Enter(); // 播放电视剧
         m_com.Sleep(iWaitSec);
         m_com.Enter();
-        m_com.isUiObjExists(m_com.BY_RESID,  Infos.S_CONTROL_PAUSE_BTN,
+        m_com.isUiObjExists(m_com.BY_RESID,  Infos.S_LC_CONTROL_PAUSE_BTN,
                 String.format("没有开始播放电视剧[%s]",sTitle));
         Utils.Print("case 播放一集电视剧 END");
     }
 
     // 0: not finished; 1: finished; -1: error
     public int isPlayFinished(){
-        String sEpisodesListID = Infos.S_EPISODES_LIST_ID;  // 电视剧列表
+        String sEpisodesListID = Infos.S_LC_EPISODES_LIST_ID;  // 电视剧列表
         int iChilds = 0;
         String s1;
         String s2 = "0";
@@ -171,7 +171,7 @@ public class TestFunTvTVPlay {
     @Test
     public void playNextEpisode(){
         Utils.Print("==============case: play next episode=================");
-        String selectEpisodeID = Infos.S_SELECT_EPISODE_ID;
+        String selectEpisodeID = Infos.S_LC_SELECT_EPISODE_ID;
         if(isPlayerWork()) {
             m_com.Sleep(iOneSecond * 2);
             m_com.Back(2);
