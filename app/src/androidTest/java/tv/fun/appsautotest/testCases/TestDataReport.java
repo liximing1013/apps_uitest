@@ -70,8 +70,16 @@ public class TestDataReport {
     @Test
     public void Data_Play_02_VIPPageVideo(){
 //        Utils.Print("play case2 金卡会员的小窗口播放 START");
-        m_enterPage.LC_TB_08_enterVIPPage(); // 进入金卡会员主页，金卡会员页小窗口自动播放
+        m_enterPage.enterVIPPage(); // 进入金卡会员主页，金卡会员页小窗口自动播放
+
         //TODO 需要程序提供小窗口播放状态获取的接口
+        m_sExpect = "续费金卡会员";
+        m_sObjId = Infos.S_VIP_ID;
+        m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
+        m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
+        m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
+
+        Utils.writeCaseResult("播放金卡小窗口视频失败", m_bPass, m_lConsumeTime);
         m_com.Sleep(m_iWaitSec);
 //        Utils.Print("play case2 金卡会员的小窗口播放 END");
     }
@@ -381,9 +389,9 @@ public class TestDataReport {
     @Test
     public void Data_Click_18_21_SpVideoInChild() {
         Utils.Print("case18 1、点击电视剧栏目");
-        m_enterPage.LC_TB_05_enterTVPlayPage();
+        m_enterPage.enterTVPlayPage();
         Utils.Print("case19 2、点击少儿栏目");
-        m_enterPage.LC_TB_07_enterChildPage();
+        m_enterPage.enterChildPage();
         m_com.Navigation("51499"); // case19 2、点击少儿栏目
         Utils.Print("case20 3、点击专题分类中的一个专题");
         m_com.Navigation("1199212499"); // case20 3、点击专题分类中的一个专题
@@ -448,8 +456,13 @@ public class TestDataReport {
     public void testUntilFail(){
 //        m_com.Navigation("111114991249904");
 //        while(true) {
-            m_com.Navigation("hh99091929191900");
+        m_com.Navigation("hh99091929191900");
 //            clickDataReport();
 //        }
     }
+
+//    @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }
