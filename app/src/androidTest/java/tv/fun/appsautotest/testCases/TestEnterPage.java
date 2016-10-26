@@ -163,7 +163,7 @@ public class TestEnterPage {
 //        Utils.Print("case 进入金卡会员页面 START");
         enterVIPPage();
 
-        m_sExpect = "续费金卡会员";
+        m_sExpect = Infos.S_TEXT_VIP_TITLE;
         m_sObjId = Infos.S_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
@@ -203,4 +203,9 @@ public class TestEnterPage {
 
         Utils.writeCaseResult("进入百视通直播大厅失败", m_bPass, m_lConsumeTime);
     }
+
+//    @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }

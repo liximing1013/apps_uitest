@@ -27,7 +27,7 @@ public class TestFunTvTVPlay {
 
     String sPauseBtnID = Infos.S_CONTROL_PAUSE_BTN; // 播放器上暂停按钮
     String sPlayedTimeID = Infos.S_PLAYED_TIME_ID; // 当前播放时长
-    String sPlayerClass = Infos.S_VIDEO_PLAYER_CLASS; // 播放器的类名
+    String sPlayerClass = Infos.S_CLASS_VIDEO_PLAYER; // 播放器的类名
     String sDetailTitleID = Infos.S_DETAIL_TITLE_ID; // 详情页标题
     String sEpisodeID = Infos.S_EPISODES_CELL_ID; // 电视剧剧集控件
 
