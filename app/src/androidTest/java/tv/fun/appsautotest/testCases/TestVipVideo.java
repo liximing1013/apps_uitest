@@ -44,6 +44,10 @@ public final class TestVipVideo {
     //设定播放视频时间
     private static final int PlayVideoTime = 60;
 
+    boolean m_bPass = false;
+    String m_sExpect = "";
+    String m_sActual = "";
+
     @Before
     public void setUp() {
         instrument = InstrumentationRegistry.getInstrumentation();
@@ -307,7 +311,13 @@ public final class TestVipVideo {
         this.openTabFromLauncherHomeByresId(uiDevice,ResId1);
         systemWait(WAIT);
         UiObject2 TextViewer1 = uiDevice.findObject(text("按 \uE693 菜单键管理城市"));
-        Assert.assertEquals("按 \uE693 菜单键管理城市",TextViewer1.getText());
+//        Assert.assertEquals("按 \uE693 菜单键管理城市",TextViewer1.getText());
+        m_sExpect = "按 \uE693 菜单键管理城市";
+        m_sActual = TextViewer1.getText();
+        m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
+
+        Utils.writeCaseResult("进入天气页面失败！", m_bPass, m_Time);
+
         uiDevice.pressBack();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadUp();
@@ -317,6 +327,7 @@ public final class TestVipVideo {
         systemWait(WAIT);
         UiObject2 TextViewer2 = uiDevice.findObject(text("我的应用"));
         Assert.assertEquals("我的应用",TextViewer2.getText());
+
         uiDevice.pressBack();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadUp();
