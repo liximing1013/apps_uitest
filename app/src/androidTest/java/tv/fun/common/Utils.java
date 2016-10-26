@@ -164,16 +164,16 @@ public class Utils {
     // 写case运行的log，如果bCondition为真，则记录sOK内容，否则记录sError内容
     public static void writeCaseResult(String sModuleName, String sCaseName,
                                        String sOK, String sError, boolean bCondition,
-                                       String sStart, long lConsume, String sOther){
+                                       long lConsume, String sOther){
         if(!bCondition){ // 条件假
-            String sErrorText = String.format("[%s][%s] %s %d %s %s",
-                    sModuleName, sCaseName, sStart, lConsume, sError, sOther);
+            String sErrorText = String.format("[%s][%s] %d %s %s",
+                    sModuleName, sCaseName, lConsume, sError, sOther);
 //            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sError, sOther);
             Utils.funAssert(sErrorText, false);
         }
         else{
-            String sOKText = String.format("[%s][%s] %s %d %s %s",
-                    sModuleName, sCaseName, sStart, lConsume, sOK, sOther);
+            String sOKText = String.format("[%s][%s] %d %s %s",
+                    sModuleName, sCaseName, lConsume, sOK, sOther);
             Utils.writeLogs(sOKText);
 //            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sOK, sOther);
         }
@@ -182,7 +182,6 @@ public class Utils {
         String sCaseName = getMethodName(4); // 第4层函数名才是用例名
         String sModuleName = sCaseName.split("_")[0];
         writeCaseResult(sModuleName, sCaseName, "Success", sError, bPass,
-                getCurDate() + " " + getCurTime(),
                 getCurSecond() - lStartTime, "");
     }
 
