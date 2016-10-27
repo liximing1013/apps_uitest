@@ -73,7 +73,7 @@ public class TestDataReport {
         m_enterPage.enterVIPPage(); // 进入金卡会员主页，金卡会员页小窗口自动播放
 
         //TODO 需要程序提供小窗口播放状态获取的接口
-        m_sExpect = "续费金卡会员";
+        m_sExpect = Infos.S_TEXT_VIP_TITLE;
         m_sObjId = Infos.S_LC_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
