@@ -27,17 +27,27 @@ public class Common {
     @Before
     public void setup() throws RemoteException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-       if(!device.isScreenOn()){
-           device.wakeUp();
-       }
-        executeAdbShellCommond("am force-stop tv.fun.appstore");
+        if(!device.isScreenOn()){
+            device.wakeUp();
+        }
+        try {
+            executeAdbShellCommond("am force-stop tv.fun.appstore");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         device.pressHome();
     }
 
     @After
     public void tearDown() {
 //        device.pressHome();
-        executeAdbShellCommond("am force-stop tv.fun.appstore");
+        try {
+            executeAdbShellCommond("am force-stop tv.fun.appstore");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
