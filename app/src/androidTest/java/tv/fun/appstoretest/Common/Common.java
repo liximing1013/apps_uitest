@@ -30,13 +30,14 @@ public class Common {
        if(!device.isScreenOn()){
            device.wakeUp();
        }
-//        device.pressHome();
+        executeAdbShellCommond("am force-stop tv.fun.appstore");
+        device.pressHome();
     }
 
     @After
     public void tearDown() {
 //        device.pressHome();
-        executeADBCommond("am force-stop tv.fun.appstore");
+        executeAdbShellCommond("am force-stop tv.fun.appstore");
     }
 
     /**
@@ -123,7 +124,19 @@ public class Common {
         UiObject childObj = parentObj.getChild(new UiSelector().resourceId(resID).index(elemIndex));
         return childObj;
     }
-
+	
+	 /**
+     * 适用于所有系统
+     * @param commondStr
+     */
+    public void executeAdbShellCommond(String commondStr) throws IOException {
+            Runtime.getRuntime().exec(commondStr);
+    }
+	
+   /**
+     * 仅适用于api21以上系统（5.0以上）
+     * @param commondStr
+     */
     public void executeADBCommond(String commondStr)  {
         try {
             device.executeShellCommand(commondStr);
