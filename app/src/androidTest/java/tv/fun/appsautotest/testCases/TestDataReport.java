@@ -308,7 +308,6 @@ public class TestDataReport {
 
     @Test
     public void LC_Data_20_playHistoryAndSpecial(){
-//        Utils.Print("play case20 ");
         playFilmNewSpecial(); // 点击播放记录卡片，播放记录中有小窗口播放的专题A
         m_com.Back(2);
         m_enterPage.enterHistoryPage();
@@ -317,50 +316,41 @@ public class TestDataReport {
     }
 
     @Test
-    public void LC_Data_01_clickOneOfThreeMain() {
-        Utils.Print("case1 点击视频首页的三幅图中的1个");
+    public void LC_Data_21_clickOneOfThreeMain() {
         m_com.Navigation("h4"); // case1 点击视频首页的三幅图中的1个
         Utils.writeCaseResult("点击首页三幅图中的1个失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_02_clickFilmCard() {
-        Utils.Print("case2 点击视频首页的电影栏目");
+    public void LC_Data_22_clickFilmCard() {
         m_com.Navigation("h24"); // case2 点击视频首页的电影栏目
         Utils.writeCaseResult("点击视频首页的电影栏目失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_03_clickSerialCard() {
-        Utils.Print("case3 点击视频首页的电视剧栏目");
+    public void LC_Data_23_clickSerialCard() {
         m_com.Navigation("h14"); // case3 点击视频首页的电视剧栏目
         Utils.writeCaseResult("点击视频首页的电视剧栏目失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_04_clickFilmBigVideo() {
-        Utils.Print("case4 点击电影-推荐里的大图视频");
+    public void LC_Data_24_clickFilmBigVideo() {
         m_com.Navigation("h349924"); // case4 点击电影-推荐里的大图视频
         Utils.writeCaseResult("点击电影-推荐里的大图视频失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_05_clickLive() {
-        Utils.Print("case5 点击直播");
+    public void LC_Data_25_clickLive() {
         m_com.Navigation("h111111499"); // case5 点击直播
         m_com.Back(2);
         Utils.writeCaseResult("点击直播失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_06_08_clickVcNewestVideo() {
-        Utils.Print("case6 点击视频分类");
+    public void LC_Data_26_28_clickVcNewestVideo() {
         m_com.Navigation("h1224"); // case6 点击视频分类
-        Utils.Print("case7 点击[最新]卡片");
         m_com.Enter(); // case7 点击[最新]卡片
-        Utils.Print("case8 点击全部里的1个免费视频");
         m_com.Navigation("992499"); // case8 点击全部里的1个免费视频
         Utils.writeCaseResult("点击视频分类最新里的免费视频失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void LC_Data_09_clickVIPCard() {
-        Utils.Print("case9 点击金卡会员卡片");
+    public void LC_Data_29_clickVIPCard() {
         m_com.Navigation("h12499"); // case9 点击金卡会员卡片
 
         m_sExpect = Infos.S_TEXT_VIP_TITLE;
@@ -373,120 +363,98 @@ public class TestDataReport {
     }
 
     @Test
-    public void LC_Data_10_11_clickSpVideoInMain() {
-        Utils.Print("case10 点击视频首页的专题");
+    public void LC_Data_30_31_clickSpVideoInMain() {
         m_com.Navigation("h1111499"); //case10 点击视频首页的专题，位置会变
-        Utils.Print("case11 点击视频首页的专题里的一个节目");
         m_com.Navigation("11499"); // case11 点击视频首页的专题里的一个节目
         Utils.writeCaseResult("点击视频首页的专题失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void LC_Data_12_clickPayVideoInMain() {
-        Utils.Print("case12 点击视频首页的付费节目");
+    public void LC_Data_32_clickPayVideoInMain() {
         m_com.Navigation("h1249911499"); // case12 点击视频首页的付费节目，位置会变
         Utils.writeCaseResult("点击视频首页的付费节目失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void LC_Data_13_clickSpVideoInNewestFilm() {
-        Utils.Print("case13 点击视频-电影-最新前瞻的专题");
+    public void LC_Data_33_clickSpVideoInNewestFilm() {
         m_enterPage.enterFilmPage(); // case13 点击视频-电影-最新前瞻的专题
         m_com.Navigation("199211499");
         Utils.writeCaseResult("点击视频-电影-最新前瞻的专题失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_14_clickVideoInAllFilm() {
-        Utils.Print("case14 点击视频-电影-全部里的正片");
+    public void LC_Data_34_clickVideoInAllFilm() {
         m_enterPage.enterFilmPage(); // case14 点击视频-电影-全部里的正片
         m_com.Navigation("3992111499");
         Utils.writeCaseResult("点击视频-电影-全部里的正片失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_15_clickSpLanMuInRecommendFilm() {
-        Utils.Print("case15 点击视频-电影-推荐-好莱坞");
+    public void LC_Data_35_clickSpLanMuInRecommendFilm() {
         m_enterPage.enterFilmPage();
         m_com.Navigation("211100499");
         Utils.writeCaseResult("点击视频-电影-推荐-好莱坞失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_16_clickSpVideoInRecommendFilm() {
-        Utils.Print("case16 点击视频-电影-推荐-专题");
+    public void LC_Data_36_clickSpVideoInRecommendFilm() {
         m_enterPage.enterFilmPage(); // case15、16 点击视频-电影-推荐-专题
         m_com.Navigation("21110499");
         m_com.Navigation("2499"); // 点击专题里的影片
         Utils.writeCaseResult("点击视频-电影-推荐-专题失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_17_clickSpVideoInSport() {
-        Utils.Print("case17 点击体育-专题(小视频)");
+    public void LC_Data_37_clickSpVideoInSport() {
         m_enterPage.enterSportsTabPage();
         m_com.Navigation("211499"); // case17 点击体育-专题(小视频)
         Utils.writeCaseResult("点击体育-专题(小视频)失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_18_21_clickSpVideoInChild() {
-//        Utils.Print("case18 1、点击电视剧栏目");
+    public void LC_Data_38_41_clickSpVideoInChild() {
         m_enterPage.enterTVPlayPage();
-//        Utils.Print("case19 2、点击少儿栏目");
         m_enterPage.enterChildPage();
         m_com.Navigation("51499"); // case19 2、点击少儿栏目
-//        Utils.Print("case20 3、点击专题分类中的一个专题");
         m_com.Navigation("1199212499"); // case20 3、点击专题分类中的一个专题
-//        Utils.Print("case21 4、点击专题里的一个节目");
         m_com.Navigation("11499"); // case21 4、点击专题里的一个节目
         Utils.writeCaseResult("点击少儿栏目专题视频失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void LC_Data_22_clickCarousel(){
-        Utils.Print("case22 点击轮播视频");
+    public void LC_Data_42_clickCarousel(){
         m_com.Navigation("h34999"); // case22 点击轮播视频
         Utils.writeCaseResult("点击轮播视频失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_23_24_clickEnterAndQuitLiveHall(){
-//        Utils.Print("case23 进入Bestv直播大厅");
+    public void LC_Data_43_44_clickEnterAndQuitLiveHall(){
         m_enterPage.enterBestvLivePage(); // case23 进入Bestv直播大厅
         Utils.writeCaseResult("进入直播大厅失败", m_bPass, m_lConsumeTime);
-//        Utils.Print("case24 退出Bestv直播大厅");
         m_com.Back(); // case24 退出Bestv直播大厅
         Utils.writeCaseResult("退出直播大厅失败", m_bPass, m_lConsumeTime);
     }
 
 //    @Test
-//    public void LC_Data_25_clickLanMu(){
+//    public void LC_Data_45_clickLanMu(){
 //     case25 点击视频首页栏目-蜡笔小新(有时候是其他的节目，位置也需要修改)
 //    }
 
     @Test
-    public void LC_Data_26_clickFreeVideoInMain(){
-        Utils.Print("case26 点击视频首页免费节目");
+    public void LC_Data_46_clickFreeVideoInMain(){
         m_com.Navigation("h112499"); // case26 点击视频首页免费节目
         Utils.writeCaseResult("首页免费节目点击失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void LC_Data_27_28_clickNewsInMain(){
-        Utils.Print("case27 1、点击视频首页新闻");
+    public void LC_Data_47_48_clickNewsInMain(){
         m_com.Navigation("h11499"); // case27 1、点击视频首页新闻
-        Utils.Print("case28 2、点击新闻分类里的一个Tab");
         m_com.Navigation("21222499"); // case28 2、点击新闻分类里的一个Tab
         Utils.writeCaseResult("首页新闻点击Tab失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void LC_Data_29_31_clickNewsInVc(){
-        Utils.Print("case29 1、点击视频分类");
+    public void LC_Data_49_51_clickNewsInVc(){
         m_com.Navigation("h122499"); // case29 1、点击视频分类
-        Utils.Print("case30 2、点击新闻");
         m_com.Navigation("11499"); // case30 2、点击新闻，位置会变化
-        Utils.Print("case31 3、点击新闻分类里的一个Tab");
         m_com.Navigation("2122499"); // case31 3、点击新闻分类里的一个Tab
-        Utils.writeCaseResult("视频分类的新闻点击Tab失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void LC_Data_32_34_clickFirstVideoInVIPPage(){
+    public void LC_Data_52_54_clickFirstVideoInVIPPage(){
         m_enterPage.enterVIPPage();
         m_com.Sleep(m_iWaitSec);
         m_com.Enter(); // case 32 1、金卡会员页，点击小窗口播放
@@ -505,8 +473,8 @@ public class TestDataReport {
 //        }
     }
 
-    @Test
-    public void test(){
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//    @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }
