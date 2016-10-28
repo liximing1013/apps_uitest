@@ -44,7 +44,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_01_Carousel(){
+    public void LC_Data_01_playCarousel(){
 //        Utils.Print("play case1 播放轮播视频 START");
         m_com.Navigation("hh93999"); // 进入电视页
 
@@ -68,7 +68,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_02_VIPPageVideo(){
+    public void LC_Data_02_playVIPPageVideo(){
 //        Utils.Print("play case2 金卡会员的小窗口播放 START");
         m_enterPage.enterVIPPage(); // 进入金卡会员主页，金卡会员页小窗口自动播放
 
@@ -84,7 +84,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_03_FreeVideo(){
+    public void LC_Data_03_playFreeVideo(){
 //        Utils.Print("play case3 播放视频分类-最新的视频 START");
         m_com.Navigation("hh91224499"); // 进入视频分类-最新
         // 顶部Tabs列表，可能会变化
@@ -113,7 +113,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_04_SpecialVideo(){
+    public void LC_Data_04_playSpecialVideo(){
 //        Utils.Print("play case4 播放视频-电影-推荐的专题 START");
         m_enterPage.enterFilmPage(); // 视频-电影
         m_com.Sleep(m_iOneSecond * 4);
@@ -129,7 +129,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_05_PlayOnePlay(){
+    public void LC_Data_05_playOnePlay(){
 //        Utils.Print("play case5 6 播放视频历史记录 START");
         m_tfttp.playOnePlay(); // case5
         m_com.Sleep(m_iWaitSec);
@@ -138,7 +138,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_06_History(){
+    public void LC_Data_06_playHistory(){
         m_enterPage.enterHistoryPage(); // case6
         // com.Down(); 2.3版本开始不需要按下方向键
         m_com.Enter();
@@ -152,7 +152,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_07_RecommendFilm(){
+    public void LC_Data_07_playRecommendFilm(){
 //        Utils.Print("play case7 播放电影-推荐里的大图视频");
         m_enterPage.enterFilmPage();
         m_com.Down();
@@ -164,7 +164,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_08_LiveVideo(){
+    public void LC_Data_08_playLiveVideo(){
 //        Utils.Print("play case8 播放直播内容——看看新闻");
         m_enterPage.enterVideoClassificationPage();
         m_com.Navigation("991149999"); // 点击视频分类 - 看看新闻
@@ -179,7 +179,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_09_SportsSpecialVideo(){
+    public void LC_Data_09_playSportsSpecialVideo(){
 //        Utils.Print("play case9 播放体育-专题小视频");
         m_enterPage.enterSportsTabPage();
         m_com.Down();
@@ -189,7 +189,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_10_ChildSpecialVideo(){
+    public void LC_Data_10_playChildSpecialVideo(){
 //        Utils.Print("play case10");
         m_enterPage.enterTVPlayPage(); // 点击电视剧栏目
         m_enterPage.enterChildPage();  // 点击少儿栏目
@@ -206,7 +206,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_11_BestvLive(){
+    public void LC_Data_11_playBestvLive(){
 //        Utils.Print("play case11 播放Bestv直播大厅的视频");
         m_enterPage.enterBestvLivePage();
 
@@ -220,7 +220,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_12_FreeVideo(){ // 选择[视频]首页的免费视频进行播放
+    public void LC_Data_12_playFreeVideo(){ // 选择[视频]首页的免费视频进行播放
 //        Utils.Print("play case12 选择[视频]首页的免费视频进行播放");
         m_com.Home();
         m_com.Right(5); // 免费视频的位置 5 可能会变
@@ -231,7 +231,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_13_SpecialVideo(){ // 选择[视频]首页的专题视频进行播放
+    public void LC_Data_13_playSpecialVideo(){ // 选择[视频]首页的专题视频进行播放
 //        Utils.Print("play case13 选择[视频]首页的专题视频进行播放");
         m_com.Home();
         m_com.Right(4); // 专题视频的位置 4 可能会变
@@ -245,7 +245,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_14_PayVideo(){
+    public void LC_Data_14_playPayVideo(){
 //        Utils.Print("play case14 选择[视频]首页的付费视频进行播放");
         m_enterPage.enterVIPPage(); // 首页没有付费视频，就去金卡会员页播放
         m_com.Enter(3);
@@ -253,7 +253,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_15_News() {
+    public void LC_Data_15_playNews() {
 //        Utils.Print("play case15 16");
         m_com.Home(); // case 15 播放视频首页的新闻
         m_com.Right(2);
@@ -262,7 +262,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_16_NewsTab(){
+    public void LC_Data_16_playNewsTab(){
         m_com.Down(); // case 16 播放新闻分类里的一个Tab
         m_com.Right();
         m_com.Down(3);
@@ -271,7 +271,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_17_NewsInClassification(){
+    public void LC_Data_17_playNewsInClassification(){
 //        Utils.Print("play case17 播放“视频分类”里的新闻");
         m_enterPage.enterVideoClassificationPage();
         m_com.Right(2); // 新闻的位置会变化
@@ -279,7 +279,7 @@ public class TestDataReport {
         Utils.writeCaseResult("没有播放视频分类里的新闻", m_bPass, m_lConsumeTime);
     }
 
-    public void play_FilmNewSpecial(){
+    public void playFilmNewSpecial(){
         m_enterPage.enterFilmPage();
         m_com.Right();
         m_com.Sleep(m_iOneSecond * 4);
@@ -288,14 +288,14 @@ public class TestDataReport {
         m_com.Enter();
     }
     @Test
-    public void Data_Play_18_FilmNewSpecial(){
+    public void LC_Data_18_playFilmNewSpecial(){
 //        Utils.Print("play case18 选择“电影-新片前瞻-专题”里的视频进行播放");
-        play_FilmNewSpecial();
+        playFilmNewSpecial();
         Utils.writeCaseResult("没有播放电影-新片前瞻-专题里的视频", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void Data_Play_19_LookBack(){
+    public void LC_Data_19_playLookBack(){
 //        Utils.Print("play case19 回看节目");
         m_enterPage.enterBestvLivePage();
         m_com.Right(2);
@@ -307,48 +307,48 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Play_20_HistoryAndSpecial(){
+    public void LC_Data_20_playHistoryAndSpecial(){
 //        Utils.Print("play case20 ");
-        play_FilmNewSpecial(); // 点击播放记录卡片，播放记录中有小窗口播放的专题A
+        playFilmNewSpecial(); // 点击播放记录卡片，播放记录中有小窗口播放的专题A
         m_com.Back(2);
         m_enterPage.enterHistoryPage();
-        play_FilmNewSpecial(); // 点击电影-新片前瞻，点击专题A开始播放
+        playFilmNewSpecial(); // 点击电影-新片前瞻，点击专题A开始播放
         Utils.writeCaseResult("专题播放失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void Data_Click_01_OneOfThreeMain() {
+    public void LC_Data_01_clickOneOfThreeMain() {
         Utils.Print("case1 点击视频首页的三幅图中的1个");
         m_com.Navigation("h4"); // case1 点击视频首页的三幅图中的1个
         Utils.writeCaseResult("点击首页三幅图中的1个失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_02_FilmCard() {
+    public void LC_Data_02_clickFilmCard() {
         Utils.Print("case2 点击视频首页的电影栏目");
         m_com.Navigation("h24"); // case2 点击视频首页的电影栏目
         Utils.writeCaseResult("点击视频首页的电影栏目失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_03_SerialCard() {
+    public void LC_Data_03_clickSerialCard() {
         Utils.Print("case3 点击视频首页的电视剧栏目");
         m_com.Navigation("h14"); // case3 点击视频首页的电视剧栏目
         Utils.writeCaseResult("点击视频首页的电视剧栏目失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_04_FilmBigVideo() {
+    public void LC_Data_04_clickFilmBigVideo() {
         Utils.Print("case4 点击电影-推荐里的大图视频");
         m_com.Navigation("h349924"); // case4 点击电影-推荐里的大图视频
         Utils.writeCaseResult("点击电影-推荐里的大图视频失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_05_Live() {
+    public void LC_Data_05_clickLive() {
         Utils.Print("case5 点击直播");
         m_com.Navigation("h111111499"); // case5 点击直播
         m_com.Back(2);
         Utils.writeCaseResult("点击直播失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_06_08_VcNewestVideo() {
+    public void LC_Data_06_08_clickVcNewestVideo() {
         Utils.Print("case6 点击视频分类");
         m_com.Navigation("h1224"); // case6 点击视频分类
         Utils.Print("case7 点击[最新]卡片");
@@ -359,7 +359,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Click_09_VIPCard() {
+    public void LC_Data_09_clickVIPCard() {
         Utils.Print("case9 点击金卡会员卡片");
         m_com.Navigation("h12499"); // case9 点击金卡会员卡片
 
@@ -373,7 +373,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Click_10_11_SpVideoInMain() {
+    public void LC_Data_10_11_clickSpVideoInMain() {
         Utils.Print("case10 点击视频首页的专题");
         m_com.Navigation("h1111499"); //case10 点击视频首页的专题，位置会变
         Utils.Print("case11 点击视频首页的专题里的一个节目");
@@ -382,35 +382,35 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Click_12_PayVideoInMain() {
+    public void LC_Data_12_clickPayVideoInMain() {
         Utils.Print("case12 点击视频首页的付费节目");
         m_com.Navigation("h1249911499"); // case12 点击视频首页的付费节目，位置会变
         Utils.writeCaseResult("点击视频首页的付费节目失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void Data_Click_13_SpVideoInNewestFilm() {
+    public void LC_Data_13_clickSpVideoInNewestFilm() {
         Utils.Print("case13 点击视频-电影-最新前瞻的专题");
         m_enterPage.enterFilmPage(); // case13 点击视频-电影-最新前瞻的专题
         m_com.Navigation("199211499");
         Utils.writeCaseResult("点击视频-电影-最新前瞻的专题失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_14_VideoInAllFilm() {
+    public void LC_Data_14_clickVideoInAllFilm() {
         Utils.Print("case14 点击视频-电影-全部里的正片");
         m_enterPage.enterFilmPage(); // case14 点击视频-电影-全部里的正片
         m_com.Navigation("3992111499");
         Utils.writeCaseResult("点击视频-电影-全部里的正片失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_15_SpLanMuInRecommendFilm() {
+    public void LC_Data_15_clickSpLanMuInRecommendFilm() {
         Utils.Print("case15 点击视频-电影-推荐-好莱坞");
         m_enterPage.enterFilmPage();
         m_com.Navigation("211100499");
         Utils.writeCaseResult("点击视频-电影-推荐-好莱坞失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_16_SpVideoInRecommendFilm() {
+    public void LC_Data_16_clickSpVideoInRecommendFilm() {
         Utils.Print("case16 点击视频-电影-推荐-专题");
         m_enterPage.enterFilmPage(); // case15、16 点击视频-电影-推荐-专题
         m_com.Navigation("21110499");
@@ -418,14 +418,14 @@ public class TestDataReport {
         Utils.writeCaseResult("点击视频-电影-推荐-专题失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_17_SpVideoInSport() {
+    public void LC_Data_17_clickSpVideoInSport() {
         Utils.Print("case17 点击体育-专题(小视频)");
         m_enterPage.enterSportsTabPage();
         m_com.Navigation("211499"); // case17 点击体育-专题(小视频)
         Utils.writeCaseResult("点击体育-专题(小视频)失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_18_21_SpVideoInChild() {
+    public void LC_Data_18_21_clickSpVideoInChild() {
 //        Utils.Print("case18 1、点击电视剧栏目");
         m_enterPage.enterTVPlayPage();
 //        Utils.Print("case19 2、点击少儿栏目");
@@ -439,13 +439,13 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Click_22_Carousel(){
+    public void LC_Data_22_clickCarousel(){
         Utils.Print("case22 点击轮播视频");
         m_com.Navigation("h34999"); // case22 点击轮播视频
         Utils.writeCaseResult("点击轮播视频失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_23_24_EnterAndQuitLiveHall(){
+    public void LC_Data_23_24_clickEnterAndQuitLiveHall(){
 //        Utils.Print("case23 进入Bestv直播大厅");
         m_enterPage.enterBestvLivePage(); // case23 进入Bestv直播大厅
         Utils.writeCaseResult("进入直播大厅失败", m_bPass, m_lConsumeTime);
@@ -455,19 +455,19 @@ public class TestDataReport {
     }
 
 //    @Test
-//    public void Data_Click_25_LanMu(){
+//    public void LC_Data_25_clickLanMu(){
 //     case25 点击视频首页栏目-蜡笔小新(有时候是其他的节目，位置也需要修改)
 //    }
 
     @Test
-    public void Data_Click_26_FreeVideoInMain(){
+    public void LC_Data_26_clickFreeVideoInMain(){
         Utils.Print("case26 点击视频首页免费节目");
         m_com.Navigation("h112499"); // case26 点击视频首页免费节目
         Utils.writeCaseResult("首页免费节目点击失败", m_bPass, m_lConsumeTime);
     }
 
     @Test
-    public void Data_Click_27_28_NewsInMain(){
+    public void LC_Data_27_28_clickNewsInMain(){
         Utils.Print("case27 1、点击视频首页新闻");
         m_com.Navigation("h11499"); // case27 1、点击视频首页新闻
         Utils.Print("case28 2、点击新闻分类里的一个Tab");
@@ -476,7 +476,7 @@ public class TestDataReport {
     }
 
     @Test
-    public void Data_Click_29_31_NewsInVc(){
+    public void LC_Data_29_31_clickNewsInVc(){
         Utils.Print("case29 1、点击视频分类");
         m_com.Navigation("h122499"); // case29 1、点击视频分类
         Utils.Print("case30 2、点击新闻");
@@ -486,7 +486,7 @@ public class TestDataReport {
         Utils.writeCaseResult("视频分类的新闻点击Tab失败", m_bPass, m_lConsumeTime);
     }
     @Test
-    public void Data_Click_32_34_FirstVideoInVIPPage(){
+    public void LC_Data_32_34_clickFirstVideoInVIPPage(){
         m_enterPage.enterVIPPage();
         m_com.Sleep(m_iWaitSec);
         m_com.Enter(); // case 32 1、金卡会员页，点击小窗口播放
@@ -505,8 +505,8 @@ public class TestDataReport {
 //        }
     }
 
-//    @Test
-//    public void test(){
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+    @Test
+    public void test(){
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 }
