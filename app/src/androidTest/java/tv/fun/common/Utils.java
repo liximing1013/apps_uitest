@@ -165,7 +165,9 @@ public class Utils {
     public static void writeCaseResult(String sModuleName, String sCaseName,
                                        String sOK, String sError, boolean bCondition,
                                        long lConsume, String sOther){
-        if(!bCondition){ // 条件假
+        sOK = sOK.replace("[", "【").replace("]", "】");
+		sError = sError.replace("[", "【").replace("]", "】");
+		if(!bCondition){ // 条件假
             String sErrorText = String.format("[%s][%s] %d %s %s",
                     sModuleName, sCaseName, lConsume, sError, sOther);
 //            insertModuleData(sModuleName, sCaseName, sStart, lConsume, sError, sOther);
