@@ -452,6 +452,7 @@ public class TestDataReport {
         m_com.Navigation("h122499"); // case29 1、点击视频分类
         m_com.Navigation("11499"); // case30 2、点击新闻，位置会变化
         m_com.Navigation("2122499"); // case31 3、点击新闻分类里的一个Tab
+        Utils.writeCaseResult("视频分类的新闻点击Tab失败", m_bPass, m_lConsumeTime);
     }
     @Test
     public void LC_Data_52_54_clickFirstVideoInVIPPage(){
