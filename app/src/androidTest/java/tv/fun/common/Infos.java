@@ -22,11 +22,10 @@ public class Infos {
     public static String S_LC_DETAIL_TITLE_ID    =  S_ID_PREFIX + "detail_title"; // 详情页的标题
     public static String S_LC_EPISODES_CELL_ID   =  S_ID_PREFIX + "tv_cell";  // 电视剧剧集控件
     public static String S_LC_SELECT_EPISODE_ID  =  S_ID_PREFIX + "detail_select_button"; // 选集控件
-
     public static String S_PROCESS_BAR_ID        =  S_ID_PREFIX + "progressBar"; // 加载转圈动画
-
     public static String S_LC_BEST_LIVE_HALL_ID  =  S_ID_PREFIX + "live_hall_title"; // 百视通直播大厅左上角图片
     public static String S_LC_KANKAN_NEWS_LOG_ID =  S_ID_PREFIX + "kankan_logo"; // 看看新闻大厅的logo
+    public static String S_LC_VIP_FULLSCREEN_BUTTON_ID = S_ID_PREFIX + "com.bestv.ott:id/detail_enter";//金卡专区全屏后button
 
     // class info
     public static String S_CLASS_VIDEO_PLAYER = "com.funshion.player.play.funshionplayer.VideoViewPlayer";
