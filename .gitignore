@@ -1,6 +1,0 @@
-/app/*.iml
-.idea
-.gradle
-local.properties
-apps_autotest.iml
-build
