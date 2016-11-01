@@ -12,6 +12,8 @@ import org.junit.Before;
 
 import java.io.IOException;
 
+import tv.fun.common.Utils;
+
 
 /**
  * Created by liuqing on 2016/8/15.
@@ -23,31 +25,24 @@ public class Common {
     public String myAppIconName = "我的应用";
     public String myAppCountUnit = "个)";
     public String[] tabs = {"推荐", "游戏", "娱乐", "生活", "教育"};
+    public String appstorePackage = "tv.fun.appstore";
+    public long execTime;
 
     @Before
-    public void setup() throws RemoteException {
+    public void setup() throws RemoteException, IOException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        execTime = Utils.getCurSecond();
         if(!device.isScreenOn()){
             device.wakeUp();
         }
-        try {
-            executeAdbShellCommond("am force-stop tv.fun.appstore");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        executeAdbShellCommond("am force-stop tv.fun.appstore");
         device.pressHome();
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException {
 //        device.pressHome();
-        try {
-            executeAdbShellCommond("am force-stop tv.fun.appstore");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+        executeAdbShellCommond("am force-stop tv.fun.appstore");
     }
 
     /**
@@ -69,6 +64,23 @@ public class Common {
      */
     public UiObject findElementByText(String textStr, String resouceID){
         UiObject obj = device.findObject(new UiSelector().text(textStr).resourceId(resouceID));
+        return obj;
+    }
+
+    /**
+     * Find Element By Resource ID
+     * @param  type
+     * @param locator
+     * @param index
+     * @return obj
+     */
+    public UiObject findElementByIndex(String type, String locator, int index){
+        UiObject obj = null;
+        if(type.equalsIgnoreCase("id")){
+            obj = device.findObject(new UiSelector().resourceId(locator).index(index));
+        }else if(type.equalsIgnoreCase("class")){
+            obj = device.findObject(new UiSelector().className(locator).index(index));
+        }
         return obj;
     }
 
@@ -134,25 +146,21 @@ public class Common {
         UiObject childObj = parentObj.getChild(new UiSelector().resourceId(resID).index(elemIndex));
         return childObj;
     }
-	
-	 /**
+
+    /**
      * 适用于所有系统
      * @param commondStr
      */
     public void executeAdbShellCommond(String commondStr) throws IOException {
-            Runtime.getRuntime().exec(commondStr);
+        Runtime.getRuntime().exec(commondStr);
     }
-	
-   /**
+
+    /**
      * 仅适用于api21以上系统（5.0以上）
      * @param commondStr
      */
-    public void executeADBCommond(String commondStr)  {
-        try {
-            device.executeShellCommand(commondStr);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void executeAdbCommond(String commondStr) throws IOException {
+        device.executeShellCommand(commondStr);
     }
 
 //    /**
