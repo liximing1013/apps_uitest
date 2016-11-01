@@ -1,4 +1,4 @@
-package tv.fun.appstoretest.TestCases;
+package tv.fun.appstoretest.testCases;
 
 import android.os.RemoteException;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -7,7 +7,7 @@ import org.junit.experimental.categories.Categories;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import tv.fun.appstoretest.Common.Common;
+import tv.fun.appstoretest.common.Common;
 
 /**
  * Created by liuqing on 2016/8/15.

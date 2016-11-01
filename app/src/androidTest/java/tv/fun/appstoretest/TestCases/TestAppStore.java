@@ -1,4 +1,4 @@
-package tv.fun.appstoretest.TestCases;
+package tv.fun.appstoretest.testCases;
 
 import android.os.RemoteException;
 import android.support.test.uiautomator.By;
@@ -17,8 +17,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import tv.fun.appsautotest.common.TvCommon;
-import tv.fun.appstoretest.Common.AppStorePage;
+import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.common.Utils;
 
 

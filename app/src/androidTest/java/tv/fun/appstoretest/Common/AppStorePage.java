@@ -1,4 +1,4 @@
-package tv.fun.appstoretest.Common;
+package tv.fun.appstoretest.common;
 
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;

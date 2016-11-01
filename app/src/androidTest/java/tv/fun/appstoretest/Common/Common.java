@@ -1,4 +1,4 @@
-package tv.fun.appstoretest.Common;
+package tv.fun.appstoretest.common;
 
 import android.os.RemoteException;
 import android.support.test.InstrumentationRegistry;

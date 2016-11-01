@@ -1,4 +1,4 @@
-package tv.fun.appstoretest.TestCases;
+package tv.fun.appstoretest.testCases;
 
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -10,8 +10,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
-import tv.fun.appsautotest.common.TvCommon;
-import tv.fun.appstoretest.Common.AppStorePage;
+import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.common.Utils;
 
 /**

@@ -1,8 +1,4 @@
-package tv.fun.appstoretest.Common;
-
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
+package tv.fun.appstoretest.common;
 
 /**
  * Created by liuqing on 2016/10/24.
