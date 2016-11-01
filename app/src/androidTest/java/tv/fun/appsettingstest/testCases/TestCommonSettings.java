@@ -335,4 +335,9 @@ public final class TestCommonSettings {
         SystemClock.sleep(Constants.SHORT_WAIT);
     }
 
+//    @Test
+//    public void test() {
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
+
 }
