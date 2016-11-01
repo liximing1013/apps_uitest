@@ -322,6 +322,12 @@ public final class TestVipVideo {
         Assert.assertNotNull(videoPlayer);
     }
 
+//    @Test
+//    public void test(){
+//
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
+
     private UiObject2 getTabFromLauncherHomeByText(UiDevice device, String tabText) {
         List<UiObject2> tabTitles = device.findObjects(By.res("com.bestv.ott:id/title"));
         Assert.assertTrue("Verify tabs on launcher home.", tabTitles.size() > 0);
