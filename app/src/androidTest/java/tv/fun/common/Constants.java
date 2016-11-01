@@ -8,10 +8,10 @@ package tv.fun.common;
 
 public final class Constants {
 
-    public final static long SHORT_WAIT = 2000;
-    public final static long WAIT = 3000;
-    public final static long LONG_WAIT = 5000;
-    public final static long TIME_OUT = 8000;
+    public final static long SHORT_WAIT = 1000L;
+    public final static long WAIT = 3000L;
+    public final static long LONG_WAIT = 5000L;
+    public final static long TIME_OUT = 8000L;
 
     public final static String SHORT_NAME_SETTINGS = "SET";
 
