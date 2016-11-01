@@ -11,6 +11,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 import tv.fun.appstoretest.Common.AppStorePage;
+import tv.fun.common.Utils;
 
 /**
  * Created by liuqing on 2016/9/7.
@@ -26,7 +27,7 @@ public class TestTVMaster extends AppStorePage {
      */
     @Category({LevelP2Tests.class, LevelP1Tests.class})
     @Test
-    public void testTVMasterFromLauncher() throws UiObjectNotFoundException, InterruptedException {
+    public void Master_Home_01_testEnterTVMasterFromLauncher() throws UiObjectNotFoundException, InterruptedException {
         //Launcher应用tab页面，点击电视助手
         enterTVMasterPage();
         //Assert
@@ -34,6 +35,8 @@ public class TestTVMaster extends AppStorePage {
         String tvMasterPageTitle = tvMasterPageTitleObj.getText();
         UiObject settingBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/iv_settings"));
         Assert.assertTrue("电视助手页面中标题显示不正确", tvMasterPageTitle.equalsIgnoreCase(tvMasterIconName));
+        Utils.writeCaseResult("Verify the title name of TVMaster page is expected:"+ tvMasterIconName+" but actual is:" + tvMasterPageTitle,
+                tvMasterPageTitle.equalsIgnoreCase(tvMasterIconName), execTime);
     }
 
     /**
@@ -44,7 +47,7 @@ public class TestTVMaster extends AppStorePage {
      */
     @Category(LevelP1Tests.class)
     @Test
-    public void testTVMasterUIDisplay() throws UiObjectNotFoundException {
+    public void Master_Home_01_testTVMasterUIDisplay() throws UiObjectNotFoundException {
         //Launcher应用tab页面，点击电视助手
         enterTVMasterPage();
         //Assert
@@ -52,5 +55,7 @@ public class TestTVMaster extends AppStorePage {
         String tvMasterPageTitle = tvMasterPageTitleObj.getText();
         UiObject settingBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/iv_settings"));
         Assert.assertTrue("电视助手页面中设置按钮没有显示", settingBtn.exists());
+        Utils.writeCaseResult("Verify the TVMaster page is not displayed",
+                settingBtn.exists(), execTime);
     }
 }
