@@ -17,6 +17,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.appstoretest.Common.AppStorePage;
 import tv.fun.common.Utils;
 
@@ -1326,4 +1327,9 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("AppStore About page title is displayed incorrectly", aboutPageTitle.getText().equalsIgnoreCase("应用市场"));
         Assert.assertTrue("AppStore About page detail info is displayed incorrectly", detailInfo.exists());
     }
+
+//        @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }

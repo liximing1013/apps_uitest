@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.appstoretest.Common.AppStorePage;
 import tv.fun.common.Utils;
 
@@ -58,4 +59,9 @@ public class TestTVMaster extends AppStorePage {
         Utils.writeCaseResult("Verify the TVMaster page is not displayed",
                 settingBtn.exists(), execTime);
     }
+
+//        @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }
