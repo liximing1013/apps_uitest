@@ -1,4 +1,4 @@
-package tv.fun.appstoretest.TestCases;
+package tv.fun.appstoretest.testCases;
 
 import android.os.RemoteException;
 import android.support.test.uiautomator.By;
@@ -17,8 +17,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import tv.fun.appsautotest.common.TvCommon;
-import tv.fun.appstoretest.Common.AppStorePage;
+import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.common.Utils;
 
 
@@ -232,6 +231,105 @@ public class TestAppStore extends AppStorePage {
         UiObject controlledDevice = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/downloadCount"));
         Assert.assertTrue("详情页中海报图没有显示", pic.exists());
         Assert.assertTrue("详情页中下载次数没有显示", controlledDevice.getText().contains("下载："));
+        Utils.writeCaseResult("Verify the app detail page is displayed correctly",
+                controlledDevice.getText().contains("下载："), execTime);
+    }
+
+    /**
+     * Test that install app successfully
+     * @throws RemoteException
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Category(LevelP1Tests.class)
+    @Test
+    public void App_Game_15_testInstallAppFromAppStore() throws RemoteException, UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+        enterAppStorePage();
+        moveToAppStoreTargetTab(appStoreTabs[1]);
+        UiObject firstApp = null;
+        firstApp = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/image").index(0));
+        firstApp.clickAndWaitForNewWindow();
+        waitForAppDetailPageDisplay();
+        //Assert
+        String currentAppName = findElementByID("tv.fun.appstore:id/title").getText();
+        if (!device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer").text("安装")).exists()) {
+            device.pressBack();
+            gotoAppCleanPageFromAppUninstallPage(true);
+            uninstallAppFromAppCleanPage(currentAppName);
+            device.pressBack();
+            moveToAppStoreTargetTab(appStoreTabs[1]);
+            firstApp = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/image").index(0));
+            firstApp.clickAndWaitForNewWindow();
+            waitForAppDetailPageDisplay();
+        }
+        //installBtn.click();不能实现点击安装按钮操作，故使用pressEnter
+        installAppInDetailPage();
+        UiObject openBtn = device.findObject(new UiSelector().className("android.widget.Button"));
+        Assert.assertTrue("详情页中应用未安装成功", openBtn.getText().equalsIgnoreCase("打开"));
+        Utils.writeCaseResult("Verify the app can be installed successfully",
+                openBtn.getText().equalsIgnoreCase("打开"), execTime);
+    }
+
+    /**
+     * Test the child App List of game can be filtered by All successfully
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_Game_23_testFilterGameChildListByAllAndBack() throws UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+        enterAppStorePage();
+        moveToAppStoreTargetTab(appStoreTabs[1]);
+        device.pressDPadDown();
+//        UiObject firstGameChildEnter = findElementByID("tv.fun.appstore:id/list").getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+        UiObject firstGameChildEnter = findElementByText("动作", "tv.fun.appstore:id/title");
+        if (!firstGameChildEnter.isSelected()) {
+            moveToUpForMultiple(6);
+            device.pressDPadRight();
+            device.pressDPadLeft();
+            device.pressDPadDown();
+        }
+//        String firstEnterName = firstGameChildEnter.getChild(new UiSelector().className("tv.fun.appstore:id/title")).getText();
+        //点击游戏tab下第一个子入口，进入列表页
+        firstGameChildEnter.clickAndWaitForNewWindow();
+        String totalApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        String startApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[0];
+        int startAppNum = stringToInt(startApp);
+        int totalAppNum = stringToInt(totalApp);
+        Assert.assertTrue("App list is not default to start with NO. 1", startAppNum == 1);
+
+        //点击"手柄"筛选按钮
+        UiObject handlel = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView"));
+        handlel.clickAndWaitForNewWindow();
+        //筛选后,再次获取数据
+        String totalAppAfterHandlel = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        int totalAppNumAfterHandlel = stringToInt(totalAppAfterHandlel);
+        Assert.assertTrue("The total app num is not less than default after filtering by Handlel", totalAppNumAfterHandlel <= stringToInt(totalApp));
+        UiScrollable scroll = new UiScrollable(new UiSelector().resourceId("android:id/tv_fun_scrollbar"));
+        if (scroll.exists()) {
+            moveToDownForMultiple(3);
+            moveToRight();
+        }
+        String startAppAfterScroll = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[0];
+        Assert.assertTrue("The start app is not changed after scrolling", stringToInt(startAppAfterScroll) > 1);
+
+        //点击"全部"筛选按钮
+        UiObject allFilter = device.findObject(new UiSelector().text("全部").className("android.widget.TextView"));
+        allFilter.clickAndWaitForNewWindow();
+        //筛选后,再次获取数据
+        String totalAppAfterAll = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        String startAppAfterAll = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[0];
+        int totalAppNumAfterAll = stringToInt(totalAppAfterAll);
+        int startAppNumAfterAll = stringToInt(startAppAfterAll);
+        Assert.assertTrue("The total app num is not more than default after filtering by All", totalAppNumAfterAll == totalAppNum);
+        Assert.assertTrue("The start app is not default to 1 after filtering", startAppNumAfterAll == 1);
+        Utils.writeCaseResult("Verify the game child list is filtering correctly",
+                totalAppNumAfterAll == totalAppNum, execTime);
+//        //Check all apps in list have all operation after filter by RC
+//        UiObject allAppList = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/all_apps_view"));
+//        int allAppNumAfterFilter = allAppList.getChildCount();
+//        Assert.assertTrue("The actaul app num is not same as the total num displayed in scrollbar after filtering by All", allAppNumAfterFilter == totalAppNumAfterAll);
     }
 
     /**
@@ -279,6 +377,8 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("Filter option is displayed incorrectly in list page", firstFilter.equalsIgnoreCase("全部"));
         Assert.assertTrue("Filter option is displayed incorrectly in list page", secFilter.equalsIgnoreCase("遥控器"));
         Assert.assertTrue("Filter option is displayed incorrectly in list page", thirdFilter.equalsIgnoreCase("手柄"));
+        Utils.writeCaseResult("Verify the game child list page is displayed correctly",
+                thirdFilter.equalsIgnoreCase("手柄"), execTime);
     }
 
     /**
@@ -348,11 +448,7 @@ public class TestAppStore extends AppStorePage {
         //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
         enterAppStorePage();
         moveToAppStoreTargetTab(appStoreTabs[1]);
-//        UiScrollable navBar = new UiScrollable(new UiSelector()
-//                .resourceId("tv.fun.appstore:id/column_list"));
-//        UiObject tjTab = navBar.getChildByText(new UiSelector()
-//                .className("tv.fun.appstore:id/column_title"), appStoreTabs[1]);
-        device.pressDPadDown();
+        moveToDown();
 //        UiObject firstGameChildEnter = findElementByID("tv.fun.appstore:id/list").getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
         UiObject firstGameChildEnter = findElementByText("动作", "tv.fun.appstore:id/title");
         if (!firstGameChildEnter.isSelected()) {
@@ -386,96 +482,6 @@ public class TestAppStore extends AppStorePage {
 //        UiObject handlelAppList = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/all_apps_view"));
 //        int handlelAppNum = handlelAppList.getChildCount();
 //        Assert.assertTrue("The actaul app num is not same as the total num displayed in scrollbar after filtering by RC", handlelAppNum == totalAppNumAfterHandlel);
-    }
-
-    /**
-     * Test the child App List of game can be filtered by All successfully
-     * @throws UiObjectNotFoundException
-     * @throws InterruptedException
-     */
-    @Test
-    public void App_Game_23_testFilterGameChildListByAllAndBack() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
-        enterAppStorePage();
-        moveToAppStoreTargetTab(appStoreTabs[1]);
-        device.pressDPadDown();
-//        UiObject firstGameChildEnter = findElementByID("tv.fun.appstore:id/list").getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
-        UiObject firstGameChildEnter = findElementByText("动作", "tv.fun.appstore:id/title");
-        if (!firstGameChildEnter.isSelected()) {
-            moveToUpForMultiple(6);
-            device.pressDPadRight();
-            device.pressDPadLeft();
-            device.pressDPadDown();
-        }
-//        String firstEnterName = firstGameChildEnter.getChild(new UiSelector().className("tv.fun.appstore:id/title")).getText();
-        //点击游戏tab下第一个子入口，进入列表页
-        firstGameChildEnter.clickAndWaitForNewWindow();
-        String totalApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        String startApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[0];
-        int startAppNum = stringToInt(startApp);
-        int totalAppNum = stringToInt(totalApp);
-        Assert.assertTrue("App list is not default to start with NO. 1", startAppNum == 1);
-
-        //点击"手柄"筛选按钮
-        UiObject handlel = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView"));
-        handlel.clickAndWaitForNewWindow();
-        //筛选后,再次获取数据
-        String totalAppAfterHandlel = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        int totalAppNumAfterHandlel = stringToInt(totalAppAfterHandlel);
-        Assert.assertTrue("The total app num is not less than default after filtering by Handlel", totalAppNumAfterHandlel <= stringToInt(totalApp));
-        UiScrollable scroll = new UiScrollable(new UiSelector().resourceId("android:id/tv_fun_scrollbar"));
-        if (scroll.exists()) {
-            moveToDownForMultiple(3);
-            moveToRight();
-        }
-        String startAppAfterScroll = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[0];
-        Assert.assertTrue("The start app is not changed after scrolling", stringToInt(startAppAfterScroll) > 1);
-
-        //点击"全部"筛选按钮
-        UiObject allFilter = device.findObject(new UiSelector().text("全部").className("android.widget.TextView"));
-        allFilter.clickAndWaitForNewWindow();
-        //筛选后,再次获取数据
-        String totalAppAfterAll = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        String startAppAfterAll = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[0];
-        int totalAppNumAfterAll = stringToInt(totalAppAfterAll);
-        int startAppNumAfterAll = stringToInt(startAppAfterAll);
-        Assert.assertTrue("The total app num is not more than default after filtering by All", totalAppNumAfterAll == totalAppNum);
-        Assert.assertTrue("The start app is not default to 1 after filtering", startAppNumAfterAll == 1);
-//        //Check all apps in list have all operation after filter by RC
-//        UiObject allAppList = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/all_apps_view"));
-//        int allAppNumAfterFilter = allAppList.getChildCount();
-//        Assert.assertTrue("The actaul app num is not same as the total num displayed in scrollbar after filtering by All", allAppNumAfterFilter == totalAppNumAfterAll);
-    }
-
-    /**
-     * Test that install app successfully
-     * @throws RemoteException
-     * @throws UiObjectNotFoundException
-     * @throws InterruptedException
-     */
-    @Category(LevelP1Tests.class)
-    @Test
-    public void App_Game_15_testInstallAppFromAppStore() throws RemoteException, UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
-        enterAppStorePage();
-        moveToAppStoreTargetTab(appStoreTabs[1]);
-        UiObject firstApp = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/image").index(0));
-        if (!firstApp.isSelected()) {
-            moveToTopOnAppStoreHomePage();
-            moveToDown();
-            moveToRight();
-        }
-        firstApp.clickAndWaitForNewWindow();
-        //Assert
-        if (!device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer").text("安装")).exists()) {
-            device.pressBack();
-            device.pressDPadRight();
-            device.pressEnter();
-        }
-        //installBtn.click();不能实现点击安装按钮操作，故使用pressEnter
-        installAppInDetailPage();
-        UiObject2 openBtn = device.findObject(By.clazz("android.widget.Button"));
-        Assert.assertTrue("详情页中应用未安装成功", openBtn.getText().equalsIgnoreCase("打开"));
     }
 
     /**
@@ -678,6 +684,47 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
+     * Test that all categories page displays correctly.
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_All_01_testAllCategoriesPageDisplay() throws UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
+        enterAppStorePage();
+        //进入全部分类
+        menu();
+        waitForElementPresentByID("android:id/tv_fun_menu_icon");
+        UiObject allCategoryIcon = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("全部分类"));
+        allCategoryIcon.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/title");
+        UiObject allCategoryTitle = device.findObject(new UiSelector().className("android.widget.TextView").index(0));
+        //断言
+        Assert.assertTrue("All Category page title is displayed incorrectly", allCategoryTitle.getText().equalsIgnoreCase("全部分类"));
+        UiObject gameTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[1]));
+        UiObject ylTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[2]));
+        UiObject shTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[3]));
+        UiObject jyTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[4]));
+        Assert.assertTrue("Game title is not displayed in all category page", gameTitle.exists());
+        Assert.assertTrue("YL title is not displayed in all category page", ylTitle.exists());
+        Assert.assertTrue("Life title is not displayed in all category page", shTitle.exists());
+        Assert.assertTrue("Education title is not displayed in all category page", jyTitle.exists());
+        UiObject gameChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(0));
+        int gameChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
+        Assert.assertTrue("The count of game child enter is not more than 1", gameChildCount > 1);
+        UiObject ylChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(1));
+        int ylChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
+        Assert.assertTrue("The count of yule child enter is not more than 1", ylChildCount > 1);
+        UiObject shChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(2));
+        int shChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
+        Assert.assertTrue("The count of shenghuo child enter is not more than 1", shChildCount > 1);
+        UiObject jyChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(3));
+        int jyChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
+        Assert.assertTrue("The count of jiaoyu child enter is not more than 1", jyChildCount > 1);
+    }
+
+    /**
      * Test that can enter child list from all category page
      *
      * @throws UiObjectNotFoundException
@@ -714,110 +761,13 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
-     * Test that all categories page displays correctly.
-     *
-     * @throws UiObjectNotFoundException
-     * @throws InterruptedException
-     */
-    @Test
-    public void App_All_1_testAllCategoriesPageDisplay() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
-        enterAppStorePage();
-        //进入全部分类
-        menu();
-        waitForElementPresentByID("android:id/tv_fun_menu_icon");
-        UiObject allCategoryIcon = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("全部分类"));
-        allCategoryIcon.clickAndWaitForNewWindow();
-        waitForElementPresentByID("tv.fun.appstore:id/title");
-        UiObject allCategoryTitle = device.findObject(new UiSelector().className("android.widget.TextView").index(0));
-        //断言
-        Assert.assertTrue("All Category page title is displayed incorrectly", allCategoryTitle.getText().equalsIgnoreCase("全部分类"));
-        UiObject gameTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[1]));
-        UiObject ylTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[2]));
-        UiObject shTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[3]));
-        UiObject jyTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(appStoreTabs[4]));
-        Assert.assertTrue("Game title is not displayed in all category page", gameTitle.exists());
-        Assert.assertTrue("YL title is not displayed in all category page", ylTitle.exists());
-        Assert.assertTrue("Life title is not displayed in all category page", shTitle.exists());
-        Assert.assertTrue("Education title is not displayed in all category page", jyTitle.exists());
-        UiObject gameChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(0));
-        int gameChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
-        Assert.assertTrue("The count of game child enter is not more than 1", gameChildCount > 1);
-        UiObject ylChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(1));
-        int ylChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
-        Assert.assertTrue("The count of yule child enter is not more than 1", ylChildCount > 1);
-        UiObject shChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(2));
-        int shChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
-        Assert.assertTrue("The count of shenghuo child enter is not more than 1", shChildCount > 1);
-        UiObject jyChildArea = device.findObject(new UiSelector().className("android.widget.LinearLayout").index(3));
-        int jyChildCount = gameChildArea.getChild(new UiSelector().resourceId("tv.fun.appstore:id/grid")).getChildCount();
-        Assert.assertTrue("The count of jiaoyu child enter is not more than 1", jyChildCount > 1);
-    }
-
-    /**
-     * Test that the child list of life is displayed correctly when entering child list page from all category page after filtering game by handle in one game child list page
-     *
-     * @throws UiObjectNotFoundException
-     * @throws InterruptedException
-     */
-    @Test
-    public void App_All_5_testEnterLifeChildListPageAfterFilterGameByHandle() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
-        enterAppStorePage();
-        moveToAppStoreTargetTab(appStoreTabs[1]);
-        moveToDown();
-        UiObject firstGameChildEnter = findElementByText("动作", "tv.fun.appstore:id/title");
-        if(!firstGameChildEnter.isSelected()){
-            moveToUpForMultiple(6);
-            moveToRight();
-            moveToLeft();
-            moveToDown();
-        }
-        //点击游戏tab下第一个子入口，进入列表页
-        firstGameChildEnter.clickAndWaitForNewWindow();
-        waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
-        String totalApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        //点击"手柄"筛选按钮
-        UiObject handlel = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView"));
-        handlel.clickAndWaitForNewWindow();
-        //筛选后,再次获取数据
-        String totalAppAfterHandlel = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        int totalAppNumAfterHandlel = stringToInt(totalAppAfterHandlel);
-        Boolean handlelStatus = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView")).isSelected();
-        Assert.assertTrue("The total app num is not less than default after filtering by Handlel", totalAppNumAfterHandlel<= stringToInt(totalApp));
-        Assert.assertTrue("The handle button is not selected", handlelStatus);
-        //按遥控器Menu键，点击"全部分类"
-        menu();
-        UiObject allCateBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("全部分类"));
-        allCateBtn.clickAndWaitForNewWindow();
-
-        //点击生活下第一个子入口
-        UiObject obj = findElementByID("tv.fun.appstore:id/container").getChild(new UiSelector().className("android.widget.LinearLayout").index(2));
-        UiObject shChildEnter = obj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
-        String childEnterName = shChildEnter.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
-        shChildEnter.clickAndWaitForNewWindow();
-        String totalSHChildApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        int totalSHChildAppNum = stringToInt(totalSHChildApp);
-
-        //返回应用市场首页,并点击生活tab下
-        device.pressBack();
-        moveToAppStoreTargetTab(appStoreTabs[3]);
-        moveToDown();
-        UiObject childEnter = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(childEnterName));
-        childEnter.clickAndWaitForNewWindow();
-        String expectedAppList = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        int expectedAppNum =  stringToInt(expectedAppList);
-        Assert.assertTrue("The app num in sh child enter page is expected [" + expectedAppNum +"], but actaul [" + totalSHChildAppNum + "]", totalSHChildAppNum==expectedAppNum);
-    }
-
-    /**
      * Test enter yule child list page after filtering game app by remote control
      *
      * @throws UiObjectNotFoundException
      * @throws InterruptedException
      */
     @Test
-    public void App_All_4_testEnterYLChildListPageAfterFilterGameByRemoteControl() throws UiObjectNotFoundException, InterruptedException {
+    public void App_All_04_testEnterYLChildListPageAfterFilterGameByRemoteControl() throws UiObjectNotFoundException, InterruptedException {
         //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
         enterAppStorePage();
         //移动焦点到导航条 > 应用管理tab
@@ -865,59 +815,59 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
-     * Test that the UI and detail info of App Uninstall page displays correctly.
+     * Test that the child list of life is displayed correctly when entering child list page from all category page after filtering game by handle in one game child list page
      *
      * @throws UiObjectNotFoundException
      * @throws InterruptedException
      */
     @Test
-    public void App_AppM_27_testEnterAppUninstallPage() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
+    public void App_All_05_testEnterLifeChildListPageAfterFilterGameByHandle() throws UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
         enterAppStorePage();
-        //移动焦点到导航条 > 应用管理tab
-        moveToAppStoreTargetTab(appStoreTabs[5]);
+        moveToAppStoreTargetTab(appStoreTabs[1]);
         moveToDown();
-        moveToRight();
-        UiObject appUninstallCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall"));
-        appUninstallCard.clickAndWaitForNewWindow();
-        waitForElementPresentByID("tv.fun.appstore:id/title");
-        moveToDown();
-        //断言
-        Assert.assertTrue("Title of AppUninstall page is incorrect", device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText().equalsIgnoreCase("应用卸载"));
-        String subTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/subTitle")).getText();
-        String str = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText();
+        UiObject firstGameChildEnter = findElementByText("动作", "tv.fun.appstore:id/title");
+        if(!firstGameChildEnter.isSelected()){
+            moveToUpForMultiple(6);
+            moveToRight();
+            moveToLeft();
+            moveToDown();
+        }
+        //点击游戏tab下第一个子入口，进入列表页
+        firstGameChildEnter.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
         String totalApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
-        int totalAppNum = stringToInt(totalApp);
-        List<UiObject2> appList = device.findObjects(By.clazz("android.widget.RelativeLayout"));
-        int appCardCount = appList.size();
-        Assert.assertTrue("The count of app displayed in current page is not more than 1", appCardCount > 1 && appCardCount < totalAppNum);
-        Assert.assertTrue("Subtitle of AppUninstall page is incorrect", subTitle.contains("有" + totalAppNum + "个应用 占用空间:") && subTitle.endsWith("M"));
-        //验证页面底部有当前应用的名称和大小信息
-        String firstAppName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/appName")).getText();
-        UiObject appInfoBar = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/appState"));
-        String appInfo = appInfoBar.getText();
-        Assert.assertTrue("App info displayed in AppUninstall page is incorrect", appInfo.contains(firstAppName) && appInfo.endsWith("M"));
-    }
+        //点击"手柄"筛选按钮
+        UiObject handlel = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView"));
+        handlel.clickAndWaitForNewWindow();
+        //筛选后,再次获取数据
+        String totalAppAfterHandlel = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        int totalAppNumAfterHandlel = stringToInt(totalAppAfterHandlel);
+        Boolean handlelStatus = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView")).isSelected();
+        Assert.assertTrue("The total app num is not less than default after filtering by Handlel", totalAppNumAfterHandlel<= stringToInt(totalApp));
+        Assert.assertTrue("The handle button is not selected", handlelStatus);
+        //按遥控器Menu键，点击"全部分类"
+        menu();
+        UiObject allCateBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("全部分类"));
+        allCateBtn.clickAndWaitForNewWindow();
 
-    /**
-     * Test that can enter app upgrade page successfully
-     *
-     * @throws UiObjectNotFoundException
-     * @throws InterruptedException
-     */
-    @Test
-    public void App_AppM_47_testEnterAppUpgradePage() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
-        enterAppStorePage();
-        //移动焦点到导航条 > 应用管理tab
-        moveToAppStoreTargetTab(appStoreTabs[5]);
+        //点击生活下第一个子入口
+        UiObject obj = findElementByID("tv.fun.appstore:id/container").getChild(new UiSelector().className("android.widget.LinearLayout").index(2));
+        UiObject shChildEnter = obj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+        String childEnterName = shChildEnter.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+        shChildEnter.clickAndWaitForNewWindow();
+        String totalSHChildApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        int totalSHChildAppNum = stringToInt(totalSHChildApp);
+
+        //返回应用市场首页,并点击生活tab下
+        device.pressBack();
+        moveToAppStoreTargetTab(appStoreTabs[3]);
         moveToDown();
-        UiObject appUpgradeCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_upgrade"));
-        appUpgradeCard.clickAndWaitForNewWindow();
-        waitForElementPresentByID("tv.fun.appstore:id/title");
-        //断言
-        String pageTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
-        Assert.assertTrue("Title of AppUpgrade page is incorrect", pageTitle.equalsIgnoreCase("应用更新"));
+        UiObject childEnter = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(childEnterName));
+        childEnter.clickAndWaitForNewWindow();
+        String expectedAppList = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        int expectedAppNum =  stringToInt(expectedAppList);
+        Assert.assertTrue("The app num in sh child enter page is expected [" + expectedAppNum +"], but actaul [" + totalSHChildAppNum + "]", totalSHChildAppNum==expectedAppNum);
     }
 
     /**
@@ -1083,8 +1033,61 @@ public class TestAppStore extends AppStorePage {
         }
     }
 
+    /**
+     * test that it can navigate from MyAPP page to APPClean page by CleanData button
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
     @Test
-    public void App_AppM_40_testEnterAppDetailPageFromAppUnintallPage() throws UiObjectNotFoundException, InterruptedException {
+    public void App_AppM_22_testGotoAppCleanPageFromMyApp() throws UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+        enterAppStorePage();
+        //移动焦点到导航条 > 应用管理tab
+        moveToAppStoreTargetTab(appStoreTabs[5]);
+        moveToDown();
+        UiObject myAppCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_local"));
+        if (!myAppCard.isSelected()) {
+            moveToRightForMultiple(2);
+            if (findElementByID("tv.fun.appstore:id/activity_search_btn").isSelected()) {
+                moveToLeft();
+                moveToDown();
+            } else {
+                moveToLeft();
+                if (!findElementByID("tv.fun.appstore:id/tool_local").isSelected()) {
+                    moveToLeft();
+                }
+            }
+        }
+        myAppCard.clickAndWaitForNewWindow();
+        //在我的应用页面，按遥控器Menu键
+        moveToDown();
+        menu();
+        UiObject appCleanBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("清理数据"));
+        //断言
+        Assert.assertTrue("The app clean button is not displayed on the Menu pop-up", appCleanBtn.exists());
+        device.pressDPadRight();
+        appCleanBtn.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.master:id/uninstall");
+        waitForElementPresentByID("tv.fun.master:id/clearData");
+        UiObject appCleanPageTitle = device.findObject(new UiSelector().resourceId("tv.fun.master:id/title"));
+        UiObject uninstallBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
+        UiObject cleanDataBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/clearData"));
+        Assert.assertTrue("app clean page title is incorrect", appCleanPageTitle.getText().equalsIgnoreCase("应用清理"));
+        Assert.assertTrue(" The uninstall button is not displayed", uninstallBtn.exists());
+        Assert.assertTrue(" The name of uninstall button is displayed incorrectly", uninstallBtn.getText().equalsIgnoreCase("卸载"));
+        Assert.assertTrue(" The clean date button is not displayed", cleanDataBtn.exists());
+        Assert.assertTrue(" The name of clean date is displayed incorrectly", cleanDataBtn.getText().equalsIgnoreCase("清理数据"));
+    }
+
+    /**
+     * Test that the UI and detail info of App Uninstall page displays correctly.
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_AppM_27_testEnterAppUninstallPage() throws UiObjectNotFoundException, InterruptedException {
         //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
         enterAppStorePage();
         //移动焦点到导航条 > 应用管理tab
@@ -1094,52 +1097,22 @@ public class TestAppStore extends AppStorePage {
         UiObject appUninstallCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall"));
         appUninstallCard.clickAndWaitForNewWindow();
         waitForElementPresentByID("tv.fun.appstore:id/title");
-        Boolean appFlag = checkWhetherNoAppInAppUninstall();
-        if (appFlag) {
-            device.pressBack();
-            moveToUp();
-            moveToRight();
-            device.pressEnter();
-            waitForElementPresentByIDAndText("tv.fun.appstore:id/search_result_title", "热门搜索：");
-            //device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn")).click(); Cannot use click
-            //Input keyword in input textfield, to search app
-            UiObject AKey = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text("A"));
-            AKey.click();
-            UiObject resultCountObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_result_count"));
-            int resultCount = Integer.parseInt(resultCountObj.getText());
-            if (resultCount > 0) {
-                moveToRightForMultiple(2);
-//                device.pressDPadDown();
-//                device.pressDPadUp();
-                device.pressEnter();
-//              UiObject result = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_search_reulst_cell").index(0));
-//                result.clickAndWaitForNewWindow();
-                installAppInDetailPageAndBack();
-                device.pressBack();
-                moveToDown();
-                moveToRight();
-                device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall")).clickAndWaitForNewWindow();
-            }
-        }
-        //得到第一个已安装应用名称
-        String firstAppName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/appName")).getText();
-
-        //在应用卸载页面，点击应用卡片
         moveToDown();
-        menu();
-        UiObject appDetailBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("详情"));
-        Assert.assertTrue("The app detail button is not displayed on the Menu pop-up", appDetailBtn.exists());
-//        device.pressDPadRight();
-        //点击“详情”按钮，进入应用详情页
-        appDetailBtn.clickAndWaitForNewWindow();
-        waitForAppDetailPageDisplay();
         //断言
-        String appTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
-        Assert.assertTrue("The detail page is incorrect when entering detail page from app uninstall page", appTitle.equalsIgnoreCase(firstAppName));
-        Assert.assertTrue("App detail page is not displayed", device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_root")).exists());
-        Assert.assertTrue("The brief of App detail page is not displayed", device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_list")).exists());
-        UiObject picObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_list")).getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_image").index(0));
-        Assert.assertTrue("The poster of App detail page is not displayed", picObj.exists());
+        Assert.assertTrue("Title of AppUninstall page is incorrect", device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText().equalsIgnoreCase("应用卸载"));
+        String subTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/subTitle")).getText();
+        String str = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText();
+        String totalApp = device.findObject(new UiSelector().resourceId("android:id/tv_fun_scrollbar_indicator")).getText().split(" / ")[1];
+        int totalAppNum = stringToInt(totalApp);
+        List<UiObject2> appList = device.findObjects(By.clazz("android.widget.RelativeLayout"));
+        int appCardCount = appList.size();
+        Assert.assertTrue("The count of app displayed in current page is not more than 1", appCardCount > 1 && appCardCount < totalAppNum);
+        Assert.assertTrue("Subtitle of AppUninstall page is incorrect", subTitle.contains("有" + totalAppNum + "个应用 占用空间:") && subTitle.endsWith("M"));
+        //验证页面底部有当前应用的名称和大小信息
+        String firstAppName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/appName")).getText();
+        UiObject appInfoBar = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/appState"));
+        String appInfo = appInfoBar.getText();
+        Assert.assertTrue("App info displayed in AppUninstall page is incorrect", appInfo.contains(firstAppName) && appInfo.endsWith("M"));
     }
 
     /**
@@ -1217,54 +1190,71 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
-     * test that it can navigate from MyAPP page to APPClean page by CleanData button
-     *
+     * Test that can goto App detail page from app uninstall page
      * @throws UiObjectNotFoundException
      * @throws InterruptedException
      */
     @Test
-    public void App_AppM_22_testGotoAppCleanPageFromMyApp() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+    public void App_AppM_40_testEnterAppDetailPageFromAppUnintallPage() throws UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
         enterAppStorePage();
         //移动焦点到导航条 > 应用管理tab
         moveToAppStoreTargetTab(appStoreTabs[5]);
         moveToDown();
-        UiObject myAppCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_local"));
-        if (!myAppCard.isSelected()) {
-            moveToRightForMultiple(2);
-            if (findElementByID("tv.fun.appstore:id/activity_search_btn").isSelected()) {
-                moveToLeft();
+        moveToRight();
+        UiObject appUninstallCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall"));
+        appUninstallCard.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/title");
+        Boolean appFlag = checkWhetherNoAppInAppUninstall();
+        if (appFlag) {
+            device.pressBack();
+            moveToUp();
+            moveToRight();
+            device.pressEnter();
+            waitForElementPresentByIDAndText("tv.fun.appstore:id/search_result_title", "热门搜索：");
+            //device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn")).click(); Cannot use click
+            //Input keyword in input textfield, to search app
+            UiObject AKey = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text("A"));
+            AKey.click();
+            UiObject resultCountObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_result_count"));
+            int resultCount = Integer.parseInt(resultCountObj.getText());
+            if (resultCount > 0) {
+                moveToRightForMultiple(2);
+//                device.pressDPadDown();
+//                device.pressDPadUp();
+                device.pressEnter();
+//              UiObject result = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_search_reulst_cell").index(0));
+//                result.clickAndWaitForNewWindow();
+                installAppInDetailPageAndBack();
+                device.pressBack();
                 moveToDown();
-            } else {
-                moveToLeft();
-                if (!findElementByID("tv.fun.appstore:id/tool_local").isSelected()) {
-                    moveToLeft();
-                }
+                moveToRight();
+                device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall")).clickAndWaitForNewWindow();
             }
         }
-        myAppCard.clickAndWaitForNewWindow();
-        //在我的应用页面，按遥控器Menu键
+        //得到第一个已安装应用名称
+        String firstAppName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/appName")).getText();
+
+        //在应用卸载页面，点击应用卡片
         moveToDown();
         menu();
-        UiObject appCleanBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("清理数据"));
+        UiObject appDetailBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("详情"));
+        Assert.assertTrue("The app detail button is not displayed on the Menu pop-up", appDetailBtn.exists());
+//        device.pressDPadRight();
+        //点击“详情”按钮，进入应用详情页
+        appDetailBtn.clickAndWaitForNewWindow();
+        waitForAppDetailPageDisplay();
         //断言
-        Assert.assertTrue("The app clean button is not displayed on the Menu pop-up", appCleanBtn.exists());
-        device.pressDPadRight();
-        appCleanBtn.clickAndWaitForNewWindow();
-        waitForElementPresentByID("tv.fun.master:id/uninstall");
-        waitForElementPresentByID("tv.fun.master:id/clearData");
-        UiObject appCleanPageTitle = device.findObject(new UiSelector().resourceId("tv.fun.master:id/title"));
-        UiObject uninstallBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
-        UiObject cleanDataBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/clearData"));
-        Assert.assertTrue("app clean page title is incorrect", appCleanPageTitle.getText().equalsIgnoreCase("应用清理"));
-        Assert.assertTrue(" The uninstall button is not displayed", uninstallBtn.exists());
-        Assert.assertTrue(" The name of uninstall button is displayed incorrectly", uninstallBtn.getText().equalsIgnoreCase("卸载"));
-        Assert.assertTrue(" The clean date button is not displayed", cleanDataBtn.exists());
-        Assert.assertTrue(" The name of clean date is displayed incorrectly", cleanDataBtn.getText().equalsIgnoreCase("清理数据"));
+        String appTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+        Assert.assertTrue("The detail page is incorrect when entering detail page from app uninstall page", appTitle.equalsIgnoreCase(firstAppName));
+        Assert.assertTrue("App detail page is not displayed", device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_root")).exists());
+        Assert.assertTrue("The brief of App detail page is not displayed", device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_list")).exists());
+        UiObject picObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_list")).getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_image").index(0));
+        Assert.assertTrue("The poster of App detail page is not displayed", picObj.exists());
     }
 
     /**
-     * test that it can navigate from AppUninstall page to APPClean page by CleanData button
+     * Test that it can navigate from AppUninstall page to APPClean page by CleanData button
      *
      * @throws UiObjectNotFoundException
      * @throws InterruptedException
@@ -1303,7 +1293,28 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
-     * test goto About page
+     * Test that can enter app upgrade page successfully
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_AppM_47_testEnterAppUpgradePage() throws UiObjectNotFoundException, InterruptedException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
+        enterAppStorePage();
+        //移动焦点到导航条 > 应用管理tab
+        moveToAppStoreTargetTab(appStoreTabs[5]);
+        moveToDown();
+        UiObject appUpgradeCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_upgrade"));
+        appUpgradeCard.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/title");
+        //断言
+        String pageTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+        Assert.assertTrue("Title of AppUpgrade page is incorrect", pageTitle.equalsIgnoreCase("应用更新"));
+    }
+
+    /**
+     * Test goto About page
      *
      * @throws UiObjectNotFoundException
      * @throws InterruptedException
