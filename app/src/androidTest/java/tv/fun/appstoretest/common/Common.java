@@ -43,6 +43,7 @@ public class Common {
     @Before
     public void setup() throws RemoteException, IOException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        execTime = Utils.getCurSecond();
         if(!device.isScreenOn()){
             device.wakeUp();
         }

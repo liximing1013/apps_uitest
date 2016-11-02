@@ -55,6 +55,8 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("电视助手卡片没有显示在Launcher应用页面", tvMasterIcon.exists());
         Assert.assertTrue("我的应用卡片没有显示在Launcher应用页面", myAppIcon.exists());
         Assert.assertTrue("我的应用卡片下方的应用数量没有显示在Launcher应用页面", myAppSubTitle.getText().contains(myAppCountUnit));
+        Utils.writeCaseResult("Verify the UI of Launcher App page is not displayed correctly",
+                myAppSubTitle.getText().contains(myAppCountUnit), execTime);
     }
 
     /**
@@ -78,6 +80,8 @@ public class TestAppStore extends AppStorePage {
         UiObject controlledDevice = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/downloadCount"));
         Assert.assertTrue("详情页中海报图没有显示", pic.exists());
         Assert.assertTrue("详情页中下载次数没有显示", controlledDevice.getText().contains("下载："));
+        Utils.writeCaseResult("Verify the App detail page is not displayed correctly",
+                controlledDevice.getText().contains("下载："), execTime);
     }
 
     /**
@@ -129,6 +133,8 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("Doesn't back to Launcher App page", appTab.exists());
         int currAppNum = stringToInt(findElementByID("com.bestv.ott:id/subtitle").getText().replace("个)", "").replace("(", ""));
         Assert.assertTrue("The install app num is not increased after install one app", currAppNum == installedAppNum + 1);
+        Utils.writeCaseResult("Verify the app can be installed successfully",
+                currAppNum == installedAppNum + 1, execTime);
     }
 
     /**
@@ -157,6 +163,8 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("The jiaoyu tab in AppStore page is not displayed", jyTab.exists());
         Assert.assertTrue("The search icon in AppStore page is not displayed", searchObj.exists());
         Assert.assertTrue("The appManage tab in AppStore page is not displayed", appManageTab.exists());
+        Utils.writeCaseResult("Verify the UI of appstore page displays correctly",
+                appManageTab.exists(), execTime);
     }
 
     /**
@@ -187,6 +195,8 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("The image of hot topic page is not displayed", hotTopicImage.exists());
         Assert.assertTrue("The app list in hot topic page is not displayed", appListObj.exists());
         Assert.assertTrue("The count of app listed in hot topic page is not more than 1", num > 1);
+        Utils.writeCaseResult("Verify the app list in hot topic page is displayed",
+                appListObj.exists(), execTime);
     }
 
     /**
@@ -221,6 +231,8 @@ public class TestAppStore extends AppStorePage {
         UiObject controlledDevice = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/downloadCount"));
         Assert.assertTrue("详情页中海报图没有显示", pic.exists());
         Assert.assertTrue("详情页中下载次数没有显示", controlledDevice.getText().contains("下载："));
+        Utils.writeCaseResult("Verify the app detail page is displayed correctly",
+                controlledDevice.getText().contains("下载："), execTime);
     }
 
     /**
@@ -255,6 +267,8 @@ public class TestAppStore extends AppStorePage {
         installAppInDetailPage();
         UiObject openBtn = device.findObject(new UiSelector().className("android.widget.Button"));
         Assert.assertTrue("详情页中应用未安装成功", openBtn.getText().equalsIgnoreCase("打开"));
+        Utils.writeCaseResult("Verify the app can be installed successfully",
+                openBtn.getText().equalsIgnoreCase("打开"), execTime);
     }
 
     /**
@@ -310,6 +324,8 @@ public class TestAppStore extends AppStorePage {
         int startAppNumAfterAll = stringToInt(startAppAfterAll);
         Assert.assertTrue("The total app num is not more than default after filtering by All", totalAppNumAfterAll == totalAppNum);
         Assert.assertTrue("The start app is not default to 1 after filtering", startAppNumAfterAll == 1);
+        Utils.writeCaseResult("Verify the game child list is filtering correctly",
+                totalAppNumAfterAll == totalAppNum, execTime);
 //        //Check all apps in list have all operation after filter by RC
 //        UiObject allAppList = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/all_apps_view"));
 //        int allAppNumAfterFilter = allAppList.getChildCount();
@@ -361,6 +377,8 @@ public class TestAppStore extends AppStorePage {
         Assert.assertTrue("Filter option is displayed incorrectly in list page", firstFilter.equalsIgnoreCase("全部"));
         Assert.assertTrue("Filter option is displayed incorrectly in list page", secFilter.equalsIgnoreCase("遥控器"));
         Assert.assertTrue("Filter option is displayed incorrectly in list page", thirdFilter.equalsIgnoreCase("手柄"));
+        Utils.writeCaseResult("Verify the game child list page is displayed correctly",
+                thirdFilter.equalsIgnoreCase("手柄"), execTime);
     }
 
     /**
