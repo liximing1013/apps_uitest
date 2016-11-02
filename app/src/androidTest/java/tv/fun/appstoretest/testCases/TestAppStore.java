@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
+import java.io.IOException;
 import java.util.List;
 
 import tv.fun.appstoretest.common.AppStorePage;
@@ -38,25 +39,37 @@ public class TestAppStore extends AppStorePage {
      */
     @Category({LevelP1Tests.class})
     @Test
-    public void App_Home_01_testLauncherAppUI() throws UiObjectNotFoundException {
-        //移动焦点到Launcher应用tab
-        navigateToLauncherAppTab();
-        //得到Launcher应用页面元素
-        UiObject appStoreIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
-        UiObject tvMasterIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
-        UiObject myAppIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/maintitle").text(myAppIconName));
-        UiObject myAppSubTitle = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));//(22个)
-        String appStoreStr = appStoreIcon.getText();
+    public void App_Home_01_testLauncherAppUI() throws UiObjectNotFoundException, IOException {
+        String error = "";
+        try {
+            //移动焦点到Launcher应用tab
+            navigateToLauncherAppTab();
+            //得到Launcher应用页面元素
+            UiObject appStoreIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
+            UiObject tvMasterIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
+            UiObject myAppIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/maintitle").text(myAppIconName));
+            UiObject myAppSubTitle = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));//(22个)
+            String appStoreStr = appStoreIcon.getText();
 
-        //断言
-        Assert.assertTrue("应用市场卡片没有显示在Launcher应用页面", appStoreIcon.exists());
-        Assert.assertTrue("在Launcher应用页面应用市场卡片显示不正确", appStoreIcon.getText().equalsIgnoreCase(appStoreIconName));
-        Assert.assertTrue("电视助手卡片没有显示在Launcher应用页面", tvMasterIcon.exists());
-        Assert.assertTrue("电视助手卡片没有显示在Launcher应用页面", tvMasterIcon.exists());
-        Assert.assertTrue("我的应用卡片没有显示在Launcher应用页面", myAppIcon.exists());
-        Assert.assertTrue("我的应用卡片下方的应用数量没有显示在Launcher应用页面", myAppSubTitle.getText().contains(myAppCountUnit));
-        Utils.writeCaseResult("Verify the UI of Launcher App page is not displayed correctly",
-                myAppSubTitle.getText().contains(myAppCountUnit), execTime);
+            //断言
+//        Assert.assertTrue("应用市场卡片没有显示在Launcher应用页面", appStoreIcon.exists());
+//        Assert.assertTrue("在Launcher应用页面应用市场卡片显示不正确", appStoreIcon.getText().equalsIgnoreCase(appStoreIconName));
+//        Assert.assertTrue("电视助手卡片没有显示在Launcher应用页面", tvMasterIcon.exists());
+//        Assert.assertTrue("我的应用卡片没有显示在Launcher应用页面", myAppIcon.exists());
+//        Assert.assertTrue("我的应用卡片下方的应用数量没有显示在Launcher应用页面", myAppSubTitle.getText().contains(myAppCountUnit));
+            verifyElementPresent("应用市场卡片没有显示在Launcher应用页面", appStoreIcon);
+            verifyElementPresent("电视助手卡片没有显示在Launcher应用页面", tvMasterIcon);
+            verifyElementPresent("我的应用卡片没有显示在Launcher应用页面", myAppIcon);
+            verifyString("在Launcher应用页面应用市场卡片显示不正确", appStoreIcon.getText(), appStoreIconName);
+            verifyIncludeString("我的应用卡片下方的应用数量没有显示在Launcher应用页面", myAppSubTitle.getText(), myAppCountUnit);
+        }catch(Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
     }
 
     /**
@@ -68,20 +81,29 @@ public class TestAppStore extends AppStorePage {
      */
     @Category(LevelP2Tests.class)
     @Test
-    public void App_Home_07_testEnterAppDetailFromLauncher() throws RemoteException, UiObjectNotFoundException, InterruptedException {
-        //移动焦点到Launcher应用tab
-        navigateToLauncherAppTab();
-        moveToDown();
-        UiObject firstApp = findElementByIndex("id", "com.bestv.ott:id/poster", 0);
-        firstApp.clickAndWaitForNewWindow();
-        waitForAppDetailPageDisplay();
-        //断言
-        UiObject pic = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_image"));
-        UiObject controlledDevice = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/downloadCount"));
-        Assert.assertTrue("详情页中海报图没有显示", pic.exists());
-        Assert.assertTrue("详情页中下载次数没有显示", controlledDevice.getText().contains("下载："));
-        Utils.writeCaseResult("Verify the App detail page is not displayed correctly",
-                controlledDevice.getText().contains("下载："), execTime);
+    public void App_Home_07_testEnterAppDetailFromLauncher() throws InterruptedException {
+        try {
+            //移动焦点到Launcher应用tab
+            navigateToLauncherAppTab();
+            moveToDown();
+            UiObject firstApp = findElementByIndex("id", "com.bestv.ott:id/poster", 0);
+            firstApp.clickAndWaitForNewWindow();
+            waitForAppDetailPageDisplay();
+            //断言
+            UiObject pic = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_image"));
+            UiObject controlledDevice = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/downloadCount"));
+//            Assert.assertTrue("详情页中海报图没有显示", pic.exists());
+//            Assert.assertTrue("详情页中下载次数没有显示", controlledDevice.getText().contains("下载："));
+            verifyElementPresent("详情页中海报图没有显示", pic);
+            verifyIncludeString("详情页中下载次数没有显示", controlledDevice.getText(), "下载：");
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
     }
 
     /**
@@ -93,48 +115,57 @@ public class TestAppStore extends AppStorePage {
      */
     @Category(LevelP2Tests.class)
     @Test
-    public void App_Home_07_testInstallAppFromLauncherAndBack() throws RemoteException, UiObjectNotFoundException, InterruptedException {
-        //移动焦点到Launcher应用tab
-        navigateToLauncherAppTab();
-        moveToDown();
-        UiObject firstApp = findElementByIndex("id", "com.bestv.ott:id/poster", 0);
-        int installedAppNum = stringToInt(findElementByID("com.bestv.ott:id/subtitle").getText().replace("个)", "").replace("(", ""));
-        firstApp.clickAndWaitForNewWindow();
-        waitForAppDetailPageDisplay();
+    public void App_Home_07_testInstallAppFromLauncherAndBack() throws InterruptedException {
+        try {
+            //移动焦点到Launcher应用tab
+            navigateToLauncherAppTab();
+            moveToDown();
+            UiObject firstApp = findElementByIndex("id", "com.bestv.ott:id/poster", 0);
+            int installedAppNum = stringToInt(findElementByID("com.bestv.ott:id/subtitle").getText().replace("个)", "").replace("(", ""));
+            firstApp.clickAndWaitForNewWindow();
+            waitForAppDetailPageDisplay();
 
-        //如果第一个应用已安装，回到首页再选择另一应用安装
-        if (findElementByClass("android.widget.Button").exists()) {
-            if ("打开".equalsIgnoreCase(findElementByClass("android.widget.Button").getText())) {
-                String appName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
-                device.pressBack();
+            //如果第一个应用已安装，回到首页再选择另一应用安装
+            if (findElementByClass("android.widget.Button").exists()) {
+                if ("打开".equalsIgnoreCase(findElementByClass("android.widget.Button").getText())) {
+                    String appName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+                    device.pressBack();
 //                UiObject myAppLink = findElementByID("com.bestv.ott:id/maintitle");
 //                myAppLink.clickAndWaitForNewWindow();
 //                waitForElementPresentByIDAndText("tv.fun.appstore:id/title", "我的应用");
 //                moveToDown();
 //                device.pressMenu();
 //                UiObject firstInstalledApp = findElementByID("tv.fun.appstore:id/listview").getChild(new UiSelector().className("tv.fun.appstore:id/appName").text(appName));
-                moveToRight();
-                device.pressEnter();
+                    moveToRight();
+                    device.pressEnter();
+                }
             }
-        }
-        //installBtn.click();不能实现点击安装按钮操作，故使用pressEnter
-        device.pressDPadDown();
-        device.pressDPadUp();
-        //点击安装按钮，安装应用
-        device.pressEnter();
-        waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
-        waitForElementPresentByClassAndText("android.widget.Button", "打开");
-        UiObject openBtn = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer").className("android.widget.Button"));
+            //installBtn.click();不能实现点击安装按钮操作，故使用pressEnter
+            device.pressDPadDown();
+            device.pressDPadUp();
+            //点击安装按钮，安装应用
+            device.pressEnter();
+            waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
+            waitForElementPresentByClassAndText("android.widget.Button", "打开");
+            UiObject openBtn = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer").className("android.widget.Button"));
 
-        //断言
-        Assert.assertTrue("Failed to install app from Launcher App page", openBtn.getText().equalsIgnoreCase("打开"));
-        device.pressBack();
-        UiObject appTab = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("应用"));
-        Assert.assertTrue("Doesn't back to Launcher App page", appTab.exists());
-        int currAppNum = stringToInt(findElementByID("com.bestv.ott:id/subtitle").getText().replace("个)", "").replace("(", ""));
-        Assert.assertTrue("The install app num is not increased after install one app", currAppNum == installedAppNum + 1);
-        Utils.writeCaseResult("Verify the app can be installed successfully",
-                currAppNum == installedAppNum + 1, execTime);
+            //断言
+            Assert.assertTrue("Failed to install app from Launcher App page", openBtn.getText().equalsIgnoreCase("打开"));
+            device.pressBack();
+            UiObject appTab = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("应用"));
+//            Assert.assertTrue("Doesn't back to Launcher App page", appTab.exists());
+            verifyElementPresent("Doesn't back to Launcher App page", appTab);
+            int currAppNum = stringToInt(findElementByID("com.bestv.ott:id/subtitle").getText().replace("个)", "").replace("(", ""));
+//            Assert.assertTrue("The install app num is not increased after install one app", currAppNum == installedAppNum + 1);
+            verifyNumber("The install app num is not increased after install one app", currAppNum, installedAppNum + 1);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
     }
 
     /**
@@ -145,26 +176,41 @@ public class TestAppStore extends AppStorePage {
      */
     @Test
     public void App_Home_43_testAppStoreUIDisplay() throws UiObjectNotFoundException, InterruptedException {
-        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
-        enterAppStorePage();
-        //断言
-        UiObject tjTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[0]));
-        UiObject yxTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[1]));
-        UiObject ylTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[2]));
-        UiObject shTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[3]));
-        UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
-        UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
-        UiObject searchObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn"));
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //断言
+            UiObject tjTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[0]));
+            UiObject yxTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[1]));
+            UiObject ylTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[2]));
+            UiObject shTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[3]));
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
+            UiObject searchObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn"));
 
-        Assert.assertTrue("The tuijian tab in AppStore page is not displayed", tjTab.exists());
-        Assert.assertTrue("The game tab in AppStore page is not displayed", yxTab.exists());
-        Assert.assertTrue("The yule tab in AppStore page is not displayed", ylTab.exists());
-        Assert.assertTrue("The shenghuo tab in AppStore page is not displayed", shTab.exists());
-        Assert.assertTrue("The jiaoyu tab in AppStore page is not displayed", jyTab.exists());
-        Assert.assertTrue("The search icon in AppStore page is not displayed", searchObj.exists());
-        Assert.assertTrue("The appManage tab in AppStore page is not displayed", appManageTab.exists());
-        Utils.writeCaseResult("Verify the UI of appstore page displays correctly",
-                appManageTab.exists(), execTime);
+//        Assert.assertTrue("The tuijian tab in AppStore page is not displayed", tjTab.exists());
+//        Assert.assertTrue("The game tab in AppStore page is not displayed", yxTab.exists());
+//        Assert.assertTrue("The yule tab in AppStore page is not displayed", ylTab.exists());
+//        Assert.assertTrue("The shenghuo tab in AppStore page is not displayed", shTab.exists());
+//        Assert.assertTrue("The jiaoyu tab in AppStore page is not displayed", jyTab.exists());
+//        Assert.assertTrue("The search icon in AppStore page is not displayed", searchObj.exists());
+//        Assert.assertTrue("The appManage tab in AppStore page is not displayed", appManageTab.exists());
+            verifyElementPresent("The tuijian tab in AppStore page is not displayed", tjTab);
+            verifyElementPresent("The game tab in AppStore page is not displayed", yxTab);
+            verifyElementPresent("The yule tab in AppStore page is not displayed", ylTab);
+            verifyElementPresent("The shenghuo tab in AppStore page is not displayed", shTab);
+            verifyElementPresent("The jiaoyu tab in AppStore page is not displayed", jyTab);
+            verifyElementPresent("The search icon in AppStore page is not displayed", searchObj);
+            verifyElementPresent("The appManage tab in AppStore page is not displayed", appManageTab);
+
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
     }
 
     /**

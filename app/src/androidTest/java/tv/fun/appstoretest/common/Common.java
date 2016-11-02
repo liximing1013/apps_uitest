@@ -8,10 +8,14 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.runners.model.Statement;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import tv.fun.common.Utils;
 
@@ -30,7 +34,6 @@ public class Common {
     public String myAppCountUnit = "个)";
     public String[] tabs = {"推荐", "游戏", "娱乐", "生活", "教育"};
     public String appstorePackage = "tv.fun.appstore";
-    public long execTime;
     public String[] appStoreTabs = {"推荐", "游戏", "娱乐", "生活", "教育", "应用管理"};
     public String[] launcherTabs = {"电视", "视频", "体育", "少儿", "应用", "设置"};
     public String appTab = "应用";
@@ -38,12 +41,16 @@ public class Common {
     public String networkIconIDInPopup = "com.bestv.ott:id/network";//launcher悬浮框上网络设置按钮的resource id
     public static boolean resultFlag = true;
     public static String resultStr = "";
-
+    public long execTime;
+    public String runTool = "Auto";//Studio or Auto
+    public String errorLog = "";
 
     @Before
     public void setup() throws RemoteException, IOException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         execTime = Utils.getCurSecond();
+        resultStr = "";
+        resultFlag = true;
         if(!device.isScreenOn()){
             device.wakeUp();
         }
@@ -473,6 +480,207 @@ public class Common {
         }
     }
 
+
+    /**
+     * Verify not the string.
+     *
+     * @param actual
+     * @param unexpected
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyNotString(String actual, String unexpected)
+            throws IOException {
+        if (!unexpected.equals(actual)) {
+            return true;
+        } else {
+            resultFlag = false;
+            resultStr += "Not expected [" + unexpected + "] is displayed. ";
+            return false;
+        }
+    }
+
+    /**
+     * Verify the string.
+     *
+     * @param actual
+     * @param expected
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyString(String failMsg, String actual, String expected)
+            throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, expected.equalsIgnoreCase(actual));
+        } else {
+            if (expected.equalsIgnoreCase(actual)) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "Expected [" + expected + "] but actual [" + actual
+                            + "]; ";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the string include another string.
+     *
+     * @param actual
+     * @param expected
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyIncludeString(String failMsg, String expected, String actual)
+            throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, expected.contains(actual));
+        } else {
+            if (expected.indexOf(actual) > -1) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                resultStr += "Expected [" + expected + "] contains actual [" + actual
+                        + "], but actually not contain; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the number.
+     *
+     * @param actual
+     * @param expected
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyNumber(String failMsg,int actual, int expected) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, actual == expected);
+        } else {
+            if (actual == expected) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                resultStr += "Expected [" + expected + "] but actual [" + actual
+                        + "]; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the number.
+     *
+     * @param actual
+     * @param expected
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyNotNumber(String failMsg,int actual, int expected) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, actual != expected);
+        } else {
+            if (actual != expected) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                resultStr += "Expected not [" + expected + "] but actual [" + actual
+                        + "]; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the element present.
+     *
+     * @param obj
+     * @param failMsg
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyElementPresent(String failMsg, UiObject obj) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, obj.exists());
+        } else {
+            if (obj.exists()) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "Element [" + obj + "] is NOT present; ";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the element present.
+     *
+     * @param obj
+     * @param failMsg
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyElementNotPresent(UiObject obj, String failMsg) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertFalse(failMsg, obj.exists());
+        } else {
+            if (!obj.exists()) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "Element [" + obj + "] is expected Not present, but actually present; ";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+//
+//    public void evaluate() throws Throwable {
+//        List<Throwable> errors = new ArrayList<Throwable>();
+//        try {
+//            next.evaluate();
+//        } catch (Throwable e) {
+//            errors.add(e);
+//        }
 //    /**
 //     * 解析XML文件
 //     *
