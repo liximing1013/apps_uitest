@@ -3,6 +3,7 @@ package tv.fun.appstoretest.common;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.view.KeyEvent;
 
 import java.util.HashMap;
 
@@ -10,42 +11,8 @@ import java.util.HashMap;
  * Created by liuqing on 2016/10/24.
  */
 public class AppStorePage extends Common{
-    public int timeout = 60;
-    public int nextPageTime = 3000;
-    public int sleepInterval = 500;
-    public String[] appStoreTabs = {"推荐", "游戏", "娱乐", "生活", "教育", "应用管理"};
-    public String[] launcherTabs = {"电视", "视频", "体育", "少儿", "应用", "设置"};
-    public String appTab = "应用";
-    public String launcherTabID = "com.bestv.ott:id/tab_title";
     public String appStoreBtn = "应用市场";
     public String appStoreTabID = "tv.fun.appstore:id/column_title";
-    public String networkIconIDInPopup = "com.bestv.ott:id/network";//launcher悬浮框上网络设置按钮的resource id
-
-    /**
-     * Change int type to the string type
-     */
-    public int stringToInt(String intstr){
-        Integer integer;
-        integer = Integer.valueOf(intstr);
-        return integer.intValue();
-    }
-
-    /**
-     *  Change int type to the string type
-     */
-    public static String intToString(int value)
-    {
-        Integer integer = new Integer(value);
-        return integer.toString();
-    }
-
-    /**
-     * Click and wait for some time
-     */
-    public void clickAndWait(UiObject Obj, int waitTime) throws UiObjectNotFoundException, InterruptedException {
-        Obj.click();
-        Thread.sleep(waitTime);
-    }
 
     /**
      * Method for navigating to Launcher App tab page
@@ -98,34 +65,11 @@ public class AppStorePage extends Common{
      * @param targetTab
      * @throws UiObjectNotFoundException
      */
-    public void moveToTargetTab(String[] tablist, String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException {
-        UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
-        if(!tab.isSelected()){
-            moveToUpForMultiple(4);//Move to navBar to avoid that the current focusot in narBar
-            if(tabResouceID.equalsIgnoreCase(launcherTabID)){
-                if(findElementByID(networkIconIDInPopup).exists()){
-                    device.pressDPadDown();
-                }
-            }
-            UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
-            String currentTab = currentTabObj.getText();
-            int needStep = stepFrom1stTabToTargetTab(tablist, currentTab, targetTab);
-            if(needStep>0){
-                moveToRightForMultiple(needStep);
-            }else {
-                moveToLeftForMultiple(needStep);
-            }
-        }
-    }
-
-    /**
-     * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
-     * @param targetTab
-     * @throws UiObjectNotFoundException
-     */
-    public void moveToAppStoreTargetTab(String targetTab) throws UiObjectNotFoundException {
+    public Boolean moveToAppStoreTargetTab(String targetTab) throws UiObjectNotFoundException {
         moveToTargetTab(appStoreTabs,targetTab, appStoreTabID, 6);
         moveToUpForMultiple(4);//Move to navBar to avoid that the current focus not in narBar
+        Boolean selectedFlag = findElementByText(targetTab, appStoreTabID).isSelected();
+        return selectedFlag;
     }
 
     /**
@@ -135,42 +79,6 @@ public class AppStorePage extends Common{
      */
     public void moveToLauncherTargetTab(String targetTab) throws UiObjectNotFoundException {
         moveToTargetTab(launcherTabs,targetTab, launcherTabID, 4);
-    }
-
-    /**
-     * Use to get the step need to move from the first tab to target tab
-     *
-     * @param targetTab
-     * @return
-     */
-    public int stepFrom1stTabToTargetTab(String[] tablist, String currentTab, String targetTab){
-        HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
-        int tabCount = tablist.length;
-        for(int i=0; i<tabCount; i++){
-            tabMap.put(tablist[i], i+1);
-        }
-        int startStep = tabMap.get(currentTab);
-        int targetTabStep = tabMap.get(targetTab);
-        int step = targetTabStep - startStep;
-        return step;
-    }
-
-    /**
-     * 按遥控器向上键
-     */
-    public void moveToUp(){
-        device.pressDPadUp();
-    }
-
-    /**
-     * 连续按遥控器向上键
-     *
-     * step  连续向右移的次数
-     */
-    public void moveToUpForMultiple(int step){
-        for(int i=1; i<=step; i++){
-            device.pressDPadUp();
-        }
     }
 
     /**
@@ -185,45 +93,6 @@ public class AppStorePage extends Common{
     }
 
     /**
-     * 按遥控器右键
-     */
-    public void moveToRight(){
-        device.pressDPadRight();
-    }
-
-    /**
-     * 连续按遥控器右键
-     *
-     * step  连续向右移的次数
-     */
-    public void moveToRightForMultiple(int step){
-        for(int i=1; i<=step; i++){
-            device.pressDPadRight();
-        }
-    }
-
-    /**
-     * 按遥控器左键
-     */
-    public void moveToLeft(){
-        device.pressDPadLeft();
-    }
-
-    /**
-     * 连续按遥控器左键
-     *
-     * step  连续向左移的次数
-     */
-    public void moveToLeftForMultiple(int step){
-        if(step<0){
-            step=-step;
-        }
-        for(int i=1; i<=step; i++){
-            device.pressDPadLeft();
-        }
-    }
-
-    /**
      * 连续按遥控器左键
      *
      * step  连续向左移的次数
@@ -232,36 +101,6 @@ public class AppStorePage extends Common{
         for(int i=1; i<=5; i++){
             device.pressDPadLeft();
         }
-    }
-
-    /**
-     * 连续按遥控器下键
-     *
-     * step  连续向下移的次数
-     */
-    public void moveToDownForMultiple(int step){
-        if(step<0){
-            step=-step;
-        }
-        for(int i=1; i<=step; i++){
-            device.pressDPadDown();
-        }
-    }
-
-    /**
-     * 按遥控器向下键
-     *
-     * 向下移
-     */
-    public void moveToDown(){
-        device.pressDPadDown();
-    }
-
-    /**
-     * 按遥控器Menu键
-     */
-    public void menu(){
-        device.pressMenu();
     }
 
     /**
@@ -354,151 +193,84 @@ public class AppStorePage extends Common{
         device.pressBack();
     }
 
-//    public void waitForElementNotPresentByText(){
-//        UiObject installBtn = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer").text("安装"));
-//
-//    }
-
     /**
-     * Wait for an element present. The element on the page does not exist in
-     * the pre-page, waiting for the element exist.
-     *
-     * @param locator
-     *            an element locator
+     * Goto App Clean page
      * @throws InterruptedException
      */
-    public void waitForElementPresentByID(String locator)
-            throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= timeout) {
-                System.out.println("timeout: wait for element present <"
-                        + locator + ">");
-                break;
-            }
-            if (device.findObject(new UiSelector().resourceId(locator)).exists()) {
-                break;
-            }
-            Thread.sleep(sleepInterval);
+    public void gotoAppCleanPageFromAppUninstallPage(Boolean NeedToAppMTab) throws InterruptedException, UiObjectNotFoundException {
+        if(NeedToAppMTab){
+            moveToAppStoreTargetTab(appStoreTabs[5]);
         }
+        gotoAppUninstallPage();
+        moveToDown();
+        menu();
+        waitForElementPresentByID("android:id/tv_fun_menu_text");
+        UiObject appCleanObj = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("清理数据"));
+        appCleanObj.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.master:id/uninstall");
+        waitForElementPresentByID("tv.fun.master:id/clearData");
     }
 
     /**
-     * Wait for an element present. The element on the page does not exist in
-     * the pre-page, waiting for the element exist.
-     *
-     * @param locator
-     *            an element locator
-     *@param textStr
-     *            text of element
+     * Uninstall App from App Clean page and back
      * @throws InterruptedException
      */
-    public void waitForElementPresentByIDAndText(String locator, String textStr)
-            throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= timeout) {
-                System.out.println("timeout: wait for element present <"
-                        + locator + "> with text (" + textStr + ")" );
-                break;
+    public void uninstallAppFromAppCleanPage(String targetAppName) throws InterruptedException, UiObjectNotFoundException {
+        String appNumStr = findElementByID("tv.fun.master:id/appNumber").getText().replace("应用数量 ", "").replace(" 个", "");
+        int appNum = stringToInt(appNumStr);
+        int targetAppIndex = 0;
+        UiObject eachAppObj = null;
+        moveToRightForMultiple(2);
+        for(int loopTime=0; loopTime<appNum;){
+            UiObject appList = findElementByID("tv.fun.master:id/listView");
+            int displayedAppCount = appList.getChildCount();
+            for(int k=0; k<displayedAppCount; k++){
+                loopTime++;
+                UiObject appListObj = findElementByID("tv.fun.master:id/listView");
+                eachAppObj = appListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(k));
+                UiObject appObj = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appNameView"));
+                String appName = appObj.getText();
+                if(targetAppName.equalsIgnoreCase(appName)){
+                    targetAppIndex = k;
+                    break;
+                }else if(loopTime<appNum&&k==displayedAppCount-1){
+                    k--;
+                }
+                moveToDown();
             }
-            if (device.findObject(new UiSelector().resourceId(locator).text(textStr)).exists()) {
-                break;
-            }
-            Thread.sleep(sleepInterval);
+            break;
         }
+        if(targetAppIndex!=0){
+            UiObject uninstallBtnOfApp = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);//cannot use click method in here
+            waitForElementPresentByID("com.android.packageinstaller:id/uninstall_confirm");
+            //卸载弹框弹出后，点击“确定”
+            UiObject confirmBtn = device.findObject(new UiSelector().resourceId("com.android.packageinstaller:id/ok_button"));
+            UiObject cancelBtn = device.findObject(new UiSelector().resourceId("com.android.packageinstaller:id/cancel_button"));
+            confirmBtn.click();
+            waitForElementNotPresentByID("com.android.packageinstaller:id/uninstall_confirm");
+        }
+        device.pressBack();
     }
 
     /**
-     * Wait for an element present. The element on the page does not exist in
-     * the pre-page, waiting for the element exist.
-     *
-     * @param className
-     *            an element locator
-     *@param textStr
-     *            text of element
-     * @throws InterruptedException
+     * Method for going to app uninstall page
+     * @throws UiObjectNotFoundException
      */
-    public void waitForElementPresentByClassAndText(String className, String textStr)
-            throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= timeout) {
-                System.out.println("timeout: wait for element present <"
-                        + className + "> with text (" + textStr + ")" );
-                break;
-            }
-            if (device.findObject(new UiSelector().text(textStr).className(className)).exists()) {
-                break;
-            }
-            Thread.sleep(sleepInterval);
-        }
+    public void gotoAppUninstallPage() throws UiObjectNotFoundException, InterruptedException {
+        UiObject appUninstallCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall"));
+        appUninstallCard.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/title");
+        waitForElementPresentByID("tv.fun.appstore:id/appName");
     }
 
     /**
-     * Wait for an element present. The element on the page does not exist in
-     * the pre-page, waiting for the element exist.
-     *
-     * @param locator
-     *            an element locator
+     * Uninstall App in App Uninstall page and back
      * @throws InterruptedException
      */
-    public void waitForElementNotPresentByID(String locator)
-            throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= timeout) {
-                System.out.println("timeout: wait for element present <"
-                        + locator + ">");
-                break;
-            }
-            if (!device.findObject(new UiSelector().resourceId(locator)).exists()) {
-                break;
-            }
-            Thread.sleep(sleepInterval);
-        }
-    }
-
-    /**
-     * Wait for an element not present. Wait for an element form "exist" to
-     * "disappear" in page.
-     *
-     * @param locator
-     *            an element locator
-     * @throws InterruptedException
-     */
-    public void waitForElementNotPresent(String locator)
-            throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= timeout) {
-                System.out.println("timeout: wait for element not present <"
-                        + locator + ">");
-                break;
-            }
-            if (!device.findObject(new UiSelector().resourceId(locator)).exists()) {
-                break;
-            }
-            Thread.sleep(sleepInterval);
-        }
-    }
-
-    /**
-     * Wait for an text note present. The element on the page exists in
-     * the pre-page, waiting for the element not exist.
-     *
-     * @param textStr
-     *            a text
-     * @throws InterruptedException
-     */
-    public void waitForTextNotPresent(String textStr)
-            throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= timeout) {
-                System.out.println("timeout: wait for text not present <"
-                        + textStr + ">");
-                break;
-            }
-            if (!device.findObject(new UiSelector().text(textStr)).exists()) {
-                break;
-            }
-            Thread.sleep(sleepInterval);
-        }
+    public void uninstallAppInAppUninstallPage(String targetApp) throws InterruptedException, UiObjectNotFoundException {
+        gotoAppUninstallPage();
+        uninstallAppFromAppCleanPage(targetApp);
     }
 
     /**
@@ -506,14 +278,6 @@ public class AppStorePage extends Common{
      */
     public void waitForAppDetailPageDisplay() throws InterruptedException {
         waitForElementPresentByClassAndText("android.widget.TextView", "操控设备：");
-    }
-
-    /**
-     * Find Elements by Class Name
-     *
-     */
-    public void findElementsByClassName(){
-
     }
 
     /**
@@ -553,24 +317,5 @@ public class AppStorePage extends Common{
         moveToDown();
         moveToTheMostLeftOfTabPage();
         moveToRight();
-    }
-
-    /****************************************************Method for TVMaster Module*******************************************/
-
-    /**
-     * 在Launcher应用tab页面，点击“电视助手”卡片
-     */
-    public void enterTVMasterPage() throws UiObjectNotFoundException {
-        //移动焦点到Launcher应用tab
-        navigateToLauncherAppTab();
-        //点击“电视助手”卡片
-        UiObject tvMasterCard =  device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
-        device.pressDPadDown();
-        device.pressDPadDown();
-        if(!tvMasterCard.isSelected()){
-            device.pressDPadRight();
-            device.pressDPadRight();
-        }
-        device.pressEnter();
     }
 }

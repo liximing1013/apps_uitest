@@ -11,13 +11,14 @@ import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 import tv.fun.appstoretest.common.AppStorePage;
+import tv.fun.appstoretest.common.MasterApp;
 import tv.fun.common.Utils;
 
 /**
  * Created by liuqing on 2016/9/7.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestTVMaster extends AppStorePage {
+public class TestTVMaster extends MasterApp {
 
     /**
      *验证可以通过点击Launcher应用页面“电视助手”卡片，进入电视助手页面
