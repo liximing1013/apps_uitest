@@ -326,4 +326,22 @@ public class Utils {
 			}
 		}
 	}
+
+    public static boolean isExternalStorageAvailable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    private static File getExternalStorageDir() {
+        return isExternalStorageAvailable() ? Environment.getExternalStorageDirectory() : null;
+    }
+
+    public static String getExternalStoragePath() {
+        File file = getExternalStorageDir();
+        if (file == null) {
+            Log.e("ZJ", "The external storage (sdcard) is not available!");
+            return "";
+        }
+        return file.getAbsolutePath();
+    }
+
 }
