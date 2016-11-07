@@ -515,6 +515,7 @@ public class Common {
             Assert.assertTrue(failMsg, expected.equalsIgnoreCase(actual));
         } else {
             if (expected.equalsIgnoreCase(actual)) {
+                resultFlag = true;
                 verifyFlag = true;
                 return verifyFlag;
             } else {
@@ -607,6 +608,36 @@ public class Common {
                 resultFlag = false;
                 resultStr += "Expected not [" + expected + "] but actual [" + actual
                         + "]; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the input parmeter is true.
+     *
+     * @param failMsg
+     * @param testFlag
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyTrue(String failMsg, Boolean testFlag) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, testFlag);
+        } else {
+            if (testFlag) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "The return of [" + testFlag + "] is False; ";
+                }
                 verifyFlag = false;
                 return verifyFlag;
             }
