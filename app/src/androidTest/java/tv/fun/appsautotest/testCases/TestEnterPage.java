@@ -163,7 +163,7 @@ public class TestEnterPage {
 //        Utils.Print("case 进入金卡会员页面 START");
         enterVIPPage();
 
-        m_sExpect = Infos.S_TEXT_VIP_TITLE;
+        m_sExpect = Infos.S_LC_TEXT_VIP_TITLE;
         m_sObjId = Infos.S_LC_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);

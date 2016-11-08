@@ -27,6 +27,7 @@ public class TestDataReport {
 
     private String m_sExpect = "";
     private String m_sActual = "";
+    private String m_sResult = "";
     private String m_sObjId = "";
     private UiObject m_uiObj = null;
 
@@ -35,6 +36,7 @@ public class TestDataReport {
 
     @Before
     public void setUp(){
+        m_sResult = "自动化脚本运行失败！";
         m_lConsumeTime = Utils.getCurSecond();
     }
     @After
@@ -46,40 +48,62 @@ public class TestDataReport {
     @Test
     public void LC_Data_01_playCarousel(){
 //        Utils.Print("play case1 播放轮播视频 START");
-        m_com.Navigation("hh93999"); // 进入电视页
+        try {
+            m_sResult = "进入电视页失败！页面中没有“轮播”字样";
+            m_com.Navigation("hh93999"); // 进入电视页
+            // test point 1
+            m_sExpect = "轮播"; // 如果没有"轮播"就表示不在电视页
+            m_sActual = m_com.getUiObjText(m_com.getUiObjByText(m_sExpect));
+            m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
 
-        // test point 1
-        m_sExpect = "轮播"; // 如果没有"轮播"就表示不在电视页
-        m_sActual = m_com.getUiObjText(m_com.getUiObjByText(m_sExpect));
-        m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
-
-        Utils.writeCaseResult("进入电视页失败", m_bPass, m_lConsumeTime);
+        }catch(Throwable e){
+            e.printStackTrace();
+            m_bPass = false;
+            m_sResult += e.toString();
+        }finally {
+            Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
 
         // test point 2
-        m_com.Enter(); // 打开轮播视频
-        m_com.Sleep(m_iWaitSec);
-        m_com.Enter(); // 调出轮播菜单
+        try {
+            m_sResult = "轮播视频打开失败！轮播视频里没有《24小时热播》";
+            m_com.Enter(); // 打开轮播视频
+            m_com.Sleep(m_iWaitSec);
+            m_com.Enter(); // 调出轮播菜单
 
-        m_sObjId = Infos.S_LC_CAROUSEL_CHANNLE; // 轮播菜单里的控件
-        m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId, 0); // 第一个节目: 24小时热播
-
-        Utils.writeCaseResult("轮播视频打开失败", m_uiObj.exists(), m_lConsumeTime);
+            m_sObjId = Infos.S_LC_CAROUSEL_CHANNLE; // 轮播菜单里的控件
+            m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId, 0); // 第一个节目: 24小时热播
+            m_bPass = m_uiObj.exists();
+        }catch (Throwable e){
+            e.printStackTrace();
+            m_bPass = false;
+            m_sResult += e.toString();
+        }finally {
+            Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
 //        Utils.Print("play case1 播放轮播视频 END");
     }
 
     @Test
     public void LC_Data_02_playVIPPageVideo(){
 //        Utils.Print("play case2 金卡会员的小窗口播放 START");
-        m_enterPage.enterVIPPage(); // 进入金卡会员主页，金卡会员页小窗口自动播放
+        try{
+            m_sResult = "播放金卡小窗口视频失败！没有金卡会员字样或者标识图片";
+            m_enterPage.enterVIPPage(); // 进入金卡会员主页，金卡会员页小窗口自动播放
 
-        //TODO 需要程序提供小窗口播放状态获取的接口
-        m_sExpect = Infos.S_TEXT_VIP_TITLE;
-        m_sObjId = Infos.S_LC_VIP_ID;
-        m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
-        m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
-        m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
-
-        Utils.writeCaseResult("播放金卡小窗口视频失败", m_bPass, m_lConsumeTime);
+            //TODO 需要程序提供小窗口播放状态获取的接口
+            m_sExpect = Infos.S_LC_TEXT_VIP_TITLE;
+            m_sObjId = Infos.S_LC_VIP_ID;
+            m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
+            m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
+            m_bPass = m_sActual.equalsIgnoreCase(m_sExpect) || m_uiObj.exists();
+        }catch(Throwable e){
+            e.printStackTrace();
+            m_bPass = false;
+            m_sResult += e.toString();
+        }finally {
+            Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
 //        Utils.Print("play case2 金卡会员的小窗口播放 END");
     }
 
@@ -353,7 +377,7 @@ public class TestDataReport {
     public void LC_Data_29_clickVIPCard() {
         m_com.Navigation("h12499"); // case9 点击金卡会员卡片
 
-        m_sExpect = Infos.S_TEXT_VIP_TITLE;
+        m_sExpect = Infos.S_LC_TEXT_VIP_TITLE;
         m_sObjId = Infos.S_LC_VIP_ID;
         m_sActual = m_com.getUiObjText(m_com.getUiObjByResId(m_sObjId));
         m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId);
