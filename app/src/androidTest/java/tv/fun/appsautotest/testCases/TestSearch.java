@@ -201,7 +201,7 @@ public class TestSearch {
     }
 
     @Test
-    public void Voice_SCH_08_enterSearchByMenuFromSetting(){
+    public void Voice_SCH_08_focusOnLetterA(){
         try {
             m_sResult = "从主页搜索按钮进入搜索页失败！没有出现字母区域或“大家都在搜”字样";
             m_com.Navigation("hh99");
@@ -228,4 +228,8 @@ public class TestSearch {
             Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
         }
     }
+//    @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }
