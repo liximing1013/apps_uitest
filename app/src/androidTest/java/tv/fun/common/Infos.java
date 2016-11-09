@@ -30,5 +30,7 @@ public class Infos {
     public static String S_VOICE_SCH_LETTER = "com.bestv.voiceAssist:id/letter"; // 搜索字母区域
 
     // class info
+    public static String S_TXTVIEW_CLASS = "android.widget.TextView";
+    public static String S_RELATELAYOUT_CLASS = "android.widget.RelativeLayout";
     public static String S_CLASS_VIDEO_PLAYER = "com.funshion.player.play.funshionplayer.VideoViewPlayer";
 }

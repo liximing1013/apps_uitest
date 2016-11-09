@@ -204,6 +204,12 @@ public class TestEnterPage {
         Utils.writeCaseResult("进入百视通直播大厅失败", m_bPass, m_lConsumeTime);
     }
 
+    public void enterSearchPage(){
+        m_com.Navigation("hh99");
+        m_com.Menu();
+        m_com.Enter();
+    }
+
 //    @Test
 //    public void test(){
 //        TvCommon.printAllMethods(this.getClass().getName());

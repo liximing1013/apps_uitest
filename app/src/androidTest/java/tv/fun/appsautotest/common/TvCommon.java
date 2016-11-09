@@ -372,6 +372,16 @@ public class TvCommon extends Common{
         }
     }
 
+    public String checkExpectResult(UiObject uiObj, String sExpect){
+        String sResult;
+        String sActual = getUiObjText(uiObj);
+        if(!sActual.equalsIgnoreCase(sExpect)) {
+            sResult = String.format(" 实际值[%s]与期望值[%s]不符！", sActual, sExpect);
+            return sResult;
+        }
+        return "OK";
+    }
+
     public void setRefreshFailWatcher(){
         device.registerWatcher("BufferRefreshFailWatcher", new BufferRefreshFailWatcher());
     }
