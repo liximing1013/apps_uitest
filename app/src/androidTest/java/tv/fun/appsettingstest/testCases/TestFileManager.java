@@ -99,7 +99,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_Category_11_01_testOpenAllFilesCardFromSdcardTab() {
+    public void FileM_test01_Category_11_01_OpenAllFilesCardFromSdcardTab() {
         try {
             mTask.openLocalFilesCard();
 
@@ -123,7 +123,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_Category_12_01_testNavigateToSpecifiedPath() {
+    public void FileM_test02_Category_12_01_NavigateToSpecifiedPath() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -143,7 +143,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_Category_18_01_testOpenUnknownTypeFile() {
+    public void FileM_test03_Category_18_01_OpenUnknownTypeFile() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateAndOpenSpecifiedFile(TEST1_FILE_PATH);
@@ -163,7 +163,75 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_Menu_01_01_testMenuHideBtnExistForDir() {
+    public void FileM_test04_Category_12_01_MessageWhenEmptyForAppCard() {
+        try {
+            mTask.openCategoryAppCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in APP card.",
+                    "未发现可安装的应用".equals(tips.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test05_Category_12_02_MessageWhenEmptyForAppCard() {
+        try {
+            mTask.openCategoryAppCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in APP card.",
+                    "未发现可安装的应用".equals(tips.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test06_Category_12_03_MessageWhenEmptyForMusicCard() {
+        try {
+            mTask.openCategoryMusicCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in music card.",
+                    "未发现可播放的音乐".equals(tips.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test07_Category_12_04_MessageWhenEmptyForPictureCard() {
+        try {
+            mTask.openCategoryPictureCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in picture card.",
+                    "未发现可显示的图片".equals(tips.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test11_Menu_04_01_01_MenuHideBtnExistForDir() {
         try {
             mTask.openLocalFilesCard();
             UiObject2 menuTips =
@@ -197,5 +265,204 @@ public final class TestFileManager {
         }
     }
 
+    @Test
+    public void FileM_test12_Menu_01_02_MenuRemoveAndHideBtnExistForFile() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mTask.showMenuAndRequestFocus();
+
+            UiObject2 menuRemoveBtnContainer =
+                    mDevice.findObject(By.res("tv.fun.filemanager:id/menu_item_del_id"));
+            Utils.writeCaseResult("Verify the remove button is focused in the bottom menu.",
+                    menuRemoveBtnContainer.isFocused(), mExecTime);
+
+            UiObject2 menuRemoveBtn =
+                    menuRemoveBtnContainer.findObject(By.res("android:id/tv_fun_menu_text"));
+            Utils.writeCaseResult("Verify the text of remove button in the bottom menu.",
+                    TEXT_REMOVE_BUTTON.equals(menuRemoveBtn.getText()), mExecTime);
+
+            UiObject2 menuHideBtnContainer =
+                    mDevice.findObject(By.res("tv.fun.filemanager:id/menu_item_hide_id"));
+            UiObject2 menuHideBtn =
+                    menuHideBtnContainer.findObject(By.res("android:id/tv_fun_menu_text"));
+            Utils.writeCaseResult("Verify the text of hide button in the bottom menu.",
+                    TEXT_HIDDEN_BUTTON.equals(menuHideBtn.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test13_Hidden_04_01_HideAndShowDirectory() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mDevice.pressDPadLeft();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+
+            mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+            UiObject2 fileHidden = mDevice.findObject(By.text(TEST_DIR_NAME));
+            Utils.writeCaseResult("Verify the directory is hidden.", fileHidden == null, mExecTime);
+
+            mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+            UiObject2 fileShow = mDevice.findObject(By.text(TEST_DIR_NAME));
+            Utils.writeCaseResult("Verify the directory is show.", fileShow != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test14_Hidden_01_01_HideAndShowFile() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+
+            mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+            UiObject2 fileHidden = mDevice.findObject(By.text(TEST1_FILE_NAME));
+            Utils.writeCaseResult("Verify the file is hidden.", fileHidden == null, mExecTime);
+
+            mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+            UiObject2 fileShow = mDevice.findObject(By.text(TEST1_FILE_NAME));
+            Utils.writeCaseResult("Verify the file is show.", fileShow != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test15_Remove_01_01_RemoveFileAndCancel() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+
+            mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
+            UiObject2 cancelBtn =
+                    mDevice.findObject(By.res("tv.fun.filemanager:id/confirm_dialog_btn_cancel"));
+            Utils.writeCaseResult("Verify the Cancel button of confirm dialog.",
+                    cancelBtn != null, mExecTime);
+
+            cancelBtn.click();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 fileDeleted = mDevice.findObject(By.text(TEST1_FILE_NAME));
+            Utils.writeCaseResult("Verify click cancel and do not remove a file.",
+                    fileDeleted != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test16_Remove_01_02_RemoveFile() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+
+            mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
+            UiObject2 confirmBtn =
+                    mDevice.findObject(By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm"));
+            Utils.writeCaseResult("Verify the Yes button of confirm dialog.",
+                    confirmBtn != null, mExecTime);
+
+            confirmBtn.click();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 fileDeleted = mDevice.findObject(By.text(TEST1_FILE_NAME));
+            Utils.writeCaseResult("Verify click yes and remove a file.",
+                    fileDeleted == null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test17_Hidden_02_01_HideAndShowOnlyFileOfDirectory() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_DIR_PATH);
+            mDevice.pressDPadUp();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+
+            mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips of empty directory from all files card.",
+                    "未发现可显示的文件".equals(tips.getText()), mExecTime);
+
+            mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+            UiObject2 hiddenFile = mDevice.findObject(By.text(TEST2_FILE_NAME));
+            Utils.writeCaseResult("Verify the file is show after click Show All.",
+                    hiddenFile.isEnabled(), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_test18_Remove_03_01_RemoveOnlyFileOfDirectory() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_DIR_PATH);
+            mDevice.pressDPadUp();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+
+            mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
+            UiObject2 confirmBtn =
+                    mDevice.findObject(By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm"));
+            confirmBtn.click();
+            SystemClock.sleep(Constants.WAIT);
+
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips of empty directory from all files card.",
+                    "未发现可显示的文件".equals(tips.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
 
 }

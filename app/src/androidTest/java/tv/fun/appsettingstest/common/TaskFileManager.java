@@ -144,4 +144,27 @@ public final class TaskFileManager {
         device.pressDPadDown();
         SystemClock.sleep(Constants.SHORT_WAIT);
     }
+
+    public void showMenuAndClickBtn(String btnText) {
+        boolean isFocused = false;
+
+        showMenuAndRequestFocus();
+
+        UiObject2 btn = device.findObject(By.text(btnText));
+        Assert.assertNotNull(btn);
+        UiObject2 btnContainer = btn.getParent();
+
+        for (int i = 0, maxMove = 5; i < maxMove; i++) {
+            if (btnContainer.isFocused()) {
+                isFocused = true;
+                break;
+            }
+            device.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+        }
+        Assert.assertTrue(isFocused);
+
+        device.pressEnter();
+        SystemClock.sleep(Constants.WAIT);
+    }
 }
