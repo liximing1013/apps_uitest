@@ -300,7 +300,7 @@ public class Utils {
 
     public static void waitForPackageOpened(UiDevice device, String pkgName, long wait) {
         for (int i = 0; i < wait; i++) {
-            SystemClock.sleep(1000);
+            SystemClock.sleep(Constants.SHORT_WAIT);
             if (pkgName.equals(device.getCurrentPackageName())) {
                 return;
             }
@@ -316,7 +316,7 @@ public class Utils {
 
 		int tryTimes = 3;
 		for (int i = 0, waitTimes = 20; i < waitTimes; i++) {
-			SystemClock.sleep(1000);
+			SystemClock.sleep(Constants.SHORT_WAIT);
 			if (tryTimes == 0) {
 				return;
 			}

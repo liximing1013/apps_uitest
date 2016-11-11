@@ -18,8 +18,10 @@ public final class Constants {
     public final static String LAUNCHER_PKG_NAME = "com.bestv.ott";
     public final static String SETTINGS_PKG_NAME = "tv.fun.settings";
     public final static String FILEMANAGER_PKG_NAME = "tv.fun.filemanager";
+    public final static String WEATHER_PKG_NAME = "tv.fun.weather";
     public final static String SETTINGS_HOME_ACTIVITY = ".general.GeneralSettingsActivity";
     public final static String FILEMANAGER_HOME_ACTIVITY = ".FunFileManagerActivity";
+    public final static String WEATHER_HOME_ACTIVITY = ".ui.WeatherActivity";
 
     public final static String CLASS_TEXT_VIEW = "android.widget.TextView";
     public final static String CLASS_SCROLL_VIEW = "android.widget.ScrollView";
