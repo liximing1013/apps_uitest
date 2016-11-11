@@ -2,6 +2,7 @@ package tv.fun.appsettingstest.testCases;
 
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -11,7 +12,10 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +37,8 @@ import static tv.fun.common.Constants.WEATHER_PKG_NAME;
  * Test cases for Weather app.
  */
 
+@RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestWeather {
 
     private UiDevice mDevice;
@@ -62,8 +68,7 @@ public final class TestWeather {
         mDevice.pressHome();
         Utils.waitForPackageOpened(mDevice, LAUNCHER_PKG_NAME);
         Utils.startActivity(WEATHER_PKG_NAME, WEATHER_HOME_ACTIVITY);
-        Utils.waitForPackageOpened(mDevice, WEATHER_PKG_NAME);
-        SystemClock.sleep(Constants.WAIT);
+        SystemClock.sleep(Constants.LONG_WAIT);
     }
 
     @After
@@ -328,6 +333,144 @@ public final class TestWeather {
         }
     }
 
+    @Test
+    public void test25FirstCityAfterAddDefaultCity() {
+        try {
+            mMessage = "Verify the 1st shown city after add new default city.";
+            UiObject2 location =
+                    mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage,
+                    String.format("%s(默认)", ADD_DEFAULT_CITY_2), location.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test26ModifyDefaultCity() {
+        try {
+            mTask.openBottomMenu();
+            mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+
+            // select 湖北 武汉
+            mTask.selectSpecifiedLocationProvince(INIT_PROVINCE, true);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mTask.selectSpecifiedLocationCity(INIT_CITY, false);
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+
+            mMessage = "Verify the shown city after change default city.";
+            UiObject2 location =
+                    mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test27FirstCityAfterModifyDefaultCity() {
+        try {
+            mMessage = "Verify the 1st shown city after change default city.";
+            UiObject2 location =
+                    mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test28ReAddDefaultCity() {
+        try {
+            mTask.openBottomMenu();
+            mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
+
+            // select 湖北 武汉
+            mTask.selectSpecifiedLocationProvince(INIT_PROVINCE, true);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mTask.selectSpecifiedLocationCity(INIT_CITY, false);
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+
+            mMessage = "Verify the shown city after re-add same default city.";
+            UiObject2 location =
+                    mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test29SequenceAfterAddedCities() {
+        try {
+            mMessage = "Verify the 1st default city";
+            UiObject2 location =
+                    mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+
+            mMessage = "Verify the 2nd added city.";
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.WAIT);
+            location = mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
+
+            mMessage = "Verify the 3rd added city.";
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.WAIT);
+            location = mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2, location.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test31DeleteMenuButton() {
+        try {
+            mTask.openBottomMenu();
+
+            mMessage = "Verify delete button exist.";
+            UiObject2 btnDeleteCity = mDevice.findObject(
+                    By.text(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY)).getParent();
+            Assert.assertTrue(mMessage, btnDeleteCity.isClickable());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
 
     private class dateComparator implements Comparator<String> {
         @Override

@@ -7,6 +7,8 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,10 +18,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.util.List;
+
 import tv.fun.appsettingstest.common.TaskCommonSettings;
 import tv.fun.common.Constants;
 import tv.fun.common.Utils;
 
+import static tv.fun.common.Constants.CLASS_TEXT_VIEW;
 import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
 import static tv.fun.common.Constants.SETTINGS_HOME_ACTIVITY;
 import static tv.fun.common.Constants.SETTINGS_PKG_NAME;
@@ -37,8 +42,9 @@ public final class TestCommonSettings {
     private UiDevice mDevice;
     private TaskCommonSettings mTask;
     private long mExecTime;
-
     private String mErrorStack = null;
+
+    private String[] TEXT_WALLPAPERS = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
     public static void classSetup() {
@@ -261,19 +267,84 @@ public final class TestCommonSettings {
         }
     }
 
-    @Ignore
+    @Test
     public void SET_test11_Common_17_01_DefaultWallpaper() {
-        // TODO: 2016/11/1  
+        try {
+            UiObject2 itemWallpaper =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+
+            String message = "Verify the item key for wallpaper setting item.";
+            UiObject2 itemKey = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_title"));
+            Assert.assertEquals(message, "壁纸", itemKey.getText());
+            message = "Verify the default wallpaper.";
+            UiObject2 itemValue = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_value"));
+            Assert.assertEquals(message, TEXT_WALLPAPERS[0], itemValue.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
     }
 
-    @Ignore
+    @Test
     public void SET_test12_Common_18_01_SubWallpapersOnSelectPage() {
-        // TODO: 2016/11/1  
+        try {
+            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+
+            String message = "Verify there are 4 sub wallpapers on wallpaper select page.";
+            List<UiObject2> wallpapers = mDevice.findObjects(By.clazz(CLASS_TEXT_VIEW));
+            Assert.assertEquals(message, TEXT_WALLPAPERS.length, wallpapers.size());
+
+            message = "Verify the 1st sub wallpaper is default selected.";
+            UiObject2 defaultWallpaper =
+                    mDevice.findObject(By.text(TEXT_WALLPAPERS[0])).getParent();
+            Assert.assertTrue(message, defaultWallpaper.isSelected());
+
+            for (UiObject2 wallpaper : wallpapers) {
+                String title = wallpaper.getText();
+                message = String.format("Verify the sub wallpaper %s is shown.", title);
+                Assert.assertTrue(message, this.IsSubWallpaperIncluded(title));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
     }
 
-    @Ignore
+    @Test
     public void SET_test13_Common_18_02_SelectWallpaper() {
-        // TODO: 2016/11/1  
+        try {
+            final String selectWallpaper = TEXT_WALLPAPERS[2];
+
+            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+            mTask.selectSpecifiedSubWallpaper(selectWallpaper);
+
+            String message = "Verify setting item value is changed to the selected wallpaper.";
+            mDevice.pressBack();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 itemWallpaper =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+            UiObject2 itemValue = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_value"));
+            Assert.assertEquals(message, selectWallpaper, itemValue.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
     }
 
     @Test
@@ -499,4 +570,12 @@ public final class TestCommonSettings {
 //        TvCommon.printAllMethods(this.getClass().getName());
 //    }
 
+    private boolean IsSubWallpaperIncluded(String wallpaper) {
+        for (String text : TEXT_WALLPAPERS) {
+            if (text.equals(wallpaper)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

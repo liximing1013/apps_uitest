@@ -2,6 +2,7 @@ package tv.fun.appsettingstest.testCases;
 
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -11,7 +12,10 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import tv.fun.appsettingstest.common.TaskFileManager;
 import tv.fun.common.Constants;
@@ -27,6 +31,8 @@ import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
  * TestFileManager
  */
 
+@RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
 
     private UiDevice mDevice;

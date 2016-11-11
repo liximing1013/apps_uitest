@@ -7,6 +7,8 @@ import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import junit.framework.Assert;
+
 import tv.fun.common.Constants;
 
 import static tv.fun.common.Constants.CLASS_TEXT_VIEW;
@@ -79,4 +81,18 @@ public final class TaskCommonSettings {
         return text;
     }
 
+    public void selectSpecifiedSubWallpaper(String title) {
+        UiObject2 wallpaper = device.findObject(By.text(title)).getParent();
+        for (int i = 0, wallpaperSize = 4; i < wallpaperSize; i++) {
+            if (wallpaper.isSelected()) {
+                device.pressEnter();
+                SystemClock.sleep(Constants.WAIT);
+                return;
+            }
+            device.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+        }
+
+        Assert.assertTrue("Failed to select the specified wallpaper.", false);
+    }
 }
