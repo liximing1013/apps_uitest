@@ -283,14 +283,13 @@ public class TvCommon extends Common{
 		long iCurSec = Utils.getCurSecond();
         UiObject uiObj = null;
 		while(null == uiObj) {
-			if(Utils.getCurSecond() >= iCurSec + 10){
+			if(Utils.getCurSecond() >= iCurSec + iWaitSec){
 				Utils.Print("waiting time is up, obj not occur!");
                 bOccur = false;
 				break;
 			}
             uiObj = getUiObject(iType, sContent, index);
 		}
-        Sleep(iWaitSec * m_iDelay);
         return bOccur;
 	}
 	

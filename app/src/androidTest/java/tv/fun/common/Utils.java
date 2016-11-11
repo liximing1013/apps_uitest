@@ -26,7 +26,7 @@ import java.util.Random;
  */
 
 public class Utils {
-	public static final String sTAG = "Utils";
+	public static final String sTAG = "AutoTestUtils";
 
     public static String getCurDate(){
         return getCurDate("yyyy-MM-dd");
