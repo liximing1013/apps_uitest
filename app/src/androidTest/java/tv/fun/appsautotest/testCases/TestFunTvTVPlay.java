@@ -33,6 +33,7 @@ public class TestFunTvTVPlay {
 
     @Before
     public void setUp() {
+
         m_com.setRefreshFailWatcher();
     }
 
@@ -49,6 +50,7 @@ public class TestFunTvTVPlay {
     }
 
     public boolean isPlayerWork(){
+
         return m_com.isUiObjExists(m_com.BY_CLASS, sPlayerClass, "");
     }
 
