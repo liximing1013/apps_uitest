@@ -72,7 +72,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test01_Common_01_01_SettingsPageTitle() {
+    public void SET_Common_01_01_SettingsPageTitle() {
         try {
             UiObject2 settingsTitle =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_title"));
@@ -89,7 +89,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test02_Common_01_02_DeviceNameDefaultValue() {
+    public void SET_Common_01_02_DeviceNameDefaultValue() {
         try {
             UiObject2 deviceNameContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
@@ -114,7 +114,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test03_Common_01_03_DeviceNameSubValues() {
+    public void SET_Common_01_03_DeviceNameSubValues() {
         try {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.SHORT_WAIT);
@@ -137,7 +137,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test04_Common_01_04_SelectDeviceName() {
+    public void SET_Common_01_04_SelectDeviceName() {
         try {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.SHORT_WAIT);
@@ -163,7 +163,7 @@ public final class TestCommonSettings {
     }
 
     @Ignore
-    public void SET_test05_Common_05_01_DefaultLocationOnSettings() {
+    public void SET_Common_05_01_DefaultLocationOnSettings() {
         try {
             UiObject2 locationItemContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_locate"));
@@ -187,7 +187,7 @@ public final class TestCommonSettings {
     }
 
     @Ignore
-    public void SET_test06_Common_05_02_OpenWeatherAppAndBackToSettings() {
+    public void SET_Common_05_02_OpenWeatherAppAndBackToSettings() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_locate"));
             mDevice.pressEnter();
@@ -211,7 +211,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test07_Common_09_01_SleepTimeDefaultValue() {
+    public void SET_Common_09_01_SleepTimeDefaultValue() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
             mDevice.pressEnter();
@@ -241,7 +241,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test08_Common_09_02_SelectSleepTime() {
+    public void SET_Common_09_02_SelectSleepTime() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
             mDevice.pressEnter();
@@ -268,7 +268,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test11_Common_17_01_DefaultWallpaper() {
+    public void SET_Common_17_01_DefaultWallpaper() {
         try {
             UiObject2 itemWallpaper =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
@@ -290,7 +290,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test12_Common_18_01_SubWallpapersOnSelectPage() {
+    public void SET_Common_18_01_SubWallpapersOnSelectPage() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_wallpaper"));
             mDevice.pressEnter();
@@ -321,7 +321,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test13_Common_18_02_SelectWallpaper() {
+    public void SET_Common_18_02_SelectWallpaper() {
         try {
             final String selectWallpaper = TEXT_WALLPAPERS[2];
 
@@ -348,7 +348,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test21_Common_19_01_ScreenSaverDefaultValue() {
+    public void SET_Common_19_01_ScreenSaverDefaultValue() {
         try {
             UiObject2 screenSaverContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_screen_saver"));
@@ -367,7 +367,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test22_Common_19_02_SelectScreenSaver() {
+    public void SET_Common_19_02_SelectScreenSaver() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_screen_saver"));
@@ -390,7 +390,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test23_Common_24_01_InstallUnknownAppDefaultValue() {
+    public void SET_Common_24_01_InstallUnknownAppDefaultValue() {
         try {
             UiObject2 installUnknownAppItemContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -410,7 +410,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test24_Common_24_02_SelectAllowedInstallUnknownAppAndCancel() {
+    public void SET_Common_24_02_SelectAllowedInstallUnknownAppAndCancel() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -442,7 +442,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test25_Common_25_01_SelectAllowedInstallUnknownAppAndConfirm() {
+    public void SET_Common_25_01_SelectAllowedInstallUnknownAppAndConfirm() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -471,7 +471,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test26_Common_26_01_SelectForbiddenInstallUnknownApp() {
+    public void SET_Common_26_01_SelectForbiddenInstallUnknownApp() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -495,7 +495,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test27_Common_27_01_SystemRecoverDialogAndClickCancel() {
+    public void SET_Common_27_01_SystemRecoverDialogAndClickCancel() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_recovery"));
             mDevice.pressEnter();
@@ -530,7 +530,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test28_Common_27_02_SaveInfoOnSystemRecoverDialog() {
+    public void SET_Common_27_02_SaveInfoOnSystemRecoverDialog() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_recovery"));
             mDevice.pressEnter();

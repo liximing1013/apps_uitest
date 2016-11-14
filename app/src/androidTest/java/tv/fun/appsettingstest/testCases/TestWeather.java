@@ -77,7 +77,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test11DefaultLocatedCity() {
+    public void WEA_Home_01_01_testDefaultLocatedCity() {
         try {
             mMessage = "Verify the default location on weather home.";
             UiObject2 location =
@@ -95,7 +95,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test12BottomTipOnWeatherHome() {
+    public void WEA_Home_01_02_testBottomTipOnWeatherHome() {
         try {
             mMessage = "Verify the tip at the bottom of weather home.";
             UiObject2 tip = mDevice.findObject(By.res("tv.fun.weather:id/tv_tip"));
@@ -111,7 +111,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test13WeatherForecastDates() {
+    public void WEA_Home_12_01_testWeatherForecastDates() {
         try {
             List<UiObject2> dates =
                     mDevice.findObjects(By.res("tv.fun.weather:id/tv_weather_date"));
@@ -144,7 +144,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test14FunctionButtonsInMenu() {
+    public void WEA_Home_20_01_testFunctionButtonsInMenu() {
         try {
             mTask.openBottomMenu();
 
@@ -180,7 +180,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test15UpdateAndRefreshWeatherData() {
+    public void WEA_Home_20_02_testUpdateAndRefreshWeatherData() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE);
@@ -200,7 +200,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test21AddCityAndCancel() {
+    public void WEA_Menu_01_01_testAddCityAndCancel() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
@@ -239,7 +239,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test22AddNewCityWeather() {
+    public void WEA_Menu_01_02_testAddNewCityWeather() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
@@ -267,7 +267,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test23AddDefaultCityAndCancel() {
+    public void WEA_Menu_05_01_testAddDefaultCityAndCancel() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
@@ -305,7 +305,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test24AddDefaultCityWeather() {
+    public void WEA_Menu_05_02_testAddDefaultCityWeather() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
@@ -334,7 +334,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test25FirstCityAfterAddDefaultCity() {
+    public void WEA_Menu_05_03_testFirstCityAfterAddDefaultCity() {
         try {
             mMessage = "Verify the 1st shown city after add new default city.";
             UiObject2 location =
@@ -352,7 +352,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test26ModifyDefaultCity() {
+    public void WEA_Menu_06_01_testModifyDefaultCity() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
@@ -380,7 +380,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test27FirstCityAfterModifyDefaultCity() {
+    public void WEA_Menu_06_02_testFirstCityAfterModifyDefaultCity() {
         try {
             mMessage = "Verify the 1st shown city after change default city.";
             UiObject2 location =
@@ -397,7 +397,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test28ReAddDefaultCity() {
+    public void WEA_Menu_07_01_testReAddDefaultCity() {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
@@ -425,7 +425,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test29SequenceAfterAddedCities() {
+    public void WEA_Menu_07_02_testSequenceAfterAddedCities() {
         try {
             mMessage = "Verify the 1st default city";
             UiObject2 location =
@@ -454,7 +454,7 @@ public final class TestWeather {
     }
 
     @Test
-    public void test31DeleteMenuButton() {
+    public void WEA_Menu_09_01_testDeleteMenuButton() {
         try {
             mTask.openBottomMenu();
 
