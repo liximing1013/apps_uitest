@@ -29,8 +29,6 @@ import tv.fun.common.Utils;
 public class TestLongVideoPlay {
     Instrumentation instrument;
     UiDevice uiDevice;
-    private static final String TAG = TestVipVideo.class.getSimpleName();
-    private static final String CAPTURES_PATH = "/data/local/tmp/captures";
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 5;
@@ -146,6 +144,5 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
         }
     } //随机播放电视剧
-
 
 }
