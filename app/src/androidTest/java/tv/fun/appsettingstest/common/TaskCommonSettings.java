@@ -10,6 +10,7 @@ import android.support.test.uiautomator.UiObject2;
 import junit.framework.Assert;
 
 import tv.fun.common.Constants;
+import tv.fun.common.Utils;
 
 import static tv.fun.common.Constants.CLASS_TEXT_VIEW;
 
@@ -95,4 +96,32 @@ public final class TaskCommonSettings {
 
         Assert.assertTrue("Failed to select the specified wallpaper.", false);
     }
+
+    public void openSelfDefineDeviceNamePage() {
+        device.pressEnter();
+        SystemClock.sleep(Constants.SHORT_WAIT);
+        UiObject2 itemSelfDefine = device.findObject(By.text("自定义"));
+        itemSelfDefine.click();
+        SystemClock.sleep(Constants.WAIT);
+    }
+
+    public void clearTextOfEditorView(int charCount) {
+        for (int i = 0; i < charCount; i++) {
+            Utils.execCommand("input keyevent KEYCODE_DEL", false, false);
+            SystemClock.sleep(200L);
+        }
+    }
+
+    public int disableInpuntMethod() {
+        Utils.CommandResult cr =
+                Utils.execCommand("ime disable com.baidu.input_baidutv/.ImeService", false, false);
+        return cr.mResult;
+    }
+
+    public int enableInputMethod() {
+        Utils.CommandResult cr =
+                Utils.execCommand("ime enable com.baidu.input_baidutv/.ImeService", false, false);
+        return cr.mResult;
+    }
+
 }

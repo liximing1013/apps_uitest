@@ -44,6 +44,8 @@ public final class TestCommonSettings {
     private long mExecTime;
     private String mErrorStack = null;
 
+    private final String SELECT_DEVICE_NAME = "书房的电视";
+    private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
     private String[] TEXT_WALLPAPERS = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
@@ -152,6 +154,116 @@ public final class TestCommonSettings {
             UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
             Utils.writeCaseResult("Verify select a pre-defined device name.",
                     deviceNameValue != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void SET_Common_02_01_testSelfDefineDeviceNameAndCancel() {
+        try {
+            mTask.openSelfDefineDeviceNamePage();
+
+            UiObject2 title = mDevice.findObject(By.res("tv.fun.settings:id/setting_title"));
+            Utils.writeCaseResult("Verify the title of self-define device name activity.",
+                    "自定义设备名称".equals(title.getText()), mExecTime);
+
+            UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+            Utils.writeCaseResult("Verify the device name editor is default focused.",
+                    editor.isFocused(), mExecTime);
+            Utils.writeCaseResult("Verify the text in the device name editor.",
+                    SELECT_DEVICE_NAME.equals(editor.getText()), mExecTime);
+
+            mTask.disableInpuntMethod();
+            Utils.execCommand("input text test", false, false);
+            mDevice.pressBack();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 deviceNameContainer =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
+            UiObject2 deviceNameValue =
+                    deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
+            Utils.writeCaseResult(
+                    "Verify cancel and back from the self-define device name activity.",
+                    deviceNameValue.isEnabled(), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            mTask.enableInputMethod();
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test14_03SelfDefineDeviceNameAndConfirm() {
+        try {
+            mTask.openSelfDefineDeviceNamePage();
+
+            mTask.clearTextOfEditorView(SELECT_DEVICE_NAME.length());
+            mTask.disableInpuntMethod();
+            Utils.execCommand(
+                    String.format("input text %s", SELF_DEFINE_DEVICE_NAME), false, false);
+            UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+            Utils.writeCaseResult("Verify define a customized device name.",
+                    SELF_DEFINE_DEVICE_NAME.equals(editor.getText()), mExecTime);
+
+            mDevice.pressDPadDown();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 btnConfirm =
+                    mDevice.findObject(By.res("tv.fun.settings:id/device_name_btn_confirm"));
+            Utils.writeCaseResult("Verify the confirm button is focused.",
+                    btnConfirm.isFocused(), mExecTime);
+
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 deviceNameContainer =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
+            UiObject2 deviceNameValue =
+                    deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
+            Utils.writeCaseResult("Self-defined device name is updated success.",
+                    deviceNameValue.isEnabled(), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            mTask.enableInputMethod();
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void test14_04SelfDefineEmptyNameAndConfirm() {
+        try {
+            mTask.openSelfDefineDeviceNamePage();
+
+            mTask.clearTextOfEditorView(SELF_DEFINE_DEVICE_NAME.length());
+            mDevice.pressBack();  // hide keyboard
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mDevice.pressDPadDown();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mDevice.pressEnter(); // submit
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+            Utils.writeCaseResult("Verify define empty device name and submit.",
+                    editor.getText() == null, mExecTime);
+
+            mDevice.pressBack();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 deviceNameContainer =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
+            UiObject2 deviceNameValue =
+                    deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
+            Utils.writeCaseResult("Verify the pre-defined device name is unchanged.",
+                    deviceNameValue.isEnabled(), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
