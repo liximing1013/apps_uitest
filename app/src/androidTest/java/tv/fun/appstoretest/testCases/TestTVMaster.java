@@ -12,6 +12,7 @@ import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.appstoretest.common.MasterApp;
 import tv.fun.common.Utils;
@@ -81,7 +82,7 @@ public class TestTVMaster extends MasterApp {
      * Test that it can be back to Launcher home page by clicking Home btn on TV Master page
      */
     @Test
-    public void Master_Home_4_testClickHomeBtnToLauncherHomePage() {
+    public void Master_Home_04_testClickHomeBtnToLauncherHomePage() {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
@@ -108,7 +109,7 @@ public class TestTVMaster extends MasterApp {
      * Test that it can be back from tv master page to Launcher app home page
      */
     @Test
-    public void Master_Home_5_testBackFromMasterToLauncherApp() {
+    public void Master_Home_05_testBackFromMasterToLauncherApp() {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
@@ -135,7 +136,7 @@ public class TestTVMaster extends MasterApp {
      * Test that the UI of APP Clean page displays correctly
      */
     @Test
-    public void Master_Clean_1_testAppCleanUI() {
+    public void Master_Clean_01_testAppCleanUI() {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
@@ -161,7 +162,7 @@ public class TestTVMaster extends MasterApp {
         }
     }
 
-    //        @Test
+//            @Test
 //    public void test(){
 //        TvCommon.printAllMethods(this.getClass().getName());
 //    }
