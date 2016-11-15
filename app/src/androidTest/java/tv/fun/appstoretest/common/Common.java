@@ -683,7 +683,7 @@ public class Common {
      * @return result of verification
      * @throws IOException
      */
-    public Boolean verifyElementNotPresent(UiObject obj, String failMsg) throws IOException {
+    public Boolean verifyElementNotPresent(String failMsg, UiObject obj) throws IOException {
         Boolean verifyFlag =true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertFalse(failMsg, obj.exists());

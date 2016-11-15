@@ -126,28 +126,22 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入视频分类页直播大厅小窗口
+    @Test //进入视频分类页直播大厅
     public void LC_BL_01_EnterBesTVLivePage() {
         try {
             this.EnterVideoClassifyPage();
             systemWait(WAIT);
             uiDevice.pressDPadRight();
-            uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            uiDevice.wait(Until.findObject(By.res("com.bestv.ott:id/live_hall_feature_one")), 15000);
+            uiDevice.pressDPadRight();
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(PauseTime);
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
-            m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            m_uiObj =uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-            Utils.writeCaseResult("小窗口视频播放失败",m_uiObj !=null,m_Time);
+            systemWait(LONG_WAIT);
+            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/live_hall_title"));
+            m_ObjId = "com.bestv.ott:id/live_hall_title";
+            Utils.writeCaseResult("进入直播大厅失败",m_uiObj !=null,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultStr = e.toString();
@@ -181,6 +175,112 @@ public class TestVideoPlayCollectAndRecord {
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
+    }
+
+    @Test //NBA赛程表页面
+    public void LC_NBA_26_EnterNBARaceCard() {
+        try {
+            this.EnterNBAHomePage();
+            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            systemWait(LONG_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 AllRace = uiDevice.findObject(By.text("NBA全部赛程"));
+            m_Actual = AllRace.getText();
+            m_Expect = "NBA全部赛程";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入NBA全部赛程页面失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //NBA一键预约页面
+    public void LC_NBA_26_EnterNBAKeyAppointment(){
+        try {
+            this.EnterNBAHomePage();
+            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            systemWait(LONG_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 AllRace = uiDevice.findObject(By.text("全部球队"));
+            m_Actual = AllRace.getText();
+            m_Expect = "全部球队";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入NBA一键预约页面失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //NBA购买NBA包
+    public void LC_NBA_26_PayNBA(){
+        try {
+            this.EnterNBAHomePage();
+//            systemWait(SHORT_WAIT);
+//            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            systemWait(LONG_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 AllRace = uiDevice.findObject(By.text("NBA包年"));
+            m_Actual = AllRace.getText();
+            m_Expect = "NBA包年";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入NBA付费包页面失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //NBA球队赛程
+    public void LC_NBA_26_EnterNBATeamSchedule(){
+        try {
+            this.EnterNBAHomePage();
+            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            systemWait(LONG_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 AllRace = uiDevice.findObject(By.text("NBA球队赛程"));
+            m_Actual = AllRace.getText();
+            m_Expect = "NBA球队赛程";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入NBA球队赛程页面失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+
     }
 
     @Test //进入新闻大厅随机全屏播放一新闻
@@ -268,7 +368,7 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), 15000);
-            systemWait(WAIT);
+            systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             //判断播放器是否播放
@@ -280,7 +380,7 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(WAIT);
             //判断是否退出后回到详情页
             UiObject2 TextView = uiDevice.findObject(text("相关推荐"));
-//        Assert.assertNotNull(TextView);
+//          Assert.assertNotNull(TextView);
             m_Expect = "相关推荐";
             m_Actual = TextView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
@@ -418,7 +518,9 @@ public class TestVideoPlayCollectAndRecord {
                 this.openTabFromLauncherHomeByresId(uiDevice, ResId7);
                 systemWait(WAIT);
                 uiDevice.pressDPadDown();
+                systemWait(SHORT_WAIT);
                 uiDevice.pressDPadDown();//进入音乐模块
+                systemWait(SHORT_WAIT);
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 UiObject2 TextViewer = uiDevice.findObject(text("按 \uE693 键查看更多操作"));
@@ -442,7 +544,7 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(WAIT);
             uiDevice.pressEnter();
             uiDevice.wait(Until.findObject(By.text("赛程表")), 15000);
-            systemWait(WAIT);
+            systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
 //       UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -467,7 +569,7 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(SHORT_WAIT);
         uiDevice.pressEnter();
         uiDevice.wait(Until.findObject(By.text("赛程表")), 15000);
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.pressDPadUp();
         try {
             UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/pay_la_txt"));
@@ -521,13 +623,13 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //查看历史赛季切换对比
+    @Test //英超查看历史赛季切换对比
     public void LC_PL_06_PremierLeagueAllRoundContrast(){
         this.EnterPLHomePage();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
         uiDevice.wait(Until.findObject(By.text("赛程表")), 15000);
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadLeft();
@@ -555,6 +657,32 @@ public class TestVideoPlayCollectAndRecord {
             e.printStackTrace();
             resultStr = e.toString();
             resultFlag =false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //进入英超节目
+    public void LC_PL_07_PremierLeagueProgram(){
+        this.EnterPLHomePage();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        uiDevice.wait(Until.findObject(By.text("赛程表")), 15000);
+        systemWait(LONG_WAIT);
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        try{
+            UiObject TabTitle = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("节目"));
+            m_Actual = TabTitle.getText();
+            m_Expect = "节目";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入英超节目页面失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -607,7 +735,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //免费大片清晰度引导开通金卡会员页
+    @Test //免费大片清晰度引导开通金卡会员
     public void LC_VIP_22_VipViaDefinition() {
         try {
             uiDevice.pressDPadDown();
@@ -692,6 +820,7 @@ public class TestVideoPlayCollectAndRecord {
     }
 
     private void systemWait(int seconds) {
+
         SystemClock.sleep(seconds * 1000);
     }
 
@@ -715,8 +844,13 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
-        UiObject2 NBAText = uiDevice.findObject(text("NBA"));
-        NBAText.click();
+//        UiObject2 NBAText = uiDevice.findObject(text("NBA"));
+//        NBAText.click();
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
     } //进入NBA首页
 
     private void EnterPLHomePage(){

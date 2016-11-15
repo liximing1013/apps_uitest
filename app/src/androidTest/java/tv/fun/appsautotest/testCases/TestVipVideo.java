@@ -42,7 +42,6 @@ public final class TestVipVideo {
     private static final int LONG_WAIT = 12;
     //设定一段播放时间
     private static final int PlayVideoTime = 60;
-    //
     boolean m_Pass = false;
     String m_Expect = "";
     String m_Actual = "";
@@ -100,7 +99,7 @@ public final class TestVipVideo {
     }
 
     @Test //即将上映内影片的收藏和播放
-    public void LC_VIP_16_ComingMoviesCollectAndPlay() {
+    public void LC_VIP_15_ComingMoviesCollectAndPlay() {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadRight();
@@ -311,12 +310,12 @@ public final class TestVipVideo {
         systemWait(SHORT_WAIT);
         uiDevice.pressEnter();
         uiDevice.wait(Until.findObject(By.text("金卡专享")), 10000);
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.pressDPadCenter();
         systemWait(PlayVideoTime);
         try {
-//            UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//            Assert.assertNotNull(VideoClazz);
+//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+//          Assert.assertNotNull(VideoClazz);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);

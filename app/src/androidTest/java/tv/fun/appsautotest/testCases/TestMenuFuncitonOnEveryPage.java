@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
@@ -48,6 +49,7 @@ public class TestMenuFuncitonOnEveryPage {
     UiObject2 m_uiObj = null;
     String resultStr = "";
     Boolean resultFlag = true;
+
     @Before
     public void setUp() {
         instrument = InstrumentationRegistry.getInstrumentation();
@@ -65,21 +67,34 @@ public class TestMenuFuncitonOnEveryPage {
         backToLauncherHome(uiDevice);
         systemWait(WAIT);
     }
+
+    @Test //获取用例名
+    public void test(){
+
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
+
     @Test //播放记录页生成记录
     public void LC_MENU_12_DeleteVideoRecordInPlayRecord() {
         try {
             uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
             uiDevice.pressEnter();
+            systemWait(SHORT_WAIT);
             uiDevice.wait(Until.findObject(By.text("相关推荐")), 15000);
             systemWait(WAIT);
             //推荐位观看一影片生成播放记录
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
             uiDevice.pressBack();
             uiDevice.pressHome();
+            systemWait(WAIT);
             UiObject2 tabView1 = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
             this.openTabFromLauncherHomeByTextView(uiDevice, tabView1);
             systemWait(WAIT);
@@ -358,6 +373,74 @@ public class TestMenuFuncitonOnEveryPage {
 
     }
 
+    @Test //播放记录页视频卡片menu键操作
+    public void LC_Menu_13_VideoRecordCardInPlayRecord() {
+        try {
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            uiDevice.pressMenu();
+            systemWait(LONG_WAIT);
+            UiObject2 DelOne = uiDevice.findObject(By.text("删除单个"));
+            m_Actual = DelOne.getText();
+            m_Expect = "删除单个";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("调起选项错误or未响应",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //播放记录页删除单个记录menu键操作
+    public void LC_Menu_13_1_DelOneRecordInPlayRecord(){
+        try {
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            UiObject Title1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject Title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
+            if(Title1.getText().equals(Title2.getText())){
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                uiDevice.pressDPadRight();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+            }else {
+                System.out.println("播放记录收藏错误");
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
     @Test //列表页Tab Menu操作
     public void LC_MENU_29_ListTabMenuOperation(){
         try {
@@ -457,8 +540,8 @@ public class TestMenuFuncitonOnEveryPage {
             uiDevice.pressDPadUp();
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
-            UiObject ZhiBoYY = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
-            if(ZhiBoYY.getText().equals("赛事预约")){
+            UiObject ZhiBoOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
+            if(ZhiBoOrder.getText().equals("赛事预约")){
                 uiDevice.pressDPadRight();
                 systemWait(SHORT_WAIT);
                 uiDevice.pressDPadRight();
@@ -470,7 +553,7 @@ public class TestMenuFuncitonOnEveryPage {
                 m_Actual = SouSuo.getText();
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("menu选项错误",m_Pass,m_Time);
-            }else {
+            }else{
                 uiDevice.pressBack();
             }
         }catch(Throwable e){
@@ -513,14 +596,5 @@ public class TestMenuFuncitonOnEveryPage {
     private void systemWait(int seconds) {
         SystemClock.sleep(seconds * 1000);
     }
-
-    private void EnterVideoClassifyPage(){
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadDown();
-        uiDevice.pressDPadDown();
-        uiDevice.pressEnter();
-        systemWait(WAIT);
-    } //进入视频分类
 
 }
