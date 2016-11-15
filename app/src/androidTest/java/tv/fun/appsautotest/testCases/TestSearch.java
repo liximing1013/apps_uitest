@@ -852,8 +852,8 @@ public class TestSearch {
                 int iExpect = 3;
                 if(iChilds != iExpect){
                     m_bPass = false;
-                    m_sResult = String.format("搜索【%s】时右侧Tab栏数量不为【%d】！",
-                            m_sExpect, iExpect);
+                    m_sResult = String.format("搜索【%s】时右侧Tab栏数量为【%d】，" +
+                            "预期结果为【%d】！", m_sExpect, iChilds, iExpect);
                 }
             }
         }catch (Throwable e){
