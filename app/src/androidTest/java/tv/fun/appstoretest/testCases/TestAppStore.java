@@ -155,6 +155,273 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
+     * Test that can goto My App page from Launcher
+     */
+    @Test
+    public void App_Home_12_testEnterMyAppPageFromLauncher() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            //断言
+            UiObject titleObj = findElementByID("tv.fun.appstore:id/title");
+            verifyString("", titleObj.getText(), "我的应用");
+            UiObject subTitle = findElementByID("tv.fun.appstore:id/subTitle");
+            String subTitleText = subTitle.getText();
+            verifyIncludeString("", subTitleText, "个应用");
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to Launcher home page from My App page By home
+     */
+    @Test
+    public void App_Home_16_testBackToLauncherHomeFromMyApp() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            device.pressHome();
+            waitForElementNotPresentByID("tv.fun.appstore:id/title");
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to Launcher App home page from My App page By back btn
+     */
+    @Test
+    public void App_Home_17_testBackToAppHomeFromMyApp() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            device.pressBack();
+            waitForElementNotPresentByID("tv.fun.appstore:id/title");
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to Launcher App home page from My App page By back btn
+     */
+    @Test
+    public void App_Home_19_testMenuPopUpInMyApp() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            moveToRight();
+            device.pressMenu();
+
+            //断言
+            UiObject menuIconObj = findElementByID("android:id/tv_fun_menu_icon");
+            UiObject uninstallBtn = findElementByText("卸载", "android:id/tv_fun_menu_text");
+            UiObject cleanBtn = findElementByText("清理数据", "android:id/tv_fun_menu_text");
+            UiObject menuPop = findElementByID("android:id/tv_fun_menu");
+            verifyElementPresent("", menuIconObj);
+            verifyElementPresent("", uninstallBtn);
+            verifyElementPresent("", cleanBtn);
+            verifyTrue("", menuPop.isEnabled());
+            device.pressBack();
+            UiObject menuDisappear = findElementByID("android:id/tv_fun_menu");
+            verifyElementNotPresent("", menuDisappear);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can uninstall one app in my app page
+     */
+    @Test
+    public void App_Home_22_testUninstallAppInMyApp() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            moveToRight();
+            UiObject subTitle = findElementByID("tv.fun.appstore:id/subTitle");//有18个应用
+            int appCount = stringToInt(subTitle.getText().replace("有", "").replace("个应用", "").replace(" ", ""));
+            device.pressMenu();
+            waitForElementPresentByID("android:id/tv_fun_menu");
+
+            //断言
+            UiObject uninstallBtn = findElementByText("卸载", "android:id/tv_fun_menu_text");
+            uninstallBtn.click();
+            waitForElementPresentByID("com.android.packageinstaller:id/uninstall_activity_snippet");
+            UiObject okBtn = findElementByID("com.android.packageinstaller:id/ok_button");
+            UiObject appNameObj = findElementByID("com.android.packageinstaller:id/app_name");
+            String appName = appNameObj.getText();
+
+            //在卸载弹框上点击“确定”按钮
+            okBtn.click();
+            waitForTextNotPresent("卸载完成");
+            UiObject subTitleAfterUninstall = findElementByID("tv.fun.appstore:id/subTitle");//有17个应用
+            int appCountAfterUninstall = stringToInt(subTitleAfterUninstall.getText().replace("有", "").replace("个应用", "").replace(" ", ""));
+            verifyTrue("", appCountAfterUninstall == appCount - 1);
+
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can cancel to uninstall one app in my app page
+     */
+    @Test
+    public void App_Home_23_testCancelUninstallAppInMyApp() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            moveToRight();
+            device.pressMenu();
+            waitForElementPresentByID("android:id/tv_fun_menu");
+
+            //断言
+            UiObject uninstallBtn = findElementByText("卸载", "android:id/tv_fun_menu_text");
+            uninstallBtn.click();
+            waitForElementPresentByID("com.android.packageinstaller:id/uninstall_activity_snippet");
+            UiObject cancelBtn = findElementByID("com.android.packageinstaller:id/cancel_button");
+            UiObject okBtn = findElementByID("com.android.packageinstaller:id/ok_button");
+            String confirmMsg = findElementByID("com.android.packageinstaller:id/uninstall_confirm").getText();
+            UiObject appNameObj = findElementByID("com.android.packageinstaller:id/app_name");
+            String appName = appNameObj.getText();
+            verifyElementPresent("", cancelBtn);
+            verifyElementPresent("", okBtn);
+            verifyString("", confirmMsg, "要卸载此应用吗？");
+            //在卸载弹框上点击“取消”按钮
+            cancelBtn.click();
+            UiObject menuPopAfterCancel = findElementByID("com.android.packageinstaller:id/uninstall_confirm");
+            waitForElementNotPresentByID("com.android.packageinstaller:id/uninstall_confirm");
+            verifyElementNotPresent("", menuPopAfterCancel);
+            UiObject appList = findElementByID("tv.fun.appstore:id/listview");
+            int childCount = appList.getChildCount();
+            Boolean flag = false;
+            for (int i = 0; i < childCount; i++) {
+                UiObject appCard = device.findObject(new UiSelector().className("android.widget.RelativeLayout").index(i));
+                UiObject appNaObj = appCard.getChild(new UiSelector().resourceId("tv.fun.appstore:id/appName"));
+                String appNameInList = appNaObj.getText();
+                if (appNameInList.equalsIgnoreCase(appName)) {
+                    flag = true;
+                    return;
+                }
+            }
+            verifyTrue("", flag);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can goto App Clean page from Launcher > my app page
+     */
+    @Test
+    public void App_Home_24_testGotoAppCleanPageFromMyApp() {
+        try {
+            //移动焦点到Launcher应用tab
+            moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+            moveToDown();
+            moveToRightForMultiple(2);
+            UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
+            myAppObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            moveToRight();
+            device.pressMenu();
+            waitForElementPresentByID("android:id/tv_fun_menu");
+
+            //断言
+            UiObject cleanBtn = findElementByText("清理数据", "android:id/tv_fun_menu_text");
+            cleanBtn.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.master:id/clearData");
+            UiObject appCleanPageTitle = device.findObject(new UiSelector().resourceId("tv.fun.master:id/title"));
+            UiObject uninstallBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
+            UiObject cleanDataBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/clearData"));
+            verifyString("app clean page title is incorrect", appCleanPageTitle.getText(), "应用清理");
+            verifyElementPresent(" The uninstall button is not displayed", uninstallBtn);
+            verifyString(" The name of uninstall button is displayed incorrectly", uninstallBtn.getText(), "卸载");
+            verifyElementPresent(" The clean date button is not displayed", cleanDataBtn);
+            verifyString(" The name of clean date is displayed incorrectly", cleanDataBtn.getText(), "清理数据");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
      * Test App Store UI Displays correctly
      *
      * @throws UiObjectNotFoundException
@@ -1195,7 +1462,7 @@ public class TestAppStore extends AppStorePage {
      * @throws InterruptedException
      */
     @Test
-    public void App_AppM_22_testGotoAppCleanPageFromMyApp() {
+    public void App_AppM_22_testGotoAppCleanPageFromMyAppInAppstore() {
         try {
             //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
             enterAppStorePage();
