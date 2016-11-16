@@ -855,9 +855,9 @@ public class TestVideoPlayCollectAndRecord {
     private void RandomPlayNews(){//随机选择新闻的一级标题进入后播放
         uiDevice.pressDPadDown();
         systemWait(WAIT);
-        Random moveTimes = new Random(1);
+        Random moveTimes = new Random();
         int i;
-        i=moveTimes.nextInt(20);
+        i=moveTimes.nextInt(16);
         for(int j= 0;j<=i;j++){
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadDown();
@@ -889,7 +889,9 @@ public class TestVideoPlayCollectAndRecord {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
     } //进入英超首页
@@ -898,7 +900,9 @@ public class TestVideoPlayCollectAndRecord {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressEnter();
         systemWait(WAIT);
     } //进入视频分类

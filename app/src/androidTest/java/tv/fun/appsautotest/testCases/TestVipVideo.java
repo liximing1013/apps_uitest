@@ -529,7 +529,7 @@ public final class TestVipVideo {
 
     private void RandomPlayTVVideo(){
         systemWait(WAIT);
-        Random moveTimes = new Random(1);
+        Random moveTimes = new Random();
         int i;
         i=moveTimes.nextInt(4);
         for(int j= 0;j<=i;j++){
@@ -543,36 +543,20 @@ public final class TestVipVideo {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressEnter();
         systemWait(WAIT);
-    } //进入视频分类
+    } //进入视频分类页面
 
     private void RightRightRight(){
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
+        int i = 0;
+        while( i <= 10){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
     }
 
 }
