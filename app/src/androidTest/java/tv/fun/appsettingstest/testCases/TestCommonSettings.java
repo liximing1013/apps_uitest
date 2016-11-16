@@ -7,19 +7,23 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import java.util.List;
 
 import tv.fun.appsettingstest.common.TaskCommonSettings;
 import tv.fun.common.Constants;
 import tv.fun.common.Utils;
 
+import static tv.fun.common.Constants.CLASS_TEXT_VIEW;
 import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
 import static tv.fun.common.Constants.SETTINGS_HOME_ACTIVITY;
 import static tv.fun.common.Constants.SETTINGS_PKG_NAME;
@@ -33,12 +37,16 @@ import static tv.fun.common.Constants.SETTINGS_PKG_NAME;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestCommonSettings {
+    // total 20
 
     private UiDevice mDevice;
     private TaskCommonSettings mTask;
     private long mExecTime;
-
     private String mErrorStack = null;
+
+    private final String SELECT_DEVICE_NAME = "书房的电视";
+    private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
+    private String[] TEXT_WALLPAPERS = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
     public static void classSetup() {
@@ -66,7 +74,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test01_Common_01_01_SettingsPageTitle() {
+    public void SET_Common_01_01_SettingsPageTitle() {
         try {
             UiObject2 settingsTitle =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_title"));
@@ -83,7 +91,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test02_Common_01_02_DeviceNameDefaultValue() {
+    public void SET_Common_01_02_DeviceNameDefaultValue() {
         try {
             UiObject2 deviceNameContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
@@ -108,7 +116,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test03_Common_01_03_DeviceNameSubValues() {
+    public void SET_Common_01_03_DeviceNameSubValues() {
         try {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.SHORT_WAIT);
@@ -131,7 +139,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test04_Common_01_04_SelectDeviceName() {
+    public void SET_Common_01_04_SelectDeviceName() {
         try {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.SHORT_WAIT);
@@ -156,44 +164,106 @@ public final class TestCommonSettings {
         }
     }
 
-    @Ignore
-    public void SET_test05_Common_05_01_DefaultLocationOnSettings() {
+    @Test
+    public void SET_Common_02_01_testSelfDefineDeviceNameAndCancel() {
         try {
-            UiObject2 locationItemContainer =
-                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_locate"));
-            UiObject2 locationItemKey =
-                    locationItemContainer.findObject(By.res("tv.fun.settings:id/item_title"));
-            Utils.writeCaseResult("Verify the location item key text.",
-                    "天气位置".equals(locationItemKey.getText()), mExecTime);
+            mTask.openSelfDefineDeviceNamePage();
 
-            UiObject2 locationItemValue =
-                    locationItemContainer.findObject(By.res("tv.fun.settings:id/item_value"));
-            Utils.writeCaseResult("Verify the location item default value text on Common Settings.",
-                    "湖北 武汉".equals(locationItemValue.getText()), mExecTime);
+            UiObject2 title = mDevice.findObject(By.res("tv.fun.settings:id/setting_title"));
+            Utils.writeCaseResult("Verify the title of self-define device name activity.",
+                    "自定义设备名称".equals(title.getText()), mExecTime);
+
+            UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+            Utils.writeCaseResult("Verify the device name editor is default focused.",
+                    editor.isFocused(), mExecTime);
+            Utils.writeCaseResult("Verify the text in the device name editor.",
+                    SELECT_DEVICE_NAME.equals(editor.getText()), mExecTime);
+
+            mTask.disableInpuntMethod();
+            Utils.execCommand("input text test", false, false);
+            mDevice.pressBack();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 deviceNameContainer =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
+            UiObject2 deviceNameValue =
+                    deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
+            Utils.writeCaseResult(
+                    "Verify cancel and back from the self-define device name activity.",
+                    deviceNameValue.isEnabled(), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
         } finally {
+            mTask.enableInputMethod();
             if (mErrorStack != null) {
                 Utils.writeCaseResult(mErrorStack, false, mExecTime);
             }
         }
     }
 
-    @Ignore
-    public void SET_test06_Common_05_02_OpenWeatherAppAndBackToSettings() {
+    @Test
+    public void SET_Common_02_02_testSelfDefineDeviceNameAndConfirm() {
         try {
-            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_locate"));
+            mTask.openSelfDefineDeviceNamePage();
+
+            mTask.clearTextOfEditorView(SELECT_DEVICE_NAME.length());
+            mTask.disableInpuntMethod();
+            Utils.execCommand(
+                    String.format("input text %s", SELF_DEFINE_DEVICE_NAME), false, false);
+            UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+            Utils.writeCaseResult("Verify define a customized device name.",
+                    SELF_DEFINE_DEVICE_NAME.equals(editor.getText()), mExecTime);
+
+            mDevice.pressDPadDown();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 btnConfirm =
+                    mDevice.findObject(By.res("tv.fun.settings:id/device_name_btn_confirm"));
+            Utils.writeCaseResult("Verify the confirm button is focused.",
+                    btnConfirm.isFocused(), mExecTime);
+
             mDevice.pressEnter();
-            Utils.waitForPackageOpened(mDevice, "tv.fun.weather");
-            Utils.writeCaseResult("Verify open Weather home.",
-                    "tv.fun.weather".equals(mDevice.getCurrentPackageName()), mExecTime);
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 deviceNameContainer =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
+            UiObject2 deviceNameValue =
+                    deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
+            Utils.writeCaseResult("Self-defined device name is updated success.",
+                    deviceNameValue.isEnabled(), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            mTask.enableInputMethod();
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void SET_Common_02_03_testSelfDefineEmptyNameAndConfirm() {
+        try {
+            mTask.openSelfDefineDeviceNamePage();
+
+            mTask.clearTextOfEditorView(SELF_DEFINE_DEVICE_NAME.length());
+            mDevice.pressBack();  // hide keyboard
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mDevice.pressDPadDown();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mDevice.pressEnter(); // submit
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 editor = mDevice.findObject(By.res("tv.fun.settings:id/device_edit"));
+            Utils.writeCaseResult("Verify define empty device name and submit.",
+                    editor.getText() == null, mExecTime);
 
             mDevice.pressBack();
-            Utils.waitForPackageOpened(mDevice, "tv.fun.settings");
-            Utils.writeCaseResult("Verify back to Settings home.",
-                    "tv.fun.settings".equals(mDevice.getCurrentPackageName()), mExecTime);
-
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 deviceNameContainer =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
+            UiObject2 deviceNameValue =
+                    deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
+            Utils.writeCaseResult("Verify the pre-defined device name is unchanged.",
+                    deviceNameValue.isEnabled(), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -205,7 +275,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test07_Common_09_01_SleepTimeDefaultValue() {
+    public void SET_Common_09_01_SleepTimeDefaultValue() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
             mDevice.pressEnter();
@@ -235,7 +305,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test08_Common_09_02_SelectSleepTime() {
+    public void SET_Common_09_02_SelectSleepTime() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
             mDevice.pressEnter();
@@ -261,23 +331,88 @@ public final class TestCommonSettings {
         }
     }
 
-    @Ignore
-    public void SET_test11_Common_17_01_DefaultWallpaper() {
-        // TODO: 2016/11/1  
-    }
+    @Test
+    public void SET_Common_17_01_DefaultWallpaper() {
+        try {
+            UiObject2 itemWallpaper =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
 
-    @Ignore
-    public void SET_test12_Common_18_01_SubWallpapersOnSelectPage() {
-        // TODO: 2016/11/1  
-    }
-
-    @Ignore
-    public void SET_test13_Common_18_02_SelectWallpaper() {
-        // TODO: 2016/11/1  
+            String message = "Verify the item key for wallpaper setting item.";
+            UiObject2 itemKey = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_title"));
+            Assert.assertEquals(message, "壁纸", itemKey.getText());
+            message = "Verify the default wallpaper.";
+            UiObject2 itemValue = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_value"));
+            Assert.assertEquals(message, TEXT_WALLPAPERS[0], itemValue.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
     }
 
     @Test
-    public void SET_test21_Common_19_01_ScreenSaverDefaultValue() {
+    public void SET_Common_18_01_SubWallpapersOnSelectPage() {
+        try {
+            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+
+            String message = "Verify there are 4 sub wallpapers on wallpaper select page.";
+            List<UiObject2> wallpapers = mDevice.findObjects(By.clazz(CLASS_TEXT_VIEW));
+            Assert.assertEquals(message, TEXT_WALLPAPERS.length, wallpapers.size());
+
+            message = "Verify the 1st sub wallpaper is default selected.";
+            UiObject2 defaultWallpaper =
+                    mDevice.findObject(By.text(TEXT_WALLPAPERS[0])).getParent();
+            Assert.assertTrue(message, defaultWallpaper.isSelected());
+
+            for (UiObject2 wallpaper : wallpapers) {
+                String title = wallpaper.getText();
+                message = String.format("Verify the sub wallpaper %s is shown.", title);
+                Assert.assertTrue(message, this.IsSubWallpaperIncluded(title));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void SET_Common_18_02_SelectWallpaper() {
+        try {
+            final String selectWallpaper = TEXT_WALLPAPERS[2];
+
+            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+            mDevice.pressEnter();
+            SystemClock.sleep(Constants.WAIT);
+            mTask.selectSpecifiedSubWallpaper(selectWallpaper);
+
+            String message = "Verify setting item value is changed to the selected wallpaper.";
+            mDevice.pressBack();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 itemWallpaper =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
+            UiObject2 itemValue = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_value"));
+            Assert.assertEquals(message, selectWallpaper, itemValue.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void SET_Common_19_01_ScreenSaverDefaultValue() {
         try {
             UiObject2 screenSaverContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_screen_saver"));
@@ -296,7 +431,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test22_Common_19_02_SelectScreenSaver() {
+    public void SET_Common_19_02_SelectScreenSaver() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_screen_saver"));
@@ -319,7 +454,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test23_Common_24_01_InstallUnknownAppDefaultValue() {
+    public void SET_Common_24_01_InstallUnknownAppDefaultValue() {
         try {
             UiObject2 installUnknownAppItemContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -339,7 +474,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test24_Common_24_02_SelectAllowedInstallUnknownAppAndCancel() {
+    public void SET_Common_24_02_SelectAllowedInstallUnknownAppAndCancel() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -371,7 +506,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test25_Common_25_01_SelectAllowedInstallUnknownAppAndConfirm() {
+    public void SET_Common_25_01_SelectAllowedInstallUnknownAppAndConfirm() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -400,7 +535,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test26_Common_26_01_SelectForbiddenInstallUnknownApp() {
+    public void SET_Common_26_01_SelectForbiddenInstallUnknownApp() {
         try {
             mTask.moveToSpecifiedSettingsItem(
                     By.res("tv.fun.settings:id/setting_item_unkown_source"));
@@ -424,7 +559,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test27_Common_27_01_SystemRecoverDialogAndClickCancel() {
+    public void SET_Common_27_01_SystemRecoverDialogAndClickCancel() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_recovery"));
             mDevice.pressEnter();
@@ -459,7 +594,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_test28_Common_27_02_SaveInfoOnSystemRecoverDialog() {
+    public void SET_Common_27_02_SaveInfoOnSystemRecoverDialog() {
         try {
             mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_recovery"));
             mDevice.pressEnter();
@@ -499,4 +634,12 @@ public final class TestCommonSettings {
 //        TvCommon.printAllMethods(this.getClass().getName());
 //    }
 
+    private boolean IsSubWallpaperIncluded(String wallpaper) {
+        for (String text : TEXT_WALLPAPERS) {
+            if (text.equals(wallpaper)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

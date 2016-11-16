@@ -2,6 +2,7 @@ package tv.fun.appsettingstest.testCases;
 
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
@@ -11,7 +12,10 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import tv.fun.appsettingstest.common.TaskFileManager;
 import tv.fun.common.Constants;
@@ -27,7 +31,10 @@ import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
  * TestFileManager
  */
 
+@RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
+    // total 15
 
     private UiDevice mDevice;
     private TaskFileManager mTask;
@@ -99,7 +106,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test01_Category_11_01_OpenAllFilesCardFromSdcardTab() {
+    public void FileM_Category_11_01_OpenAllFilesCardFromSdcardTab() {
         try {
             mTask.openLocalFilesCard();
 
@@ -123,7 +130,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test02_Category_12_01_NavigateToSpecifiedPath() {
+    public void FileM_Category_12_01_NavigateToSpecifiedPath() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -143,7 +150,95 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test03_Category_18_01_OpenUnknownTypeFile() {
+    public void FileM_Category_12_02_MessageWhenEmptyFoVideoCard() {
+        try {
+            mTask.openCategoryVideoCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in APP card.",
+                    "未发现可播放的视频".equals(tips.getText()), mExecTime);
+
+            mDevice.pressMenu();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 menu = mDevice.findObject(By.res("android:id/tv_fun_menu"));
+            Assert.assertNull("Verify the menu is NOT shown when no files in video card.", menu);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Category_12_03_MessageWhenEmptyForAppCard() {
+        try {
+            mTask.openCategoryAppCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in APP card.",
+                    "未发现可安装的应用".equals(tips.getText()), mExecTime);
+
+            mDevice.pressMenu();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 menu = mDevice.findObject(By.res("android:id/tv_fun_menu"));
+            Assert.assertNull("Verify the menu is NOT shown when no files in App card.", menu);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Category_12_04_MessageWhenEmptyForMusicCard() {
+        try {
+            mTask.openCategoryMusicCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in music card.",
+                    "未发现可播放的音乐".equals(tips.getText()), mExecTime);
+
+            mDevice.pressMenu();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 menu = mDevice.findObject(By.res("android:id/tv_fun_menu"));
+            Assert.assertNull("Verify the menu is NOT shown when no files in music card.", menu);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Category_12_05_MessageWhenEmptyForPictureCard() {
+        try {
+            mTask.openCategoryPictureCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in picture card.",
+                    "未发现可显示的图片".equals(tips.getText()), mExecTime);
+
+            mDevice.pressMenu();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 menu = mDevice.findObject(By.res("android:id/tv_fun_menu"));
+            Assert.assertNull("Verify the menu is NOT shown when no files in Pic card.", menu);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Category_18_01_OpenUnknownTypeFile() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateAndOpenSpecifiedFile(TEST1_FILE_PATH);
@@ -163,75 +258,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test04_Category_12_01_MessageWhenEmptyForAppCard() {
-        try {
-            mTask.openCategoryAppCard();
-            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
-            Utils.writeCaseResult("Verify the tips when no files in APP card.",
-                    "未发现可安装的应用".equals(tips.getText()), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Test
-    public void FileM_test05_Category_12_02_MessageWhenEmptyForAppCard() {
-        try {
-            mTask.openCategoryAppCard();
-            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
-            Utils.writeCaseResult("Verify the tips when no files in APP card.",
-                    "未发现可安装的应用".equals(tips.getText()), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Test
-    public void FileM_test06_Category_12_03_MessageWhenEmptyForMusicCard() {
-        try {
-            mTask.openCategoryMusicCard();
-            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
-            Utils.writeCaseResult("Verify the tips when no files in music card.",
-                    "未发现可播放的音乐".equals(tips.getText()), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Test
-    public void FileM_test07_Category_12_04_MessageWhenEmptyForPictureCard() {
-        try {
-            mTask.openCategoryPictureCard();
-            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
-            Utils.writeCaseResult("Verify the tips when no files in picture card.",
-                    "未发现可显示的图片".equals(tips.getText()), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Test
-    public void FileM_test11_Menu_04_01_01_MenuHideBtnExistForDir() {
+    public void FileM_Menu_01_01_MenuHideBtnExistForDir() {
         try {
             mTask.openLocalFilesCard();
             UiObject2 menuTips =
@@ -266,7 +293,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test12_Menu_01_02_MenuRemoveAndHideBtnExistForFile() {
+    public void FileM_Menu_01_02_MenuRemoveAndHideBtnExistForFile() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -301,7 +328,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test13_Hidden_04_01_HideAndShowDirectory() {
+    public void FileM_Menu_01_03_HideAndShowDirectory() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -329,7 +356,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test14_Hidden_01_01_HideAndShowFile() {
+    public void FileM_Menu_01_04_HideAndShowFile() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -354,7 +381,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test15_Remove_01_01_RemoveFileAndCancel() {
+    public void FileM_Menu_01_05_RemoveFileAndCancel() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -383,7 +410,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test16_Remove_01_02_RemoveFile() {
+    public void FileM_Menu_01_06_RemoveFile() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -412,7 +439,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test17_Hidden_02_01_HideAndShowOnlyFileOfDirectory() {
+    public void FileM_Menu_02_01_HideAndShowOnlyFileOfDirectory() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_DIR_PATH);
@@ -439,7 +466,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_test18_Remove_03_01_RemoveOnlyFileOfDirectory() {
+    public void FileM_Menu_02_02_RemoveOnlyFileOfDirectory() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_DIR_PATH);
@@ -464,5 +491,10 @@ public final class TestFileManager {
             }
         }
     }
+
+//    @Test
+//    public void test() {
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
 }

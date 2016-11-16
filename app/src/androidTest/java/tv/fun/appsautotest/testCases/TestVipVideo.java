@@ -98,7 +98,7 @@ public final class TestVipVideo {
         }
     }
 
-    @Test //即将上映内影片的收藏和播放
+    @Test //即将上映中影片的收藏
     public void LC_VIP_15_ComingMoviesCollectAndPlay() {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
@@ -199,7 +199,7 @@ public final class TestVipVideo {
         }
     }
 
-    @Test //验证输入错误的兑换券
+    @Test //兑换中验证输入错误的兑换券
     public void LC_VIP_11_1_InputErrorCharacterOnExchangePage() {
         uiDevice.pressDPadUp();
         systemWait(SHORT_WAIT);
@@ -426,7 +426,7 @@ public final class TestVipVideo {
         }
     }
 
-    @Test //视频分类页进入金卡专区
+    @Test //视频分类页入口进入金卡列表页
     public void LC_VIP_21_VideoClassifySkipVip() {
         uiDevice.pressHome();
         systemWait(WAIT);
@@ -449,11 +449,11 @@ public final class TestVipVideo {
             systemWait(SHORT_WAIT);
             uiDevice.pressEnter();
             uiDevice.wait(Until.findObject(By.text("金卡专享")), 15000);
-            systemWait(WAIT);
+            systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
-//            UiObject2 videoPlayer = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//            Assert.assertNotNull(videoPlayer);
+//          UiObject2 videoPlayer = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+//          Assert.assertNotNull(videoPlayer);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);
@@ -529,7 +529,7 @@ public final class TestVipVideo {
 
     private void RandomPlayTVVideo(){
         systemWait(WAIT);
-        Random moveTimes = new Random(1);
+        Random moveTimes = new Random();
         int i;
         i=moveTimes.nextInt(4);
         for(int j= 0;j<=i;j++){
@@ -543,36 +543,20 @@ public final class TestVipVideo {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
         uiDevice.pressEnter();
         systemWait(WAIT);
-    } //进入视频分类
+    } //进入视频分类页面
 
     private void RightRightRight(){
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
+        int i = 0;
+        while( i <= 10){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
     }
 
 }
