@@ -30,8 +30,8 @@ import static android.support.test.uiautomator.By.text;
 
 /**
  * Created by lixm on 2016/10/28
- * 混合类
- * 15
+ * Mix
+ *
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -83,7 +83,7 @@ public class TestVideoPlayCollectAndRecord {
         TvCommon.printAllMethods(this.getClass().getName());
     }
 
-    @Test //小视频收藏
+    @Test //体育Tab下小视频收藏
     public void LC_SV_10_SmallVideoCollectRecord() {
         try {
             uiDevice.pressDPadUp();
@@ -100,7 +100,7 @@ public class TestVideoPlayCollectAndRecord {
             UiObject2 Text1 = uiDevice.findObject(By.res("com.bestv.ott:id/special_player_favorite"));
            if(Text1.getText().equals("已收藏")){
                 uiDevice.pressBack();
-                System.out.println("此小视频专题已收藏");
+                System.out.println("此小视频专题右上角选项显示:"+Text1.getText());
             }else {
                uiDevice.pressDPadUp();
                systemWait(SHORT_WAIT);
@@ -231,8 +231,8 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_PayNBA(){
         try {
             this.EnterNBAHomePage();
-//            systemWait(SHORT_WAIT);
-//            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+//          systemWait(SHORT_WAIT);
+//          uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
@@ -305,8 +305,8 @@ public class TestVideoPlayCollectAndRecord {
             //全屏播放
             uiDevice.pressEnter();
             systemWait(PlayVideoTime);
-//            UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//            Assert.assertNotNull(VideoClazz);
+//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+//          Assert.assertNotNull(VideoClazz);
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj =uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("新闻大厅播放新闻失败",m_uiObj !=null,m_Time);
@@ -335,11 +335,11 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressEnter();
             //新闻播放60s
             systemWait(PlayVideoTime);
-//        UiObject2 VideoClass = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//        Assert.assertNotNull(VideoClass);
+//          UiObject2 VideoClass = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+//          Assert.assertNotNull(VideoClass);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            Utils.writeCaseResult("看看新闻播放问题", m_uiObj != null, m_Time);
+            Utils.writeCaseResult("看看新闻无法播放", m_uiObj != null, m_Time);
             //返回新闻大厅
             uiDevice.pressBack();
         }catch (Throwable e){
@@ -689,7 +689,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //视频分类一周更新视频
+    @Test //进入视频分类一周更新视频
     public void LC_VC_01_EnterNewVideo() {
         try {
             this.EnterVideoClassifyPage();
@@ -700,7 +700,7 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.text("相关推荐")), 15000);
-            systemWait(WAIT);
+            systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
@@ -768,6 +768,34 @@ public class TestVideoPlayCollectAndRecord {
             e.printStackTrace();
             resultStr =e.toString();
             resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //Launcher首页点击搜索框
+    public void LC_SY_02_ClickSearchBar() {
+        try {
+            uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            uiDevice.pressDPadRight();
+            uiDevice.pressDPadRight();
+            uiDevice.pressDPadRight();
+            uiDevice.pressDPadRight();
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 Text = uiDevice.findObject(By.text("输入影片首字母或全拼"));
+            m_Actual = Text.getText();
+            m_Expect = "输入影片首字母或全拼";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("搜索页面跳转失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag =false;
+            resultStr = e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -874,4 +902,5 @@ public class TestVideoPlayCollectAndRecord {
         uiDevice.pressEnter();
         systemWait(WAIT);
     } //进入视频分类
+
 }

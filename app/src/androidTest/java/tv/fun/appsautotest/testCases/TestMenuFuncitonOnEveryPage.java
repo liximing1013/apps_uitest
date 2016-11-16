@@ -112,7 +112,7 @@ public class TestMenuFuncitonOnEveryPage {
         }
     }
 
-    @Test //我的播放记录页menu键清空全部
+    @Test //播放记录页menu键清空全部
     public void LC_MENU_11_EmptyVideoRecordInPlayRecord() {
         try {
             UiObject2 tabView1 = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
@@ -142,7 +142,7 @@ public class TestMenuFuncitonOnEveryPage {
         }
     }
 
-    @Test //猜你喜欢内视频收藏
+    @Test //猜你喜欢内视频menu收藏
     public void LC_MENU_28_WouldYouLikeCollectRecord() {
         try {
             //猜你喜欢进入时会重新刷新数据
@@ -150,9 +150,11 @@ public class TestMenuFuncitonOnEveryPage {
             this.openTabFromLauncherHomeByTextView(uiDevice, tabView1);
             systemWait(WAIT);
             uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadLeft();
             systemWait(WAIT);
             uiDevice.pressDPadDown();
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
             uiDevice.pressMenu();
@@ -168,14 +170,13 @@ public class TestMenuFuncitonOnEveryPage {
             systemWait(SHORT_WAIT);
             uiDevice.pressEnter();
             uiDevice.wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), 15000);
-            systemWait(WAIT);
+            systemWait(LONG_WAIT);
             UiObject2 TextViewer2 = uiDevice.findObject(text("已收藏"));
 //        Assert.assertEquals("详情页显示已收藏","已收藏",TextViewer2.getText());
             m_Expect = "已收藏";
             m_Actual = TextViewer2.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-            Utils.writeCaseResult("详情页显示错误", m_Pass, m_Time);
-            uiDevice.pressBack();
+            Utils.writeCaseResult("详情页收藏选项显示错误", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultStr = e.toString();
@@ -186,7 +187,7 @@ public class TestMenuFuncitonOnEveryPage {
         }
     }
 
-    @Test //赛事预约页面清空全部比赛预约
+    @Test //赛事预约页面清空全部比赛
     public void LC_MENU_24_EmptyMatchOrderInterface() {
         try {
             UiObject2 tabView1 = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
@@ -336,7 +337,7 @@ public class TestMenuFuncitonOnEveryPage {
     }
 
     @Test //应用Tab页面menu操作
-    public void LC_MENU_06_AppTabMenuOperation(){
+    public void LC_MENU_08_AppTabMenuOperation(){
         try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
@@ -442,7 +443,7 @@ public class TestMenuFuncitonOnEveryPage {
     }
 
     @Test //列表页Tab Menu操作
-    public void LC_MENU_29_ListTabMenuOperation(){
+    public void LC_MENU_30_ListTabMenuOperation(){
         try {
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
@@ -594,6 +595,7 @@ public class TestMenuFuncitonOnEveryPage {
     }
 
     private void systemWait(int seconds) {
+
         SystemClock.sleep(seconds * 1000);
     }
 
