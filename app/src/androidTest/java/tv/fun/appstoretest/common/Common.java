@@ -646,6 +646,36 @@ public class Common {
     }
 
     /**
+     * Verify the input parmeter is false.
+     *
+     * @param failMsg
+     * @param testFlag
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyFalse(String failMsg, Boolean testFlag) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertFalse(failMsg, testFlag);
+        } else {
+            if (!testFlag) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "The return of [" + testFlag + "] is not False; ";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
      * Verify the element present.
      *
      * @param obj

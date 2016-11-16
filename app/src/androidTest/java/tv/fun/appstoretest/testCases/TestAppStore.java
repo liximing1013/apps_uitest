@@ -18,6 +18,7 @@ import org.junit.runners.MethodSorters;
 import java.io.IOException;
 import java.util.List;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.common.Utils;
 
@@ -497,6 +498,298 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
+     * test back to Launcher app tab page from hot topic page by Home
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_TJ_14_testBackToLauncherFromHotTopicPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToFirstCardUnderSuggestTab();
+            UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
+            if (!hotTopic.isSelected()) {
+                moveToFirstCardUnderSuggestTab();
+            }
+
+            //点击推荐tab下热门排行topic
+            hotTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
+            device.pressHome();
+            waitForElementNotPresent("tv.fun.appstore:id/topic_app_list");
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test back to App Store app tab page from hot topic page by back btn
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_TJ_15_testBackToAppStoreFromHotTopicPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToFirstCardUnderSuggestTab();
+            UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
+            if (!hotTopic.isSelected()) {
+                moveToFirstCardUnderSuggestTab();
+            }
+
+            //点击推荐tab下热门排行topic
+            hotTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
+            device.pressBack();
+            waitForElementNotPresent("tv.fun.appstore:id/topic_app_list");
+            //断言
+            UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
+            UiObject searchObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn"));
+            verifyElementPresent("The search icon in AppStore page is not displayed", searchObj);
+            verifyElementPresent("The appManage tab in AppStore page is not displayed", appManageTab);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test enter back to App detail page from hot topic page
+     */
+    @Test
+    public void App_TJ_16_testEnterAppDetailPageFromHotTopicPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToFirstCardUnderSuggestTab();
+            UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
+            if (!hotTopic.isSelected()) {
+                moveToFirstCardUnderSuggestTab();
+            }
+            //点击推荐tab下热门排行topic
+            hotTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
+            //点击任一应用
+            UiObject appListView = findElementByID("tv.fun.appstore:id/topic_app_list");
+            UiObject firstAppCard = appListView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            String appName = firstAppCard.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+            firstAppCard.clickAndWaitForNewWindow();
+            waitForAppDetailPageDisplay();
+            //Assert
+            UiObject pic = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_detail_poster_image"));
+            UiObject controlledDevice = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/downloadCount"));
+            verifyElementPresent("详情页中海报图没有显示", pic);
+            verifyTrue("详情页中下载次数没有显示", controlledDevice.getText().contains("下载："));
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test check app brief info after clicking brief in app detail page from hot topic page
+     */
+    @Test
+    public void App_TJ_18_testCheckAppBriefInfoFromHotTopicPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToFirstCardUnderSuggestTab();
+            UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
+            if (!hotTopic.isSelected()) {
+                moveToFirstCardUnderSuggestTab();
+            }
+            //点击推荐tab下热门排行topic
+            hotTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
+            //点击任一应用
+            UiObject appListView = findElementByID("tv.fun.appstore:id/topic_app_list");
+            UiObject firstAppCard = appListView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            String appName = firstAppCard.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+            moveToDown();
+            moveToLeftForMultiple(2);
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            //firstAppCard.clickAndWaitForNewWindow();//Not support
+            waitForAppDetailPageDisplay();
+            //Assert
+            String appTitleInDetail = findElementByID("tv.fun.appstore:id/title").getText();
+            verifyString("", appTitleInDetail, appName);
+            UiObject briefObj = findElementByID("tv.fun.appstore:id/brief");
+            String textOfBrief = briefObj.getText();
+            UiObject posterObj = findElementByID("tv.fun.appstore:id/app_detail_poster_image");
+            moveToDownForMultiple(4);
+            moveToUp();
+            //点击海报
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/snapshot_hd");
+            //posterObj.clickAndWaitForNewWindow();//Not Support
+            UiObject posterFull = findElementByID("tv.fun.appstore:id/snapshot_hd");
+            verifyElementPresent("", posterFull);
+            verifyTrue("", posterFull.isEnabled());
+            device.pressBack();
+            //点击简介
+            briefObj.clickAndWaitForNewWindow();
+            UiObject fullPageTitle = findElementByClass("android.widget.TextView");
+            String titleOfFullPage = fullPageTitle.getText();
+            UiObject detailInfoInFull = findElementByID("tv.fun.appstore:id/app_detail_more_content");
+            String textOfInfo = detailInfoInFull.getText();
+            verifyIncludeString("", textOfInfo.replace("\n", ""), textOfBrief.replace("\n", ""));
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test back to Launcher from app detail in hot topic page
+     */
+    @Test
+    public void App_TJ_23_testBackToLauncherFromAppDetailInHotTopicPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToFirstCardUnderSuggestTab();
+            UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
+            if (!hotTopic.isSelected()) {
+                moveToFirstCardUnderSuggestTab();
+            }
+            //点击推荐tab下热门排行topic
+            hotTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
+            //点击任一应用
+            UiObject appListView = findElementByID("tv.fun.appstore:id/topic_app_list");
+            UiObject firstAppCard = appListView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            String appName = firstAppCard.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+            moveToDown();
+            moveToLeftForMultiple(2);
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            //firstAppCard.clickAndWaitForNewWindow();//not support clicking in here
+            waitForAppDetailPageDisplay();
+            //按遥控器Home键
+            device.pressHome();
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test back to hot topic page from app detail
+     */
+    @Test
+    public void App_TJ_24_testBackToHotTopicFromAppDetail() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToFirstCardUnderSuggestTab();
+            UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
+            if (!hotTopic.isSelected()) {
+                moveToFirstCardUnderSuggestTab();
+            }
+            //点击推荐tab下热门排行topic
+            hotTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
+            //点击任一应用
+            UiObject appListView = findElementByID("tv.fun.appstore:id/topic_app_list");
+            UiObject firstAppCard = appListView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            String appName = firstAppCard.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
+            moveToDown();
+            moveToLeftForMultiple(2);
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForAppDetailPageDisplay();
+            //按遥控器Back键
+            device.pressBack();
+            UiObject hotTopicImage = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/topic_poster"));
+            UiObject appListObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/topic_app_list"));
+            //断言
+            verifyElementPresent("The image of hot topic page is not displayed", hotTopicImage);
+            verifyElementPresent("The app list in hot topic page is not displayed", appListObj);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test Menu pop-up in machine required page
+     *
+     * @throws RemoteException
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Category(LevelP2Tests.class)
+    @Test
+    public void App_TJ_48_testMenuPopUpInMachineRequired() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToTargetTab(appStoreTabs, appStoreTabs[0], appStoreTabID, 0);
+            moveToDownForMultiple(3);
+            UiObject targetTopic = findElementByText("装机必备", "tv.fun.appstore:id/title");
+            if (!targetTopic.isSelected()) {
+                moveToTopOnAppStoreHomePage();
+                moveToDownForMultiple(3);
+            }
+            //点击装机必备卡片
+            targetTopic.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/topic_poster");
+            moveToRight();
+            device.pressMenu();
+            waitForElementPresentByID("android:id/tv_fun_menu_icon");
+            //Assert
+            UiObject btnInPopup = findElementByID("android:id/tv_fun_menu_text");
+            String btnName = btnInPopup.getText();
+            verifyString("", btnName, "安装全部");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
      * test enter app detail from app store page
      *
      * @throws RemoteException
@@ -644,13 +937,50 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
+     * Test the child App List of game can be filtered by All successfully
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_Game_43_testEnterAllCatogriesPageFromAllGamePage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 游戏 Tab
+            moveToAppStoreTargetTab(appStoreTabs[1]);
+            UiObject yxTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[1]));
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            device.pressMenu();
+            waitForElementPresentByID("android:id/tv_fun_menu_icon");
+            UiObject searchBtn = findElementByText("搜索", "android:id/tv_fun_menu_text");
+            UiObject allCateBtn = findElementByText("全部分类", "android:id/tv_fun_menu_text");
+            verifyElementPresent("", searchBtn);
+            verifyElementPresent("", allCateBtn);
+            allCateBtn.clickAndWaitForNewWindow();
+            UiObject allCategoryTitle = device.findObject(new UiSelector().className("android.widget.TextView").index(0));
+            //断言
+            verifyString("All Category page title is displayed incorrectly", allCategoryTitle.getText(), "全部分类");
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
      * Test enter child list page of Game
      *
      * @throws UiObjectNotFoundException
      * @throws InterruptedException
      */
     @Test
-    public void App_Game_53_testEnterGameChildListPageAndBack() {
+    public void App_Game_54_testEnterGameChildListPageAndBack() {
         try {
             //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
             enterAppStorePage();
@@ -792,6 +1122,43 @@ public class TestAppStore extends AppStorePage {
 //        UiObject handlelAppList = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/all_apps_view"));
 //        int handlelAppNum = handlelAppList.getChildCount();
 //        Assert.assertTrue("The actaul app num is not same as the total num displayed in scrollbar after filtering by RC", handlelAppNum == totalAppNumAfterHandlel);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that the default filter is correct of Action list page
+     *
+     */
+    @Test
+    public void App_Game_55_testDefaultFilterInActionListPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            moveToAppStoreTargetTab(appStoreTabs[1]);
+            moveToDown();
+            UiObject firstGameChildEnter = findElementByText("动作", "tv.fun.appstore:id/title");
+            if (!firstGameChildEnter.isSelected()) {
+                moveToUpForMultiple(6);
+                device.pressDPadRight();
+                device.pressDPadLeft();
+                device.pressDPadDown();
+            }
+            //点击游戏tab下第一个子入口，进入列表页
+            firstGameChildEnter.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            UiObject allFilter = device.findObject(new UiSelector().text("全部").className("android.widget.TextView"));
+            UiObject handlel = device.findObject(new UiSelector().text("手柄").className("android.widget.TextView"));
+            UiObject remoteControl = device.findObject(new UiSelector().text("遥控器").className("android.widget.TextView"));
+            verifyTrue("", allFilter.isSelected());
+            verifyFalse("", handlel.isSelected());
+            verifyFalse("", remoteControl.isSelected());
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -1821,8 +2188,8 @@ public class TestAppStore extends AppStorePage {
         }
     }
 
-//        @Test
-//    public void test(){
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+        @Test
+    public void test(){
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 }

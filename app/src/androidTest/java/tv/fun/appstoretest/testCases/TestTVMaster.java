@@ -162,8 +162,8 @@ public class TestTVMaster extends MasterApp {
         }
     }
 
-//            @Test
-//    public void test(){
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+            @Test
+    public void test(){
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 }
