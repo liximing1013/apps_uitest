@@ -13,7 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -38,6 +37,7 @@ import static tv.fun.common.Constants.SETTINGS_PKG_NAME;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestCommonSettings {
+    // total 20
 
     private UiDevice mDevice;
     private TaskCommonSettings mTask;
@@ -202,7 +202,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void test14_03SelfDefineDeviceNameAndConfirm() {
+    public void SET_Common_02_02_testSelfDefineDeviceNameAndConfirm() {
         try {
             mTask.openSelfDefineDeviceNamePage();
 
@@ -241,7 +241,7 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void test14_04SelfDefineEmptyNameAndConfirm() {
+    public void SET_Common_02_03_testSelfDefineEmptyNameAndConfirm() {
         try {
             mTask.openSelfDefineDeviceNamePage();
 
@@ -264,54 +264,6 @@ public final class TestCommonSettings {
                     deviceNameContainer.findObject(By.text(SELF_DEFINE_DEVICE_NAME));
             Utils.writeCaseResult("Verify the pre-defined device name is unchanged.",
                     deviceNameValue.isEnabled(), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Ignore
-    public void SET_Common_05_01_DefaultLocationOnSettings() {
-        try {
-            UiObject2 locationItemContainer =
-                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_locate"));
-            UiObject2 locationItemKey =
-                    locationItemContainer.findObject(By.res("tv.fun.settings:id/item_title"));
-            Utils.writeCaseResult("Verify the location item key text.",
-                    "天气位置".equals(locationItemKey.getText()), mExecTime);
-
-            UiObject2 locationItemValue =
-                    locationItemContainer.findObject(By.res("tv.fun.settings:id/item_value"));
-            Utils.writeCaseResult("Verify the location item default value text on Common Settings.",
-                    "湖北 武汉".equals(locationItemValue.getText()), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Ignore
-    public void SET_Common_05_02_OpenWeatherAppAndBackToSettings() {
-        try {
-            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_locate"));
-            mDevice.pressEnter();
-            Utils.waitForPackageOpened(mDevice, "tv.fun.weather");
-            Utils.writeCaseResult("Verify open Weather home.",
-                    "tv.fun.weather".equals(mDevice.getCurrentPackageName()), mExecTime);
-
-            mDevice.pressBack();
-            Utils.waitForPackageOpened(mDevice, "tv.fun.settings");
-            Utils.writeCaseResult("Verify back to Settings home.",
-                    "tv.fun.settings".equals(mDevice.getCurrentPackageName()), mExecTime);
-
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();

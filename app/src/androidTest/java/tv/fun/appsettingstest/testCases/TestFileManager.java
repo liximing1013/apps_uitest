@@ -34,6 +34,7 @@ import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
+    // total 15
 
     private UiDevice mDevice;
     private TaskFileManager mTask;
@@ -490,5 +491,10 @@ public final class TestFileManager {
             }
         }
     }
+
+//    @Test
+//    public void test() {
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
 }

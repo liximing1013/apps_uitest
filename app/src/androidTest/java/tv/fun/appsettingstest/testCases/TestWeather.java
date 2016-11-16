@@ -40,6 +40,7 @@ import static tv.fun.common.Constants.WEATHER_PKG_NAME;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestWeather {
+    // total 15
 
     private UiDevice mDevice;
     private TaskWeather mTask;
@@ -483,5 +484,9 @@ public final class TestWeather {
         }
     }
 
+//    @Test
+//    public void test() {
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
 }

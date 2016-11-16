@@ -107,7 +107,7 @@ public final class TaskCommonSettings {
 
     public void clearTextOfEditorView(int charCount) {
         for (int i = 0; i < charCount; i++) {
-            Utils.execCommand("input keyevent KEYCODE_DEL", false, false);
+            device.pressDelete();
             SystemClock.sleep(200L);
         }
     }
