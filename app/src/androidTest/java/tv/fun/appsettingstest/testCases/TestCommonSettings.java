@@ -319,6 +319,10 @@ public final class TestCommonSettings {
 
             Utils.writeCaseResult("Verify select the sleep time.",
                     "30分钟".equals(itemValue.getText()), mExecTime);
+			mDevice.pressDPadRight();  // set sleep time to 90 minutes
+            SystemClock.sleep(Constants.SHORT_WAIT);
+			mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
