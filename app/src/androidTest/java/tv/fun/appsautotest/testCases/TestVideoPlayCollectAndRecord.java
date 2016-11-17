@@ -19,7 +19,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
 import java.util.Random;
 
 import tv.fun.appsautotest.common.TvCommon;
@@ -39,11 +38,9 @@ import static android.support.test.uiautomator.By.text;
 public class TestVideoPlayCollectAndRecord {
     Instrumentation instrument;
     UiDevice uiDevice;
-    private static final String TAG = TestVipVideo.class.getSimpleName();
-    private static final String CAPTURES_PATH = "/data/local/tmp/captures";
     //设定等待时间
     private static final int SHORT_WAIT = 1;
-    private static final int WAIT = 5;
+    private static final int WAIT = 8;
     private static final int LONG_WAIT = 15;
     //暂停时间
     private static final int PauseTime = 20;
@@ -161,8 +158,6 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("NBA小窗口播放失败", m_uiObj != null, m_Time);
@@ -181,7 +176,7 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_EnterNBARaceCard() {
         try {
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
@@ -206,7 +201,7 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_EnterNBAKeyAppointment(){
         try {
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
@@ -231,8 +226,6 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_PayNBAPage(){
         try {
             this.EnterNBAHomePage();
-//          systemWait(SHORT_WAIT);
-//          uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
@@ -305,8 +298,6 @@ public class TestVideoPlayCollectAndRecord {
             //全屏播放
             uiDevice.pressEnter();
             systemWait(PlayVideoTime);
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj =uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("新闻大厅播放新闻失败",m_uiObj !=null,m_Time);
@@ -324,16 +315,14 @@ public class TestVideoPlayCollectAndRecord {
     @Test //看看新闻直播正常播放
     public void LC_NEWS_09_KanKanNewsNormalPlay() {
         try {
-            UiObject2 tabView1 = this.getTabFromLauncherHomeByText(uiDevice, "视频分类");
-            //进入视频分类看看新闻固定位进入播放
-            this.openTabFromLauncherHomeByTextView(uiDevice, tabView1);
+            this.EnterVideoClassifyPage();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
             uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             uiDevice.pressEnter();
-            //新闻播放60s
             systemWait(PlayVideoTime);
 //          UiObject2 VideoClass = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
 //          Assert.assertNotNull(VideoClass);
@@ -362,10 +351,7 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            uiDevice.pressDPadDown();
-            uiDevice.pressDPadDown();
-            uiDevice.pressDPadDown();
-            systemWait(SHORT_WAIT);
+            this.DownMoveNo1();
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), 15000);
             systemWait(LONG_WAIT);
@@ -376,15 +362,15 @@ public class TestVideoPlayCollectAndRecord {
             Assert.assertNotNull(VideoClazz);
             systemWait(WAIT);
             uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
             uiDevice.pressBack();
             systemWait(WAIT);
             //判断是否退出后回到详情页
             UiObject2 TextView = uiDevice.findObject(text("相关推荐"));
-//          Assert.assertNotNull(TextView);
             m_Expect = "相关推荐";
             m_Actual = TextView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-            Utils.writeCaseResult("显示错误", m_Pass, m_Time);
+            Utils.writeCaseResult("视频播放退回到详情页时显示错误", m_Pass, m_Time);
             systemWait(SHORT_WAIT);
             uiDevice.pressBack();
         }catch (Throwable e){
@@ -790,6 +776,7 @@ public class TestVideoPlayCollectAndRecord {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("视频播放失败or初次进入页面时重试", m_uiObj != null, m_Time);
             uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
             uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
@@ -821,32 +808,28 @@ public class TestVideoPlayCollectAndRecord {
     @Test //免费大片清晰度引导开通金卡会员
     public void LC_VIP_22_VipViaDefinition() {
         try {
-            uiDevice.pressDPadDown();
+            this.EnterFreeFilmPage();
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-            uiDevice.pressDPadDown();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            uiDevice.wait(Until.findObject(By.text("免费大片")), 15000);
-            systemWait(LONG_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            uiDevice.pressMenu();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadLeft();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
-            m_Actual = TextView.getText();
-            m_Expect = "开通金卡会员";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("弹框失败", m_Pass, m_Time);
-            uiDevice.pressBack();
+            UiObject DetPayButton = uiDevice.findObject(new UiSelector().text("付费"));
+            if(DetPayButton.exists()){
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                uiDevice.pressMenu();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadLeft();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
+                m_Actual = TextView.getText();
+                m_Expect = "开通金卡会员";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("弹框失败", m_Pass, m_Time);
+                uiDevice.pressBack();
+            }else {
+                System.out.println("亲爱的风行用户，你已经是金卡会员了，无需引导了.....么么哒");
+            }
         }catch(Throwable e){
             e.printStackTrace();
             resultStr =e.toString();
@@ -862,11 +845,7 @@ public class TestVideoPlayCollectAndRecord {
         try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
-            uiDevice.pressDPadRight();
-            uiDevice.pressDPadRight();
-            uiDevice.pressDPadRight();
-            uiDevice.pressDPadRight();
-            uiDevice.pressDPadRight();
+            this.RightMoveNo2();
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
@@ -888,7 +867,7 @@ public class TestVideoPlayCollectAndRecord {
     @Test //Launcher右移
     public void LC_SY_03_LauncherMove() {
         try {
-            this.RightMove();
+            this.RightMoveNo1();
             UiObject2 Text = uiDevice.findObject(By.text("消息中心"));
             m_Expect = "消息中心";
             m_Actual = Text.getText();
@@ -902,27 +881,6 @@ public class TestVideoPlayCollectAndRecord {
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
-    }
-
-    private UiObject2 getTabFromLauncherHomeByText(UiDevice device, String tabText) {
-        List<UiObject2> tabTitles = device.findObjects(By.res("com.bestv.ott:id/title"));
-        Assert.assertTrue("Verify tabs on launcher home.", tabTitles.size() > 0);
-        UiObject2 retTitle = null;
-        for (UiObject2 title : tabTitles) {
-            if (tabText.equals(title.getText())) {
-                retTitle = title;
-            }
-        }
-        Assert.assertNotNull(retTitle);
-        return retTitle;
-    }
-
-    private void openTabFromLauncherHomeByTextView(UiDevice device, UiObject2 TabView) {
-        TabView.click();
-        systemWait(SHORT_WAIT);
-        device.pressEnter();
-        device.waitForIdle();
-        systemWait(WAIT);
     }
 
     private void openTabFromLauncherHomeByresId(UiDevice device, UiObject2 resourceId) {
@@ -1009,11 +967,43 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(WAIT);
     } //进入视频分类
 
-    private void RightMove(){
+    private void RightMoveNo1(){
         int i = 0;
         while (i<=25){
             i++;
             uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    }
+
+    private void EnterFreeFilmPage(){
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        systemWait(LONG_WAIT);
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        uiDevice.wait(Until.findObject(By.text("免费大片")), 15000);
+        systemWait(LONG_WAIT);
+    }
+
+    private void RightMoveNo2(){
+        int i = 0;
+        while (i<=5){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    }
+
+    private void DownMoveNo1(){
+        int i = 0;
+        while (i<=3){
+            i++;
+            uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
         }
     }

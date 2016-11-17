@@ -213,7 +213,7 @@ public final class TestVipVideo {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             UiObject2 textView1 = uiDevice.findObject(text("兑换码输入错误，请重试！"));
-//        Assert.assertEquals("兑换失败提示","兑换码输入错误，请重试！",textView1.getText());
+//          Assert.assertEquals("兑换失败提示","兑换码输入错误，请重试！",textView1.getText());
             m_Expect = "兑换码输入错误，请重试！";
             m_Actual = textView1.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
@@ -337,18 +337,18 @@ public final class TestVipVideo {
     }
 
     @Test //金卡会员专区播放金卡电视剧
-    public void LC_VIP_17_PlayVipTVVideo() throws InterruptedException{
+    public void LC_VIP_17_PlayVipTVVideo(){
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadUp();
         systemWait(SHORT_WAIT);
-        uiDevice.pressEnter();
+        uiDevice.pressDPadCenter();
         this.RandomPlayTVVideo();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
-        uiDevice.pressEnter();
-        uiDevice.wait(Until.findObject(By.text("金卡专享")), 10000);
+        uiDevice.pressDPadCenter();
+        uiDevice.wait(Until.findObject(By.text("金卡专享")), 15000);
         systemWait(LONG_WAIT);
         uiDevice.pressDPadCenter();
         systemWait(PlayVideoTime);
@@ -387,8 +387,6 @@ public final class TestVipVideo {
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);
@@ -547,9 +545,9 @@ public final class TestVipVideo {
 
     private void RandomPlayTVVideo(){
         systemWait(WAIT);
-        Random moveTimes = new Random();
+        Random moveTimes = new Random(1);
         int i;
-        i=moveTimes.nextInt(4);
+        i=moveTimes.nextInt(6);
         for(int j= 0;j<=i;j++){
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
