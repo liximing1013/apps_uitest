@@ -7,8 +7,6 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -337,12 +335,12 @@ public final class TestCommonSettings {
             UiObject2 itemWallpaper =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
 
-            String message = "Verify the item key for wallpaper setting item.";
             UiObject2 itemKey = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_title"));
-            Assert.assertEquals(message, "壁纸", itemKey.getText());
-            message = "Verify the default wallpaper.";
+            Utils.writeCaseResult("Verify the item key for wallpaper setting item.",
+                    "壁纸".equals(itemKey.getText()), mExecTime);
             UiObject2 itemValue = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_value"));
-            Assert.assertEquals(message, TEXT_WALLPAPERS[0], itemValue.getText());
+            Utils.writeCaseResult("Verify the default wallpaper.",
+                    TEXT_WALLPAPERS[0].equals(itemValue.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -360,19 +358,20 @@ public final class TestCommonSettings {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.WAIT);
 
-            String message = "Verify there are 4 sub wallpapers on wallpaper select page.";
             List<UiObject2> wallpapers = mDevice.findObjects(By.clazz(CLASS_TEXT_VIEW));
-            Assert.assertEquals(message, TEXT_WALLPAPERS.length, wallpapers.size());
+            Utils.writeCaseResult("Verify there are 4 sub wallpapers on wallpaper select page.",
+                    TEXT_WALLPAPERS.length == wallpapers.size(), mExecTime);
 
-            message = "Verify the 1st sub wallpaper is default selected.";
             UiObject2 defaultWallpaper =
                     mDevice.findObject(By.text(TEXT_WALLPAPERS[0])).getParent();
-            Assert.assertTrue(message, defaultWallpaper.isSelected());
+            Utils.writeCaseResult("Verify the 1st sub wallpaper is default selected.",
+                    defaultWallpaper.isSelected(), mExecTime);
 
             for (UiObject2 wallpaper : wallpapers) {
                 String title = wallpaper.getText();
-                message = String.format("Verify the sub wallpaper %s is shown.", title);
-                Assert.assertTrue(message, this.IsSubWallpaperIncluded(title));
+                Utils.writeCaseResult(
+                        String.format("Verify the sub wallpaper %s is shown.", title),
+                        this.IsSubWallpaperIncluded(title), mExecTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -394,13 +393,13 @@ public final class TestCommonSettings {
             SystemClock.sleep(Constants.WAIT);
             mTask.selectSpecifiedSubWallpaper(selectWallpaper);
 
-            String message = "Verify setting item value is changed to the selected wallpaper.";
             mDevice.pressBack();
             SystemClock.sleep(Constants.SHORT_WAIT);
             UiObject2 itemWallpaper =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_wallpaper"));
             UiObject2 itemValue = itemWallpaper.findObject(By.res("tv.fun.settings:id/item_value"));
-            Assert.assertEquals(message, selectWallpaper, itemValue.getText());
+            Utils.writeCaseResult("Verify setting item value is changed to the selected wallpaper.",
+                    selectWallpaper.equals(itemValue.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();

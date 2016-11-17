@@ -7,8 +7,6 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,7 +43,6 @@ public final class TestWeather {
     private UiDevice mDevice;
     private TaskWeather mTask;
     private long mExecTime;
-    private String mMessage;
     private String mErrorStack = null;
 
     private final String INIT_PROVINCE = "湖北";
@@ -80,11 +77,10 @@ public final class TestWeather {
     @Test
     public void WEA_Home_01_01_testDefaultLocatedCity() {
         try {
-            mMessage = "Verify the default location on weather home.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertTrue(location.isEnabled());
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult("Verify the default location on weather home.",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -98,9 +94,9 @@ public final class TestWeather {
     @Test
     public void WEA_Home_01_02_testBottomTipOnWeatherHome() {
         try {
-            mMessage = "Verify the tip at the bottom of weather home.";
             UiObject2 tip = mDevice.findObject(By.res("tv.fun.weather:id/tv_tip"));
-            Assert.assertTrue(mMessage, tip.getText().contains("菜单键管理城市"));
+            Utils.writeCaseResult("Verify the tip at the bottom of weather home.",
+                    tip.getText().contains("菜单键管理城市"), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -126,13 +122,14 @@ public final class TestWeather {
             List<String> expectedDates = mTask.getWeatherForecastDates();
             Collections.sort(expectedDates, new dateComparator());
 
-            mMessage = "Verify the length of weather forecast dates is 5.";
-            Assert.assertEquals(mMessage, actualDates.size(), expectedDates.size());
+            Utils.writeCaseResult("Verify the length of weather forecast dates is 5.",
+                    actualDates.size() == expectedDates.size(), mExecTime);
 
             for (int i = 0; i < size; i++) {
-                mMessage = String.format(Locale.getDefault(),
-                        "Verify the forecast date at position %d", i);
-                Assert.assertEquals(mMessage, expectedDates.get(i), actualDates.get(i));
+                Utils.writeCaseResult(
+                        String.format(Locale.getDefault(),
+                                "Verify the forecast date at position %d", i),
+                        expectedDates.get(i).equals(actualDates.get(i)), mExecTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,27 +146,27 @@ public final class TestWeather {
         try {
             mTask.openBottomMenu();
 
-            mMessage = "Verify update button exist.";
             UiObject2 btnUpdate = mDevice.findObject(
                     By.text(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE)).getParent();
-            Assert.assertTrue(mMessage, btnUpdate.isClickable());
-            mMessage = "Verify update button is default focused.";
-            Assert.assertTrue(mMessage, btnUpdate.isFocused());
+            Utils.writeCaseResult("Verify update button exist.",
+                    btnUpdate.isClickable(), mExecTime);
+            Utils.writeCaseResult("Verify update button is default focused.",
+                    btnUpdate.isFocused(), mExecTime);
 
-            mMessage = "Verify modify default city button exist.";
             UiObject2 btnModifyDefault = mDevice.findObject(
                     By.text(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT)).getParent();
-            Assert.assertTrue(mMessage, btnModifyDefault.isClickable());
+            Utils.writeCaseResult("Verify modify default city button exist.",
+                    btnModifyDefault.isClickable(), mExecTime);
 
-            mMessage = "Verify add city button exist.";
             UiObject2 btnAddCity = mDevice.findObject(
                     By.text(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY)).getParent();
-            Assert.assertTrue(mMessage, btnAddCity.isClickable());
+            Utils.writeCaseResult("Verify add city button exist.",
+                    btnAddCity.isClickable(), mExecTime);
 
-            mMessage = "Verify the delete city button NOT exist.";
             UiObject2 textDeleteCity =
                     mDevice.findObject(By.text(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY));
-            Assert.assertNull(mMessage, textDeleteCity);
+            Utils.writeCaseResult("Verify the delete city button NOT exist.",
+                    textDeleteCity == null, mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -186,10 +183,11 @@ public final class TestWeather {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_UPDATE);
 
-            mMessage = "Verify the refresh time is updated after click Update menu button.";
             UiObject2 refreshTime =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_refresh_time"));
-            Assert.assertEquals(mMessage, "刚刚更新", refreshTime.getText());
+            Utils.writeCaseResult(
+                    "Verify the refresh time is updated after click Update menu button.",
+                    "刚刚更新".equals(refreshTime.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -207,13 +205,13 @@ public final class TestWeather {
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_ADD_CITY);
 
             // verification 1
-            mMessage = "Verify the title of add city page.";
             UiObject2 title = mDevice.findObject(By.res("tv.fun.weather:id/setting_title"));
-            Assert.assertEquals(mMessage, "添加城市", title.getText());
-            mMessage = "Verify the default located province.";
-            Assert.assertEquals(mMessage, INIT_PROVINCE, mTask.getSelectedLocationProvince());
-            mMessage = "Verify the default located city.";
-            Assert.assertEquals(mMessage, INIT_CITY, mTask.getSelectedLocationCity());
+            Utils.writeCaseResult("Verify the title of add city page.",
+                    "添加城市".equals(title.getText()), mExecTime);
+            Utils.writeCaseResult("Verify the default located province.",
+                    INIT_PROVINCE.equals(mTask.getSelectedLocationProvince()), mExecTime);
+            Utils.writeCaseResult("Verify the default located city.",
+                    INIT_CITY.equals(mTask.getSelectedLocationCity()), mExecTime);
 
             // select 山东 青岛
             mTask.selectSpecifiedLocationProvince(ADD_PROVINCE_1, true);
@@ -224,11 +222,10 @@ public final class TestWeather {
             SystemClock.sleep(Constants.WAIT);
 
             // verification 2
-            mMessage = "Verify the shown city is not changed after cancel add city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertNotNull(location);
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult("Verify the shown city is not changed after cancel add city.",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -253,10 +250,10 @@ public final class TestWeather {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.WAIT);
 
-            mMessage = "Verify the shown city after add new city weather.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
+            Utils.writeCaseResult("Verify the shown city after add new city weather.",
+                    ADD_CITY_1.equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -274,13 +271,13 @@ public final class TestWeather {
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
 
             // verification 1
-            mMessage = "Verify the title of modify default city page.";
             UiObject2 title = mDevice.findObject(By.res("tv.fun.weather:id/setting_title"));
-            Assert.assertEquals(mMessage, "修改默认城市", title.getText());
-            mMessage = "Verify the default located province.";
-            Assert.assertEquals(mMessage, INIT_PROVINCE, mTask.getSelectedLocationProvince());
-            mMessage = "Verify the default located city.";
-            Assert.assertEquals(mMessage, INIT_CITY, mTask.getSelectedLocationCity());
+            Utils.writeCaseResult("Verify the title of modify default city page.",
+                    "修改默认城市".equals(title.getText()), mExecTime);
+            Utils.writeCaseResult("Verify the default located province.",
+                    INIT_PROVINCE.equals(mTask.getSelectedLocationProvince()), mExecTime);
+            Utils.writeCaseResult("Verify the default located city.",
+                    INIT_CITY.equals(mTask.getSelectedLocationCity()), mExecTime);
 
             // select 海南 三亚
             mTask.selectSpecifiedLocationProvince(ADD_DEFAULT_PROVINCE_2, false);
@@ -291,10 +288,11 @@ public final class TestWeather {
             SystemClock.sleep(Constants.WAIT);
 
             // verification 2
-            mMessage = "Verify the shown city is not changed after cancel add new default city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult(
+                    "Verify the shown city is not changed after cancel add new default city.",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -319,11 +317,11 @@ public final class TestWeather {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.WAIT);
 
-            mMessage = "Verify the shown city after add new default city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage,
-                    String.format("%s(默认)", ADD_DEFAULT_CITY_2), location.getText());
+            Utils.writeCaseResult("Verify the shown city after add new default city.",
+                    String.format("%s(默认)", ADD_DEFAULT_CITY_2).equals(location.getText()),
+                    mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -337,11 +335,11 @@ public final class TestWeather {
     @Test
     public void WEA_Menu_05_03_testFirstCityAfterAddDefaultCity() {
         try {
-            mMessage = "Verify the 1st shown city after add new default city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage,
-                    String.format("%s(默认)", ADD_DEFAULT_CITY_2), location.getText());
+            Utils.writeCaseResult("Verify the 1st shown city after add new default city.",
+                    String.format("%s(默认)", ADD_DEFAULT_CITY_2).equals(location.getText()),
+                    mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -366,10 +364,10 @@ public final class TestWeather {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.WAIT);
 
-            mMessage = "Verify the shown city after change default city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult("Verify the shown city after change default city.",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -383,10 +381,10 @@ public final class TestWeather {
     @Test
     public void WEA_Menu_06_02_testFirstCityAfterModifyDefaultCity() {
         try {
-            mMessage = "Verify the 1st shown city after change default city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult("Verify the 1st shown city after change default city.",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -411,10 +409,10 @@ public final class TestWeather {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.WAIT);
 
-            mMessage = "Verify the shown city after re-add same default city.";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult("Verify the shown city after re-add same default city.",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -428,22 +426,22 @@ public final class TestWeather {
     @Test
     public void WEA_Menu_07_02_testSequenceAfterAddedCities() {
         try {
-            mMessage = "Verify the 1st default city";
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, String.format("%s(默认)", INIT_CITY), location.getText());
+            Utils.writeCaseResult("Verify the 1st default city",
+                    String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
 
-            mMessage = "Verify the 2nd added city.";
             mDevice.pressDPadRight();
             SystemClock.sleep(Constants.WAIT);
             location = mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, ADD_CITY_1, location.getText());
+            Utils.writeCaseResult("Verify the 2nd added city.",
+                    ADD_CITY_1.equals(location.getText()), mExecTime);
 
-            mMessage = "Verify the 3rd added city.";
             mDevice.pressDPadRight();
             SystemClock.sleep(Constants.WAIT);
             location = mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
-            Assert.assertEquals(mMessage, ADD_DEFAULT_CITY_2, location.getText());
+            Utils.writeCaseResult("Verify the 3rd added city.",
+                    ADD_DEFAULT_CITY_2.equals(location.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -459,10 +457,10 @@ public final class TestWeather {
         try {
             mTask.openBottomMenu();
 
-            mMessage = "Verify delete button exist.";
             UiObject2 btnDeleteCity = mDevice.findObject(
                     By.text(mTask.WEATHER_MENU_BUTTON_TEXT_DELETE_CITY)).getParent();
-            Assert.assertTrue(mMessage, btnDeleteCity.isClickable());
+            Utils.writeCaseResult("Verify delete button exist.",
+                    btnDeleteCity.isClickable(), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
