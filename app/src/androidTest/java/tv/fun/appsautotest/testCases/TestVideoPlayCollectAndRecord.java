@@ -31,8 +31,8 @@ import static android.support.test.uiautomator.By.text;
 /**
  * Created by lixm on 2016/10/28
  * Mix
- *
- */
+ * test case: 28
+ **/
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder
@@ -157,9 +157,9 @@ public class TestVideoPlayCollectAndRecord {
         try {
             systemWait(SHORT_WAIT);
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
+            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 15000);
             systemWait(LONG_WAIT);
-            uiDevice.pressEnter();
+            uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
 //          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
 //          Assert.assertNotNull(VideoClazz);
@@ -228,7 +228,7 @@ public class TestVideoPlayCollectAndRecord {
     }
 
     @Test //NBA购买NBA包
-    public void LC_NBA_26_PayNBA(){
+    public void LC_NBA_26_PayNBAPage(){
         try {
             this.EnterNBAHomePage();
 //          systemWait(SHORT_WAIT);
@@ -436,84 +436,166 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入顶部快捷栏&逻辑判断电视上是否插有U盘
-    public void LC_TB_03_EnterEveryTopBars() {
+    @Test //进入顶部快捷栏天气
+    public void LC_TB_03_EnterWeatherTopBars() {
         try {
-            uiDevice.pressHome();
-            //进入天气APP
             uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadUp();
             systemWait(WAIT);
-            UiObject2 ResId1 = uiDevice.findObject(By.res("com.bestv.ott:id/weather"));
-            this.openTopBarFromLauncherHomeByresId(uiDevice, ResId1);
+            UiObject2 Weather = uiDevice.findObject(By.res("com.bestv.ott:id/weather"));
+            this.openTopBarFromLauncherHomeByresId(uiDevice, Weather);
             systemWait(WAIT);
             UiObject2 TextViewer1 = uiDevice.findObject(text("按 \uE693 菜单键管理城市"));
-//        Assert.assertEquals("按 \uE693 菜单键管理城市",TextViewer1.getText());
+//          Assert.assertEquals("按 \uE693 菜单键管理城市",TextViewer1.getText());
             m_Expect = "按 \uE693 菜单键管理城市";
             m_Actual = TextViewer1.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入天气页面失败！", m_Pass, m_Time);
-            uiDevice.pressBack();
-            systemWait(WAIT);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag =false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //进入顶部快捷栏我的应用
+    public void LC_TB_04_EnterAppTopBars() {
+        try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
             UiObject2 ResId2 = uiDevice.findObject(By.res("com.bestv.ott:id/app"));
             this.openTabFromLauncherHomeByresId(uiDevice, ResId2);
             systemWait(WAIT);
             UiObject2 TextViewer2 = uiDevice.findObject(text("我的应用"));
-//        Assert.assertEquals("我的应用",TextViewer2.getText());
+//          Assert.assertEquals("我的应用",TextViewer2.getText());
             m_Expect = "我的应用";
             m_Actual = TextViewer2.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入我的应用失败", m_Pass, m_Time);
-            uiDevice.pressBack();
-            systemWait(SHORT_WAIT);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
+    }
+
+    @Test //进入顶部快捷栏播放记录
+    public void LC_TB_05_EnterHistoryTopBars() {
+        try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
             UiObject2 ResId3 = uiDevice.findObject(By.res("com.bestv.ott:id/history"));
             this.openTabFromLauncherHomeByresId(uiDevice, ResId3);
             systemWait(WAIT);
             UiObject2 TextViewer3 = uiDevice.findObject(text("播放记录"));
-//            Assert.assertEquals("播放记录", TextViewer3.getText());
+//          Assert.assertEquals("播放记录", TextViewer3.getText());
             m_Expect = "播放记录";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入播放记录页失败",m_Pass,m_Time);
-            uiDevice.pressBack();
-            systemWait(SHORT_WAIT);
+            Utils.writeCaseResult("进入播放记录页失败", m_Pass, m_Time);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
+    }
+
+    @Test //进入顶部快捷栏消息中心
+    public void LC_TB_06_EnterMessageTopBars() {
+        try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
-            UiObject2 ResId4 = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
-            this.openTabFromLauncherHomeByresId(uiDevice, ResId4);
+            uiDevice.pressDPadUp();
             systemWait(WAIT);
-            UiObject2 TextViewer4 = uiDevice.findObject(text("消息中心"));
-            Assert.assertEquals("消息中心", TextViewer4.getText());
-            uiDevice.pressBack();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadUp();
-            systemWait(SHORT_WAIT);
-            UiObject2 ResId5 = uiDevice.findObject(By.res("com.bestv.ott:id/setting"));
-            this.openTabFromLauncherHomeByresId(uiDevice, ResId5);
+            UiObject2 ResId3 = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
+            this.openTabFromLauncherHomeByresId(uiDevice, ResId3);
             systemWait(WAIT);
-            UiObject2 TextViewer5 = uiDevice.findObject(text("通用设置"));
-            Assert.assertEquals("通用设置", TextViewer5.getText());
-            uiDevice.pressBack();
-            systemWait(SHORT_WAIT);
+            UiObject2 TextViewer3 = uiDevice.findObject(text("消息中心"));
+            m_Expect = "消息中心";
+            m_Actual = TextViewer3.getText();
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入消息中心页面失败", m_Pass, m_Time);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
+    }
+
+    @Test //进入顶部快捷栏通用设置
+    public void LC_TB_07_EnterSettingsTopBars() {
+        try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
-            UiObject2 ResId6 = uiDevice.findObject(By.res("com.bestv.ott:id/network"));
-            this.openTabFromLauncherHomeByresId(uiDevice, ResId6);
-            systemWait(LONG_WAIT);
-            UiObject2 TextViewer6 = uiDevice.findObject(text("网络设置"));
-            Assert.assertEquals("网络设置", TextViewer6.getText());
-            uiDevice.pressBack();
-            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
+            UiObject2 ResId3 = uiDevice.findObject(By.res("com.bestv.ott:id/setting"));
+            this.openTabFromLauncherHomeByresId(uiDevice, ResId3);
+            systemWait(WAIT);
+            UiObject2 TextViewer3 = uiDevice.findObject(text("通用设置"));
+            m_Expect = "通用设置";
+            m_Actual = TextViewer3.getText();
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入通用设置页面失败", m_Pass, m_Time);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
+    }
+
+    @Test //进入顶部快捷栏网络
+    public void LC_TB_08_EnterNetworkTopBars(){
+        try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
+            UiObject2 ResId3 = uiDevice.findObject(By.res("com.bestv.ott:id/network"));
+            this.openTabFromLauncherHomeByresId(uiDevice, ResId3);
+            systemWait(WAIT);
+            UiObject2 TextViewer3 = uiDevice.findObject(text("网络设置"));
+            m_Expect = "网络设置";
+            m_Actual = TextViewer3.getText();
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("进入网络页面失败", m_Pass, m_Time);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
+    }
+
+    @Test //进入顶部快捷栏U盘
+    public void LC_TB_09_EnterStorageTopBars() {
+        try {
+            uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
             UiObject2 ResId7 = uiDevice.findObject(By.res("com.bestv.ott:id/storage"));
             if (ResId7 == null) {
                 uiDevice.pressHome();
                 uiDevice.waitForIdle();
+                System.out.println("当前电视未插有U盘，请插入U盘在进行测试...");
             } else {
                 this.openTabFromLauncherHomeByresId(uiDevice, ResId7);
                 systemWait(WAIT);
@@ -524,16 +606,17 @@ public class TestVideoPlayCollectAndRecord {
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 UiObject2 TextViewer = uiDevice.findObject(text("按 \uE693 键查看更多操作"));
-                Assert.assertNotNull("按 \uE693 键查看更多操作", TextViewer.getText());
-                uiDevice.pressBack();
+                m_Actual = TextViewer.getText();
+                m_Expect = "按 \uE693 键查看更多操作";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("进入U盘页面失败",m_Pass,m_Time);
             }
-        }catch (Throwable e){
+        }catch (Throwable e) {
             e.printStackTrace();
-            resultFlag =false;
+            resultFlag = false;
             resultStr = e.toString();
-        }
-        finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
     }
 
@@ -718,7 +801,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //焦点大图切换
+    @Test //焦点大图
     public void LC_SY_01_FocusImageThreePoint() {
         try {
             systemWait(WAIT);
@@ -792,6 +875,25 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "输入影片首字母或全拼";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("搜索页面跳转失败",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag =false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //Launcher右移
+    public void LC_SY_03_LauncherMove() {
+        try {
+            this.RightMove();
+            UiObject2 Text = uiDevice.findObject(By.text("消息中心"));
+            m_Expect = "消息中心";
+            m_Actual = Text.getText();
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("Launcher首页配置图片有问题",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag =false;
@@ -906,5 +1008,14 @@ public class TestVideoPlayCollectAndRecord {
         uiDevice.pressEnter();
         systemWait(WAIT);
     } //进入视频分类
+
+    private void RightMove(){
+        int i = 0;
+        while (i<=25){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    }
 
 }
