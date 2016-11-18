@@ -39,7 +39,7 @@ public final class TestVipVideo {
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 5;
-    private static final int LONG_WAIT = 12;
+    private static final int LONG_WAIT = 15;
     //设定一段播放时间
     private static final int PlayVideoTime = 60;
     boolean m_Pass = false;
@@ -344,7 +344,7 @@ public final class TestVipVideo {
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
         this.RandomPlayTVVideo();
-        systemWait(SHORT_WAIT);
+        systemWait(WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
@@ -353,11 +353,9 @@ public final class TestVipVideo {
         uiDevice.pressDPadCenter();
         systemWait(PlayVideoTime);
         try {
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);
+            Utils.writeCaseResult("金卡电视剧视频播放失败",m_uiObj !=null,m_Time);
             uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
@@ -439,7 +437,7 @@ public final class TestVipVideo {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         this.RandomPlayFilm();
@@ -468,7 +466,7 @@ public final class TestVipVideo {
         uiDevice.pressHome();
         systemWait(WAIT);
         this.EnterVideoClassifyPage();
-        systemWait(SHORT_WAIT);
+        systemWait(WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();

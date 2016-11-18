@@ -10,6 +10,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -38,7 +39,7 @@ public class TestLongVideoPlay {
     private static final int WAIT = 5;
     private static final int LONG_WAIT = 15;
     //暂停时间
-    private static final int PauseTime = 20;
+    private static final int PauseTime = 30;
     //设定播放视频时间（短）
     private static final int PlayVideoShortTime = 60;
     //设定播放视频时间（长）
@@ -66,63 +67,105 @@ public class TestLongVideoPlay {
     @Test //电视剧播放
     public void LC_PLAY_01_TestLongVideoPlay() throws InterruptedException {
         System.out.println("测试电视剧的播放开始了，哇咔咔.....");
-        this.EnterTVVideoCommendHall();//进入电视剧列表页全部
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadDown();
-        systemWait(SHORT_WAIT);
-        this.RandomPlayTVVideo();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadCenter();
         try {
-            uiDevice.wait(Until.findObject(By.text("相关推荐")), 15000);
-            systemWait(LONG_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(PlayVideoShortTime);
-            m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-            Utils.writeCaseResult("视频播放失败", m_uiObj != null, m_Time);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            resultFlag = false;
-            resultStr = e.toString();
-        } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
-        }
-        try {
-            uiDevice.pressDPadCenter();//暂停
-            systemWait(PauseTime); //暂停时间
-            m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
-            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
-            Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            resultFlag = false;
-            resultStr = e.toString();
-        } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
-        }
-        try {
+            this.EnterTVVideoCommendHall();//进入电视剧列表页全部
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(SHORT_WAIT);
+            this.RandomPlayTVVideo();
+            systemWait(SHORT_WAIT);
+            for (int i = 0; i <= 10; i++) {
+                uiDevice.pressDPadCenter();
+                uiDevice.wait(Until.findObject(By.text("相关推荐")), 15000);
+                systemWait(LONG_WAIT);
+                uiDevice.waitForIdle();
+                uiDevice.pressDPadCenter();
+                systemWait(PlayVideoShortTime);
+                m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
+                m_uiObj = uiDevice.findObject
+                        (By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+                Utils.writeCaseResult("视频播放失败", m_uiObj != null, m_Time);
+                try {
+                    uiDevice.pressDPadCenter();//暂停
+                    systemWait(PauseTime); //暂停时间
+                    m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
+                    m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
+                    Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    resultFlag = false;
+                    resultStr = e.toString();
+                } finally {
+                    Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+                }
+                try {
+                    uiDevice.pressDPadCenter();
+                    uiDevice.waitForIdle();
+                    systemWait(WAIT);
+                    this.RightRightSpeedSpeed();
+                    systemWait(PlayVideoLongTime);
+                    uiDevice.waitForIdle();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    resultFlag = false;
+                    resultStr = e.toString();
+                } finally {
+                    Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+                    uiDevice.pressBack();
+                    systemWait(SHORT_WAIT);
+                    uiDevice.pressBack();
+                    systemWait(SHORT_WAIT);
+                    uiDevice.pressBack();
+                    systemWait(WAIT);
+                    uiDevice.waitForIdle();
+                    uiDevice.pressDPadRight();
+                    uiDevice.waitForIdle();
+                }
+            }
+            uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressBack();
+            systemWait(WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(WAIT);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            this.RightRightSpeedSpeed();
-            systemWait(PlayVideoShortTime);
-
-
-        } catch (Throwable e) {
+            uiDevice.pressDPadRight();
+            UiObject Cell = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tv_cell")
+                    .className("android.widget.TextView").text("4"));
+            Cell.clickAndWaitForNewWindow(15000);
+            systemWait(PlayVideoLongTime);
+            uiDevice.pressDPadCenter();
+            UiObject Time1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/time_current")
+                    .className("android.widget.TextView"));
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoLongTime);
+            uiDevice.pressDPadCenter();
+            UiObject Time2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/time_current")
+                    .className("android.widget.TextView"));
+            if(Time1.getText().equals(Time2.getText())){
+                uiDevice.pressHome();
+                System.out.println("时间戳无变化，播放器问题");
+            }else {
+                uiDevice.pressDPadCenter();
+                this.RightRightSpeedSpeed();
+            }
+        }catch (Throwable e){
             e.printStackTrace();
-            resultFlag = false;
             resultStr = e.toString();
-        } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            resultFlag =false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
-
     @Test
     public void testDemo() throws UiObjectNotFoundException {
         uiDevice.pressDPadCenter();
         systemWait(LONG_WAIT);
         uiDevice.pressDPadCenter();
         systemWait(LONG_WAIT);
+        this.RightRightSpeedSpeed();
 
     }
 
@@ -148,6 +191,13 @@ public class TestLongVideoPlay {
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
         }
+//        Utils.execCommand("adb shell sendevent /dev/input/event3 4 4 458831", false, false);
+//        Utils.execCommand("adb shell sendevent /dev/input/event3 1 106 1", false, false);
+//        Utils.execCommand("adb shell sendevent /dev/input/event3 0 0 0", false, false);
+//        Utils.execCommand("adb shell /system/bin/sleep " + iSeconds, false, false);
+//        Utils.execCommand("adb shell sendevent /dev/input/event3 4 4 458831", false, false);
+//        Utils.execCommand("adb shell sendevent /dev/input/event3 1 106 0", false, false);
+//        Utils.execCommand("adb shell sendevent /dev/input/event3 0 0 0", false, false);
     }
 
     private void RandomPlayTVVideo() {

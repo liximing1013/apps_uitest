@@ -152,15 +152,12 @@ public class TestVideoPlayCollectAndRecord {
     @Test  //进入NBA首页全屏播放小窗口
     public void LC_NBA_01_EnterNBAHomePage() {
         try {
-            systemWait(SHORT_WAIT);
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 15000);
-            systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            Utils.writeCaseResult("NBA小窗口播放失败", m_uiObj != null, m_Time);
+            Utils.writeCaseResult("NBA小窗口播放小视频专题失败", m_uiObj != null, m_Time);
             uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
@@ -176,8 +173,6 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_EnterNBARaceCard() {
         try {
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 15000);
-            systemWait(LONG_WAIT);
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
@@ -201,8 +196,6 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_EnterNBAKeyAppointment(){
         try {
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 15000);
-            systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
@@ -226,7 +219,6 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_PayNBAPage(){
         try {
             this.EnterNBAHomePage();
-            systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
@@ -252,8 +244,6 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_NBA_26_EnterNBATeamSchedule(){
         try {
             this.EnterNBAHomePage();
-            uiDevice.wait(Until.findObject(By.text("赛程表 >")), 10000);
-            systemWait(LONG_WAIT);
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
@@ -932,13 +922,12 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
-//        UiObject2 NBAText = uiDevice.findObject(text("NBA"));
-//        NBAText.click();
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
+        systemWait(WAIT);
         uiDevice.pressDPadCenter();
+        systemWait(LONG_WAIT);
     } //进入NBA首页
 
     private void EnterPLHomePage(){
