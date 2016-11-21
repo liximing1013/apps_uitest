@@ -70,12 +70,6 @@ public final class TestVipVideo {
         systemWait(WAIT);
     }
 
-//    @Test //获取用例名
-//    public void test(){
-//
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
-
     @Test //进入金卡会员页
     public void LC_VIP_01_EnterVipPage() {
         System.out.println("进入金卡会员页面，开启金卡专区的自动化测试了..");

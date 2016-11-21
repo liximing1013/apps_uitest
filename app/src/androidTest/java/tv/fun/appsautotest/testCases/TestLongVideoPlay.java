@@ -10,9 +10,6 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.support.test.uiautomator.UiWatcher;
-import android.support.test.uiautomator.Until;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -70,7 +67,7 @@ public class TestLongVideoPlay {
     String m_Expect = "";
     String m_Actual = "";
     String resultStr = "";
-    Boolean resultFlag = true;
+    Boolean resultFlag = false;
 
     @Before
     public void setUp() {
@@ -84,52 +81,51 @@ public class TestLongVideoPlay {
 
     @Test //电视剧播放
     public void LC_PLAY_01_TestLongVideoPlay() throws InterruptedException {
-        System.out.println("测试电视剧的播放开始了，哇咔咔.....");
-        try {
-            this.EnterTVVideoCommendHall();//进入电视剧列表页全部
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadDown();
-            systemWait(SHORT_WAIT);
-            this.RandomPlayTVVideo();
-            systemWait(SHORT_WAIT);
-            for (int i = 0; i <= 15; i++) {
-                uiDevice.pressDPadCenter();
+        System.out.println("电视剧的播放开始了，哇咔咔.....");
+        this.EnterTVVideoCommendHall();//进入电视剧列表页全部
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        this.RandomPlayTVVideo();
+        systemWait(SHORT_WAIT);
+        for (int i = 0; i <= 15; i++) {
+            uiDevice.pressDPadCenter();
+            UiObject TextView = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/detail_title")
+                    .className("android.widget.TextView"));
+            UiObject2 PayButton = uiDevice.findObject(By.text("付费"));
+            if(PayButton == null){
+                System.out.println("本片为免费影片，请尽情欣赏，呵呵哒.....");
                 systemWait(LONG_WAIT);
                 uiDevice.waitForIdle();
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 uiDevice.pressDPadLeft(); //左键从头播放
-                systemWait(PlayVideoShortTime);
+                systemWait(PlayVideoLongTime); //播放10+min
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 m_uiObj = uiDevice.findObject
                         (By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 Utils.writeCaseResult("视频播放失败", m_uiObj != null, m_Time);
-                try {
-                    uiDevice.pressDPadCenter();//暂停
-                    systemWait(PauseTime); //暂停时间
-                    m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
-                    m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
-                    Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
-                } catch (Throwable e) {
-                    System.out.println("视频暂停失败");
-                    e.printStackTrace();
-                    resultFlag = false;
-                    resultStr = e.toString();
-                } finally {
-                    Utils.writeCaseResult(resultStr, resultFlag, m_Time);
-                }
+                uiDevice.pressDPadCenter();//暂停
+                systemWait(PauseTime); //暂停时间
+                m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
+                m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
+                Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
                 try {
                     uiDevice.pressDPadCenter();
-                    uiDevice.waitForIdle();
                     systemWait(WAIT);
+                    uiDevice.waitForIdle();
                     this.RightRightSpeedSpeed();
                     this.ProgressBarExists(10000);
-                    systemWait(PlayVideoLongTime);
-                    uiDevice.waitForIdle();
+                    systemWait(PlayVideoLongTime);//播放10+min
                     uiDevice.pressBack();
                     systemWait(SHORT_WAIT);
                     uiDevice.pressBack();
-                    systemWait(SHORT_WAIT);
+                    systemWait(LONG_WAIT);
+                    UiObject2 DetailText = uiDevice.findObject(By.text("相关推荐"));
+                    m_Actual = DetailText.getText();
+                    m_Expect = "相关推荐";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult(TextView.getText(), m_Pass, m_Time);
                     uiDevice.pressBack();
                     systemWait(WAIT);
                     uiDevice.waitForIdle();
@@ -137,68 +133,106 @@ public class TestLongVideoPlay {
                 } catch (Throwable e) {
                     System.out.println("视频快进失败");
                     e.printStackTrace();
-                    resultFlag = false;
-                    resultStr = e.toString();
-                } finally {
-                    Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+                }
+            }else {
+                System.out.println("本片为Vip影片,请去购买金卡会员好吗,麻溜哒...");
+                systemWait(LONG_WAIT);
+                uiDevice.waitForIdle();
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                uiDevice.pressDPadLeft(); //左键从头播放
+                systemWait(PlayVideoShortTime); //播放1min
+                m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
+                m_uiObj = uiDevice.findObject
+                        (By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+                Utils.writeCaseResult("视频播放失败", m_uiObj != null, m_Time);
+                uiDevice.pressDPadCenter();//暂停
+                systemWait(PauseTime); //暂停时间
+                m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
+                m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
+                Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
+                try {
+                    uiDevice.pressDPadCenter();
+                    systemWait(WAIT);
+                    uiDevice.waitForIdle();
+                    this.RightRightSpeedSpeed();
+                    this.ProgressBarExists(10000);
+                    systemWait(PlayVideoShortTime);//播放1min
+                    uiDevice.pressBack();
+                    systemWait(SHORT_WAIT);
+                    uiDevice.pressBack();
+                    systemWait(LONG_WAIT);
+                    UiObject2 DetailText = uiDevice.findObject(By.text("相关推荐"));
+                    m_Actual = DetailText.getText();
+                    m_Expect = "相关推荐";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult(TextView.getText(), m_Pass, m_Time);
+                    uiDevice.pressBack();
+                    systemWait(WAIT);
+                    uiDevice.waitForIdle();
+                    uiDevice.pressDPadRight();
+                } catch (Throwable e) {
+                    System.out.println("视频快进失败");
+                    e.printStackTrace();
                 }
             }
-            uiDevice.pressBack();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressBack();
-            systemWait(WAIT);
-            uiDevice.pressDPadDown();
-            systemWait(WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            uiDevice.pressDPadRight();
-            UiObject Cell = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tv_cell")
-                    .className("android.widget.TextView").text("3"));
-            Cell.clickAndWaitForNewWindow(15000);
-            systemWait(PlayVideoLongTime);
-            uiDevice.pressDPadCenter();
-            UiObject Time1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/time_current")
-                    .className("android.widget.TextView"));
-            uiDevice.pressDPadCenter();
-            systemWait(PlayVideoLongTime);
-            uiDevice.pressDPadCenter();
-            UiObject Time2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/time_current")
-                    .className("android.widget.TextView"));
-            if(Time1.getText().equals(Time2.getText())){
-                uiDevice.pressHome();
-                System.out.println("时间戳无变化，播放器问题");
-            }else {
+        }
+            try {
+                uiDevice.pressBack();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressBack();
+                systemWait(WAIT);
+                uiDevice.pressDPadDown();
+                systemWait(WAIT);
                 uiDevice.pressDPadCenter();
-                this.LeftLeftSpeedSpeed();
+                systemWait(LONG_WAIT);
+                uiDevice.pressDPadRight();
+                UiObject Cell = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tv_cell")
+                        .className("android.widget.TextView").text("3"));
+                Cell.clickAndWaitForNewWindow(15000);
+                systemWait(PlayVideoLongTime);
+                uiDevice.pressDPadCenter();
+                UiObject Time1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/time_current")
+                        .className("android.widget.TextView"));
+                uiDevice.pressDPadCenter();
+                systemWait(PlayVideoLongTime);
+                uiDevice.pressDPadCenter();
+                UiObject Time2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/time_current")
+                        .className("android.widget.TextView"));
+                if (Time1.getText().equals(Time2.getText())) {
+                    uiDevice.pressHome();
+                    System.out.println("时间戳无变化，播放器问题");
+                } else {
+                    uiDevice.pressDPadCenter();
+                    this.LeftLeftSpeedSpeed();
+                }
+            } catch (Throwable e) {
+                System.out.println("！！！！！");
+                e.printStackTrace();
+                resultStr = e.toString();
+                resultFlag = false;
+            } finally {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
             }
-        }catch (Throwable e){
-            System.out.println("！！！！！");
-            e.printStackTrace();
-            resultStr = e.toString();
-            resultFlag =false;
-        }
-        finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
-        }
     }
 
     @Test //电影播放
     public void LC_PLAY_02_Test100FilmPlay() throws InterruptedException {
-        final UiObject2 Player = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
-        //注册监听器
-        uiDevice.registerWatcher("testWatcher", new UiWatcher() {
-            @Override
-            public boolean checkForCondition() {
-                if(uiDevice.hasObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER))){
-                    Player.isSelected();
-                    Log.i("testWatcher", "监听器被触发了");
-                    return true;
-                }
-                Log.i("testWatcher", "监听器未被触发");
-                return false;
-            }
-        });
-        System.out.println("测试电影播放的case开始了，萌萌哒......");
+//        final UiObject2 Player = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
+//        //注册监听器
+//        uiDevice.registerWatcher("testWatcher", new UiWatcher() {
+//            @Override
+//            public boolean checkForCondition() {
+//                if(uiDevice.hasObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER))){
+//                    Player.isSelected();
+//                    Log.i("testWatcher", "监听器被触发了");
+//                    return true;
+//                }
+//                Log.i("testWatcher", "监听器未被触发");
+//                return false;
+//            }
+//        });
+        System.out.println("Are you ready...Let's GO GO GO");
         try {
             this.EnterFilmCommendHall();
             systemWait(SHORT_WAIT);
@@ -210,24 +244,32 @@ public class TestLongVideoPlay {
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
                 uiDevice.waitForIdle();
+                UiObject TextView = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/detail_title")
+                        .className("android.widget.TextView"));
                 UiObject2 PayButton = uiDevice.findObject(By.text("付费"));
                 if(PayButton != null){
-                    System.out.println("本片为Vip影片,请去购买金卡会员好吗,萌萌哒.....");
-                    uiDevice.resetWatcherTriggers();
-                    Log.i("testWatcher", "重置监听器成功");
+                    System.out.println("本片为Vip影片,请去购买金卡会员好吗,麻溜哒...");
+//                  uiDevice.resetWatcherTriggers();
+//                  Log.i("testWatcher", "重置监听器成功");
                     uiDevice.pressDPadCenter();
                     systemWait(WAIT);
                     uiDevice.pressDPadLeft();
-                    systemWait(PlayVideoLongTime);
+                    systemWait(PlayVideoLongTime); //播放10+min
                     UiObject2 PayMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
                     m_Actual = PayMedia.getText();
                     m_Expect = "请选择要购买的媒体或服务";
                     m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                     Utils.writeCaseResult("非金卡会员试看影片时跳转开通会员页失败",m_Pass,m_Time);
                     uiDevice.pressBack();
-                    systemWait(WAIT);
+                    systemWait(LONG_WAIT);
+                    UiObject2 DetailText = uiDevice.findObject(By.text("相关推荐"));
+                    m_Actual = DetailText.getText();
+                    m_Expect = "相关推荐";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult(TextView.getText(),m_Pass,m_Time);
                     uiDevice.pressBack();
                     uiDevice.pressDPadRight();
+//                  uiDevice.removeWatcher("testWatcher");
                     systemWait(WAIT);
                 }else {
                     System.out.println("本片为免费影片，请尽情欣赏，呵呵哒.....");
@@ -239,14 +281,23 @@ public class TestLongVideoPlay {
                     m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
                     Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
                     uiDevice.pressDPadCenter();
-                    systemWait(LONG_WAIT);
+                    systemWait(PlayVideoShortTime);
                     this.RightRightSpeedSpeed();
                     systemWait(LONG_WAIT);
                     this.LeftLeftSpeedSpeed();
                     systemWait(LONG_WAIT);
+                    m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+                    m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
+                    Utils.writeCaseResult("视频播放器正常播放",m_uiObj != null,m_Time);
+                    systemWait(PlayVideoLongTime);
                     uiDevice.pressBack();
                     uiDevice.pressBack();
                     systemWait(WAIT);
+                    UiObject2 DetailText = uiDevice.findObject(By.text("相关推荐"));
+                    m_Actual = DetailText.getText();
+                    m_Expect = "相关推荐";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult(TextView.getText(),m_Pass,m_Time);
                     uiDevice.pressBack();
                     systemWait(WAIT);
                     uiDevice.pressDPadRight();
@@ -256,51 +307,11 @@ public class TestLongVideoPlay {
         } catch (Throwable e) {
             e.printStackTrace();
             resultStr = e.toString();
-            resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            Utils.writeCaseResult(resultStr,false,m_Time);
+            System.exit(0);
         }
-    }
-
-    @Test // 测试Demo
-    public void TestDemo(){
-        final UiObject2 Player = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
-        //注册监听器
-        uiDevice.registerWatcher("testWatcher", new UiWatcher() {
-            @Override
-            public boolean checkForCondition() {
-                if(uiDevice.hasObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER))){
-                    Player.isSelected();
-                    Log.i("testWatcher", "监听器被触发了");
-                    return true;
-                }
-                Log.i("testWatcher", "监听器未被触发");
-                return false;
-            }
-        });
-        //运行用例步骤
-        uiDevice.wait(Until.findObject(By.text("写短信")), 2000);
-        UiObject2 btn = uiDevice.findObject(By.text("写短信"));
-        btn.click();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressBack();
-
-        //重置监听器
-        uiDevice.resetWatcherTriggers();
-        uiDevice.wait(Until.findObject(By.text("写短信")), 2000);
-        btn.click();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressBack();
-        Log.i("testWatcher", "重置监听器成功");
-
-        //移除监听器
-        uiDevice.removeWatcher("testWatcher");
-        Log.i("testWatcher", "移除监听器成功");
-        uiDevice.wait(Until.findObject(By.text("写短信")), 2000);
-        btn.click();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressBack();
     }
 
     private void EnterTVVideoCommendHall() {
@@ -363,11 +374,10 @@ public class TestLongVideoPlay {
     } //随机播放电视剧
 
     private void RandomPlayFilm(){
-        uiDevice.pressDPadDown();
         systemWait(WAIT);
         Random moveTimes = new Random(1);
         int i;
-        i = moveTimes.nextInt(3);
+        i = moveTimes.nextInt(4);
         for (int j = 0; j <= i; j++) {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();

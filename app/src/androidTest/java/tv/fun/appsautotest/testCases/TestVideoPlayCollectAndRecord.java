@@ -193,7 +193,7 @@ public class TestVideoPlayCollectAndRecord {
     }
 
     @Test //NBA一键预约页面
-    public void LC_NBA_26_EnterNBAKeyAppointment(){
+    public void LC_NBA_38_EnterNBAKeyAppointment(){
         try {
             this.EnterNBAHomePage();
             uiDevice.pressDPadUp();
@@ -216,7 +216,7 @@ public class TestVideoPlayCollectAndRecord {
     }
 
     @Test //NBA购买NBA包
-    public void LC_NBA_26_PayNBAPage(){
+    public void LC_NBA_58_PayNBAPage(){
         try {
             this.EnterNBAHomePage();
             uiDevice.pressDPadUp();
@@ -241,7 +241,7 @@ public class TestVideoPlayCollectAndRecord {
     }
 
     @Test //NBA球队赛程
-    public void LC_NBA_26_EnterNBATeamSchedule(){
+    public void LC_NBA_19_EnterNBATeamSchedule(){
         try {
             this.EnterNBAHomePage();
             uiDevice.pressDPadRight();
@@ -553,10 +553,9 @@ public class TestVideoPlayCollectAndRecord {
             Utils.writeCaseResult("进入网络页面失败", m_Pass, m_Time);
         } catch (Throwable e) {
             e.printStackTrace();
-            resultFlag = false;
             resultStr = e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            Utils.writeCaseResult(resultStr,false, m_Time);
         }
     }
 

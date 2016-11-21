@@ -92,11 +92,10 @@ public class TestMenuFuncitonOnEveryPage {
             Utils.writeCaseResult("弹框显示错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultFlag = false;
             resultStr = e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            Utils.writeCaseResult(resultStr,false,m_Time);
         }
     }
 
