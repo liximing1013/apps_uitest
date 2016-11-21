@@ -31,6 +31,7 @@ import static android.support.test.uiautomator.By.text;
  * 测试menu键在各个页面的操作
  * test case: 15
  **/
+
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder
 public class TestMenuFuncitonOnEveryPage {
@@ -39,7 +40,7 @@ public class TestMenuFuncitonOnEveryPage {
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 5;
-    private static final int LONG_WAIT = 15;
+    private static final int LONG_WAIT = 12;
     //初始化
     boolean m_Pass = false;
     String m_Expect = "";
@@ -266,16 +267,10 @@ public class TestMenuFuncitonOnEveryPage {
     @Test //播放记录页生成记录
     public void LC_MENU_12_DeleteVideoRecordInPlayRecord() {
         try {
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressEnter();
-            systemWait(SHORT_WAIT);
-            uiDevice.wait(Until.findObject(By.text("相关推荐")), 15000);
+            this.RightRightRight();
             systemWait(WAIT);
+            uiDevice.pressEnter();
+            systemWait(LONG_WAIT);
             //推荐位观看一影片生成播放记录
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
@@ -287,7 +282,6 @@ public class TestMenuFuncitonOnEveryPage {
             UiObject2 tabView1 = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
             this.openTabFromLauncherHomeByTextView(uiDevice, tabView1);
             systemWait(WAIT);
-//        UiObject2 TextView = uiDevice.findObject(By.res("com.bestv.ott:id/no_data_title"));
             m_ObjId = "com.bestv.ott:id/no_data_title";
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/no_data_title"));
             Utils.writeCaseResult("播放记录页无播放记录", m_uiObj == null, m_Time);
@@ -302,7 +296,7 @@ public class TestMenuFuncitonOnEveryPage {
     }
 
     @Test //播放记录页视频卡片menu键操作
-    public void LC_Menu_13_VideoRecordCardInPlayRecord() {
+    public void LC_MENU_13_VideoRecordCardInPlayRecord() {
         try {
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
@@ -334,7 +328,7 @@ public class TestMenuFuncitonOnEveryPage {
     }
 
     @Test //播放记录页删除单个记录menu键操作
-    public void LC_Menu_14_DelOneRecordInPlayRecord(){
+    public void LC_MENU_14_DelOneRecordInPlayRecord(){
         try {
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
@@ -408,22 +402,30 @@ public class TestMenuFuncitonOnEveryPage {
     @Test //赛事预约页面清空全部比赛
     public void LC_MENU_24_EmptyMatchOrderInterface() {
         try {
-            UiObject2 tabView1 = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
-            this.openTabFromLauncherHomeByTextView(uiDevice, tabView1);
-            uiDevice.pressDPadUp();
-            uiDevice.pressDPadRight();
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressMenu();
-            systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            UiObject2 TextViewer = uiDevice.findObject(text("赛事预约"));
-            //赛事预约界面清空时会Tab消失&TextViewer为空值时不能使用get取值
-            Assert.assertNull(TextViewer);
+            systemWait(LONG_WAIT);
+            UiObject2 TabViewer= uiDevice.findObject(By.text("赛事预约"));
+            if(TabViewer == null){
+                System.out.println("没有预约赛事Tab，么么哒！Please go order");
+            }else {
+                uiDevice.pressDPadUp();
+                uiDevice.pressDPadRight();
+                uiDevice.pressDPadRight();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressMenu();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadRight();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(SHORT_WAIT);
+                UiObject2 TextViewer = uiDevice.findObject(text("赛事预约"));
+                //赛事预约界面清空时会Tab消失&TextViewer为空值时不能使用get取值
+                Assert.assertNull(TextViewer);
+            }
         }catch (Throwable e){
             e.printStackTrace();
             resultStr = e.toString();
@@ -511,7 +513,7 @@ public class TestMenuFuncitonOnEveryPage {
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
+            systemWait(WAIT);
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
             uiDevice.pressMenu();
@@ -599,5 +601,14 @@ public class TestMenuFuncitonOnEveryPage {
 
         SystemClock.sleep(seconds * 1000);
     } //等待时间
+
+    private void RightRightRight(){
+        int i = 0;
+        while( i <= 2){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    } //R*3
 
 }

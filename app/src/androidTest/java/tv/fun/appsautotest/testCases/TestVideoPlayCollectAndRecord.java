@@ -900,7 +900,7 @@ public class TestVideoPlayCollectAndRecord {
     private void systemWait(int seconds) {
 
         SystemClock.sleep(seconds * 1000);
-    }
+    } //等待时间
 
     private void RandomPlayNews(){//随机选择新闻的一级标题进入后播放
         uiDevice.pressDPadDown();
@@ -956,15 +956,6 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(WAIT);
     } //进入视频分类
 
-    private void RightMoveNo1(){
-        int i = 0;
-        while (i<=25){
-            i++;
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-        }
-    }
-
     private void EnterFreeFilmPage(){
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
@@ -977,7 +968,16 @@ public class TestVideoPlayCollectAndRecord {
         uiDevice.pressDPadCenter();
         uiDevice.wait(Until.findObject(By.text("免费大片")), 15000);
         systemWait(LONG_WAIT);
-    }
+    }//进入免费大片页面
+
+    private void RightMoveNo1(){
+        int i = 0;
+        while (i<=25){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    } //右移步数1
 
     private void RightMoveNo2(){
         int i = 0;
@@ -986,7 +986,7 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
         }
-    }
+    }//右移步数2
 
     private void DownMoveNo1(){
         int i = 0;
@@ -995,6 +995,6 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
         }
-    }
+    }//下移步数1
 
 }

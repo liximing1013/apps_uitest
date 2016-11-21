@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Random;
 
-import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
@@ -28,9 +27,10 @@ import static android.support.test.uiautomator.By.text;
 
 /******************************
  * Created Lixm on 2016/10/10
- * Test playing VIP Video
- * test case: 14
+ * Test Playing VIP Video
+ * Test Case: 14
  ******************************/
+
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder
 public final class TestVipVideo {
@@ -70,11 +70,11 @@ public final class TestVipVideo {
         systemWait(WAIT);
     }
 
-    @Test //获取用例名
-    public void test(){
-
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//    @Test //获取用例名
+//    public void test(){
+//
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
     @Test //进入金卡会员页
     public void LC_VIP_01_EnterVipPage() {
@@ -483,7 +483,6 @@ public final class TestVipVideo {
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
             uiDevice.pressEnter();
-            uiDevice.wait(Until.findObject(By.text("金卡专享")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
