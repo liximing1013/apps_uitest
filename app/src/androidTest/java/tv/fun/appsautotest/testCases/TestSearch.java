@@ -847,8 +847,7 @@ public class TestSearch {
                 // 第二级UI
                 m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS, Infos.S_VIEW_CLASS, 0);
 
-                String sId = "com.bestv.voiceAssist:id/category_cell";
-                int iChilds = m_com.getUiObjByResId(sId).getChildCount();
+                int iChilds = m_uiObj.getChildCount();
                 int iExpect = 3;
                 if(iChilds != iExpect){
                     m_bPass = false;
