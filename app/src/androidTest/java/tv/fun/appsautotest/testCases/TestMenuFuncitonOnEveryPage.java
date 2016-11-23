@@ -93,9 +93,10 @@ public class TestMenuFuncitonOnEveryPage {
         }catch (Throwable e){
             e.printStackTrace();
             resultStr = e.toString();
+            resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,false,m_Time);
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
 

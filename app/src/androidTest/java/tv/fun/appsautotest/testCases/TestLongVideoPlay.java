@@ -100,7 +100,7 @@ public class TestLongVideoPlay {
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 uiDevice.pressDPadLeft(); //左键从头播放
-                systemWait(PlayVideoLongTime); //播放10+min
+                systemWait(PlayVideoShortTime); //播放10+min
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 m_uiObj = uiDevice.findObject
                         (By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -116,7 +116,7 @@ public class TestLongVideoPlay {
                     uiDevice.waitForIdle();
                     this.RightRightSpeedSpeed();
                     this.ProgressBarExists(10000);
-                    systemWait(PlayVideoLongTime);//播放10+min
+                    systemWait(PlayVideoShortTime);//播放10+min
                     uiDevice.pressBack();
                     systemWait(SHORT_WAIT);
                     uiDevice.pressBack();
@@ -281,7 +281,7 @@ public class TestLongVideoPlay {
                     m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
                     Utils.writeCaseResult("视频暂停后无暂停标示", m_uiObj != null, m_Time);
                     uiDevice.pressDPadCenter();
-                    systemWait(PlayVideoShortTime);
+                    systemWait(PlayVideoLongTime);
                     this.RightRightSpeedSpeed();
                     systemWait(LONG_WAIT);
                     this.LeftLeftSpeedSpeed();
@@ -289,7 +289,7 @@ public class TestLongVideoPlay {
                     m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                     m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                     Utils.writeCaseResult("视频播放器正常播放",m_uiObj != null,m_Time);
-                    systemWait(PlayVideoLongTime);
+                    systemWait(PlayVideoLongTime); //播放10+min
                     uiDevice.pressBack();
                     uiDevice.pressBack();
                     systemWait(WAIT);
@@ -307,9 +307,10 @@ public class TestLongVideoPlay {
         } catch (Throwable e) {
             e.printStackTrace();
             resultStr = e.toString();
+            resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,false,m_Time);
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
             System.exit(0);
         }
     }

@@ -554,8 +554,9 @@ public class TestVideoPlayCollectAndRecord {
         } catch (Throwable e) {
             e.printStackTrace();
             resultStr = e.toString();
+            resultFlag = false;
         } finally {
-            Utils.writeCaseResult(resultStr,false, m_Time);
+            Utils.writeCaseResult(resultStr,resultFlag, m_Time);
         }
     }
 
@@ -883,7 +884,7 @@ public class TestVideoPlayCollectAndRecord {
 
     private void openTopBarFromLauncherHomeByresId(UiDevice device,UiObject2 resourceId){
         resourceId.click();
-        systemWait(SHORT_WAIT);
+        systemWait(WAIT);
         device.pressDPadCenter();
         device.waitForIdle();
         systemWait(WAIT);
