@@ -20,17 +20,17 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Random;
 
-import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
 
-/**
- * Created Lixm on 2016/10/10.
- * Test playing VIP Video.
- * 13
- */
+/******************************
+ * Created Lixm on 2016/10/10
+ * Test Playing VIP Video
+ * Test Case: 14
+ ******************************/
+
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder
 public final class TestVipVideo {
@@ -39,7 +39,7 @@ public final class TestVipVideo {
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 5;
-    private static final int LONG_WAIT = 12;
+    private static final int LONG_WAIT = 15;
     //设定一段播放时间
     private static final int PlayVideoTime = 60;
     boolean m_Pass = false;
@@ -70,10 +70,22 @@ public final class TestVipVideo {
         systemWait(WAIT);
     }
 
-    @Test //获取用例名
-    public void test(){
-
-        TvCommon.printAllMethods(this.getClass().getName());
+    @Test //进入金卡会员页
+    public void LC_VIP_01_EnterVipPage() {
+        System.out.println("进入金卡会员页面，开启金卡专区的自动化测试了..");
+        try {
+            systemWait(WAIT);
+            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/vip_title"));
+            m_ObjId = "com.bestv.ott:id/vip_title";
+            Utils.writeCaseResult("跳转页面失败", m_uiObj != null, m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     @Test //全屏观看金卡会员频道小窗口
@@ -98,49 +110,21 @@ public final class TestVipVideo {
         }
     }
 
-    @Test //即将上映中影片的收藏
-    public void LC_VIP_15_ComingMoviesCollectAndPlay() {
-        uiDevice.pressDPadRight();
+    @Test //金卡会员页会员特权页面
+    public void LC_VIP_07_VipMemberPage() {
         systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadRight();
+        this.RightRightRight();
         systemWait(WAIT);
-        UiObject2 tabView2 = this.getTabFromLauncherHomeByText(uiDevice, "即将上映");
-        //进入即将上映页面
-        this.openTabFromLauncherHomeByTextView(uiDevice, tabView2);
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadDown();
-        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        systemWait(WAIT);
         try {
-            UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/fav_state"));
-            //通过Res_id来获取Text值，判断当前button选项
-            if (ResId.getText().equals("加入收藏")) {
-                //点击确定加入收藏
-                uiDevice.pressDPadCenter();
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadUp();
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(LONG_WAIT);
-                //加入断言判定详情页是否变为已收藏
-                UiObject2 Text = uiDevice.findObject(text("已收藏"));
-//            Assert.assertEquals("详情页内收藏选项变为已收藏", "已收藏", Text.getText());
-                m_Expect = "已收藏";
-                m_Actual = Text.getText();
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
-                systemWait(WAIT);
-            } else {
-                uiDevice.pressBack();
-                uiDevice.pressBack();
-                systemWait(WAIT);
-            }
-        }catch(Throwable e){
+            m_ObjId = "com.bestv.ott:id/detail_background";
+            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/detail_background"));
+            Utils.writeCaseResult("进入金卡会员页面失败",m_uiObj !=null,m_Time);
+        }catch (Throwable e){
             e.printStackTrace();
-            resultStr =e.toString();
-            resultFlag=false;
+            resultStr = e.toString();
+            resultFlag = false;
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -223,7 +207,7 @@ public final class TestVipVideo {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             UiObject2 textView1 = uiDevice.findObject(text("兑换码输入错误，请重试！"));
-//        Assert.assertEquals("兑换失败提示","兑换码输入错误，请重试！",textView1.getText());
+//          Assert.assertEquals("兑换失败提示","兑换码输入错误，请重试！",textView1.getText());
             m_Expect = "兑换码输入错误，请重试！";
             m_Actual = textView1.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
@@ -266,6 +250,55 @@ public final class TestVipVideo {
         }
     }
 
+    @Test //即将上映中影片的收藏
+    public void LC_VIP_15_ComingMoviesCollectAndPlay() {
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadRight();
+        systemWait(WAIT);
+        UiObject2 tabView2 = this.getTabFromLauncherHomeByText(uiDevice, "即将上映");
+        //进入即将上映页面
+        this.openTabFromLauncherHomeByTextView(uiDevice, tabView2);
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        try {
+            UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/fav_state"));
+            //通过Res_id来获取Text值，判断当前button选项
+            if (ResId.getText().equals("加入收藏")) {
+                //点击确定加入收藏
+                uiDevice.pressDPadCenter();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadUp();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                //加入断言判定详情页是否变为已收藏
+                UiObject2 Text = uiDevice.findObject(text("已收藏"));
+//            Assert.assertEquals("详情页内收藏选项变为已收藏", "已收藏", Text.getText());
+                m_Expect = "已收藏";
+                m_Actual = Text.getText();
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
+                systemWait(WAIT);
+            } else {
+                uiDevice.pressBack();
+                uiDevice.pressBack();
+                systemWait(WAIT);
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
+            resultStr =e.toString();
+            resultFlag=false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
     @Test //金卡会员专区播放金卡电影
     public void LC_VIP_16_PlayVipVideo() {
         uiDevice.pressDPadRight();
@@ -298,27 +331,25 @@ public final class TestVipVideo {
     }
 
     @Test //金卡会员专区播放金卡电视剧
-    public void LC_VIP_17_PlayVipTVVideo() throws InterruptedException{
+    public void LC_VIP_17_PlayVipTVVideo(){
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadUp();
         systemWait(SHORT_WAIT);
-        uiDevice.pressEnter();
+        uiDevice.pressDPadCenter();
         this.RandomPlayTVVideo();
-        systemWait(SHORT_WAIT);
+        systemWait(WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
-        uiDevice.pressEnter();
-        uiDevice.wait(Until.findObject(By.text("金卡专享")), 10000);
+        uiDevice.pressDPadCenter();
+        uiDevice.wait(Until.findObject(By.text("金卡专享")), 15000);
         systemWait(LONG_WAIT);
         uiDevice.pressDPadCenter();
         systemWait(PlayVideoTime);
         try {
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);
+            Utils.writeCaseResult("金卡电视剧视频播放失败",m_uiObj !=null,m_Time);
             uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
@@ -348,8 +379,6 @@ public final class TestVipVideo {
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
-//          UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClazz);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);
@@ -402,11 +431,11 @@ public final class TestVipVideo {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         this.RandomPlayFilm();
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.pressEnter();
         uiDevice.wait(Until.findObject(By.text("金卡专享")), 15000);
         systemWait(LONG_WAIT);
@@ -431,13 +460,13 @@ public final class TestVipVideo {
         uiDevice.pressHome();
         systemWait(WAIT);
         this.EnterVideoClassifyPage();
-        systemWait(SHORT_WAIT);
+        systemWait(WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         try {
             UiObject2 TabView = uiDevice.findObject(By.text("金卡电影"));
             m_Actual = TabView.getText();
@@ -448,7 +477,6 @@ public final class TestVipVideo {
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
             uiDevice.pressEnter();
-            uiDevice.wait(Until.findObject(By.text("金卡专享")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
@@ -456,32 +484,11 @@ public final class TestVipVideo {
 //          Assert.assertNotNull(videoPlayer);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-            Utils.writeCaseResult("4K专区内任选视频播放失败",m_uiObj !=null,m_Time);
+            Utils.writeCaseResult("视频播放失败",m_uiObj !=null,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
-        }
-        finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
-        }
-    }
-
-    @Test //金卡会员页会员特权页面
-    public void LC_VIP_7_VipMemberPage() {
-        systemWait(SHORT_WAIT);
-        this.RightRightRight();
-        systemWait(WAIT);
-        uiDevice.pressDPadCenter();
-        systemWait(WAIT);
-        try {
-            m_ObjId = "com.bestv.ott:id/detail_background";
-            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/detail_background"));
-            Utils.writeCaseResult("进入金卡会员页面失败",m_uiObj !=null,m_Time);
-        }catch (Throwable e){
-            e.printStackTrace();
-            resultStr = e.toString();
-            resultFlag = false;
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -512,7 +519,7 @@ public final class TestVipVideo {
     private void systemWait(int seconds) {
 
         SystemClock.sleep(seconds * 1000);
-    }
+    } //等待时间设定
 
     private void RandomPlayFilm(){
         uiDevice.pressDPadDown();
@@ -529,9 +536,9 @@ public final class TestVipVideo {
 
     private void RandomPlayTVVideo(){
         systemWait(WAIT);
-        Random moveTimes = new Random();
+        Random moveTimes = new Random(1);
         int i;
-        i=moveTimes.nextInt(4);
+        i=moveTimes.nextInt(6);
         for(int j= 0;j<=i;j++){
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
@@ -557,6 +564,6 @@ public final class TestVipVideo {
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
         }
-    }
+    } //R*10
 
 }
