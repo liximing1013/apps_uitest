@@ -42,14 +42,17 @@ public final class TestVipVideo {
     private static final int LONG_WAIT = 15;
     //设定一段播放时间
     private static final int PlayVideoTime = 60;
-    boolean m_Pass = false;
-    String m_Expect = "";
-    String m_Actual = "";
+    //初始化
     String m_ObjId = "";
-    UiObject2 m_uiObj = null;
-    String resultStr = "";
-    Boolean resultFlag = true;
-    long m_Time;
+    private UiObject2 m_uiObj = null;
+    private long m_Time;
+    private String m_Expect = "";
+    private String m_Actual = "";
+    private String resultStr = "";
+    private String m_Result = "";
+    private boolean resultFlag = true;
+    private boolean m_Pass = false;
+
 
     @Before
     public void setUp() {
@@ -77,14 +80,14 @@ public final class TestVipVideo {
             systemWait(WAIT);
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/vip_title"));
             m_ObjId = "com.bestv.ott:id/vip_title";
-            Utils.writeCaseResult("跳转页面失败", m_uiObj != null, m_Time);
+            m_Result = "进入金卡会员页面失败";
         }catch (Throwable e){
             e.printStackTrace();
-            resultFlag = false;
-            resultStr = e.toString();
+            m_Pass= false;
+            m_Result += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            Utils.writeCaseResult(m_Result,m_Pass,m_Time);
         }
     }
 
@@ -93,8 +96,8 @@ public final class TestVipVideo {
         try {
             uiDevice.pressEnter();
             systemWait(PlayVideoTime);//加入断言判定是否全屏播放,via全屏播放时唯一的标示
-//        UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
-//        Assert.assertNotNull("小窗口全屏播放", ResId);
+//            UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
+//            Assert.assertNotNull("小窗口全屏播放", ResId);
             m_ObjId = Infos.S_LC_VIP_FULLSCREEN_BUTTON_ID;
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
             Utils.writeCaseResult("进入全屏播放时失败，无法抓取到控件", m_uiObj != null, m_Time);
@@ -104,7 +107,7 @@ public final class TestVipVideo {
         }catch(Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }

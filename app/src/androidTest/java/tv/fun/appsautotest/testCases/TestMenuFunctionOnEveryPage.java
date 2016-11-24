@@ -34,7 +34,7 @@ import static android.support.test.uiautomator.By.text;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder
-public class TestMenuFuncitonOnEveryPage {
+public class TestMenuFunctionOnEveryPage {
     Instrumentation instrument;
     UiDevice uiDevice;
     //设定等待时间
@@ -42,14 +42,15 @@ public class TestMenuFuncitonOnEveryPage {
     private static final int WAIT = 5;
     private static final int LONG_WAIT = 12;
     //初始化
-    boolean m_Pass = false;
-    String m_Expect = "";
-    String m_Actual = "";
-    long m_Time;
     String m_ObjId = "";
-    UiObject2 m_uiObj = null;
-    String resultStr = "";
-    Boolean resultFlag = true;
+    private long m_Time;
+    private UiObject2 m_uiObj = null;
+    private boolean m_Pass = false;
+    private boolean resultFlag = true;
+    private String m_Expect = "";
+    private String m_Actual = "";
+    private String resultStr = "";
+
 
     @Before
     public void setUp() {

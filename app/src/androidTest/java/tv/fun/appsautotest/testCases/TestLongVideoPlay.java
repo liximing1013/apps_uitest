@@ -47,8 +47,8 @@ import tv.fun.common.Utils;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder
 public class TestLongVideoPlay {
-    Instrumentation instrument;
-    UiDevice uiDevice;
+    private Instrumentation instrument;
+    private UiDevice uiDevice;
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 5;
@@ -60,14 +60,15 @@ public class TestLongVideoPlay {
     //设定播放视频时间（长）
     private static final int PlayVideoLongTime = 660;
     //初始化
-    long m_Time;
     String m_ObjId = "";
-    UiObject2 m_uiObj = null;
-    boolean m_Pass = false;
-    String m_Expect = "";
-    String m_Actual = "";
-    String resultStr = "";
-    Boolean resultFlag = false;
+    private long m_Time;
+    private UiObject2 m_uiObj = null;
+    private String m_Expect = "";
+    private String m_Actual = "";
+    private String resultStr = "";
+    private boolean m_Pass = false;
+    private boolean resultFlag = false;
+
 
     @Before
     public void setUp() {
@@ -130,7 +131,7 @@ public class TestLongVideoPlay {
                     systemWait(WAIT);
                     uiDevice.waitForIdle();
                     uiDevice.pressDPadRight();
-                } catch (Throwable e) {
+                }catch (Throwable e) {
                     System.out.println("视频快进失败");
                     e.printStackTrace();
                 }
@@ -209,7 +210,7 @@ public class TestLongVideoPlay {
             } catch (Throwable e) {
                 System.out.println("！！！！！");
                 e.printStackTrace();
-                resultStr = e.toString();
+                resultStr += e.toString();
                 resultFlag = false;
             } finally {
                 Utils.writeCaseResult(resultStr, resultFlag, m_Time);
@@ -259,7 +260,7 @@ public class TestLongVideoPlay {
                     m_Actual = PayMedia.getText();
                     m_Expect = "请选择要购买的媒体或服务";
                     m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                    Utils.writeCaseResult("非金卡会员试看影片时跳转开通会员页失败",m_Pass,m_Time);
+                    Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
                     uiDevice.pressBack();
                     systemWait(LONG_WAIT);
                     UiObject2 DetailText = uiDevice.findObject(By.text("相关推荐"));
@@ -288,7 +289,7 @@ public class TestLongVideoPlay {
                     systemWait(LONG_WAIT);
                     m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                     m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-                    Utils.writeCaseResult("视频播放器正常播放",m_uiObj != null,m_Time);
+                    Utils.writeCaseResult("播放器正常播放",m_uiObj != null,m_Time);
                     systemWait(PlayVideoLongTime); //播放10+min
                     uiDevice.pressBack();
                     uiDevice.pressBack();
@@ -306,7 +307,7 @@ public class TestLongVideoPlay {
             }
         } catch (Throwable e) {
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {

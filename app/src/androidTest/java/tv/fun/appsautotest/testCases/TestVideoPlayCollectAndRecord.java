@@ -47,14 +47,14 @@ public class TestVideoPlayCollectAndRecord {
     //设定播放视频时间
     private static final int PlayVideoTime = 60;
     //初始化
-    boolean m_Pass = false;
-    String m_Expect = "";
-    String m_Actual = "";
-    long m_Time;
     String m_ObjId = "";
+    private long m_Time;
     UiObject2 m_uiObj = null;
-    String resultStr = "";
-    Boolean resultFlag = true;
+    private String m_Expect = "";
+    private String m_Actual = "";
+    private String resultStr = "";
+    private boolean resultFlag = true;
+    private boolean m_Pass = false;
 
     @Before
     public void setUp() {
