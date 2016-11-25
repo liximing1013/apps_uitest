@@ -426,7 +426,7 @@ public class TestSearch {
             for(int i = 0; i < jsonArray.length(); ++i){
                 JSONObject jsonObj = (JSONObject)jsonArray.get(i);
                 aHotNames[i] = jsonObj.getString("name");
-                Utils.Print(i + " " + aHotNames[i]);
+//                Utils.Print(i + " " + aHotNames[i]);
             }
 
             int iNum = Utils.randInt(iMax);

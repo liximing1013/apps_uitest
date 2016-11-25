@@ -2,6 +2,8 @@ package tv.fun.appsautotest.testCases;
 
 import android.support.test.uiautomator.UiObject;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -9,6 +11,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import tv.fun.appsautotest.common.TvCommon;
+import tv.fun.common.HttpUtils;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
@@ -24,8 +27,10 @@ public class TestEnterPage {
 
     boolean m_bPass = false;
     long m_lConsumeTime = -1;
+    String m_sVersion = Infos.S_TV_VERSION;
     String m_sExpect = "";
     String m_sActual = "";
+    String m_sResult = "";
     String m_sObjId = "";
     String m_sModuleName = "";
     String m_sCaseName = "";
@@ -112,14 +117,38 @@ public class TestEnterPage {
     @Test
     public void LC_TB_05_enterTVPlayPage(){
 //        Utils.Print("case 进入电视剧页面 START");
-        enterTVPlayPage();
+        try{
+            enterTVPlayPage();
+            String sUrl = HttpUtils.m_sPlayMainPageUrl + "&version=" + m_sVersion;;
+            String sResult = HttpUtils.sendGet(sUrl);
+            JSONObject jsonObject = new JSONObject(sResult);
 
-        String sTitle1 = "香港TVB";
-        String sTitle2 = "都市喜剧";
-        m_bPass = m_com.isUiObjExists(m_com.BY_TEXT, sTitle1, "") ||
-                m_com.isUiObjExists(m_com.BY_TEXT, sTitle2, "");
-
-        Utils.writeCaseResult("进入电视剧页失败", m_bPass, m_lConsumeTime);
+            String sRetCode = jsonObject.getString("retCode");
+            if(!sRetCode.equalsIgnoreCase("200")){
+                m_bPass = false;
+                m_sResult = String.format("电视剧页面TabUrl连接【%s】访问失败！", sUrl);
+            }else{
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                int iCheck = 7; // 检查前7个Tab
+                for(int i = 0; i < iCheck; ++i){
+                    JSONObject jsonObj = (JSONObject)jsonArray.get(i);
+                    m_sExpect = jsonObj.getString("name");
+                    Utils.Print(m_sExpect);
+                    m_bPass = m_com.isUiObjExists(m_com.BY_TEXT, m_sExpect, "");
+                    if(!m_bPass) {
+                        m_sResult += String.format("进入【视频】页面的电视剧页失败!" +
+                                "不存在【%s】Tab", m_sExpect);
+                        break;
+                    }
+                }
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            m_bPass = false;
+            m_sResult += e.toString();
+        }finally {
+            Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
 //        Utils.Print("case 进入电视剧页面 END");
     }
 
@@ -145,14 +174,38 @@ public class TestEnterPage {
     }
     @Test
     public void LC_TB_07_enterChildPage(){
-        enterChildPage();
-        // TODO 可以用服务端的数据来做校验
-        String sTitle1 = "启蒙";
-        String sTitle2 = "乐园";
-        m_bPass = m_com.isUiObjExists(m_com.BY_TEXT, sTitle1, "") ||
-                m_com.isUiObjExists(m_com.BY_TEXT, sTitle2, "");
+        try{
+            enterChildPage();
+            String sUrl = HttpUtils.m_sChildMainPageUrl + "&version=" + m_sVersion;
+            String sResult = HttpUtils.sendGet(sUrl);
+            JSONObject jsonObject = new JSONObject(sResult);
 
-        Utils.writeCaseResult("进入少儿页失败", m_bPass, m_lConsumeTime);
+            String sRetCode = jsonObject.getString("retCode");
+            if(!sRetCode.equalsIgnoreCase("200")){
+                m_bPass = false;
+                m_sResult = String.format("少儿页面TabUrl连接【%s】访问失败！", sUrl);
+            }else{
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                int iCheck = 7; // 检查前7个Tab
+                for(int i = 0; i < iCheck; ++i){
+                    JSONObject jsonObj = (JSONObject)jsonArray.get(i);
+                    m_sExpect = jsonObj.getString("name");
+                    m_bPass = m_com.isUiObjExists(m_com.BY_TEXT, m_sExpect, "");
+                    Utils.Print(m_sExpect);
+                    if(!m_bPass) {
+                        m_sResult += String.format("进入【视频】页面的少儿页失败!" +
+                                "不存在【%s】Tab", m_sExpect);
+                        break;
+                    }
+                }
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            m_bPass = false;
+            m_sResult += e.toString();
+        }finally {
+            Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
     }
 
     public void enterVIPPage(){

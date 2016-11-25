@@ -9,6 +9,15 @@ import java.net.URLConnection;
 
 
 public class HttpUtils {
+    public static String m_sJoUrl = "http://jo.funtv.bestv.com.cn";
+    public static String m_sFilmMainPageUrl = m_sJoUrl + "/config/mretrievetabs/v2?" +
+            "block_id=109&nav_id=8";
+    public static String m_sPlayMainPageUrl = m_sJoUrl + "/config/mretrievetabs/v2?" +
+            "block_id=110&nav_id=8";
+    public static String m_sChildMainPageUrl = m_sJoUrl + "/config/mretrievetabs/v2?" +
+            "block_id=119&nav_id=8";
+    public static String m_sVarietyMainPageUrl = m_sJoUrl + "/config/mretrievetabs/v2?" +
+            "block_id=112&nav_id=8";
 	/**
      * 向指定URL发送GET方法的请求
      */
