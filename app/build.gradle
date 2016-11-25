@@ -30,10 +30,11 @@ android {
         exclude 'NOTICE'
         exclude 'LICENSE.txt'
     }
+    useLibrary('org.apache.http.legacy')
 }
 
 dependencies {
-    //compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.android.support:support-v4:23.+'
@@ -41,5 +42,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.+'
+    androidTestCompile 'com.squareup.okhttp:okhttp:2.7.5'
     //compile files('src/main/libs/usc.jar')
 }
