@@ -5,6 +5,8 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.view.KeyEvent;
 
+import org.junit.Assert;
+
 import java.util.HashMap;
 
 /**
@@ -13,6 +15,7 @@ import java.util.HashMap;
 public class AppStorePage extends Common{
     public String appStoreBtn = "应用市场";
     public String appStoreTabID = "tv.fun.appstore:id/column_title";
+    public String[] topicsUnderSuggest = {"热门排行", "最新上架", "装机必备"};
 
     /**
      * Method for navigating to Launcher App tab page
@@ -35,11 +38,9 @@ public class AppStorePage extends Common{
             navigateToLauncherAppTab();
         }
         UiObject appStoreCard =  device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
-        device.pressDPadDown();
-        device.pressDPadDown();
+        moveToDownForMultiple(2);
         if(!appStoreCard.isSelected()){
-            device.pressDPadLeft();
-            device.pressDPadLeft();
+            moveToLeftForMultiple(2);
         }
         device.pressEnter();
         waitForElementPresentByIDAndText("tv.fun.appstore:id/column_title", "应用管理");
@@ -54,7 +55,7 @@ public class AppStorePage extends Common{
         UiObject currentSelectedTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text("应用管理"));
         if(currentSelectedTab.isSelected()){
             moveToUpForMultiple(4);//Move to navBar to avoid that the current focus not in narBar
-            if(targetTab.equalsIgnoreCase("推荐")){
+            if(targetTab.equalsIgnoreCase(appStoreTabs[0])){
                 moveToLeftForMultiple(5);
             }
         }
@@ -101,6 +102,29 @@ public class AppStorePage extends Common{
         for(int i=1; i<=5; i++){
             device.pressDPadLeft();
         }
+    }
+
+    /**
+     * Enter topic page under suggest tab
+     */
+    public void enterTopicPage(String topicName) throws InterruptedException, UiObjectNotFoundException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+        enterAppStorePage();
+        moveToFirstCardUnderSuggestTab();
+        UiObject topicObj = device.findObject(new UiSelector().text(topicName).resourceId("tv.fun.appstore:id/title"));
+        UiObject firstTopic = device.findObject(new UiSelector().text(topicsUnderSuggest[0]).resourceId("tv.fun.appstore:id/title"));
+        if (!firstTopic.isSelected()) {
+            moveToFirstCardUnderSuggestTab();
+        }
+        if(topicName.equalsIgnoreCase(topicsUnderSuggest[1])){
+            moveToDown();
+        }else if(topicName.equalsIgnoreCase(topicsUnderSuggest[2])){
+            moveToDownForMultiple(2);
+        }
+
+        //点击推荐tab下topic
+        topicObj.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
     }
 
     /**

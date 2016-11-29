@@ -171,7 +171,12 @@ public class Common {
      * @param commondStr
      */
     public void executeAdbShellCommond(String commondStr) throws IOException {
-        Runtime.getRuntime().exec(commondStr);
+        try {
+            Runtime.getRuntime().exec("am force-stop tv.fun.appstore");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+        }
     }
 
     /**
@@ -286,6 +291,20 @@ public class Common {
         for(int i=1; i<=step; i++){
             device.pressDPadDown();
         }
+    }
+
+    /**
+     * 按遥控器Home键
+     */
+    public void home(){
+        device.pressHome();
+    }
+
+    /**
+     * 按遥控器Back键
+     */
+    public void back(){
+        device.pressBack();
     }
 
     /**
@@ -616,6 +635,33 @@ public class Common {
     }
 
     /**
+     * Verify the actual number is larger than the input number.
+     *
+     * @param actualNum
+     * @param smallNum
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyNumberLarger(String failMsg,int actualNum, int smallNum) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, actualNum > smallNum);
+        } else {
+            if (actualNum > smallNum) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                resultStr += "Expected the [" + actualNum + "] is larger than [" + smallNum
+                        + "]; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
      * Verify the input parmeter is true.
      *
      * @param failMsg
@@ -636,7 +682,7 @@ public class Common {
                 if (failMsg != "") {
                     resultStr += failMsg+";";
                 } else {
-                    resultStr += "The return of [" + testFlag + "] is False; ";
+                    resultStr += "The return of [" + testFlag + "] is not True; ";
                 }
                 verifyFlag = false;
                 return verifyFlag;
@@ -706,7 +752,7 @@ public class Common {
     }
 
     /**
-     * Verify the element present.
+     * Verify the element not present.
      *
      * @param obj
      * @param failMsg
@@ -727,6 +773,37 @@ public class Common {
                     resultStr += failMsg+";";
                 } else {
                     resultStr += "Element [" + obj + "] is expected Not present, but actually present; ";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the element not present.
+     *
+     * @param locator
+     * @param failMsg
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyElementNotPresent(String failMsg, String locator) throws IOException {
+        Boolean verifyFlag =true;
+        UiObject obj = findElementByID(locator);
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertFalse(failMsg, obj.exists());
+        } else {
+            if (!obj.exists()) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "Element [" + locator + "] is expected Not present, but actually present; ";
                 }
                 verifyFlag = false;
                 return verifyFlag;
@@ -769,5 +846,4 @@ public class Common {
 //        System.out.println("dom4j parserXml");
 //        return testKind;
 //    }
-
 }
