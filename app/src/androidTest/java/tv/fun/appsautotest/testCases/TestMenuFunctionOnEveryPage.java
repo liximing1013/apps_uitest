@@ -18,10 +18,10 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
@@ -33,7 +33,7 @@ import static android.support.test.uiautomator.By.text;
  **/
 
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestMenuFunctionOnEveryPage {
     Instrumentation instrument;
     UiDevice uiDevice;
@@ -56,9 +56,11 @@ public class TestMenuFunctionOnEveryPage {
     public void setUp() {
         instrument = InstrumentationRegistry.getInstrumentation();
         uiDevice = UiDevice.getInstance(instrument);
+        m_Time= Utils.getCurSecond();   //耗时
+
         uiDevice.pressHome();
         systemWait(SHORT_WAIT);
-        m_Time= Utils.getCurSecond();   //耗时
+
     }
 
     @After //运行脚本之后回到launcher
@@ -70,11 +72,11 @@ public class TestMenuFunctionOnEveryPage {
         systemWait(WAIT);
     }
 
-    @Test //获取用例名
-    public void test(){
-
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//    @Test //获取用例名
+//    public void test(){
+//
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
     @Test //电视Tab页面menu键操作
     public void LC_MENU_01_TVTabMenuOperation() {
@@ -93,7 +95,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("弹框显示错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -120,7 +122,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -155,7 +157,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -189,7 +191,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -226,7 +228,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -258,7 +260,7 @@ public class TestMenuFunctionOnEveryPage {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -288,7 +290,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("播放记录页无播放记录", m_uiObj == null, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag =false;
         }
         finally {
@@ -320,7 +322,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("调起选项错误or未响应",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -357,7 +359,7 @@ public class TestMenuFunctionOnEveryPage {
         }catch(Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -393,7 +395,7 @@ public class TestMenuFunctionOnEveryPage {
         }catch(Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -429,8 +431,8 @@ public class TestMenuFunctionOnEveryPage {
             }
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
-            resultFlag =false;
+            resultStr += e.toString();
+            resultFlag = false;
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -474,7 +476,7 @@ public class TestMenuFunctionOnEveryPage {
             Utils.writeCaseResult("详情页收藏选项显示错误", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag =false;
         }
         finally {
@@ -499,7 +501,7 @@ public class TestMenuFunctionOnEveryPage {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -527,7 +529,7 @@ public class TestMenuFunctionOnEveryPage {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -564,7 +566,7 @@ public class TestMenuFunctionOnEveryPage {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);

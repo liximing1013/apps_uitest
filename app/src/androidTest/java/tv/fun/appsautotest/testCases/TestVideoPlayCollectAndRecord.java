@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import java.util.Random;
 
@@ -34,7 +35,7 @@ import static android.support.test.uiautomator.By.text;
  **/
 
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestVideoPlayCollectAndRecord {
     Instrumentation instrument;
     UiDevice uiDevice;
@@ -553,7 +554,7 @@ public class TestVideoPlayCollectAndRecord {
             Utils.writeCaseResult("进入网络页面失败", m_Pass, m_Time);
         } catch (Throwable e) {
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         } finally {
             Utils.writeCaseResult(resultStr,resultFlag, m_Time);
@@ -590,7 +591,7 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         } finally {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
@@ -615,7 +616,7 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr =e.toString();
+            resultStr +=e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -646,7 +647,7 @@ public class TestVideoPlayCollectAndRecord {
             }
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
