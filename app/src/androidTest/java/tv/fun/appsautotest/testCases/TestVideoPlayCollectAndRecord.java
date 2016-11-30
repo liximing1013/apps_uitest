@@ -43,8 +43,6 @@ public class TestVideoPlayCollectAndRecord {
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 8;
     private static final int LONG_WAIT = 15;
-    //暂停时间
-    private static final int PauseTime = 20;
     //设定播放视频时间
     private static final int PlayVideoTime = 60;
     //初始化
@@ -61,8 +59,9 @@ public class TestVideoPlayCollectAndRecord {
     public void setUp() {
         instrument = InstrumentationRegistry.getInstrumentation();
         uiDevice = UiDevice.getInstance(instrument);
+
         uiDevice.pressHome();
-//        uiDevice.waitForIdle(2000);
+        systemWait(WAIT);
         m_Time= Utils.getCurSecond();   //耗时
     }
 

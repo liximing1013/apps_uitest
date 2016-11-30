@@ -507,11 +507,12 @@ public final class TestVipVideo {
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
-//          UiObject2 videoPlayer = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(videoPlayer);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("视频播放失败",m_uiObj !=null,m_Time);
+            uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -537,8 +538,9 @@ public final class TestVipVideo {
             uiDevice.pressDPadRight();
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
+            systemWait(WAIT);
             uiDevice.pressDPadRight();
-            systemWait(LONG_WAIT);
+            systemWait(WAIT);
             UiObject ZhiFuBao = uiDevice.findObject(new UiSelector().className("android.widget.ImageView")
                     .resourceId("com.bestv.mediapay:id/pay_image"));
             Assert.assertNotNull(ZhiFuBao);
