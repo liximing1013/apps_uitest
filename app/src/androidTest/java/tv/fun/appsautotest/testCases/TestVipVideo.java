@@ -455,7 +455,7 @@ public final class TestVipVideo {
     }
 
     @Test //金卡专区进入金卡动漫
-    public void LC_VIP_20_PlayComicVideo() {
+    public void LC_VIP_23_PlayComicVideo() {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();

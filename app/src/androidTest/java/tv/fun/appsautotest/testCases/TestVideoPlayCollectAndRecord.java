@@ -314,8 +314,6 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(WAIT);
             uiDevice.pressEnter();
             systemWait(PlayVideoTime);
-//          UiObject2 VideoClass = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//          Assert.assertNotNull(VideoClass);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("看看新闻无法播放", m_uiObj != null, m_Time);
