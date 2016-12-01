@@ -29,17 +29,18 @@ public class AppStorePage extends Common{
 
     /**
      * Method for entering AppStore page from Launcher
+     *
      * @throws UiObjectNotFoundException
      */
     public void enterAppStorePage() throws UiObjectNotFoundException, InterruptedException {
         //移动焦点到Launcher应用tab
         Boolean selectFlag = device.findObject(new UiSelector().text("应用").resourceId("com.bestv.ott:id/tab_title")).isSelected();
-        if(!selectFlag){
+        if (!selectFlag) {
             navigateToLauncherAppTab();
         }
-        UiObject appStoreCard =  device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
+        UiObject appStoreCard = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
         moveToDownForMultiple(2);
-        if(!appStoreCard.isSelected()){
+        if (!appStoreCard.isSelected()) {
             moveToLeftForMultiple(2);
         }
         device.pressEnter();
@@ -48,14 +49,15 @@ public class AppStorePage extends Common{
 
     /**
      * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
+     *
      * @param targetTab
      * @throws UiObjectNotFoundException
      */
     public void moveToSuggestTabFromAppManageTab(String targetTab) throws UiObjectNotFoundException {
         UiObject currentSelectedTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text("应用管理"));
-        if(currentSelectedTab.isSelected()){
+        if (currentSelectedTab.isSelected()) {
             moveToUpForMultiple(4);//Move to navBar to avoid that the current focus not in narBar
-            if(targetTab.equalsIgnoreCase(appStoreTabs[0])){
+            if (targetTab.equalsIgnoreCase(appStoreTabs[0])) {
                 moveToLeftForMultiple(5);
             }
         }
@@ -63,11 +65,12 @@ public class AppStorePage extends Common{
 
     /**
      * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
+     *
      * @param targetTab
      * @throws UiObjectNotFoundException
      */
     public Boolean moveToAppStoreTargetTab(String targetTab) throws UiObjectNotFoundException {
-        moveToTargetTab(appStoreTabs,targetTab, appStoreTabID, 6);
+        moveToTargetTab(appStoreTabs, targetTab, appStoreTabID, 6);
         moveToUpForMultiple(4);//Move to navBar to avoid that the current focus not in narBar
         Boolean selectedFlag = findElementByText(targetTab, appStoreTabID).isSelected();
         return selectedFlag;
@@ -75,31 +78,32 @@ public class AppStorePage extends Common{
 
     /**
      * Sometimes, the default tab is not the APP tab. This method is used to move the focus to the target tab in launcher home page
+     *
      * @param targetTab
      * @throws UiObjectNotFoundException
      */
     public void moveToLauncherTargetTab(String targetTab) throws UiObjectNotFoundException {
-        moveToTargetTab(launcherTabs,targetTab, launcherTabID, 4);
+        moveToTargetTab(launcherTabs, targetTab, launcherTabID, 4);
     }
 
     /**
      * 在Appstore首页，移动到导航条
-     *
+     * <p>
      * step  连续向右移的次数
      */
-    public void moveToTopOnAppStoreHomePage(){
-        for(int i=1; i<=6; i++){
+    public void moveToTopOnAppStoreHomePage() {
+        for (int i = 1; i <= 6; i++) {
             device.pressDPadUp();
         }
     }
 
     /**
      * 连续按遥控器左键
-     *
+     * <p>
      * step  连续向左移的次数
      */
-    public void moveToTheMostLeftOfTabPage(){
-        for(int i=1; i<=5; i++){
+    public void moveToTheMostLeftOfTabPage() {
+        for (int i = 1; i <= 5; i++) {
             device.pressDPadLeft();
         }
     }
@@ -116,9 +120,9 @@ public class AppStorePage extends Common{
         if (!firstTopic.isSelected()) {
             moveToFirstCardUnderSuggestTab();
         }
-        if(topicName.equalsIgnoreCase(topicsUnderSuggest[1])){
+        if (topicName.equalsIgnoreCase(topicsUnderSuggest[1])) {
             moveToDown();
-        }else if(topicName.equalsIgnoreCase(topicsUnderSuggest[2])){
+        } else if (topicName.equalsIgnoreCase(topicsUnderSuggest[2])) {
             moveToDownForMultiple(2);
         }
 
@@ -132,13 +136,13 @@ public class AppStorePage extends Common{
      *
      * @return
      */
-    public Boolean checkWhetherNoAppInstalled(){
+    public Boolean checkWhetherNoAppInstalled() {
         Boolean flag = false;
-        try{
-            if(device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/emptyView")).exists()){
-                flag=true;
+        try {
+            if (device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/emptyView")).exists()) {
+                flag = true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return flag;
@@ -152,21 +156,21 @@ public class AppStorePage extends Common{
      */
     public Boolean checkWhetherNoAppInstalledExceptAutoAPP(int limitAppCount) throws UiObjectNotFoundException {
         Boolean flag = false;
-        try{
+        try {
             flag = checkWhetherNoAppInstalled();
-            if(!flag){
+            if (!flag) {
                 String app = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/subTitle")).getText().split("个应用")[0].replace("有", "");
                 int appCount = stringToInt(app);
-                if(appCount<=limitAppCount){
-                    flag=true;
-                }else{
+                if (appCount <= limitAppCount) {
+                    flag = true;
+                } else {
                     String fApp = findElementByID("tv.fun.appstore:id/appName").getText();
-                    if(fApp.contains("auto")||fApp.contains("test")){
-                        flag=true;
+                    if (fApp.contains("auto") || fApp.contains("test")) {
+                        flag = true;
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return flag;
@@ -174,6 +178,7 @@ public class AppStorePage extends Common{
 
     /**
      * Check whether no app in MyApp page except 1 app for auto
+     *
      * @return
      */
     public Boolean checkWhetherNoAppInMyApp() throws UiObjectNotFoundException {
@@ -183,6 +188,7 @@ public class AppStorePage extends Common{
 
     /**
      * Check whether no app in AppUninstall page except 2 app for auto
+     *
      * @return
      */
     public Boolean checkWhetherNoAppInAppUninstall() throws UiObjectNotFoundException {
@@ -192,6 +198,7 @@ public class AppStorePage extends Common{
 
     /**
      * Install App in detail page
+     *
      * @throws InterruptedException
      */
     public void installAppInDetailPage() throws InterruptedException {
@@ -200,11 +207,12 @@ public class AppStorePage extends Common{
         device.pressEnter();
         Thread.sleep(5000);
         waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
-        waitForElementPresentByIDAndText("tv.fun.appstore:id/titleContainer","打开");
+        waitForElementPresentByIDAndText("tv.fun.appstore:id/titleContainer", "打开");
     }
 
     /**
      * Install App in detail page and back
+     *
      * @throws InterruptedException
      */
     public void installAppInDetailPageAndBack() throws InterruptedException {
@@ -213,16 +221,17 @@ public class AppStorePage extends Common{
         device.pressEnter();
         Thread.sleep(5000);
         waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
-        waitForElementPresentByIDAndText("tv.fun.appstore:id/titleContainer","打开");
+        waitForElementPresentByIDAndText("tv.fun.appstore:id/titleContainer", "打开");
         device.pressBack();
     }
 
     /**
      * Goto App Clean page
+     *
      * @throws InterruptedException
      */
     public void gotoAppCleanPageFromAppUninstallPage(Boolean NeedToAppMTab) throws InterruptedException, UiObjectNotFoundException {
-        if(NeedToAppMTab){
+        if (NeedToAppMTab) {
             moveToAppStoreTargetTab(appStoreTabs[5]);
         }
         gotoAppUninstallPage();
@@ -237,6 +246,7 @@ public class AppStorePage extends Common{
 
     /**
      * Uninstall App from App Clean page and back
+     *
      * @throws InterruptedException
      */
     public void uninstallAppFromAppCleanPage(String targetAppName) throws InterruptedException, UiObjectNotFoundException {
@@ -245,26 +255,26 @@ public class AppStorePage extends Common{
         int targetAppIndex = 0;
         UiObject eachAppObj = null;
         moveToRightForMultiple(2);
-        for(int loopTime=0; loopTime<appNum;){
+        for (int loopTime = 0; loopTime < appNum; ) {
             UiObject appList = findElementByID("tv.fun.master:id/listView");
             int displayedAppCount = appList.getChildCount();
-            for(int k=0; k<displayedAppCount; k++){
+            for (int k = 0; k < displayedAppCount; k++) {
                 loopTime++;
                 UiObject appListObj = findElementByID("tv.fun.master:id/listView");
                 eachAppObj = appListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(k));
                 UiObject appObj = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appNameView"));
                 String appName = appObj.getText();
-                if(targetAppName.equalsIgnoreCase(appName)){
+                if (targetAppName.equalsIgnoreCase(appName)) {
                     targetAppIndex = k;
                     break;
-                }else if(loopTime<appNum&&k==displayedAppCount-1){
+                } else if (loopTime < appNum && k == displayedAppCount - 1) {
                     k--;
                 }
                 moveToDown();
             }
             break;
         }
-        if(targetAppIndex!=0){
+        if (targetAppIndex != 0) {
             UiObject uninstallBtnOfApp = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
             device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);//cannot use click method in here
             waitForElementPresentByID("com.android.packageinstaller:id/uninstall_confirm");
@@ -279,6 +289,7 @@ public class AppStorePage extends Common{
 
     /**
      * Method for going to app uninstall page
+     *
      * @throws UiObjectNotFoundException
      */
     public void gotoAppUninstallPage() throws UiObjectNotFoundException, InterruptedException {
@@ -290,6 +301,7 @@ public class AppStorePage extends Common{
 
     /**
      * Uninstall App in App Uninstall page and back
+     *
      * @throws InterruptedException
      */
     public void uninstallAppInAppUninstallPage(String targetApp) throws InterruptedException, UiObjectNotFoundException {
@@ -306,13 +318,14 @@ public class AppStorePage extends Common{
 
     /**
      * Method for going to
+     *
      * @throws UiObjectNotFoundException
      */
     public void goToAppUninstallPage() throws UiObjectNotFoundException, InterruptedException {
         //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
         enterAppStorePage();
         UiObject tjTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text("推荐"));
-        if(!tjTab.isSelected()){
+        if (!tjTab.isSelected()) {
             moveToUpForMultiple(4);
             device.pressDPadUp();
         }
@@ -341,5 +354,30 @@ public class AppStorePage extends Common{
         moveToDown();
         moveToTheMostLeftOfTabPage();
         moveToRight();
+    }
+
+    /**
+     * Enter App Store page and install multiple app in first child list under one tab
+     */
+    public void installMultipleAppsInFirstChildList(String targetTab, int needApps) throws InterruptedException, UiObjectNotFoundException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+        enterAppStorePage();
+        moveToAppStoreTargetTab(targetTab);//appStoreTabs[4]
+        UiObject firstApp = null;
+        firstApp = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/image").index(0));
+        firstApp.clickAndWaitForNewWindow();
+        UiObject childList = findElementByID("tv.fun.appstore:id/list");
+        UiObject firstChild = childList.getChild(new UiSelector().resourceId("tv.fun.appstore:id/title"));
+        firstChild.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+        //安装应用
+        for (int i = 0; i < needApps; i++) {
+            UiObject appList = findElementByID("tv.fun.appstore:id/all_apps_view");
+            UiObject oneAppLine = appList.getChild(new UiSelector().className("android.widget.FrameLayout").index(i));
+            UiObject oneApp = oneAppLine.getChild(new UiSelector().resourceId("tv.fun.appstore:id/all_app_title"));
+            oneApp.clickAndWaitForNewWindow();
+            waitForAppDetailPageDisplay();
+            installAppInDetailPageAndBack();
+        }
     }
 }

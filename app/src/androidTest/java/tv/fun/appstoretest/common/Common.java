@@ -44,6 +44,7 @@ public class Common {
     public long execTime;
     public String runTool = "Auto";//Studio or Auto
     public String errorLog = "";
+    private static Process process;
 
     @Before
     public void setup() throws RemoteException, IOException {
@@ -167,6 +168,18 @@ public class Common {
     }
 
     /**
+     * 初始化进程
+     */
+    private static void initProcess() {
+        if (process == null)
+            try {
+                process = Runtime.getRuntime().exec("su");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+
+    /**
      * 适用于所有系统
      * @param commondStr
      */
@@ -188,12 +201,30 @@ public class Common {
     }
 
     /**
-     * Change int type to the string type
+     * Change string type to the int type
      */
     public int stringToInt(String intstr){
         Integer integer;
         integer = Integer.valueOf(intstr);
         return integer.intValue();
+    }
+
+    /**
+     * Change string type to the float type
+     */
+    public Float stringToFloat(String intstr){
+        Float value;
+        value = Float.valueOf(intstr);
+        return value;
+    }
+
+    /**
+     * Change float type to the string type
+     */
+    public String floatToString(Float intstr){
+        String value;
+        value = String.valueOf(intstr);
+        return value;
     }
 
     /**
@@ -305,6 +336,18 @@ public class Common {
      */
     public void back(){
         device.pressBack();
+    }
+
+    /**
+     * 连续多次按遥控器Back键
+     */
+    public void backForMultiple(int times){
+        if(times<0){
+            times=-times;
+        }
+        for(int i=1; i<=times; i++){
+            device.pressBack();
+        }
     }
 
     /**

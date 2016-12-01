@@ -17,6 +17,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.common.Utils;
 
@@ -2530,8 +2531,8 @@ public class TestAppStore extends AppStorePage {
         }
     }
 
-//            @Test
-//    public void test(){
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+            @Test
+    public void test(){
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 }
