@@ -366,6 +366,65 @@ public class TvCommon extends Common{
         }
     }
 
+    public void longPressUp(int iSecond){
+        longPress(0, iSecond);
+    }
+
+    public void longPressRight(int iSecond){
+        longPress(1, iSecond);
+    }
+
+    public void longPressDown(int iSecond){
+        longPress(2, iSecond);
+    }
+
+    public void longPressLeft(int iSecond){
+        longPress(3, iSecond);
+    }
+
+    // 需要将/dev/input/event3的权限设置为666才能运行长按操作
+    public void longPress(int iKey, int iSecond){
+        String [] asCmd = new String[7];
+
+        if(0 == iKey){ // Up
+            asCmd[0] = "sendevent /dev/input/event3 4 4 458834";
+            asCmd[1] = "sendevent /dev/input/event3 1 103 1";
+            asCmd[2] = "sendevent /dev/input/event3 0 0 0";
+            asCmd[3] = String.format("/system/bin/sleep %s", iSecond);
+            asCmd[4] = asCmd[0];
+            asCmd[5] = "sendevent /dev/input/event3 1 103 0";
+            asCmd[6] = asCmd[2];
+        }
+        else if(1 == iKey){ // Right
+            asCmd[0] = "sendevent /dev/input/event3 4 4 458831";
+            asCmd[1] = "sendevent /dev/input/event3 1 106 1";
+            asCmd[2] = "sendevent /dev/input/event3 0 0 0";
+            asCmd[3] = String.format("/system/bin/sleep %s", iSecond);
+            asCmd[4] = asCmd[0];
+            asCmd[5] = "sendevent /dev/input/event3 1 106 0";
+            asCmd[6] = asCmd[2];
+        }
+        else if(2 == iKey){ // Down
+            asCmd[0] = "sendevent /dev/input/event3 4 4 458833";
+            asCmd[1] = "sendevent /dev/input/event3 1 108 1";
+            asCmd[2] = "sendevent /dev/input/event3 0 0 0";
+            asCmd[3] = String.format("/system/bin/sleep %s", iSecond);
+            asCmd[4] = asCmd[0];
+            asCmd[5] = "sendevent /dev/input/event3 1 108 0";
+            asCmd[6] = asCmd[2];
+        }
+        else if(3 == iKey){ // Left
+            asCmd[0] = "sendevent /dev/input/event3 4 4 458832";
+            asCmd[1] = "sendevent /dev/input/event3 1 105 1";
+            asCmd[2] = "sendevent /dev/input/event3 0 0 0";
+            asCmd[3] = String.format("/system/bin/sleep %s", iSecond);
+            asCmd[4] = asCmd[0];
+            asCmd[5] = "sendevent /dev/input/event3 1 105 0";
+            asCmd[6] = asCmd[2];
+        }
+        Utils.execCommand(asCmd, false, true);
+    }
+
     public String checkExpectResult(UiObject uiObj, String sExpect){
         String sResult;
         String sActual = getUiObjText(uiObj);
