@@ -45,7 +45,8 @@ public class Utils {
 		DateFormat df = new SimpleDateFormat(sFormat);
 		return df.format(date);
 	}
-	
+
+    // 获取时间戳
 	public static long getCurSecond(){
 		Date date = new Date();
 		return date.getTime() / 1000;
@@ -171,6 +172,8 @@ public class Utils {
 		if(!bCondition){ // 条件假
             String sErrorText = String.format("[%s][%s] %d %s %s",
                     sModuleName, sCaseName, lConsume, sError, sOther);
+			execCommand(String.format("logcat -v time -d > /mnt/sdcard/autotest/logcat_%s_%s.log",
+                    sCaseName, getCurTime("yyyyMMddHHmmss")), false, false);
             Utils.funAssert(sErrorText, false);
         }
         else{
@@ -342,5 +345,4 @@ public class Utils {
         }
         return file.getAbsolutePath();
     }
-
 }

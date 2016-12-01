@@ -8,13 +8,8 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiWatcher;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import tv.fun.common.Utils;
 import tv.fun.common.Common;
+import tv.fun.common.Utils;
 
 public class TvCommon extends Common{
     private int m_iDelay = 1000;
@@ -400,27 +395,6 @@ public class TvCommon extends Common{
             }
             return false;
         }
-    }
-
-    public String executeCommand(String[] cmd) {
-        Utils.Print("Exec started!");
-        StringBuffer sb = new StringBuffer("");
-        Process pr = null;
-        try{
-            pr = Runtime.getRuntime().exec(cmd);
-            BufferedInputStream bi = new BufferedInputStream(pr.getInputStream());
-            BufferedReader br = new BufferedReader(new InputStreamReader(bi));
-            String line;
-            while((line = br.readLine()) != null){
-                sb.append(line + "\n");
-                Utils.Print(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String sRes = sb.toString();
-        Utils.Print("Exec finished!");
-        return sRes;
     }
 }
 
