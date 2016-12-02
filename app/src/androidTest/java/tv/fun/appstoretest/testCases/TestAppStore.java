@@ -433,13 +433,16 @@ public class TestAppStore extends AppStorePage {
         try{
             //移动焦点到导航条上任一tab
             moveToTargetTab(launcherTabs,launcherTabs[1], launcherTabID, 4);
-            moveToUp();
+            moveToUpForMultiple(2);
             //选中我的应用卡片，并点击
             UiObject myAppCardObj = findElementByID("com.bestv.ott:id/app");
             UiObject titleObj = findElementByID("com.bestv.ott:id/app_title");
             String nameOfCard = titleObj.getText();
             verifyString("", nameOfCard, "我的应用");
+            waitForElementPresentByID("com.bestv.ott:id/app");
             myAppCardObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+
             //断言
             UiObject myAppTitleObj = findElementByID("tv.fun.appstore:id/title");
             verifyString("", myAppTitleObj.getText(), "我的应用");
@@ -2395,6 +2398,7 @@ public class TestAppStore extends AppStorePage {
             //在应用卸载页面，点击应用卡片
             moveToDown();
             menu();
+            waitForElementPresentByID("android:id/tv_fun_menu_text");
             UiObject appDetailBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("详情"));
             verifyElementPresent("The app detail button is not displayed on the Menu pop-up", appDetailBtn);
 //        device.pressDPadRight();
@@ -2531,8 +2535,8 @@ public class TestAppStore extends AppStorePage {
         }
     }
 
-            @Test
-    public void test(){
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//            @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }

@@ -23,8 +23,6 @@ import tv.fun.common.Utils;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestTVMaster extends MasterApp {
-    public String[] masterCards = {"一键优化", "内存加速", "垃圾清理", "网络测速", "应用清理", "自启动管理", "网络诊断"};
-
     /**
      * 验证可以通过点击Launcher应用页面“电视助手”卡片，进入电视助手页面
      *
@@ -939,9 +937,7 @@ public class TestTVMaster extends MasterApp {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
             //点击"应用清理"卡片
-            UiObject cleanCard = findElementByText(masterCards[4], "tv.fun.master:id/home_item_title");
-            cleanCard.clickAndWaitForNewWindow();
-            waitForElementPresentByIDAndText("tv.fun.master:id/title", masterCards[4]);
+            gotoAppCleanPageInMaster();
             //按遥控器Menu键
             menu();
             Thread.sleep(500);
@@ -966,9 +962,7 @@ public class TestTVMaster extends MasterApp {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
             //点击"应用清理"卡片
-            UiObject cleanCard = findElementByText(masterCards[4], "tv.fun.master:id/home_item_title");
-            cleanCard.clickAndWaitForNewWindow();
-            waitForElementPresentByIDAndText("tv.fun.master:id/title", masterCards[4]);
+            gotoAppCleanPageInMaster();
             //按遥控器Home键
             home();
             waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
@@ -996,9 +990,7 @@ public class TestTVMaster extends MasterApp {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
             //点击"应用清理"卡片
-            UiObject cleanCard = findElementByText(masterCards[4], "tv.fun.master:id/home_item_title");
-            cleanCard.clickAndWaitForNewWindow();
-            waitForElementPresentByIDAndText("tv.fun.master:id/title", masterCards[4]);
+            gotoAppCleanPageInMaster();
             //按遥控器Back键
             back();
             //断言
@@ -1014,6 +1006,513 @@ public class TestTVMaster extends MasterApp {
         }
     }
 
+    /**
+     * Test that the UI of ap auto launch page displays correctly
+     */
+    @Test
+    public void Master_AutoL_01_testAutoLaunchPageUI(){
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            String statusText = statusObj.getText();
+            autoLObj.clickAndWaitForNewWindow();
+            UiObject pageTitleObj = findElementByID("tv.fun.master:id/title");
+            verifyString("", pageTitleObj.getText(), "自启动管理");
+            if (findElementByID("tv.fun.master:id/toolbar").exists()) {
+                UiObject appCountObj = findElementByID("tv.fun.master:id/app_count");
+                int appCount = stringToInt(appCountObj.getText());
+                String text = findElementByID("tv.fun.master:id/have").getText() + appCountObj.getFromParent(new UiSelector().className("android.widget.TextView").index(2)).getText();
+                UiObject disableBtn = findElementByID("tv.fun.master:id/disable_all_btn");
+                verifyElementPresent("", disableBtn);
+                verifyString("", text, "有款应用自启动");
+                verifyTrue("", appCount >= 1);
+                back();
+                int autoLOptions = stringToInt(statusText.replace("款应用自启动", "").replace("有", ""));
+                verifyIncludeString("", statusText, "款应用自启动");
+                verifyTrue("", autoLOptions >= 1);
+            } else {
+                UiObject msg = device.findObject(new UiSelector().className("android.widget.TextView").text("无自启动应用"));
+                UiObject result = device.findObject(new UiSelector().className("android.widget.TextView").text("系统状态良好"));
+                verifyElementPresent("", msg);
+                verifyElementPresent("", result);
+                back();
+                verifyIncludeString("", statusText, "无自启动应用");
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that the App option displays correctly in auto launch page
+     */
+    @Test
+    public void Master_AutoL_02_testAppOptionDisplayInAutoLaunchPage(){
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            String statusText = statusObj.getText();
+            autoLObj.clickAndWaitForNewWindow();
+            if (!findElementByID("tv.fun.master:id/toolbar").exists()) {
+                home();
+                //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面,并安装有自启动管理的应用
+                prepareAppWithAutoLaunch();
+                home();
+                //Launcher应用tab页面，点击电视助手，点击“自启动管理”卡片
+                gotoAutoLaunchPage();
+            }
+            UiObject listView = findElementByID("tv.fun.master:id/listview");
+            UiObject appObj = listView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            UiObject appImage = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appImage"));
+            UiObject appNameObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appName"));
+            UiObject curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            UiObject btnObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/switchButton"));
+            UiObject disableAllBtn = findElementByID("tv.fun.master:id/disable_all_btn");
+            verifyElementPresent("", appImage);
+            verifyElementPresent("", appNameObj);
+            verifyElementPresent("", curStatusObj);
+            verifyElementPresent("", btnObj);
+            verifyElementPresent("", disableAllBtn);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can open the auto launch for one app
+     */
+    @Test
+    public void Master_AutoL_03_testOpenAutoLaunchForApp(){
+        UiObject curStatusObj=null;
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            autoLObj.clickAndWaitForNewWindow();
+            if (!findElementByID("tv.fun.master:id/toolbar").exists()) {
+                home();
+                //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面,并安装有自启动管理的应用
+                prepareAppWithAutoLaunch();
+                home();
+                //Launcher应用tab页面，点击电视助手，点击“自启动管理”卡片
+                gotoAutoLaunchPage();
+            }
+            UiObject listView = findElementByID("tv.fun.master:id/listview");
+            UiObject appObj = listView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            UiObject btnObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/switchButton"));
+            UiObject disableAllBtn = findElementByID("tv.fun.master:id/disable_all_btn");
+            moveToDown();
+            moveToUp();
+            if(disableAllBtn.isFocused()){
+                moveToDown();
+            }
+            if("已允许".equalsIgnoreCase(curStatusObj.getText())){
+                device.pressEnter();
+                waitForElementNotPresent(findElementByText("已允许", "tv.fun.master:id/appStartState"));
+            }
+            curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            verifyString("", curStatusObj.getText(), "已禁止");
+            device.pressEnter();
+            waitForElementNotPresent(findElementByText("已禁止", "tv.fun.master:id/appStartState"));
+            curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            verifyString("", curStatusObj.getText(), "已允许");
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can close the auto launch for one app
+     */
+    @Test
+    public void Master_AutoL_04_testCloseAutoLaunchForApp(){
+        UiObject curStatusObj=null;
+        UiObject autoLObj = null;
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            autoLObj.clickAndWaitForNewWindow();
+            if (!findElementByID("tv.fun.master:id/toolbar").exists()) {
+                home();
+                //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面,并安装有自启动管理的应用
+                prepareAppWithAutoLaunch();
+                home();
+                //Launcher应用tab页面，点击电视助手，点击“自启动管理”卡片
+                gotoAutoLaunchPage();
+            }
+            UiObject listView = findElementByID("tv.fun.master:id/listview");
+            UiObject appObj = listView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
+            curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            UiObject btnObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/switchButton"));
+            UiObject disableAllBtn = findElementByID("tv.fun.master:id/disable_all_btn");
+            moveToDown();
+            moveToUp();
+            if(disableAllBtn.isFocused()){
+                moveToDown();
+            }
+            if("已禁止".equalsIgnoreCase(curStatusObj.getText())){
+                device.pressEnter();
+                waitForElementNotPresent(findElementByText("已禁止", "tv.fun.master:id/appStartState"));
+            }
+            curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            verifyString("", curStatusObj.getText(), "已允许");
+            device.pressEnter();
+            waitForElementNotPresent(findElementByText("已允许", "tv.fun.master:id/appStartState"));
+            curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
+            verifyString("", curStatusObj.getText(), "已禁止");
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that no response when pressing Menu btn in memory speed page
+     */
+    @Test
+    public void Master_AutoL_07_testNoMenuActionInAutoLPage() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            autoLObj.clickAndWaitForNewWindow();
+            //按遥控器Menu键
+            menu();
+            Thread.sleep(500);
+            //断言
+            verifyElementNotPresent("", "android:id/tv_fun_menu");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can back to Launcher home via pressing Home btn in auto launch page
+     */
+    @Test
+    public void Master_AutoL_08_testBackToLauncherHomeByHomeInAutoLPage() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            autoLObj.clickAndWaitForNewWindow();
+            //按遥控器Home键
+            home();
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can back to TV Master home via pressing Back btn in auto launch page
+     */
+    @Test
+    public void Master_AutoL_09_testBackToMasterPageByBackIAutoLPage() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“自启动管理”卡片
+            UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+            autoLObj.clickAndWaitForNewWindow();
+            //按遥控器Back键
+            back();
+            //断言
+            UiObject masterObj = device.findObject(new UiSelector().resourceId("tv.fun.master:id/tv_master_title").text("电视助手"));
+            verifyElementPresent("", masterObj);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test the UI of network check page displays correctly when checking
+     */
+    @Test
+    public void Master_WLZD_02_testNetworkCheckPageUIWhenChecking(){
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“网络诊断”卡片
+            UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            String statusText = statusObj.getText();
+            checkObj.clickAndWaitForNewWindow();
+            //诊断中UI
+            UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            UiObject ipObj = findElementByID("tv.fun.master:id/check_network_info_ip");
+            UiObject versionObj = findElementByID("tv.fun.master:id/check_network_info_version");
+            UiObject macObj = findElementByID("tv.fun.master:id/check_network_info_mac");
+            verifyElementPresent("", checkingObj);
+            verifyIncludeString("", ipObj.getText(), "公网 IP：");
+            verifyIncludeString("", versionObj.getText(), "版本号：");
+            verifyIncludeString("", macObj.getText(), "MAC 地址：28:76:CD:");
+            UiObject checkOptionList = findElementByID("tv.fun.master:id/check_network_result");
+            int optionsCount = checkOptionList.getChildCount();
+            verifyNumber("", optionsCount, 8);
+            UiObject firstOptionObj = checkOptionList.getChild(new UiSelector().className("android.widget.LinearLayout").index(0));
+            UiObject firstOptionIcon = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_icon"));
+            UiObject firstOptionText = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_text"));
+            verifyElementPresent("", firstOptionIcon);
+            verifyElementPresent("", firstOptionText);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test the UI of network check page displays correctly after checking
+     */
+    @Test
+    public void Master_WLZD_03_testNetworkCheckPageUIAfterCheck(){
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“网络诊断”卡片
+            UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            String statusText = statusObj.getText();
+            checkObj.clickAndWaitForNewWindow();
+            //诊断后UI
+            UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            waitForElementNotPresent(checkingObj);
+            waitForElementPresentByID("tv.fun.master:id/check_network_again");
+            UiObject checkOptionList = findElementByID("tv.fun.master:id/check_network_result");
+            int optionsCount = checkOptionList.getChildCount();
+            verifyNumber("", optionsCount, 8);
+            UiObject firstOptionObj = checkOptionList.getChild(new UiSelector().className("android.widget.LinearLayout").index(0));
+            UiObject firstOptionIcon = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_icon"));
+            UiObject firstOptionText = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_text"));
+            verifyElementPresent("", firstOptionIcon);
+            verifyElementPresent("", firstOptionText);
+            UiObject retryObj = findElementByID("tv.fun.master:id/check_network_again");
+            UiObject finishObj = findElementByID("tv.fun.master:id/check_network_finish");
+            verifyString("", retryObj.getText(), "重新检测");
+            verifyString("", finishObj.getText(), "完成");
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can retry network checking
+     */
+    @Test
+    public void Master_WLZD_12_testRetryNetworkCheckingAfterCheck(){
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“网络诊断”卡片
+            UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            String statusText = statusObj.getText();
+            checkObj.clickAndWaitForNewWindow();
+            //诊断后UI
+            UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            waitForElementNotPresent(checkingObj);
+            waitForElementPresentByID("tv.fun.master:id/check_network_again");
+            UiObject retryObj = findElementByID("tv.fun.master:id/check_network_again");
+            verifyString("", retryObj.getText(), "重新检测");
+            retryObj.click();
+            UiObject retryChecking = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            verifyElementPresent("", retryChecking);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can finish network checking
+     */
+    @Test
+    public void Master_WLZD_13_testFinishNetworkCheckingAfterCheck(){
+        try{
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            moveToRightForMultiple(5);
+            //点击“网络诊断”卡片
+            UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
+            UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
+            String statusText = statusObj.getText();
+            checkObj.clickAndWaitForNewWindow();
+            //诊断后UI
+            UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            waitForElementNotPresent(checkingObj);
+            waitForElementPresentByID("tv.fun.master:id/check_network_again");
+            UiObject finishObj = findElementByID("tv.fun.master:id/check_network_finish");
+            verifyString("", finishObj.getText(), "完成");
+            finishObj.click();
+            verifyElementNotPresent("", findElementByID("tv.fun.master:id/check_network_info_version"));
+            UiObject masterObj = device.findObject(new UiSelector().resourceId("tv.fun.master:id/tv_master_title").text("电视助手"));
+            verifyElementPresent("", masterObj);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that No repsonse when pressing menu in NetWork Check page
+     */
+    @Test
+    public void Master_WLZD_19_testNoMenuActionInNetWorkCheckpage() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击"网络诊断"卡片
+            gotoNetworkCheckPageFromMaster();
+            //按遥控器Menu键
+            menu();
+            Thread.sleep(500);
+            //断言
+            verifyElementNotPresent("", "android:id/tv_fun_menu");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can back to Launcher home page after pressing home btn in NetWork Check page
+     */
+    @Test
+    public void Master_WLZD_20_testBackToLauncherFromNetworkCheckByHome() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击"网络诊断"卡片
+            gotoNetworkCheckPageFromMaster();
+            UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            verifyElementPresent("", checkingObj);
+            //按遥控器Home键
+            home();
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can back to TV Master home page after pressing back btn in Network check page
+     */
+    @Test
+    public void Master_WLZD_21_testBackToMasterHomeFromNetworkCheckByBack() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击"网络诊断"卡片
+            gotoNetworkCheckPageFromMaster();
+            UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
+            verifyElementPresent("", checkingObj);
+            //按遥控器Back键
+            back();
+            //断言
+            UiObject masterObj = device.findObject(new UiSelector().resourceId("tv.fun.master:id/tv_master_title").text("电视助手"));
+            verifyElementPresent("", masterObj);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
             @Test
     public void test(){
         TvCommon.printAllMethods(this.getClass().getName());

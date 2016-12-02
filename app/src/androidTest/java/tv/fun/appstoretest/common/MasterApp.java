@@ -3,6 +3,7 @@ package tv.fun.appstoretest.common;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.view.KeyEvent;
 
 import java.io.IOException;
 
@@ -82,5 +83,58 @@ public class MasterApp extends AppStorePage {
         UiObject firstApp = listView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(index));
         String firstAppName = firstApp.getChild(new UiSelector().resourceId("tv.fun.master:id/appNameView")).getText();
         return firstAppName;
+    }
+
+    /**
+     * Click "网络诊断"卡片，进入页面
+     */
+    public void gotoAutoLaunchPage() throws UiObjectNotFoundException, InterruptedException {
+        //Launcher应用tab页面，点击电视助手
+        enterTVMasterPage();
+        //点击“自启动管理”
+        moveToRightForMultiple(5);
+        UiObject cardObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+        cardObj.clickAndWaitForNewWindow();
+    }
+
+    /**
+     * Click "自启动管理"卡片，进入页面
+     */
+    public void gotoAutoLaunchPageFromMaster() throws UiObjectNotFoundException {
+        moveToRightForMultiple(5);
+        UiObject cardObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
+        cardObj.clickAndWaitForNewWindow();
+    }
+
+    /**
+     * prepare one app with auto launch
+     */
+    public void prepareAppWithAutoLaunch() throws InterruptedException, UiObjectNotFoundException {
+        //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+        enterAppStorePage();
+        menu();
+        waitForElementPresentByID("android:id/tv_fun_menu_icon");
+        UiObject searchIcon = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("搜索"));
+        searchIcon.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/search_single_key");
+        //Input search key and search
+        //Input search key and search
+        for(int i=0; i< keywordForAutoLApp.length; i++){
+            device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text(keywordForAutoLApp[i])).click();
+        }
+        moveToRightForMultiple(6);
+        UiObject appObj = findElementByID("tv.fun.appstore:id/app_title");
+        device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+        waitForAppDetailPageDisplay();
+        installAppInDetailPage();
+    }
+
+    /**
+     * Click "网络诊断"卡片，进入页面
+     */
+    public void gotoNetworkCheckPageFromMaster() throws UiObjectNotFoundException {
+        moveToRightForMultiple(5);
+        UiObject cardObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
+        cardObj.clickAndWaitForNewWindow();
     }
 }

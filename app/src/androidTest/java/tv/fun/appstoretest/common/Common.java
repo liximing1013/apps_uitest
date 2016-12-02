@@ -45,6 +45,7 @@ public class Common {
     public String runTool = "Auto";//Studio or Auto
     public String errorLog = "";
     private static Process process;
+    public String[] keywordForAutoLApp = {"D", "S", "Y", "Y", "G", "J"};//有自启动管理权限的应用“电视应用管家”搜索关键字
 
     @Before
     public void setup() throws RemoteException, IOException {
@@ -477,6 +478,29 @@ public class Common {
     }
 
     /**
+     * Wait for an element not present. Wait for an element form "exist" to
+     * "disappear" in page.
+     *
+     * @param ele
+     *            an element
+     * @throws InterruptedException
+     */
+    public void waitForElementNotPresent(UiObject ele)
+            throws InterruptedException {
+        for (int second = 0;; second++) {
+            if (second >= timeout) {
+                System.out.println("timeout: wait for element not present <"
+                        + ele + ">");
+                break;
+            }
+            if (!ele.exists()) {
+                break;
+            }
+            Thread.sleep(sleepInterval);
+        }
+    }
+
+    /**
      * Wait for an text note present. The element on the page exists in
      * the pre-page, waiting for the element not exist.
      *
@@ -525,7 +549,7 @@ public class Common {
     public void moveToTargetTab(String[] tablist, String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException {
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
         if(!tab.isSelected()){
-            moveToUpForMultiple(4);//Move to navBar to avoid that the current focusot in narBar
+            moveToUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
             if(tabResouceID.equalsIgnoreCase(launcherTabID)){
                 if(findElementByID(networkIconIDInPopup).exists()){
                     device.pressDPadDown();
