@@ -10,6 +10,7 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.support.test.uiautomator.UiWatcher;
 import android.util.Log;
 
 import org.junit.Before;
@@ -20,9 +21,9 @@ import org.junit.runners.MethodSorters;
 
 import java.util.Random;
 
+import tv.fun.common.HttpUtils;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
-import tv.fun.common.HttpUtils;
 
 import static android.content.ContentValues.TAG;
 
@@ -221,22 +222,22 @@ public class TestLongVideoPlay {
             }
     }
 
-    @Test //50部电影播放
+    @Test //电影播放
     public void LC_PLAY_02_Test100FilmPlay() throws InterruptedException {
-//        final UiObject2 Player = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
-//        //注册监听器
-//        uiDevice.registerWatcher("testWatcher", new UiWatcher() {
-//            @Override
-//            public boolean checkForCondition() {
-//                if(uiDevice.hasObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER))){
-//                    Player.isSelected();
-//                    Log.i("testWatcher", "监听器被触发了");
-//                    return true;
-//                }
-//                Log.i("testWatcher", "监听器未被触发");
-//                return false;
-//            }
-//        });
+        final UiObject2 Player = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
+        //注册监听器
+        uiDevice.registerWatcher("testWatcher", new UiWatcher() {
+            @Override
+            public boolean checkForCondition() {
+                System.out.println("监听器检查函数开始运行--播放器是否在运行");
+                if(Player == null){
+                    Log.i("testWatcher", "监听器被触发了");
+                    return true;
+                }
+                Log.i("testWatcher", "监听器未被触发");
+                return false;
+            }
+        });
         System.out.println("Are you ready...Let's GO GO GO");
         try {
             this.EnterFilmCommendHall();
@@ -245,7 +246,7 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
             this.RandomPlayFilm();
             systemWait(SHORT_WAIT);
-            for (int j = 0; j <= 50; j++){
+            for (int j = 0; j <= 55; j++){
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
                 uiDevice.waitForIdle();
@@ -254,8 +255,8 @@ public class TestLongVideoPlay {
                 UiObject2 PayButton = uiDevice.findObject(By.text("付费"));
                 if(PayButton != null){
                     System.out.println("本片为Vip影片,请去购买金卡会员好吗,麻溜哒...");
-//                  uiDevice.resetWatcherTriggers();
-//                  Log.i("testWatcher", "重置监听器成功");
+                    uiDevice.resetWatcherTriggers();
+                    Log.i("testWatcher", "重置监听器成功");
                     uiDevice.pressDPadCenter();
                     systemWait(WAIT);
                     uiDevice.pressDPadLeft();
@@ -274,10 +275,12 @@ public class TestLongVideoPlay {
                     Utils.writeCaseResult(TextView.getText(),m_Pass,m_Time);
                     uiDevice.pressBack();
                     uiDevice.pressDPadRight();
-//                  uiDevice.removeWatcher("testWatcher");
+                    uiDevice.removeWatcher("testWatcher");
                     systemWait(WAIT);
                 }else {
                     System.out.println("本片为免费影片，请尽情欣赏，呵呵哒.....");
+                    uiDevice.resetWatcherTriggers();
+                    Log.i("testWatcher", "重置监听器成功");
                     uiDevice.pressDPadCenter();
                     systemWait(LONG_WAIT);
                     uiDevice.pressDPadCenter();//暂停
@@ -306,6 +309,7 @@ public class TestLongVideoPlay {
                     uiDevice.pressBack();
                     systemWait(WAIT);
                     uiDevice.pressDPadRight();
+                    uiDevice.removeWatcher("testWatcher");
                     systemWait(WAIT);
                 }
             }

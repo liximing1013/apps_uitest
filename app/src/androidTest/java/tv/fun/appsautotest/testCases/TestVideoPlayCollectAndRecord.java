@@ -20,9 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.util.List;
 import java.util.Random;
 
-import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
@@ -31,14 +31,14 @@ import static android.support.test.uiautomator.By.text;
 /**
  * Created by lixm on 2016/10/28
  * Mix
- * test case: 28
+ * test case: 36
  **/
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestVideoPlayCollectAndRecord {
-    Instrumentation instrument;
-    UiDevice uiDevice;
+    private Instrumentation instrument;
+    private UiDevice uiDevice;
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 8;
@@ -74,11 +74,11 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(WAIT);
     }
 
-    @Test //获取用例名
-    public void test(){
-
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//    @Test //获取用例名
+//    public void test(){
+//
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
     @Test //体育Tab下小视频收藏
     public void LC_SV_10_SmallVideoCollectRecord() {
@@ -266,6 +266,41 @@ public class TestVideoPlayCollectAndRecord {
 
     }
 
+    @Test //NBA支持专题类型
+    public void LC_NBA_08_EnterNBAFixedLocation(){
+        try{
+            EnterNBAHomePage();
+            uiDevice.pressDPadDown();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject ImageView = uiDevice.findObject(new UiSelector().className("android.widget.ImageView")
+                    .resourceId("com.bestv.ott:id/special_player_list_item_status_icon"));
+            if(ImageView.exists()){
+                System.out.println("小窗口视频播放暂停");
+                uiDevice.pressDPadLeft();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(PlayVideoTime);
+                m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
+                m_uiObj = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
+                Utils.writeCaseResult("视频正常播放",m_uiObj != null,m_Time);
+            }else {
+                Utils.writeCaseResult("False",false,m_Time);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+
+    }
+
     @Test //进入新闻大厅随机全屏播放一新闻
     public void LC_NEWS_11_FullScreenPlayRandomNews() {
         try {
@@ -329,7 +364,39 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test  //排行榜任选一影片播放
+    @Test //新闻头条生成记录
+    public void LC_MEWS_12_AddNewsRecord(){
+        try{
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(WAIT);
+            UiObject NewsTitle = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoTime);
+            uiDevice.pressBack();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject NewsTitle2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
+            if(NewsTitle.getText().equals(NewsTitle2.getText())){
+                Utils.writeCaseResult("播放记录页面显示正确",true,m_Time);
+            }else {
+                Utils.writeCaseResult("播放记录页面显示错误",false,m_Time);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //排行榜任选一影片播放
     public void LC_PHB_04_RankListPlayVideo() {
         try {
             //排行榜数据每天更新一次，每天运行脚本时，播放影片不同
@@ -746,6 +813,42 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
+    @Test //英超首页预约比赛
+    public void LC_PL_08_PremierLeaguePageOrderMatch(){
+        try{
+            EnterPLHomePage();
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject OrderIcon = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/livehint")
+                    .className("android.widget.TextView"));
+            if(OrderIcon.exists()){
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadLeft();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 OrderText = uiDevice.findObject(By.text("取消预约"));
+                m_Actual = "取消预约";
+                m_Expect = OrderText.getText();
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("页面选项显示正确",m_Pass,m_Time);
+            }else {
+                System.out.print("无可预约英超比赛");
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
     @Test //进入视频分类一周更新视频
     public void LC_VC_01_EnterNewVideo() {
         try {
@@ -852,7 +955,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //Launcher右移
+    @Test
     public void LC_SY_03_LauncherMove() {
         try {
             this.RightMoveNo1();
@@ -864,11 +967,173 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag =false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
+    }
+
+    @Test //列表页筛选页面
+    public void LC_SX_01_FilterPageChoose(){
+        try{
+            EnterFilmFilterPage();
+            uiDevice.pressDPadDown();
+            systemWait(WAIT);
+            UiObject FilterT = uiDevice.findObject(new UiSelector().text("地区"));
+            Assert.assertEquals("地区",FilterT.getText());
+            List<UiObject2> list = uiDevice.findObjects(By.res("com.bestv.ott:id/filter_page_title"));
+            if(list.size() == 5 ){
+                Utils.writeCaseResult("True",true,m_Time);
+            }else {
+                Utils.writeCaseResult("False",false,m_Time);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag =false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //详情页演职员表跳转
+    public void LC_DETAIL_06_DetailsPagePerformerJump(){
+        try{
+            RightMoveNo3();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
+            UiObject ActorName1 = uiDevice.findObject(new UiSelector().focused(true));
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject2 ActorName2 = uiDevice.findObject(By.res("com.bestv.ott:id/top_title"));
+            String a1 = ActorName1.getText() + "的相关影片";
+            String a2 = ActorName2.getText();
+            if (a1 == a2) {
+                System.out.print("True" + a2);
+            } else {
+                System.out.print("false" +a1);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
+    }
+
+    @Test //详情页付费包跳转
+    public void LC_DETAIL_07_DetailsPagePayPackPageJump() {
+        try {
+            RightMoveNo3();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject VideoName = uiDevice.findObject(new UiSelector().className("android.widget.TextView")
+            .resourceId("com.bestv.ott:id/detail_title"));
+            UiObject PayVip = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/discripse")
+                    .text("付费"));
+            if(PayVip != null){
+                uiDevice.pressDPadRight();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 PayTitle = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
+                Assert.assertEquals("请选择要购买的媒体或服务",PayTitle.getText());
+                uiDevice.pressDPadDown();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject PayVip1 = uiDevice.findObject(new UiSelector().text("付费开通"));
+                m_Actual = PayVip1.getText();
+                m_Expect = "付费开通";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("跳转至付费包页面失败",m_Pass,m_Time);
+            }else {
+                System.out.println("您可以直接观看："+VideoName.getText());
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //详情页片花
+    public void LC_DETAIL_08_DetailsPageTrailers(){
+        try{
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject Trail = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/icon"));
+            if(Trail.exists()){
+                RightMoveNo3();
+                UiObject2 TrailText = uiDevice.findObject(By.text("精彩片花"));
+                Assert.assertEquals("精彩片花",TrailText.getText());
+                systemWait(WAIT);
+                uiDevice.pressDPadDown();
+                m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/detail_related_vedio_tag"));
+                m_ObjId = "com.bestv.ott:id/detail_related_vedio_tag";
+                Utils.writeCaseResult("片花显示错误",m_uiObj != null ,m_Time);
+            }else {
+                Utils.writeCaseResult("本片无精彩片花",false,m_Time);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //详情页更多
+    public void LC_DETAIL_09_DetailsPageMoreButton(){
+        try{
+            RightMoveNo3();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject More = uiDevice.findObject(new UiSelector().text("更多>").resourceId("com.bestv.ott:id/detail_more_text"));
+            if(More.exists()){
+                uiDevice.pressDPadUp();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 Brief = uiDevice.findObject(By.text("简 介"));
+                m_Actual = Brief.getText();
+                m_Expect = "简 介";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("简介页面跳转失败",m_Pass,m_Time);
+            }else {
+                System.out.println("本片无更多选项");
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+
     }
 
     private void openTabFromLauncherHomeByresId(UiDevice device, UiObject2 resourceId) {
@@ -894,6 +1159,18 @@ public class TestVideoPlayCollectAndRecord {
         device.waitForIdle();
         systemWait(WAIT);
     }
+
+    private void EnterFilmFilterPage() {
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadDown();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        systemWait(WAIT);
+        uiDevice.pressDPadLeft();
+        systemWait(WAIT);
+        uiDevice.pressDPadLeft();
+        systemWait(WAIT);
+    } //进入电影筛选页面
 
     private void systemWait(int seconds) {
 
@@ -985,6 +1262,24 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
         }
     }//右移步数2
+
+    private void RightMoveNo3(){
+        int i = 0;
+        while (i<=2){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    }//右移步数3
+
+    private void LeftMoveNo1(){
+        int i = 0;
+        while (i<=3){
+            i++;
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+        }
+    }//右移步数3
 
     private void DownMoveNo1(){
         int i = 0;
