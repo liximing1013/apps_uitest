@@ -81,7 +81,7 @@ public class TestVideoPlayCollectAndRecord {
         TvCommon.printAllMethods(this.getClass().getName());
     }
 
-    @Test //体育Tab下小视频收藏
+    @Test //小视频收藏
     public void LC_SV_10_SmallVideoCollectRecord() {
         try {
             uiDevice.pressDPadUp();
@@ -108,7 +108,8 @@ public class TestVideoPlayCollectAndRecord {
                systemWait(SHORT_WAIT);
                uiDevice.pressDPadCenter();
                systemWait(WAIT);
-               UiObject Text2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/special_player_favorite").text("已收藏"));
+               UiObject Text2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/special_player_favorite")
+                       .text("已收藏"));
                m_Expect = "已收藏";
                m_Actual = Text2.getText();
                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
@@ -117,14 +118,14 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag =false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
 
-    @Test //进入视频分类页直播大厅
+    @Test //视频分类页直播大厅
     public void LC_BL_01_EnterBesTVLivePage() {
         try {
             this.EnterVideoClassifyPage();
@@ -139,10 +140,10 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(LONG_WAIT);
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/live_hall_title"));
             m_ObjId = "com.bestv.ott:id/live_hall_title";
-            Utils.writeCaseResult("进入直播大厅失败",m_uiObj !=null,m_Time);
+            Utils.writeCaseResult("进入直播大厅失败",m_uiObj != null,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag =false;
         }
         finally {
@@ -150,7 +151,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test  //进入NBA首页全屏播放小窗口
+    @Test  //NBA首页全屏播放小窗口
     public void LC_NBA_01_EnterNBAHomePage() {
         try {
             this.EnterNBAHomePage();
@@ -162,7 +163,7 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag =false;
         }
         finally {
@@ -186,7 +187,7 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -209,14 +210,14 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
 
-    @Test //NBA购买NBA包
+    @Test //购买NBA包
     public void LC_NBA_58_PayNBAPage(){
         try {
             this.EnterNBAHomePage();
@@ -234,7 +235,7 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -259,7 +260,7 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
@@ -267,7 +268,7 @@ public class TestVideoPlayCollectAndRecord {
 
     }
 
-    @Test //NBA支持专题类型
+    @Test //NBA固定位专题类型
     public void LC_NBA_08_EnterNBAFixedLocation(){
         try{
             EnterNBAHomePage();
@@ -302,7 +303,7 @@ public class TestVideoPlayCollectAndRecord {
 
     }
 
-    @Test //进入新闻大厅随机全屏播放一新闻
+    @Test //新闻大厅全屏播放新闻
     public void LC_NEWS_11_FullScreenPlayRandomNews() {
         try {
             uiDevice.pressDPadRight();
@@ -338,7 +339,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //看看新闻直播正常播放
+    @Test //看看新闻直播
     public void LC_NEWS_09_KanKanNewsNormalPlay() {
         try {
             this.EnterVideoClassifyPage();
@@ -397,7 +398,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //排行榜任选一影片播放
+    @Test //排行榜任选影片播放
     public void LC_PHB_04_RankListPlayVideo() {
         try {
             //排行榜数据每天更新一次，每天运行脚本时，播放影片不同
@@ -409,7 +410,6 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(WAIT);
             this.DownMoveNo1();
             uiDevice.pressDPadCenter();
-            uiDevice.wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
@@ -432,14 +432,14 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag =false;
-            resultStr =e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
 
-    @Test //进入视频分类页排行榜
+    @Test //视频分类页排行榜
     public void LC_PHB_02_EnterRankListPage() {
         try {
             this.EnterVideoClassifyPage();
@@ -453,7 +453,6 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             UiObject2 TextViewer = uiDevice.findObject(By.text("TOP1"));
-//        Assert.assertEquals("TOP1",TextViewer.getText());
             m_Actual = "TOP1";
             m_Expect = TextViewer.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
@@ -470,7 +469,7 @@ public class TestVideoPlayCollectAndRecord {
             Utils.writeCaseResult("无法进入媒体详情页", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr =e.toString();
+            resultStr += e.toString();
             resultFlag =false;
         }
         finally {
@@ -478,7 +477,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入顶部快捷栏天气
+    @Test //顶部快捷栏--天气
     public void LC_TB_03_EnterWeatherTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -489,22 +488,21 @@ public class TestVideoPlayCollectAndRecord {
             this.openTopBarFromLauncherHomeByresId(uiDevice, Weather);
             systemWait(WAIT);
             UiObject2 TextViewer1 = uiDevice.findObject(text("按 \uE693 菜单键管理城市"));
-//          Assert.assertEquals("按 \uE693 菜单键管理城市",TextViewer1.getText());
             m_Expect = "按 \uE693 菜单键管理城市";
             m_Actual = TextViewer1.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入天气页面失败！", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultFlag =false;
-            resultStr = e.toString();
+            resultFlag = false;
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
 
-    @Test //进入顶部快捷栏我的应用
+    @Test //顶部快捷栏--我的应用
     public void LC_TB_04_EnterAppTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -515,7 +513,6 @@ public class TestVideoPlayCollectAndRecord {
             this.openTabFromLauncherHomeByresId(uiDevice, ResId2);
             systemWait(WAIT);
             UiObject2 TextViewer2 = uiDevice.findObject(text("我的应用"));
-//          Assert.assertEquals("我的应用",TextViewer2.getText());
             m_Expect = "我的应用";
             m_Actual = TextViewer2.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
@@ -523,13 +520,13 @@ public class TestVideoPlayCollectAndRecord {
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         } finally {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
     }
 
-    @Test //进入顶部快捷栏播放记录
+    @Test //顶部快捷栏--播放记录
     public void LC_TB_05_EnterHistoryTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -540,7 +537,6 @@ public class TestVideoPlayCollectAndRecord {
             this.openTabFromLauncherHomeByresId(uiDevice, ResId3);
             systemWait(WAIT);
             UiObject2 TextViewer3 = uiDevice.findObject(text("播放记录"));
-//          Assert.assertEquals("播放记录", TextViewer3.getText());
             m_Expect = "播放记录";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
@@ -548,13 +544,13 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         } finally {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
     }
 
-    @Test //进入顶部快捷栏消息中心
+    @Test //顶部快捷栏--消息中心
     public void LC_TB_06_EnterMessageTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -572,13 +568,13 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         } finally {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
     }
 
-    @Test //进入顶部快捷栏通用设置
+    @Test //顶部快捷栏--通用设置
     public void LC_TB_07_EnterSettingsTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -596,13 +592,13 @@ public class TestVideoPlayCollectAndRecord {
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         } finally {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
     }
 
-    @Test //进入顶部快捷栏网络
+    @Test //顶部快捷栏--网络
     public void LC_TB_08_EnterNetworkTopBars(){
         try {
             uiDevice.pressDPadUp();
@@ -626,7 +622,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入顶部快捷栏U盘
+    @Test //顶部快捷栏--U盘
     public void LC_TB_09_EnterStorageTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -662,7 +658,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //英超首页播放小视频专题
+    @Test //英超播放小视频专题
     public void LC_PL_03_PremierLeaguePlaySmallVideo() {
         try {
             this.EnterPLHomePage();
@@ -672,8 +668,6 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-//       UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
-//       Assert.assertNotNull(VideoClazz);
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("英超首页小视频播放失败", m_uiObj != null, m_Time);
@@ -720,7 +714,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入英超首页全部轮次新增选项-查看历史赛季
+    @Test //英超首页全部轮次新增选项--查看历史赛季
     public void LC_PL_05_EnterPremierLeagueAllRound(){
         this.EnterPLHomePage();
         systemWait(SHORT_WAIT);
@@ -748,7 +742,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //英超查看历史赛季切换对比
+    @Test //英超--查看历史赛季切换对比
     public void LC_PL_06_PremierLeagueAllRoundContrast(){
         this.EnterPLHomePage();
         systemWait(SHORT_WAIT);
@@ -761,7 +755,8 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
         systemWait(WAIT);
-        UiObject SaiJi = uiDevice.findObject(new UiSelector().text("2016-2017赛季").resourceId("com.bestv.ott:id/fa_round_title"));
+        UiObject SaiJi = uiDevice.findObject(new UiSelector().text("2016-2017赛季")
+                .resourceId("com.bestv.ott:id/fa_round_title"));
         try {
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
@@ -771,7 +766,8 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-            UiObject SaiJi2 = uiDevice.findObject(new UiSelector().text("2015-2016赛季").resourceId("com.bestv.ott:id/fa_round_title"));
+            UiObject SaiJi2 = uiDevice.findObject(new UiSelector().text("2015-2016赛季")
+                    .resourceId("com.bestv.ott:id/fa_round_title"));
             if(SaiJi == SaiJi2){
                 Utils.writeLogs("修改成功后历史赛季显示应不相同","历史赛季更改成功");
             }else{
@@ -788,7 +784,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入英超节目
+    @Test //英超节目列表页
     public void LC_PL_07_PremierLeagueProgram(){
         this.EnterPLHomePage();
         systemWait(SHORT_WAIT);
@@ -806,7 +802,7 @@ public class TestVideoPlayCollectAndRecord {
             Utils.writeCaseResult("进入英超节目页面失败",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
-            resultStr = e.toString();
+            resultStr += e.toString();
             resultFlag = false;
         }
         finally {
@@ -814,7 +810,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //英超首页预约比赛
+    @Test //英超主页预约比赛
     public void LC_PL_08_PremierLeaguePageOrderMatch(){
         try{
             EnterPLHomePage();
@@ -850,7 +846,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //进入视频分类一周更新视频
+    @Test //视频分类一周更新视频
     public void LC_VC_01_EnterNewVideo() {
         try {
             this.EnterVideoClassifyPage();
@@ -860,7 +856,6 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
-            uiDevice.wait(Until.findObject(By.text("相关推荐")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
@@ -880,7 +875,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //焦点大图
+    @Test //焦点大图5s切换
     public void LC_SY_01_FocusImageThreePoint() {
         try {
             systemWait(WAIT);
@@ -890,14 +885,14 @@ public class TestVideoPlayCollectAndRecord {
         }catch(Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr =e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
     }
 
-    @Test //免费大片清晰度引导开通金卡会员
+    @Test //免费大片--清晰度引导开通金卡会员
     public void LC_VIP_22_VipViaDefinition() {
         try {
             this.EnterFreeFilmPage();
@@ -932,7 +927,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //Launcher首页点击搜索框
+    @Test //Launcher首页--搜索框
     public void LC_SY_02_ClickSearchBar() {
         try {
             uiDevice.pressDPadUp();
@@ -956,7 +951,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test
+    @Test //Launcher首页页面图片配置
     public void LC_SY_03_LauncherMove() {
         try {
             this.RightMoveNo1();
@@ -996,7 +991,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //详情页演职员表跳转
+    @Test //详情页--演职员表跳转
     public void LC_DETAIL_06_DetailsPagePerformerJump(){
         try{
             RightMoveNo3();
@@ -1028,7 +1023,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //详情页付费包跳转
+    @Test //详情页--付费选项跳转
     public void LC_DETAIL_07_DetailsPagePayPackPageJump() {
         try {
             RightMoveNo3();
@@ -1068,7 +1063,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //详情页片花
+    @Test //详情页--片花选项
     public void LC_DETAIL_08_DetailsPageTrailers(){
         try{
             uiDevice.pressDPadRight();
@@ -1102,7 +1097,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //详情页更多
+    @Test //详情页--更多选项
     public void LC_DETAIL_09_DetailsPageMoreButton(){
         try{
             RightMoveNo3();

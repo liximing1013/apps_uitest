@@ -22,6 +22,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
@@ -35,8 +36,8 @@ import static android.support.test.uiautomator.By.text;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestMenuFunctionOnEveryPage {
-    Instrumentation instrument;
-    UiDevice uiDevice;
+    private Instrumentation instrument;
+    private UiDevice uiDevice;
     //设定等待时间
     private static final int SHORT_WAIT = 1;
     private static final int WAIT = 5;
@@ -72,11 +73,11 @@ public class TestMenuFunctionOnEveryPage {
         systemWait(WAIT);
     }
 
-//    @Test //获取用例名
-//    public void test(){
-//
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+    @Test //获取用例名
+    public void test(){
+
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 
     @Test //电视Tab页面menu键操作
     public void LC_MENU_01_TVTabMenuOperation() {

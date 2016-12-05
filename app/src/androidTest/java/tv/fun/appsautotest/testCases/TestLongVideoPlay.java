@@ -85,7 +85,7 @@ public class TestLongVideoPlay {
         systemWait(SHORT_WAIT);
     }
 
-    @Test //多部电视剧电视剧播放
+    @Test //电视剧播放
     public void LC_PLAY_01_TestLongVideoPlay() throws InterruptedException {
         System.out.println("电视剧的播放开始了，哇咔咔.....");
         EnterTVVideoListPage();//进入电视剧列表页全部
@@ -323,7 +323,7 @@ public class TestLongVideoPlay {
         }
     }
 
-    @Test //推荐大厅更新剧集
+    @Test //更新电视剧播放
     public void LC_PLAY_03_TestTVVideoSelectionPlay() throws InterruptedException{
         try{
             System.out.println("电视剧选集选择->播放");
