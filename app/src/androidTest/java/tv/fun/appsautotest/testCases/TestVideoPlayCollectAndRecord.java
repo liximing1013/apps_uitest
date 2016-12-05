@@ -23,6 +23,7 @@ import org.junit.runners.MethodSorters;
 import java.util.List;
 import java.util.Random;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
@@ -74,11 +75,11 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(WAIT);
     }
 
-//    @Test //获取用例名
-//    public void test(){
-//
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+    @Test //获取用例名
+    public void test(){
+
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 
     @Test //体育Tab下小视频收藏
     public void LC_SV_10_SmallVideoCollectRecord() {
@@ -365,7 +366,7 @@ public class TestVideoPlayCollectAndRecord {
     }
 
     @Test //新闻头条生成记录
-    public void LC_MEWS_12_AddNewsRecord(){
+    public void LC_NEWS_12_AddNewsRecord(){
         try{
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);
@@ -959,11 +960,8 @@ public class TestVideoPlayCollectAndRecord {
     public void LC_SY_03_LauncherMove() {
         try {
             this.RightMoveNo1();
-            UiObject2 Text = uiDevice.findObject(By.text("消息中心"));
-            m_Expect = "消息中心";
-            m_Actual = Text.getText();
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("Launcher首页配置图片有问题",m_Pass,m_Time);
+            UiObject2 Text = uiDevice.findObject(By.focused(true));
+            Assert.assertEquals(Text.getText(),true,true);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag =false;
@@ -1247,7 +1245,7 @@ public class TestVideoPlayCollectAndRecord {
 
     private void RightMoveNo1(){
         int i = 0;
-        while (i<=25){
+        while (i<=24){
             i++;
             uiDevice.pressDPadRight();
             systemWait(SHORT_WAIT);

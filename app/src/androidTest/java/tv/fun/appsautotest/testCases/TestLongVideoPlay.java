@@ -246,7 +246,7 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
             this.RandomPlayFilm();
             systemWait(SHORT_WAIT);
-            for (int j = 0; j <= 55; j++){
+            for (int j = 0; j <= 100; j++){
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
                 uiDevice.waitForIdle();
