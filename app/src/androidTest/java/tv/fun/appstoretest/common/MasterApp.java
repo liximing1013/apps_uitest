@@ -137,4 +137,12 @@ public class MasterApp extends AppStorePage {
         UiObject cardObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
         cardObj.clickAndWaitForNewWindow();
     }
+
+    /**
+     * Click 设置按钮，进入页面
+     */
+    public void gotoSettingPageFromMaster() throws UiObjectNotFoundException {
+        UiObject setObj = findElementByID("tv.fun.master:id/iv_settings");
+        setObj.clickAndWaitForNewWindow();
+    }
 }

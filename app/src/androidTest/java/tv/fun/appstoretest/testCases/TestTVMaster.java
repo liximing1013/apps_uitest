@@ -1029,11 +1029,15 @@ public class TestTVMaster extends MasterApp {
                 UiObject disableBtn = findElementByID("tv.fun.master:id/disable_all_btn");
                 verifyElementPresent("", disableBtn);
                 verifyString("", text, "有款应用自启动");
-                verifyTrue("", appCount >= 1);
+                verifyTrue("", appCount >= 0);
                 back();
-                int autoLOptions = stringToInt(statusText.replace("款应用自启动", "").replace("有", ""));
-                verifyIncludeString("", statusText, "款应用自启动");
-                verifyTrue("", autoLOptions >= 1);
+                if(appCount==0){
+                    verifyIncludeString("", statusText, "无自启动应用");
+                }else {
+                    int autoLOptions = stringToInt(statusText.replace("款应用自启动", "").replace("有", ""));
+                    verifyIncludeString("", statusText, "款应用自启动");
+                    verifyTrue("", autoLOptions >= 1);
+                }
             } else {
                 UiObject msg = device.findObject(new UiSelector().className("android.widget.TextView").text("无自启动应用"));
                 UiObject result = device.findObject(new UiSelector().className("android.widget.TextView").text("系统状态良好"));
@@ -1499,6 +1503,132 @@ public class TestTVMaster extends MasterApp {
             gotoNetworkCheckPageFromMaster();
             UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
             verifyElementPresent("", checkingObj);
+            //按遥控器Back键
+            back();
+            //断言
+            UiObject masterObj = device.findObject(new UiSelector().resourceId("tv.fun.master:id/tv_master_title").text("电视助手"));
+            verifyElementPresent("", masterObj);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that the setting page UI displays correctly
+     */
+    @Test
+    public void Master_SET_01_testMasterSettingPageUI() {
+        String[] expectedOptionTitles = {"自动网络保护", "自动清理安装包", "自动清理卸载残留", "应用权限管理", "关  于"};
+        String[] expectedOptionMsg = {"保护当前视频播放独享网络和资源", "应用安装之后自动清理安装包", "应用被卸载后自动清理其残留文件",
+                "控制应用使用摄像头、录音等权限", "QQ群：259741088"};
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击设置按钮
+            gotoSettingPageFromMaster();
+            //断言
+            UiObject optionListObj = findElementByID("tv.fun.master:id/list");
+            int count = optionListObj.getChildCount();
+            for (int i = 0; i < count; i++) {
+                UiObject optionObj = optionListObj.getChild(new UiSelector().resourceId("tv.fun.master:id/rl_item_root").index(i));
+                UiObject optionTitleObj = optionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/title"));
+                String optionTitle = optionTitleObj.getText();
+                UiObject optionDescObj = optionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/message"));
+                String optionDescription = optionDescObj.getText();
+                verifyString("", optionTitle, expectedOptionTitles[i]);
+                verifyString("", optionDescription, expectedOptionMsg[i]);
+                if (i <= 2) {
+                    UiObject switchObj = optionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/tv_switch"));
+                    String switchStatus = switchObj.getText();
+                    verifyElementPresent("", switchObj);
+                    verifyString("", switchStatus, "开");
+                } else {
+                    UiObject arrowObj = optionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/tv_arrow"));
+                    verifyElementPresent("", arrowObj);
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that No repsonse when pressing menu in Master setting page
+     */
+    @Test
+    public void Master_SET_03_testNoMenuActionInMasterSettingpage() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击设置按钮
+            gotoSettingPageFromMaster();
+            //按遥控器Menu键
+            menu();
+            Thread.sleep(500);
+            //断言
+            verifyElementNotPresent("", "android:id/tv_fun_menu");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can back to Launcher home page after pressing home btn in Master setting page
+     */
+    @Test
+    public void Master_SET_04_testBackToLauncherFromMasterSettingpageByHome() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击设置按钮
+            gotoSettingPageFromMaster();
+            UiObject eleObj = findElementByID("tv.fun.master:id/rl_item_root");
+            verifyElementPresent("", eleObj);
+            //按遥控器Home键
+            home();
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can back to TV Master home page after pressing back btn in MasterSetting page
+     */
+    @Test
+    public void Master_SET_05_testBackToMasterHomeFromMasterSettingByBack() {
+        try {
+            //Launcher应用tab页面，点击电视助手
+            enterTVMasterPage();
+            //点击设置按钮
+            gotoSettingPageFromMaster();
+            UiObject eleObj = findElementByID("tv.fun.master:id/rl_item_root");
+            verifyElementPresent("", eleObj);
             //按遥控器Back键
             back();
             //断言
