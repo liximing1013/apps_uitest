@@ -456,11 +456,10 @@ public class TestVideoPlayCollectAndRecord {
             m_Actual = "TOP1";
             m_Expect = TextViewer.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-            Utils.writeCaseResult("排行榜页面显示正确", m_Pass, m_Time);
+            Utils.writeCaseResult("排行榜页面显示错误", m_Pass, m_Time);
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
-            uiDevice.wait(Until.findObject(By.text("选集")), 15000);
-            systemWait(WAIT);
+            systemWait(LONG_WAIT);
             UiObject2 TextView = uiDevice.findObject(By.text("相关推荐"));
             Assert.assertEquals("成功进入详情页", "相关推荐", TextView.getText());
             m_Expect = "相关推荐";
@@ -664,7 +663,6 @@ public class TestVideoPlayCollectAndRecord {
             this.EnterPLHomePage();
             systemWait(WAIT);
             uiDevice.pressEnter();
-            uiDevice.wait(Until.findObject(By.text("赛程表")), 15000);
             systemWait(LONG_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
@@ -817,7 +815,7 @@ public class TestVideoPlayCollectAndRecord {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             UiObject OrderIcon = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/livehint")
-                    .className("android.widget.TextView"));
+                    .text("预约"));
             if(OrderIcon.exists()){
                 systemWait(SHORT_WAIT);
                 uiDevice.pressDPadLeft();
@@ -834,7 +832,7 @@ public class TestVideoPlayCollectAndRecord {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("页面选项显示正确",m_Pass,m_Time);
             }else {
-                System.out.print("无可预约英超比赛");
+                System.out.println("无可预约英超比赛");
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -912,7 +910,7 @@ public class TestVideoPlayCollectAndRecord {
                 m_Actual = TextView.getText();
                 m_Expect = "开通金卡会员";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("弹框失败", m_Pass, m_Time);
+                Utils.writeCaseResult("开通会员提示弹框失败", m_Pass, m_Time);
                 uiDevice.pressBack();
             }else {
                 System.out.println("亲爱的风行用户，你已经是金卡会员了，无需引导了.....么么哒");
@@ -1032,8 +1030,7 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(LONG_WAIT);
             UiObject VideoName = uiDevice.findObject(new UiSelector().className("android.widget.TextView")
             .resourceId("com.bestv.ott:id/detail_title"));
-            UiObject PayVip = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/discripse")
-                    .text("付费"));
+            UiObject2 PayVip = uiDevice.findObject(By.text("付费"));
             if(PayVip != null){
                 uiDevice.pressDPadRight();
                 systemWait(SHORT_WAIT);
