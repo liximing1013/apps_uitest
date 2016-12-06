@@ -435,11 +435,11 @@ public class TestAppStore extends AppStorePage {
             moveToTargetTab(launcherTabs,launcherTabs[1], launcherTabID, 4);
             moveToUpForMultiple(2);
             //选中我的应用卡片，并点击
+            waitForElementPresentByID("com.bestv.ott:id/app");
             UiObject myAppCardObj = findElementByID("com.bestv.ott:id/app");
             UiObject titleObj = findElementByID("com.bestv.ott:id/app_title");
             String nameOfCard = titleObj.getText();
             verifyString("", nameOfCard, "我的应用");
-            waitForElementPresentByID("com.bestv.ott:id/app");
             myAppCardObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/title");
 
@@ -2107,11 +2107,7 @@ public class TestAppStore extends AppStorePage {
                 int resultCount = Integer.parseInt(resultCountObj.getText());
                 if (resultCount > 0) {
                     moveToRight();
-//                device.pressDPadDown();
-//                device.pressDPadUp();
                     device.pressEnter();
-//              UiObject result = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_search_reulst_cell").index(0));
-//                result.clickAndWaitForNewWindow();
                     installAppInDetailPageAndBack();
                     device.pressBack();
                     moveToDown();
@@ -2513,7 +2509,7 @@ public class TestAppStore extends AppStorePage {
             enterAppStorePage();
             //移动焦点到导航条 >应用管理tab
             moveToAppStoreTargetTab(appStoreTabs[5]);
-            UiObject2 appManageTab = device.findObject(By.text(appStoreTabs[5]));
+            UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
             Assert.assertTrue("The focus is not on the appManage tab", appManageTab.isSelected());
             moveToDown();
             //Move to About card

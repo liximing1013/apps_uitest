@@ -39,7 +39,6 @@ public class TestTVMaster extends MasterApp {
             UiObject tvMasterPageTitleObj = device.findObject(new UiSelector().resourceId("tv.fun.master:id/tv_master_title"));
             String tvMasterPageTitle = tvMasterPageTitleObj.getText();
             UiObject settingBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/iv_settings"));
-//            Assert.assertTrue("电视助手页面中标题显示不正确", tvMasterPageTitle.equalsIgnoreCase(tvMasterIconName));
             verifyString("电视助手页面中标题显示不正确", tvMasterPageTitle, tvMasterIconName);
         } catch (Throwable e) {
             e.printStackTrace();
@@ -67,7 +66,6 @@ public class TestTVMaster extends MasterApp {
             UiObject tvMasterPageTitleObj = device.findObject(new UiSelector().resourceId("tv.fun.master:id/tv_master_title"));
             String tvMasterPageTitle = tvMasterPageTitleObj.getText();
             UiObject settingBtn = device.findObject(new UiSelector().resourceId("tv.fun.master:id/iv_settings"));
-//            Assert.assertTrue("电视助手页面中设置按钮没有显示", settingBtn.exists());
             verifyElementPresent("电视助手页面中设置按钮没有显示", settingBtn);
         } catch (Throwable e) {
             e.printStackTrace();

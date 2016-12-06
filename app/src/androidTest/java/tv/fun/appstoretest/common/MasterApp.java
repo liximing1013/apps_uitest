@@ -18,7 +18,10 @@ public class MasterApp extends AppStorePage {
      */
     public void enterTVMasterPage() throws UiObjectNotFoundException, InterruptedException {
         //移动焦点到Launcher应用tab
-        moveToTargetTab(launcherTabs, appTab, launcherTabID, 4);
+        if(!findElementByID(launcherTabID).exists()){
+            home();
+        }
+        moveToTargetTab(launcherTabs, appTab, launcherTabID, 5);
         //点击“电视助手”卡片
         UiObject tvMasterCard = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
         device.pressDPadDown();
