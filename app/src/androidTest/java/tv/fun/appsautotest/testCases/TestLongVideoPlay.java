@@ -87,7 +87,7 @@ public class TestLongVideoPlay {
 
     @Test //电视剧播放
     public void LC_PLAY_01_TestLongVideoPlay() throws InterruptedException {
-        System.out.println("电视剧的播放开始了，哇咔咔.....");
+        System.out.println("电视剧的播放开始了，哇咔咔...");
         EnterTVVideoListPage();//进入电视剧列表页全部
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();

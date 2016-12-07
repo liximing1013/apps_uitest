@@ -490,7 +490,7 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "按 \uE693 菜单键管理城市";
             m_Actual = TextViewer1.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入天气页面失败！", m_Pass, m_Time);
+            Utils.writeCaseResult("进入顶部快捷栏--天气：失败", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -515,7 +515,7 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "我的应用";
             m_Actual = TextViewer2.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入我的应用失败", m_Pass, m_Time);
+            Utils.writeCaseResult("进入顶部快捷栏--我的应用：失败", m_Pass, m_Time);
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -539,7 +539,7 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "播放记录";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入播放记录页失败", m_Pass, m_Time);
+            Utils.writeCaseResult("进入顶部快捷栏--播放记录：失败", m_Pass, m_Time);
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -563,7 +563,7 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "消息中心";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入消息中心页面失败", m_Pass, m_Time);
+            Utils.writeCaseResult("进入顶部快捷栏--消息中心：失败", m_Pass, m_Time);
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -587,7 +587,7 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "通用设置";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入通用设置页面失败", m_Pass, m_Time);
+            Utils.writeCaseResult("进入顶部快捷栏--通用设置：失败", m_Pass, m_Time);
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -611,7 +611,7 @@ public class TestVideoPlayCollectAndRecord {
             m_Expect = "网络设置";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入网络页面失败", m_Pass, m_Time);
+            Utils.writeCaseResult("进入顶部快捷栏--网络：失败", m_Pass, m_Time);
         } catch (Throwable e) {
             e.printStackTrace();
             resultStr += e.toString();
@@ -1071,8 +1071,8 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-            UiObject Trail = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/icon"));
-            if(Trail.exists()){
+            UiObject2 Trail = uiDevice.findObject(By.text("片花"));
+            if(Trail != null){
                 RightMoveNo3();
                 UiObject2 TrailText = uiDevice.findObject(By.text("精彩片花"));
                 Assert.assertEquals("精彩片花",TrailText.getText());
@@ -1082,7 +1082,7 @@ public class TestVideoPlayCollectAndRecord {
                 m_ObjId = "com.bestv.ott:id/detail_related_vedio_tag";
                 Utils.writeCaseResult("片花显示错误",m_uiObj != null ,m_Time);
             }else {
-                Utils.writeCaseResult("本片无精彩片花",false,m_Time);
+                System.out.println("本片无精彩片花选项");
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -1124,6 +1124,42 @@ public class TestVideoPlayCollectAndRecord {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
 
+    }
+
+    @Test //详情页--跟播剧收藏提醒
+    public void LC_DETAIL_10_DetailsPageCorner(){
+        try{
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(WAIT);
+            UiObject2 UpdateVideo = uiDevice.findObject(By.text("跟播"));
+            if(UpdateVideo != null){
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                uiDevice.pressDPadRight();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadRight();
+                systemWait(SHORT_WAIT); //等待时间不能超过5s
+                UiObject ColTip = uiDevice.findObject(new UiSelector().text("加入收藏，有更新会提醒哦")
+                        .resourceId("com.bestv.ott:id/subscibe_tip_button"));
+                m_Expect = ColTip.getText();
+                m_Actual = "加入收藏，有更新会提醒哦";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("Tips提示5s后消失",m_Pass,m_Time);
+            }else {
+                System.out.println("固定位未配置跟播剧");
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     private void openTabFromLauncherHomeByresId(UiDevice device, UiObject2 resourceId) {
@@ -1258,15 +1294,6 @@ public class TestVideoPlayCollectAndRecord {
         while (i<=2){
             i++;
             uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-        }
-    }//右移步数3
-
-    private void LeftMoveNo1(){
-        int i = 0;
-        while (i<=3){
-            i++;
-            uiDevice.pressDPadLeft();
             systemWait(SHORT_WAIT);
         }
     }//右移步数3

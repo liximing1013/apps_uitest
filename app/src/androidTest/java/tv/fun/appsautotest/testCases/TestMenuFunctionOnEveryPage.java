@@ -43,7 +43,7 @@ public class TestMenuFunctionOnEveryPage {
     private static final int WAIT = 5;
     private static final int LONG_WAIT = 12;
     //初始化
-    String m_ObjId = "";
+    private String m_ObjId = "";
     private long m_Time;
     private UiObject2 m_uiObj = null;
     private boolean m_Pass = false;

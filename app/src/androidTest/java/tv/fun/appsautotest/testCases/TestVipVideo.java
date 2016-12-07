@@ -54,7 +54,6 @@ public final class TestVipVideo {
     private boolean resultFlag = true;
     private boolean m_Pass = false;
 
-
     @Before
     public void setUp() {
         instrument = InstrumentationRegistry.getInstrumentation();
@@ -620,12 +619,12 @@ public final class TestVipVideo {
     } //进入视频分类页面
 
     private void RightRightRight(){
-        int i = 0;
-        while( i <= 10){
-            i++;
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-        }
-    } //R*10
+    int i = 0;
+    while( i <= 10){
+        i++;
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+    }
+} //R*11
 
 }
