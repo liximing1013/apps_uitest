@@ -50,6 +50,24 @@ public class Common {
         }
     }
 
+    // 水平方向移动，正数向右，负数向左
+    public void MoveX(int iTimes){
+        if(iTimes > 0){
+            Right(iTimes);
+        }else{
+            Left(-iTimes);
+        }
+    }
+
+    // 垂直方向移动，正数向下，负数向上
+    public void MoveY(int iTimes){
+        if(iTimes > 0){
+            Down(iTimes);
+        }else{
+            Up(-iTimes);
+        }
+    }
+
     public void Left(){
         device.pressDPadLeft();
     }

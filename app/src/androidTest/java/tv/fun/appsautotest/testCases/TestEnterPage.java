@@ -260,6 +260,7 @@ public class TestEnterPage {
     public void enterSearchPage(){
         m_com.Navigation("hh99");
         m_com.Menu();
+        m_com.Sleep(iOneSecond);
         m_com.Enter();
     }
 
