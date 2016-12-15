@@ -9,7 +9,6 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiSelector;
-import android.support.test.uiautomator.Until;
 
 import junit.framework.Assert;
 
@@ -22,7 +21,6 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
@@ -73,11 +71,11 @@ public class TestMenuFunctionOnEveryPage {
         systemWait(WAIT);
     }
 
-    @Test //获取用例名
-    public void test(){
-
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//    @Test //获取用例名
+//    public void test(){
+//
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 
     @Test //电视Tab页面menu键操作
     public void LC_MENU_01_TVTabMenuOperation() {
@@ -467,10 +465,8 @@ public class TestMenuFunctionOnEveryPage {
             uiDevice.pressBack();
             systemWait(SHORT_WAIT);
             uiDevice.pressEnter();
-            uiDevice.wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), 15000);
             systemWait(LONG_WAIT);
             UiObject2 TextViewer2 = uiDevice.findObject(text("已收藏"));
-//        Assert.assertEquals("详情页显示已收藏","已收藏",TextViewer2.getText());
             m_Expect = "已收藏";
             m_Actual = TextViewer2.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);

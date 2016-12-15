@@ -27,11 +27,11 @@ import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
 
-/******************************
+/**
  * Created Lixm on 2016/10/10
  * Test Playing VIP Video
  * Test Case: 16
- ******************************/
+ **/
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

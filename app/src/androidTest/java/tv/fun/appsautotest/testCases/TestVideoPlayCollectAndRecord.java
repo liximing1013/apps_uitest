@@ -10,6 +10,7 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
 
 import junit.framework.Assert;
 
@@ -27,12 +28,12 @@ import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
+import static android.content.ContentValues.TAG;
 import static android.support.test.uiautomator.By.text;
 
 /**
  * Created by lixm on 2016/10/28
- * Mix
- * test case: 36
+ * test case: 38
  **/
 
 @RunWith(AndroidJUnit4.class)
@@ -873,7 +874,7 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
-    @Test //焦点大图5s切换
+    @Test //焦点大图3s切换
     public void LC_SY_01_FocusImageThreePoint() {
         try {
             systemWait(WAIT);
@@ -1162,6 +1163,111 @@ public class TestVideoPlayCollectAndRecord {
         }
     }
 
+    @Test //详情页--继续播放
+    public void LC_DETAIL_01_DetailPageResumePlay(){
+        try{
+            RightMoveNo3();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject2 PlayButton1 = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            if(PlayButton1.getText().equals("播放")){
+                uiDevice.pressDPadCenter();
+                systemWait(PlayVideoTime);
+                uiDevice.pressBack();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressBack();
+                UiObject ResumeButton = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/discripse")
+                .text("继续播放"));
+                m_Expect = "继续播放";
+                m_Actual = ResumeButton.getText();
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("详情页播放选项显示错误",m_Pass,m_Time);
+            }else {
+                uiDevice.pressDPadDown();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                UiObject PlayButton2 = uiDevice.findObject(new UiSelector().text("试看"));
+                if(PlayButton2.getText().equals(PlayButton1.getText())){
+                    uiDevice.pressDPadCenter();
+                    systemWait(PlayVideoTime);
+                    uiDevice.pressBack();
+                    systemWait(SHORT_WAIT);
+                    uiDevice.pressBack();
+                    UiObject2 TuiJian = uiDevice.findObject(By.text("相关推荐"));
+                    m_Expect = "相关推荐";
+                    m_Actual = TuiJian.getText();
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("返回到详情页错误",m_Pass,m_Time);
+                }else {
+                    System.out.println("金卡专享影片");
+                }
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+
+        }
+
+    }
+
+    @Test //详情页--评分_后台开关控制
+    public void LC_DETAIL_05_DetailPageScore() throws Exception{
+        try{
+            UiObject2 tabView = this.getTabFromLauncherHomeByText(uiDevice, "金卡会员");
+            this.openTabFromLauncherHomeByTextView(uiDevice, tabView);
+            systemWait(WAIT);
+            RightMoveNo4();
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject Score1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/special_item_score"));
+            Log.e(TAG, "SCORE: " + Score1.getText());//抓error类型log
+            String a1 = Score1.getText();
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            UiObject Score2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/detail_karma"));
+            if(Score2.exists()){
+                String a2 = Score2.getText()+"分";
+                Assert.assertEquals("评分显示错误",a1,a2);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    private UiObject2 getTabFromLauncherHomeByText(UiDevice device, String tabText) {
+        List<UiObject2> tabTitles = device.findObjects(By.res("com.bestv.ott:id/title"));
+        Assert.assertTrue("Verify tabs on launcher home.", tabTitles.size() > 0);
+        UiObject2 retTitle = null;
+        for (UiObject2 title : tabTitles) {
+            if (tabText.equals(title.getText())) {
+                retTitle = title;
+            }
+        }
+        Assert.assertNotNull(retTitle);
+        return retTitle;
+    }
+
+    private void openTabFromLauncherHomeByTextView(UiDevice device, UiObject2 TabView) {
+        TabView.click();
+        systemWait(SHORT_WAIT);
+        device.pressEnter();
+        device.waitForIdle();
+        systemWait(WAIT);
+    }
+
     private void openTabFromLauncherHomeByresId(UiDevice device, UiObject2 resourceId) {
         resourceId.click();
         //resourceId.getParent().click();
@@ -1288,6 +1394,15 @@ public class TestVideoPlayCollectAndRecord {
             systemWait(SHORT_WAIT);
         }
     }//右移步数2
+
+    private void RightMoveNo4(){
+        int i = 0;
+        while (i<=3){
+            i++;
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+        }
+    }//右移步数4
 
     private void RightMoveNo3(){
         int i = 0;
