@@ -620,6 +620,39 @@ public class Common {
     }
 
     /**
+     * Verify the actual string is not matched with the input.
+     *
+     * @param actual
+     * @param expected
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyNotString(String failMsg, String actual, String expected)
+            throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, !expected.equalsIgnoreCase(actual));
+        } else {
+            if (!expected.equalsIgnoreCase(actual)) {
+                resultFlag = true;
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "Expected [" + actual + "] is not same as the string [" + expected
+                            + "]; but actually they are same";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
      * Verify the string include another string.
      *
      * @param actual

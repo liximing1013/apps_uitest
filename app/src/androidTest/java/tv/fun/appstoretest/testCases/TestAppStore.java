@@ -1766,6 +1766,293 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
+     * test that the UI of no search result page displays correctly in app store
+     *
+     * @throws RemoteException
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Category(LevelP1Tests.class)
+    @Test
+    public void App_Search_03_testNoSearchResultPageInAppStore() {
+        String[] keywordForNoResult = {"H", "I"};
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            menu();
+            waitForElementPresentByID("android:id/tv_fun_menu_icon");
+            UiObject searchIcon = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("搜索"));
+            searchIcon.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/search_single_key");
+            //Input search key and search
+            for(int i=0; i< keywordForNoResult.length; i++){
+                device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text(keywordForNoResult[i])).click();
+                Thread.sleep(500);
+            }
+            waitForElementPresentByID("tv.fun.appstore:id/search_no_result");
+            //Assert
+            UiObject noResultObj = findElementByID("tv.fun.appstore:id/search_no_result");
+            String noReusltStr = noResultObj.getText();
+            verifyElementPresent("", noResultObj);
+            verifyString("", noReusltStr, "暂无匹配结果！");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test that can install app successfully which from search result
+     *
+     * @throws RemoteException
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Category(LevelP1Tests.class)
+    @Test
+    public void App_Search_06_testInstallAppInSearchResult() {
+        String[] keywordForNoResult = {"H"};
+        String firstAppName = "";
+        UiObject searchIcon = null;
+        UiObject appObj = null;
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToSearchPageByMenuPopUp();
+            //Search app by keyword
+            searchAppByKeyword(keywordForNoResult);
+            appObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_title").selected(true));
+            String appName = appObj.getText();
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForAppDetailPageDisplay();
+            if (findElementByClass("android.widget.Button").exists()) {
+                if ("打开".equalsIgnoreCase(findElementByClass("android.widget.Button").getText())) {
+                    backForMultiple(2);
+                    moveToAppStoreTargetTab(appStoreTabs[5]);
+                    moveToDown();
+                    UiObject myAppCard = device.findObject(new UiSelector().text("我的应用").resourceId("tv.fun.appstore:id/tool_local"));
+                    myAppCard.clickAndWaitForNewWindow();
+                    waitForElementPresentByID("tv.fun.appstore:id/title");
+                    moveToRight();
+                    menu();
+                    waitForElementPresentByID("android:id/tv_fun_menu");
+                    //点击清理数据按钮
+                    UiObject cleanBtn = findElementByText("清理数据", "android:id/tv_fun_menu_text");
+                    cleanBtn.clickAndWaitForNewWindow();
+                    waitForElementPresentByID("tv.fun.master:id/clearData");
+                    //得到已安装应用数量
+                    uninstallAppFromAppCleanPage(appName);
+                    //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+                    home();
+                    enterAppStorePage();
+                    navigateToSearchPageByMenuPopUp();
+                    //Search app by keyword
+                    searchAppByKeyword(keywordForNoResult);
+                    appObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_title").selected(true));
+                    device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+                    waitForAppDetailPageDisplay();
+                }
+            }
+            installAppInDetailPage();
+            //Assert
+            String appStatusBtn = findElementByClass("android.widget.Button").getText();
+            verifyString("", appStatusBtn, "打开");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * test that can install app successfully which from search result
+     *
+     * @throws RemoteException
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Category(LevelP1Tests.class)
+    @Test
+    public void App_Search_07_testCannotSearchOutAppInBackList() {
+        String[] keywordForAppInBlackList = {"K", "K"};
+        String appName = "K客";
+        String firstAppName = "";
+        UiObject searchIcon = null;
+        UiObject appObj = null;
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToSearchPageByMenuPopUp();
+            //Search app by keyword
+            searchAppByKeyword(keywordForAppInBlackList);
+            waitForElementPresentByID("tv.fun.appstore:id/search_no_result");
+            //Assert
+            if(findElementByID("tv.fun.appstore:id/search_no_result").exists()) {
+                UiObject noResultObj = findElementByID("tv.fun.appstore:id/search_no_result");
+                String noReusltStr = noResultObj.getText();
+                verifyElementPresent("", noResultObj);
+                verifyString("", noReusltStr, "暂无匹配结果！");
+            }else{
+                UiObject appList = findElementByID("tv.fun.appstore:id/app_search_reulst_cell");
+                int appNum = appList.getChildCount();
+                int totalAppNum = stringToInt(findElementByID("tv.fun.appstore:id/search_result_count").getText());//40
+                for(int k=0; k<totalAppNum; k++){
+                    UiObject firstAppInLineObj = appList.getChild(new UiSelector().className("android.widget.RelativeLayout").index(k));
+                    UiObject appNameInLineObj = firstAppInLineObj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_title"));
+                    String firstAppNameInLine = appNameInLineObj.getText();
+                    verifyNotString("", firstAppNameInLine, appName);
+                    if(totalAppNum>=2) {
+                        UiObject secAppInLineObj = appList.getChild(new UiSelector().className("android.widget.RelativeLayout").index(k + 1));
+                        UiObject secAppNameInLineObj = secAppInLineObj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_title"));
+                        String secAppNameInLine = secAppNameInLineObj.getText();
+                        verifyNotString("", secAppNameInLine, appName);
+                    }
+                    k=k+1;
+                    moveToDown();
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that the corn of the installed app displays correctly in search result list
+     */
+    @Test
+    public void App_Search_08_testInstalledAppCornDisplay(){
+        String[] keywordForResult = {"H"};
+        UiObject firstAppInLineObj = null;
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToSearchPageByMenuPopUp();
+            //Search app by keyword
+            searchAppByKeyword(keywordForResult);
+            UiObject appList = findElementByID("tv.fun.appstore:id/search_result_noraml").getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_search_reulst_cell").index(0));
+            firstAppInLineObj = appList.getChild(new UiSelector().className("android.widget.RelativeLayout"));
+            UiObject appNameInLineObj = firstAppInLineObj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_title"));
+            if(!appNameInLineObj.isSelected()){
+                moveToUpForMultiple(6);
+                if(findElementByID("tv.fun.appstore:id/search_del_key").isSelected()){
+                    moveToRight();
+                }else{
+                    moveToLeft();
+                }
+            }
+            String appName = appNameInLineObj.getText();
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForAppDetailPageDisplay();
+            if (findElementByClass("android.widget.Button").exists()) {
+                if (!"打开".equalsIgnoreCase(findElementByClass("android.widget.Button").getText())) {
+                    installAppInDetailPage();
+                }
+                back();
+            }
+            //Assert
+            firstAppInLineObj = appList.getChild(new UiSelector().className("android.widget.RelativeLayout"));
+            int childCount = firstAppInLineObj.getChildCount();
+            UiObject appCorn = firstAppInLineObj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/badge"));
+            verifyTrue("", appCorn.isEnabled());
+            verifyNumber("", childCount, 4);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that no repsonse when pressing Menu btn in app search page
+     */
+    @Test
+    public void App_Search_09_testNoRepsonceForMenuInSearchPage(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToSearchPageByMenuPopUp();
+            //按遥控器Menu键
+            menu();
+            //断言
+            verifyElementNotPresent("", "android:id/tv_fun_menu_text");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to Launcher home page from App Store Search page By home
+     */
+    @Test
+    public void App_Search_11_testBackToLauncherHomeFromSearch(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToSearchPageByMenuPopUp();
+            //按遥控器Home键
+            home();
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to App Store home page from App Search page By back btn
+     */
+    @Test
+    public void App_Search_12_testBackToAppStoreHomeFroSearchPage(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToSearchPageByMenuPopUp();
+            //按遥控器Back键
+            back();
+            //断言
+            UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
+            UiObject searchObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn"));
+            verifyElementPresent("The search icon in AppStore page is not displayed", searchObj);
+            verifyElementPresent("The appManage tab in AppStore page is not displayed", appManageTab);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
      * Test that all categories page displays correctly.
      *
      * @throws UiObjectNotFoundException

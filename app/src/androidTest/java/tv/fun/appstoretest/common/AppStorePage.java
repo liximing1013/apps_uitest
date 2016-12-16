@@ -226,6 +226,34 @@ public class AppStorePage extends Common{
     }
 
     /**
+     * Navigate to search page by Menu popup in app store page
+     *
+     * @throws InterruptedException
+     */
+    public void navigateToSearchPageByMenuPopUp() throws InterruptedException, UiObjectNotFoundException {
+        menu();
+        waitForElementPresentByID("android:id/tv_fun_menu_icon");
+        UiObject searchIcon = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("搜索"));
+        searchIcon.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.appstore:id/search_single_key");
+
+    }
+
+    /**
+     * Search App by keywords in app store page
+     *
+     * @throws InterruptedException
+     */
+    public void searchAppByKeyword(String[] keywords) throws InterruptedException, UiObjectNotFoundException {
+        //Input search key and search
+        for(int i=0; i< keywords.length; i++){
+            device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text(keywords[i])).click();
+            Thread.sleep(50);
+        }
+        moveToRightForMultiple(2);
+    }
+
+    /**
      * Goto App Clean page
      *
      * @throws InterruptedException
