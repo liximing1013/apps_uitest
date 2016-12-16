@@ -1,6 +1,7 @@
 package tv.fun.appsautotest.testCases;
 
 import android.app.Instrumentation;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,12 +14,15 @@ import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiWatcher;
 import android.util.Log;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.io.File;
 import java.util.Random;
 
 import tv.fun.common.HttpUtils;
@@ -87,7 +91,7 @@ public class TestLongVideoPlay {
 
     @Test //电视剧播放
     public void LC_PLAY_01_TestLongVideoPlay() throws InterruptedException {
-        System.out.println("电视剧的播放开始了，哇咔咔.....");
+        System.out.println("电视剧的播放开始了，哇咔咔...");
         EnterTVVideoListPage();//进入电视剧列表页全部
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
@@ -246,7 +250,7 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
             this.RandomPlayFilm();
             systemWait(SHORT_WAIT);
-            for (int j = 0; j <= 100; j++){
+            for (int j = 0; j <= 66; j++){ //66大顺
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
                 uiDevice.waitForIdle();
@@ -323,9 +327,9 @@ public class TestLongVideoPlay {
         }
     }
 
-    @Test //更新电视剧播放
-    public void LC_PLAY_03_TestTVVideoSelectionPlay() throws InterruptedException{
-        try{
+    @Test //更新剧集播放
+    public void LC_PLAY_03_TestTVVideoSelectionPlay() throws InterruptedException {
+        try {
             System.out.println("电视剧选集选择->播放");
             EnterTVVideoCommendHall();
             uiDevice.pressDPadDown();
@@ -339,13 +343,13 @@ public class TestLongVideoPlay {
 //                    .className("android.widget.TextView"));
             HttpUtils utils = new HttpUtils();
             int CellNum = utils.getLatestTvTotalNumByName(TVTitle.getText());
-            System.out.println("本部电视剧更新集数为："+CellNum+"集");
-            if(TVCell != null){
+            System.out.println("本部电视剧更新集数为：" + CellNum + "集");
+            if (TVCell != null) {
                 uiDevice.pressDPadRight();
                 systemWait(SHORT_WAIT);
                 uiDevice.pressDPadDown();
                 systemWait(WAIT);
-                if(CellNum >=1 && CellNum <= 30){
+                if (CellNum >= 1 && CellNum <= 30) {
                     UiObject Cell_1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tv_cell")
                             .className("android.widget.TextView").text("1"));
                     systemWait(WAIT);
@@ -356,8 +360,8 @@ public class TestLongVideoPlay {
                     systemWait(SHORT_WAIT);
                     m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
                     m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
-                    Utils.writeCaseResult("暂停标示",m_uiObj != null,m_Time);
-                }else {
+                    Utils.writeCaseResult("暂停标示", m_uiObj != null, m_Time);
+                } else {
                     LeftLeftLeft();
                     UiObject Cell_30 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tv_cell")
                             .className("android.widget.TextView").text("30"));
@@ -371,20 +375,18 @@ public class TestLongVideoPlay {
                     systemWait(SHORT_WAIT);
                     m_ObjId = "com.bestv.ott:id/control_panel_pause_layout_btn";
                     m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/control_panel_pause_layout_btn"));
-                    Utils.writeCaseResult("暂停标示",m_uiObj != null,m_Time);
+                    Utils.writeCaseResult("暂停标示", m_uiObj != null, m_Time);
                 }
-            }else {
+            } else {
                 Log.d(TAG, "LC_PLAY_03_TestTVVideoSelectionPlay: 跑偏了");
             }
-        }catch (Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
-        finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
-        }
-
     }
 
     private void EnterTVVideoListPage() {
@@ -481,5 +483,17 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
         }
     } //L*14
+
+    private String TakeScreenShot(String VideoName){
+        Environment.getExternalStoragePublicDirectory("/mnt/sdcard/autotest/image/");
+        File ImageFile = new File("/mnt/sdcard/autotest/image/test.png");
+        uiDevice.takeScreenshot(ImageFile);
+        if (!ImageFile.exists()) {
+            Assert.assertTrue(ImageFile.mkdirs());
+        }if(m_uiObj == null){
+            uiDevice.takeScreenshot(ImageFile);
+        }
+        return VideoName;
+    } //error截图功能调研
 
 }

@@ -36,7 +36,8 @@ public class TestSearch {
     private long m_lConsumeTime = -1;
     private boolean m_bPass = true;
 
-    private String m_sLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // #表示123按键，*表示清空按键，<表示删除按键
+    private String m_sLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#*<";
     private String m_sClearId = "com.bestv.voiceAssist:id/clear_icon"; // 清空按钮
     private String m_sDeletId = "com.bestv.voiceAssist:id/delete_icon"; // 删除按钮
     private String m_sSchList = "com.bestv.voiceAssist:id/hot_search_list"; // 右侧热门搜索列表
@@ -495,16 +496,42 @@ public class TestSearch {
         }
     }
 
-    private String enterLetter(String sLetters){
+    // 输入一串字母sLetters
+    private void enterLetters(String sLetters){
+        String sRet = "";
+        int iNumsPerLine = 5;
+        int iHorizontal;
+        int iVertical;
+        int iX0, iX1, iY0, iY1;
+        String sCurLetter = String.valueOf(sLetters.charAt(0));
+        enterLetter(sCurLetter, false);
+        for(int i = 1; i < sLetters.length(); ++i) {
+            sCurLetter = String.valueOf(sLetters.charAt(i - 1));
+            iY0 = m_sLetters.indexOf(sCurLetter) / iNumsPerLine;
+            iX0 = m_sLetters.indexOf(sCurLetter) % iNumsPerLine;
+            sCurLetter = String.valueOf(sLetters.charAt(i));
+            iY1 = m_sLetters.indexOf(sCurLetter) / iNumsPerLine;
+            iX1 = m_sLetters.indexOf(sCurLetter) % iNumsPerLine;
+            iHorizontal = iX1 - iX0;
+            iVertical = iY1 - iY0;
+            m_com.MoveX(iHorizontal);
+            m_com.MoveY(iVertical);
+            m_com.Enter();
+        }
+    }
+
+    // 输入一串字母sLetters，如果sRet不等于sLetters，则返回false
+    private boolean enterLetter(String sLetters, boolean bBack){
         String sRet = "";
         for(int i = 0; i < sLetters.length(); ++i) {
             String sLetter = String.valueOf(sLetters.charAt(i)).toUpperCase();
             int iIndex = m_sLetters.indexOf(sLetter);
-            sRet += enterLetter(iIndex);
+            sRet += enterLetter(iIndex, bBack);
         }
-        return sRet;
+        return sRet.equalsIgnoreCase(sLetters);
     }
-    private String enterLetter(int iIndex){
+
+    private String enterLetter(int iIndex, boolean bBack){
         try {
             String sLetter = String.valueOf(m_sLetters.charAt(iIndex));
             int iNumsPerLine = 5;
@@ -519,8 +546,11 @@ public class TestSearch {
                 m_sResult = "字母按键没有焦点框！";
             } else {
                 m_com.Enter();
-                m_com.Up(iDown);
-                m_com.Left(iRight);
+                if(bBack) {
+                    // 返回字母A
+                    m_com.Up(iDown);
+                    m_com.Left(iRight);
+                }
                 return sLetter;
             }
         }catch(Throwable e){
@@ -529,6 +559,9 @@ public class TestSearch {
             m_sResult = e.toString();
         }
         return "";
+    }
+    private String enterLetter(int iIndex){
+        return enterLetter(iIndex, true);
     }
 
     @Test
@@ -540,7 +573,7 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
 
-            enterLetter("C");
+            enterLetters("C");
             m_com.Down(10);
             m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_PHONE_BTN);
             m_bPass = m_uiObj.isFocused();
@@ -618,9 +651,8 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
 
-            enterLetter("D");
+            enterLetters("DH*"); // * 表示clear btn清空输入框
             m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_SEARCH_EDIT);
-            m_com.Navigation("22222114"); // clear btn
             if(!m_uiObj.getText().equalsIgnoreCase("输入影片首字母或全拼")){
                 m_bPass = false;
                 m_sResult = "输入框的内容没有被清空！";
@@ -652,11 +684,12 @@ public class TestSearch {
             }
 
             String sSearchTxt = "XLJ";
-            enterLetter(sSearchTxt);
+            enterLetters(sSearchTxt);
             // 如果没有结果就记录一下
             if(m_com.getUiObjByResId("com.bestv.voiceAssist:id/nodata_hint").exists()){
                 m_bPass = false;
                 m_sResult = String.format("没有搜索到【%s】相关的内容！", sSearchTxt);
+                Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
                 return;
             }
 
@@ -668,7 +701,7 @@ public class TestSearch {
             String sSearchNum = m_com.getUiObjText(uiObj).split("：")[1];
             iNumOfXLJ = Integer.parseInt(sSearchNum);
 
-            m_com.Navigation("222221114"); // delete btn
+            m_com.Navigation("322224"); // delete btn
             m_sExpect = sSearchTxt.substring(0, sSearchTxt.length() - 1);
             if(!m_uiObj.getText().equalsIgnoreCase(m_sExpect)){
                 m_bPass = false;
@@ -813,7 +846,7 @@ public class TestSearch {
             }
             // 只有明星的搜索
             m_sExpect = "JKJN";
-            enterLetter(m_sExpect);
+            enterLetters(m_sExpect);
             if(m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list").exists()){
                 m_bPass = false;
                 m_sResult = String.format("搜索【%s】时右侧出现了Tab栏！", m_sExpect);
@@ -837,7 +870,7 @@ public class TestSearch {
             }
             // 既有视频又有明星的搜索
             m_sExpect = "JK";
-            enterLetter(m_sExpect);
+            enterLetters(m_sExpect);
             if(!m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list").exists()){
                 m_bPass = false;
                 m_sResult = String.format("搜索【%s】时右侧没有出现Tab栏！", m_sExpect);
@@ -915,8 +948,8 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
             // 输入明星缩写
-            enterLetter("LDH");
-            m_com.Right(5); // 第5次才到结果页的第一项
+            enterLetters("LDH");
+            m_com.Right(3); // 第3次才到结果页的第一项
             // 检查视频列表是否存在
             m_sExpect = getSearchResultTxt(0); // 第一个一般是刘德华
             m_com.Enter(); // 点击进入明星视频列表
@@ -945,6 +978,8 @@ public class TestSearch {
 
 //    @Test
     public void test() throws UiObjectNotFoundException {
+//        enterLetters("CCC*LDK<HZ*A#");
+//        m_com.Enter();
 //        TvCommon.printAllMethods(this.getClass().getName());
         // 进入搜索页的功能函数
 //        m_sResult = enterSearchPage();

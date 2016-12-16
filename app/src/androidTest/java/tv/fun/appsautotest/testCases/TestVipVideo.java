@@ -27,11 +27,11 @@ import tv.fun.common.Utils;
 
 import static android.support.test.uiautomator.By.text;
 
-/******************************
+/**
  * Created Lixm on 2016/10/10
  * Test Playing VIP Video
  * Test Case: 16
- ******************************/
+ **/
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -53,7 +53,6 @@ public final class TestVipVideo {
     private String resultStr = "";
     private boolean resultFlag = true;
     private boolean m_Pass = false;
-
 
     @Before
     public void setUp() {
@@ -620,12 +619,12 @@ public final class TestVipVideo {
     } //进入视频分类页面
 
     private void RightRightRight(){
-        int i = 0;
-        while( i <= 10){
-            i++;
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-        }
-    } //R*10
+    int i = 0;
+    while( i <= 10){
+        i++;
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+    }
+} //R*11
 
 }
