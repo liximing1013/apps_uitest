@@ -44,7 +44,7 @@ public class AppStorePage extends Common{
             moveToLeftForMultiple(2);
         }
         device.pressEnter();
-        waitForElementPresentByIDAndText("tv.fun.appstore:id/column_title", "应用管理");
+//        waitForElementPresentByIDAndText("tv.fun.appstore:id/column_title", "应用管理");
     }
 
     /**
@@ -197,6 +197,36 @@ public class AppStorePage extends Common{
     }
 
     /**
+     * Check whether there are app which installed from app store in MyApp page
+     *
+     * @return
+     */
+    public Boolean checkWhetherHaveAppFromStoreInMyApp() throws UiObjectNotFoundException {
+        Boolean flag = false;
+        UiObject appList = findElementByID("tv.fun.appstore:id/listview");
+        int appNum = appList.getChildCount();
+        for(int i = 0; i<appNum; i++){
+            UiObject eachAppObj = appList.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
+            UiObject currentAppObj = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/app_item_poster"));
+            if(!currentAppObj.exists()){
+                flag = false;
+                if(i<5) {
+                    moveToRight();
+                }else if(i==5){
+                    moveToDown();
+                    moveToLeftForMultiple(5);
+                }else {
+                    moveToLeft();
+                }
+            }else{
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    /**
      * Install App in detail page
      *
      * @throws InterruptedException
@@ -251,6 +281,18 @@ public class AppStorePage extends Common{
             Thread.sleep(50);
         }
         moveToRightForMultiple(2);
+    }
+
+    /**
+     * Navigate to All Category page by Menu popup in app store page
+     *
+     * @throws InterruptedException
+     */
+    public void navigateToAllCategoryPageByMenuPopUp() throws InterruptedException, UiObjectNotFoundException {
+        menu();
+        waitForElementPresentByID("android:id/tv_fun_menu_icon");
+        UiObject categoryIcon = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("全部分类"));
+        categoryIcon.clickAndWaitForNewWindow();
     }
 
     /**
