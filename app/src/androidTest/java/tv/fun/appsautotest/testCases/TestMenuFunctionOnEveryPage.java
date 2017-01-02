@@ -249,8 +249,8 @@ public class TestMenuFunctionOnEveryPage {
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             //加入判定是否已清空播放记录页面
+            systemWait(SHORT_WAIT);
             UiObject2 TextView = uiDevice.findObject(text("您还没有看过任何影片，去看几部片子再回来吧"));
-//        Assert.assertEquals("播放记录页清空后文字显示","您还没有看过任何影片，去看几部片子再回来吧",TextView.getText());
             m_Expect = "您还没有看过任何影片，去看几部片子再回来吧";
             m_Actual = TextView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
