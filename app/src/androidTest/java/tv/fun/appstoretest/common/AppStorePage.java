@@ -44,7 +44,7 @@ public class AppStorePage extends Common{
             moveToLeftForMultiple(2);
         }
         device.pressEnter();
-//        waitForElementPresentByIDAndText("tv.fun.appstore:id/column_title", "应用管理");
+        waitForElementPresentByIDAndText("tv.fun.appstore:id/column_title", "应用管理");
     }
 
     /**
@@ -235,7 +235,7 @@ public class AppStorePage extends Common{
         device.pressDPadDown();
         device.pressDPadUp();
         device.pressEnter();
-        Thread.sleep(5000);
+        Thread.sleep(8000);
         waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
         waitForElementPresentByIDAndText("tv.fun.appstore:id/titleContainer", "打开");
     }
