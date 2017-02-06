@@ -90,7 +90,7 @@ public class TestEnterPage {
     }
 
     public void enterFilmPage(){
-        m_com.Navigation("hh9999249999");
+        m_com.Navigation("hh99992499");
     }
     @Test
     public void LC_TB_04_enterFilmPage(){
@@ -178,12 +178,19 @@ public class TestEnterPage {
             enterChildPage();
             String sUrl = HttpUtils.m_sChildMainPageUrl + "&version=" + m_sVersion;
             String sResult = HttpUtils.sendGet(sUrl);
-            JSONObject jsonObject = new JSONObject(sResult);
+            String sRetCode;
+            JSONObject jsonObject = null;
+            try{
+                jsonObject = new JSONObject(sResult);
+                sRetCode = jsonObject.getString("retCode");
+            }catch (Exception e){
+                sRetCode = sResult;
+            }
 
-            String sRetCode = jsonObject.getString("retCode");
             if(!sRetCode.equalsIgnoreCase("200")){
                 m_bPass = false;
-                m_sResult = String.format("少儿页面TabUrl连接【%s】访问失败！", sUrl);
+                m_sResult = String.format("少儿页面TabUrl连接【%s】访问失败！错误：%s",
+                        sUrl, sRetCode);
             }else{
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 int iCheck = 7; // 检查前7个Tab

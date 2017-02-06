@@ -179,10 +179,7 @@ public class TestDataReport {
     public void LC_Data_07_playRecommendFilm(){
 //        Utils.Print("play case7 播放电影-推荐里的大图视频");
         m_enterPage.enterFilmPage();
-        m_com.Down();
-        m_com.Enter();
-        m_com.Sleep(m_iOneSecond * 8);
-        m_com.Enter();
+        m_com.Navigation("2499999999499994");
         m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_LC_CONTROL_PAUSE_BTN, "");
         Utils.writeCaseResult("没有播放电影-推荐里的大图视频", m_bPass, m_lConsumeTime);
     }
