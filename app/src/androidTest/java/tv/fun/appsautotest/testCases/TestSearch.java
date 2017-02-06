@@ -920,7 +920,11 @@ public class TestSearch {
             m_com.waitTillOccur(m_com.BY_RESID, m_sSchPoster, 0, 15);
             m_com.Right(6); // 移动4次到结果列表，再移动两次到第2个结果的卡片
 
-            m_sExpect = getSearchResultTxt(1); // 第二个结果
+            // 第二个结果，一般是《爱情包邮》，如果发生变化，这里需要修改
+            m_sExpect = getSearchResultTxt(1);
+            if(m_sExpect.equalsIgnoreCase("爱情包邮")){ // 别名
+                m_sExpect = "那件疯狂的小事叫爱情"; // 正片名字
+            }
 
             m_com.Enter(); // 进入节目详情页
             m_com.waitTillOccur(m_com.BY_RESID, Infos.S_LC_DETAIL_TITLE_ID, 0, 15);

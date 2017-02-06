@@ -70,7 +70,7 @@ public class HttpUtils {
             	sResponseData += sLine;
             }
         } catch (Exception e) {
-        	sResponseData = "fail";//e.getMessage();
+        	sResponseData = e.getMessage();
         }
         // 使用finally块来关闭输入流
         finally {
