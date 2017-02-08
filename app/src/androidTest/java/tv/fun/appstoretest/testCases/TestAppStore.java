@@ -123,7 +123,7 @@ public class TestAppStore extends AppStorePage {
             if (findElementByClass("android.widget.Button").exists()) {
                 if ("打开".equalsIgnoreCase(findElementByClass("android.widget.Button").getText())) {
                     String appName = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title")).getText();
-                    device.pressBack();
+                    back();
                     moveToRight();
                     device.pressEnter();
                 }
@@ -139,7 +139,8 @@ public class TestAppStore extends AppStorePage {
 
             //断言
             Assert.assertTrue("Failed to install app from Launcher App page", openBtn.getText().equalsIgnoreCase("打开"));
-            device.pressBack();
+            back();
+            waitForElementPresentByID("com.bestv.ott:id/tab_title");
             UiObject appTab = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("应用"));
             verifyElementPresent("Doesn't back to Launcher App page", appTab);
             int currAppNum = stringToInt(findElementByID("com.bestv.ott:id/subtitle").getText().replace("个)", "").replace("(", ""));
@@ -227,7 +228,7 @@ public class TestAppStore extends AppStorePage {
             UiObject myAppObj = findElementByText("我的应用", "com.bestv.ott:id/maintitle");
             myAppObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/title");
-            device.pressBack();
+            back();
             waitForElementNotPresentByID("tv.fun.appstore:id/title");
             //断言
             UiObject appStoreIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
@@ -261,7 +262,7 @@ public class TestAppStore extends AppStorePage {
             myAppObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/title");
             moveToRight();
-            device.pressMenu();
+            menu();
 
             //断言
             UiObject menuIconObj = findElementByID("android:id/tv_fun_menu_icon");
@@ -272,7 +273,7 @@ public class TestAppStore extends AppStorePage {
             verifyElementPresent("", uninstallBtn);
             verifyElementPresent("", cleanBtn);
             verifyTrue("", menuPop.isEnabled());
-            device.pressBack();
+            back();
             UiObject menuDisappear = findElementByID("android:id/tv_fun_menu");
             verifyElementNotPresent("", menuDisappear);
         } catch (Throwable e) {
@@ -301,7 +302,7 @@ public class TestAppStore extends AppStorePage {
             moveToRight();
             UiObject subTitle = findElementByID("tv.fun.appstore:id/subTitle");//有18个应用
             int appCount = stringToInt(subTitle.getText().replace("有", "").replace("个应用","").replace(" ", ""));
-            device.pressMenu();
+            menu();
             waitForElementPresentByID("android:id/tv_fun_menu");
 
             //断言
@@ -343,8 +344,9 @@ public class TestAppStore extends AppStorePage {
             myAppObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/title");
             moveToRight();
-            device.pressMenu();
+            menu();
             waitForElementPresentByID("android:id/tv_fun_menu");
+            waitForElementPresentByID("android:id/tv_fun_menu_text");
 
             //断言
             UiObject uninstallBtn = findElementByText("卸载", "android:id/tv_fun_menu_text");
@@ -400,7 +402,7 @@ public class TestAppStore extends AppStorePage {
             myAppObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/title");
             moveToRight();
-            device.pressMenu();
+            menu();
             waitForElementPresentByID("android:id/tv_fun_menu");
 
             //断言
@@ -442,6 +444,7 @@ public class TestAppStore extends AppStorePage {
             verifyString("", nameOfCard, "我的应用");
             myAppCardObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/title");
+            waitForElementPresentByID("tv.fun.appstore:id/subTitle");
 
             //断言
             UiObject myAppTitleObj = findElementByID("tv.fun.appstore:id/title");
@@ -619,7 +622,11 @@ public class TestAppStore extends AppStorePage {
             enterAppStorePage();
             //按遥控器Back键
             back();
+            waitForElementPresentByID("com.bestv.ott:id/maintitle");
             //断言
+            if(!device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName)).exists()){
+                back();
+            }
             UiObject appStoreIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(appStoreIconName));
             UiObject tvMasterIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
             UiObject myAppIcon = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/maintitle").text(myAppIconName));
@@ -644,6 +651,7 @@ public class TestAppStore extends AppStorePage {
         try{
             //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
             enterAppStorePage();
+            moveToAppStoreTargetTab(appStoreTabs[0]);
             //断言
             UiObject firstTab = findElementByText("推荐", "tv.fun.appstore:id/column_title");
             UiObject hotTopic = findElementByText("热门排行", "tv.fun.appstore:id/title");
@@ -798,7 +806,7 @@ public class TestAppStore extends AppStorePage {
             //点击推荐tab下热门排行topic
             hotTopic.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/topic_app_list");
-            device.pressBack();
+            back();
             waitForElementNotPresent("tv.fun.appstore:id/topic_app_list");
             //断言
             UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
@@ -894,7 +902,7 @@ public class TestAppStore extends AppStorePage {
             UiObject posterFull = findElementByID("tv.fun.appstore:id/snapshot_hd");
             verifyElementPresent("", posterFull);
             verifyTrue("", posterFull.isEnabled());
-            device.pressBack();
+            back();
             //点击简介
             briefObj.clickAndWaitForNewWindow();
             UiObject fullPageTitle = findElementByClass("android.widget.TextView");
@@ -968,7 +976,7 @@ public class TestAppStore extends AppStorePage {
             //firstAppCard.clickAndWaitForNewWindow();//not support clicking in here
             waitForAppDetailPageDisplay();
             //按遥控器Home键
-            device.pressHome();
+            home();
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
             UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
@@ -992,9 +1000,8 @@ public class TestAppStore extends AppStorePage {
         try {
             //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
             enterAppStorePage();
-            moveToFirstCardUnderSuggestTab();
             UiObject hotTopic = device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title"));
-            if (!hotTopic.isSelected()) {
+            if (!device.findObject(new UiSelector().text("热门排行").resourceId("tv.fun.appstore:id/title").selected(true)).exists()) {
                 moveToFirstCardUnderSuggestTab();
             }
             //点击推荐tab下热门排行topic
@@ -1009,7 +1016,7 @@ public class TestAppStore extends AppStorePage {
             device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
             waitForAppDetailPageDisplay();
             //按遥控器Back键
-            device.pressBack();
+            back();
             UiObject hotTopicImage = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/topic_poster"));
             UiObject appListObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/topic_app_list"));
             //断言
@@ -1071,7 +1078,7 @@ public class TestAppStore extends AppStorePage {
             targetTopic.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.appstore:id/topic_poster");
             moveToRight();
-            device.pressMenu();
+            menu();
             waitForElementPresentByID("android:id/tv_fun_menu_icon");
             //Assert
             UiObject btnInPopup = findElementByID("android:id/tv_fun_menu_text");
@@ -1144,10 +1151,10 @@ public class TestAppStore extends AppStorePage {
             //Assert
             String currentAppName = findElementByID("tv.fun.appstore:id/title").getText();
             if (!device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer").text("安装")).exists()) {
-                device.pressBack();
+                back();
                 gotoAppCleanPageFromAppUninstallPage(true);
                 uninstallAppFromAppCleanPage(currentAppName);
-                device.pressBack();
+                back();
                 moveToAppStoreTargetTab(appStoreTabs[1]);
                 firstApp = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/image").index(0));
                 firstApp.clickAndWaitForNewWindow();
@@ -1224,7 +1231,8 @@ public class TestAppStore extends AppStorePage {
             device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
             waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
             waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
-            device.pressMenu();
+            menu();
+
             waitForElementPresentByID("android:id/tv_fun_menu_icon");
             UiObject searchBtn = findElementByText("搜索", "android:id/tv_fun_menu_text");
             UiObject allCateBtn = findElementByText("全部分类", "android:id/tv_fun_menu_text");
@@ -1676,6 +1684,216 @@ public class TestAppStore extends AppStorePage {
     }
 
     /**
+     *Test that the short introduce info of app in JY child list page displays correctly,same as the info in detail page
+     */
+    @Test
+    public void App_JY_28_testAppShortIntroduceInfo(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 教育 Tab
+            moveToAppStoreTargetTab(appStoreTabs[4]);
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            // jyTab.clickAndWaitForNewWindow();//Not support to click the tab
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            //全部教育页面,点击一应用进入详情页
+            moveToRight();
+            UiObject appTitleObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/all_app_title").selected(true));
+            String appName = appTitleObj.getText();
+            UiObject appShortInfoOne = findElementByID("tv.fun.appstore:id/all_apps_status_prefix");//滑雪大冒险　|　18万次下载　|
+            String appShortInfo = appShortInfoOne.getText();
+            appTitleObj.clickAndWaitForNewWindow();
+            waitForAppDetailPageDisplay();
+            //断言
+            UiObject actualAppNameObj = findElementByID("tv.fun.appstore:id/title");
+            String actualAppName = actualAppNameObj.getText();
+            UiObject downloadCountObj = findElementByID("tv.fun.appstore:id/downloadCount");
+            String downloadCount = downloadCountObj.getText().replace("下载：", "");//下载：18万次
+            verifyString("", appName, actualAppName);
+            verifyString("", appShortInfo, actualAppName+"　|　" + downloadCount+"下载　|");
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Test that the Menu popup displays corrctly in all JY page
+     */
+    @Test
+    public void App_JY_31_testMenuPopUpInAllJYPage(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 教育 Tab
+            moveToAppStoreTargetTab(appStoreTabs[4]);
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            // jyTab.clickAndWaitForNewWindow();//Not support to click the tab
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            //全部教育页面,按遥控器Menu键
+            menu();
+            waitForElementPresentByID("android:id/tv_fun_menu");
+            //断言
+            UiObject menuObj = findElementByID("android:id/tv_fun_menu");
+            UiObject firstObj = menuObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(0)).getChild(new UiSelector().resourceId("android:id/tv_fun_menu_text"));
+            String firstObjText = firstObj.getText();
+            UiObject secObj = menuObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(1)).getChild(new UiSelector().resourceId("android:id/tv_fun_menu_text"));
+            String secObjText = secObj.getText();
+            verifyElementPresent("", firstObj);
+            verifyElementPresent("", secObj);
+            verifyString("", firstObjText, "搜索");
+            verifyString("", secObjText, "全部分类");
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Test that can back to Launcher from all JY page by pressing "Home" btn
+     */
+    @Test
+    public void App_JY_33_testBackToLauncherFromAllJYPageByHome(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 教育 Tab
+            moveToAppStoreTargetTab(appStoreTabs[4]);
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            // jyTab.clickAndWaitForNewWindow();//Not support to click the tab
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            //全部教育页面,按遥控器Home键
+            home();
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Test that can back to App Store home page from all JY page by pressing "Back" btn
+     */
+    @Test
+    public void App_JY_34_testBackToAppStorePageFromAllJYPageByBack(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 教育 Tab
+            moveToAppStoreTargetTab(appStoreTabs[4]);
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            // jyTab.clickAndWaitForNewWindow();//Not support to click the tab
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            //全部教育页面,按遥控器Back键
+            back();
+            //断言
+            UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
+            UiObject searchObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn"));
+            verifyElementPresent("The search icon in AppStore page is not displayed", searchObj);
+            verifyElementPresent("The appManage tab in AppStore page is not displayed", appManageTab);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Test that can go to app search page from all JY page by pressing "Menu" btn
+     */
+    @Test
+    public void App_JY_35_testGotoSearchPageFromAllJYPageByMenu(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 教育 Tab
+            moveToAppStoreTargetTab(appStoreTabs[4]);
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            // jyTab.clickAndWaitForNewWindow();//Not support to click the tab
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            //全部教育页面,按遥控器Menu键
+            menu();
+            waitForElementPresentByID("android:id/tv_fun_menu");
+            UiObject searchBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("搜索"));
+            searchBtn.clickAndWaitForNewWindow();
+            //断言
+            UiObject inputBox = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_input"));
+            UiObject delBtn = findElementByID("tv.fun.appstore:id/search_del_key");
+            verifyElementPresent("搜索页面中输入框未显示", inputBox);
+            verifyElementPresent("搜索页面中删除按钮未显示", delBtn);
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Test that can go to All category page from all JY page by pressing "Menu" btn
+     */
+    @Test
+    public void App_JY_36_testGotoAllCategoryPageFromAllJYPageByMenu(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            //Move to 教育 Tab
+            moveToAppStoreTargetTab(appStoreTabs[4]);
+            UiObject jyTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[4]));
+            // jyTab.clickAndWaitForNewWindow();//Not support to click the tab
+            device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_title");
+            waitForElementPresentByID("tv.fun.appstore:id/all_apps_view");
+            //全部教育页面,按遥控器Menu键
+            menu();
+            waitForElementPresentByID("android:id/tv_fun_menu");
+            UiObject allCategoryBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("全部分类"));
+            allCategoryBtn.clickAndWaitForNewWindow();
+            //断言
+            UiObject pageTitleObj = findElementByID("android:id/content").getChild(new UiSelector().className("android.widget.TextView"));
+            verifyString("", "全部分类", pageTitleObj.getText());
+        }catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
      * test the UI of App Store search page displayed correctly
      *
      * @throws RemoteException
@@ -1981,7 +2199,7 @@ public class TestAppStore extends AppStorePage {
      * Test that no repsonse when pressing Menu btn in app search page
      */
     @Test
-    public void App_Search_09_testNoRepsonceForMenuInSearchPage(){
+    public void App_Search_09_testNoResponseForMenuInSearchPage(){
         try{
             //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
             enterAppStorePage();
@@ -2154,7 +2372,7 @@ public class TestAppStore extends AppStorePage {
      * @throws InterruptedException
      */
     @Test
-    public void App_All_04_testEnterYLChildListPageAfterFilterGameByRemoteControl() {
+    public void App_All_04_testPageAfterFilterGameByRemoteControl() {
         try {
             //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
             enterAppStorePage();
@@ -2257,7 +2475,8 @@ public class TestAppStore extends AppStorePage {
             int totalSHChildAppNum = stringToInt(totalSHChildApp);
 
             //返回应用市场首页,并点击生活tab下
-            device.pressBack();
+            back();
+
             moveToAppStoreTargetTab(appStoreTabs[3]);
             moveToDown();
             UiObject childEnter = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/title").text(childEnterName));
@@ -2274,6 +2493,140 @@ public class TestAppStore extends AppStorePage {
                     resultFlag, execTime);
         }
     }
+
+    /**
+     * Test that no repsonse when pressing Menu btn in All category page
+     */
+    @Test
+    public void App_All_07_testNoResponseForMenuInAllCategoryPage(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToAllCategoryPageByMenuPopUp();
+            //按遥控器Menu键
+            menu();
+            //断言
+            verifyElementNotPresent("", "android:id/tv_fun_menu_text");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to Launcher home page from App Store All Category page By home
+     */
+    @Test
+    public void App_All_09_testBackToLauncherHomeFromAllCategory(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToAllCategoryPageByMenuPopUp();
+            //按遥控器Home键
+            home();
+            //断言
+            UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            verifyElementPresent("", tvCard);
+            verifyTrue("", videoTab.isSelected());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that can Back to App Store home page from App All category page By back btn
+     */
+    @Test
+    public void App_All_10_testBackToAppStoreHomeFroAllCategoryPage(){
+        try{
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面
+            enterAppStorePage();
+            navigateToAllCategoryPageByMenuPopUp();
+            //按遥控器Back键
+            back();
+            //断言
+            UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
+            UiObject searchObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/activity_search_btn"));
+            verifyElementPresent("The search icon in AppStore page is not displayed", searchObj);
+            verifyElementPresent("The appManage tab in AppStore page is not displayed", appManageTab);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     * Test that the Menu pop up displays correctly in my app page
+     *
+     * @throws UiObjectNotFoundException
+     * @throws InterruptedException
+     */
+    @Test
+    public void App_AppM_16_testMemuPopupInMyAppPage() {
+        try {
+            //在Launcher应用tab页面，点击应用市场卡片，进入应用市场页面---Need Update
+            enterAppStorePage();
+            //移动焦点到导航条 > 应用管理tab
+            moveToAppStoreTargetTab(appStoreTabs[5]);
+            moveToDown();
+            UiObject myAppCard = device.findObject(new UiSelector().text("我的应用").resourceId("tv.fun.appstore:id/tool_local"));
+            myAppCard.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.appstore:id/title");
+            moveToDown();
+            Boolean appFlag = checkWhetherHaveAppFromStoreInMyApp();
+            if (!appFlag) {
+                back();
+                moveToUp();
+                moveToRight();
+                device.pressEnter();
+                waitForElementPresentByIDAndText("tv.fun.appstore:id/search_result_title", "热门搜索：");
+                //Input keyword in input textfield, to search app
+                UiObject aKey = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text("A"));
+                aKey.click();
+                UiObject resultCountObj = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_result_count"));
+                int resultCount = Integer.parseInt(resultCountObj.getText());
+                if (resultCount > 0) {
+                    moveToRightForMultiple(2);
+                    device.pressEnter();
+                    installAppInDetailPageAndBack();
+                    back();
+                    moveToDown();
+                    device.findObject(new UiSelector().text("我的应用").resourceId("tv.fun.appstore:id/tool_local")).clickAndWaitForNewWindow();
+                    moveToDown();
+                }
+            }
+            //在我的应用页面，按遥控器Menu键
+            menu();
+            UiObject detailBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("详情"));
+            UiObject uninstallBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("卸载"));
+            UiObject cleanBtn = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("清理数据"));
+            verifyElementPresent("The app detail button is not displayed on the Menu pop-up", detailBtn);
+            verifyElementPresent("The uninstall button is not displayed on the Menu pop-up", uninstallBtn);
+            verifyElementPresent("The clean button is not displayed on the Menu pop-up", cleanBtn);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
 
     /**
      * Test that enter app detail page from my app page
@@ -2295,7 +2648,7 @@ public class TestAppStore extends AppStorePage {
             waitForElementPresentByID("tv.fun.appstore:id/title");
             Boolean appFlag = checkWhetherNoAppInMyApp();
             if (appFlag) {
-                device.pressBack();
+                back();
                 moveToUp();
                 moveToRight();
                 device.pressEnter();
@@ -2310,7 +2663,7 @@ public class TestAppStore extends AppStorePage {
                     moveToRightForMultiple(2);
                     device.pressEnter();
                     installAppInDetailPageAndBack();
-                    device.pressBack();
+                    back();
                     moveToDown();
                     moveToRight();
                     device.findObject(new UiSelector().text("我的应用").resourceId("tv.fun.appstore:id/tool_local")).clickAndWaitForNewWindow();
@@ -2336,7 +2689,7 @@ public class TestAppStore extends AppStorePage {
             for (int i = 0; i < k; i++) {
                 menu();
                 if (!device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("详情")).exists()) {
-                    device.pressBack();
+                    back();
                     moveToRight();
                 } else {
                     break;
@@ -2381,7 +2734,7 @@ public class TestAppStore extends AppStorePage {
             waitForElementPresentByID("tv.fun.appstore:id/title");
             Boolean appFlag = checkWhetherNoAppInMyApp();
             if (appFlag) {
-                device.pressBack();
+                back();
                 moveToUp();
                 moveToRight();
                 device.pressEnter();
@@ -2396,7 +2749,7 @@ public class TestAppStore extends AppStorePage {
                     moveToRight();
                     device.pressEnter();
                     installAppInDetailPageAndBack();
-                    device.pressBack();
+                    back();
                     moveToDown();
                     device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_local")).clickAndWaitForNewWindow();
                 }
@@ -2571,7 +2924,7 @@ public class TestAppStore extends AppStorePage {
             waitForElementPresentByID("tv.fun.appstore:id/title");
             Boolean appFlag = checkWhetherNoAppInAppUninstall();
             if (appFlag) {
-                device.pressBack();
+                back();
                 moveToUp();
                 moveToRight();
                 device.pressEnter();
@@ -2586,7 +2939,7 @@ public class TestAppStore extends AppStorePage {
                     moveToRightForMultiple(2);
                     device.pressEnter();
                     installAppInDetailPageAndBack();
-                    device.pressBack();
+                    back();
                     moveToDown();
                     moveToRight();
                     device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall")).clickAndWaitForNewWindow();
@@ -2650,7 +3003,7 @@ public class TestAppStore extends AppStorePage {
             waitForElementPresentByID("tv.fun.appstore:id/title");
             Boolean appFlag = checkWhetherNoAppInAppUninstall();
             if (appFlag) {
-                device.pressBack();
+                back();
                 moveToUp();
                 moveToRight();
                 device.pressEnter();
@@ -2669,7 +3022,7 @@ public class TestAppStore extends AppStorePage {
 //              UiObject result = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/app_search_reulst_cell").index(0));
 //                result.clickAndWaitForNewWindow();
                     installAppInDetailPageAndBack();
-                    device.pressBack();
+                    back();
                     moveToDown();
                     moveToRight();
                     device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_uninstall")).clickAndWaitForNewWindow();
