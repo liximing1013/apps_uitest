@@ -224,13 +224,15 @@ public class TestVideoPlayCollectAndRecord {
             this.EnterNBAHomePage();
             uiDevice.pressDPadUp();
             systemWait(SHORT_WAIT);
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            UiObject2 AllRace = uiDevice.findObject(By.text("NBA包年"));
+            UiObject2 AllRace = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
             m_Actual = AllRace.getText();
-            m_Expect = "NBA包年";
+            m_Expect = "请选择要购买的媒体或服务";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入NBA付费包页面失败",m_Pass,m_Time);
         }catch (Throwable e){
@@ -608,8 +610,8 @@ public class TestVideoPlayCollectAndRecord {
             UiObject2 ResId3 = uiDevice.findObject(By.res("com.bestv.ott:id/network"));
             this.openTabFromLauncherHomeByresId(uiDevice, ResId3);
             systemWait(WAIT);
-            UiObject2 TextViewer3 = uiDevice.findObject(text("网络设置"));
-            m_Expect = "网络设置";
+            UiObject2 TextViewer3 = uiDevice.findObject(text("有线网络"));
+            m_Expect = "有线网络";
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入顶部快捷栏--网络：失败", m_Pass, m_Time);
@@ -897,28 +899,27 @@ public class TestVideoPlayCollectAndRecord {
             this.EnterFreeFilmPage();
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-            UiObject DetPayButton = uiDevice.findObject(new UiSelector().text("付费"));
-            if(DetPayButton.exists()){
-                uiDevice.pressDPadCenter();
-                systemWait(LONG_WAIT);
-                uiDevice.pressMenu();
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadLeft();
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
-                m_Actual = TextView.getText();
-                m_Expect = "开通金卡会员";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("开通会员提示弹框失败", m_Pass, m_Time);
-                uiDevice.pressBack();
-            }else {
-                System.out.println("亲爱的风行用户，你已经是金卡会员了，无需引导了.....么么哒");
-            }
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressMenu();
+            systemWait(SHORT_WAIT);
+            systemWait(SHORT_WAIT);
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+            systemWait(SHORT_WAIT);
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
+            m_Actual = TextView.getText();
+            m_Expect = "开通金卡会员";
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("开通会员提示弹框失败", m_Pass, m_Time);
+            uiDevice.pressBack();
         }catch(Throwable e){
             e.printStackTrace();
-            resultStr =e.toString();
+            resultStr +=e.toString();
             resultFlag = false;
         }
         finally {
@@ -1015,7 +1016,7 @@ public class TestVideoPlayCollectAndRecord {
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
-            resultStr = e.toString();
+            resultStr += e.toString();
         }
         finally {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
@@ -1352,7 +1353,7 @@ public class TestVideoPlayCollectAndRecord {
         systemWait(SHORT_WAIT);
     } //进入英超首页
 
-    private void EnterVideoClassifyPage(){
+    public void EnterVideoClassifyPage(){
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
@@ -1373,7 +1374,6 @@ public class TestVideoPlayCollectAndRecord {
         uiDevice.pressDPadRight();
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadCenter();
-        uiDevice.wait(Until.findObject(By.text("免费大片")), 15000);
         systemWait(LONG_WAIT);
     }//进入免费大片页面
 
