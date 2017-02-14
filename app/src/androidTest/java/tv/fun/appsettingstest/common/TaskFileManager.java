@@ -69,11 +69,47 @@ public final class TaskFileManager {
         openCardFromFileManagerHomePage(positionX, positionY);
     }
 
-    public void openCardFromFileManagerHomePage(int positionX, int positionY) {
+    private void openCardFromFileManagerHomePage(int positionX, int positionY) {
         device.click(positionX, positionY);
         SystemClock.sleep(Constants.SHORT_WAIT);
         device.pressEnter();
         SystemClock.sleep(Constants.WAIT);
+    }
+
+    public void moveUntilSpecifiedItemSelected(String itemText) {
+        moveAndEnterOnSpecifiedItemFromCurrentDir(itemText, false);
+    }
+
+    private void moveAndEnterOnSpecifiedItemFromCurrentDir(String itemName, boolean isEnter) {
+        device.pressDPadLeft();
+        SystemClock.sleep(Constants.SHORT_WAIT);
+        device.pressDPadLeft();
+        SystemClock.sleep(Constants.SHORT_WAIT);
+
+        UiObject2 item = device.findObject(By.text(itemName));
+        for (int i = 0, tryTimes = 10; i < tryTimes; i++) {
+            if (item != null && item.isEnabled()) {
+                break;
+            }
+            device.pressDPadDown();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            item = device.findObject(By.text(itemName));
+        }
+
+        for (int i = 0, tryTimes = 50; i < tryTimes; i++) {
+            if (item.isSelected()) {
+                if (isEnter) {
+                    device.pressEnter();
+                    SystemClock.sleep(Constants.SHORT_WAIT);
+                }
+                return;
+            }
+            device.pressDPadRight();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+        }
+
+        Assert.assertTrue("moveAndEnterOnSpecifiedItemFromCurrentDir, failed to select item "
+                + itemName, false);
     }
 
     public void navigateToSpecifiedPath(String path) {

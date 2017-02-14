@@ -7,10 +7,13 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -35,7 +38,7 @@ import static tv.fun.common.Constants.SETTINGS_PKG_NAME;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestCommonSettings {
-    // total 20
+    // total 23
 
     private UiDevice mDevice;
     private TaskCommonSettings mTask;
@@ -44,6 +47,9 @@ public final class TestCommonSettings {
 
     private final String SELECT_DEVICE_NAME = "书房的电视";
     private final String SELF_DEFINE_DEVICE_NAME = "funshionTV-test";
+    private final String TEXT_INPUT_METHOD = "百度输入法TV版";
+    private final String[] SUB_VALUES_SHUTDOWN_TV_TIME =
+            {"关闭", "30分钟", "60分钟", "90分钟", "120分钟"};
     private String[] TEXT_WALLPAPERS = {"神秘紫光", "霞光黄昏", "静谧月夜", "朦胧山色"};
 
     @BeforeClass
@@ -142,14 +148,13 @@ public final class TestCommonSettings {
             mDevice.pressEnter();
             SystemClock.sleep(Constants.SHORT_WAIT);
 
-            String subDeviceName = "书房的电视";
-            UiObject2 deviceName = mDevice.findObject(By.text(subDeviceName));
+            UiObject2 deviceName = mDevice.findObject(By.text(SELECT_DEVICE_NAME));
             deviceName.click();
             SystemClock.sleep(Constants.SHORT_WAIT);
 
             UiObject2 deviceNameContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_name"));
-            UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(subDeviceName));
+            UiObject2 deviceNameValue = deviceNameContainer.findObject(By.text(SELECT_DEVICE_NAME));
             Utils.writeCaseResult("Verify select a pre-defined device name.",
                     deviceNameValue != null, mExecTime);
         } catch (Exception e) {
@@ -273,11 +278,28 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_Common_09_01_SleepTimeDefaultValue() {
+    public void SET_Common_09_01_OpenAdvancedSettingItem() {
         try {
-            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
-            mDevice.pressEnter();
-            SystemClock.sleep(Constants.WAIT);
+            this.openAdvancedSettingsPage();
+
+            UiObject2 advancedPageTitle =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_title"));
+            Utils.writeCaseResult("Verify the text of title on advanced page.",
+                    "高级设置".equals(advancedPageTitle.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void SET_Common_09_02_SleepTimeDefaultValue() {
+        try {
+            this.openAdvancedSettingsPage();
 
             UiObject2 sleepSettingContainer =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_sleep"));
@@ -303,12 +325,9 @@ public final class TestCommonSettings {
     }
 
     @Test
-    public void SET_Common_09_02_SelectSleepTime() {
+    public void SET_Common_09_03_SelectSleepTime() {
         try {
-            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
-            mDevice.pressEnter();
-            SystemClock.sleep(Constants.WAIT);
-
+            this.openAdvancedSettingsPage();
             mDevice.pressDPadRight();
             SystemClock.sleep(Constants.SHORT_WAIT);
             mDevice.pressDPadRight();
@@ -323,6 +342,126 @@ public final class TestCommonSettings {
             SystemClock.sleep(Constants.SHORT_WAIT);
 			mDevice.pressDPadRight();
             SystemClock.sleep(Constants.SHORT_WAIT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Ignore
+    public void SET_Common_10_01_SetShutDownTvTimeDefaultValue() {
+        // UI changed
+        try {
+            this.openAdvancedSettingsPage();
+            UiObject2 shutDownTvContainer = mDevice.findObject(
+                    By.res("tv.fun.settings:id/setting_item_screen_shutdown_time"));
+
+            UiObject2 itemKey =
+                    shutDownTvContainer.findObject(By.res("tv.fun.settings:id/item_title"));
+            Utils.writeCaseResult("Verify the key text of set shutdown tv time.",
+                    "定时关机".equals(itemKey.getText()), mExecTime);
+
+            UiObject2 itemValue = mTask.getTextViewOfSwitcher(shutDownTvContainer);
+            Utils.writeCaseResult("Verify the default value of set shutdown tv time.",
+                    SUB_VALUES_SHUTDOWN_TV_TIME[0].equals(itemValue.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Ignore
+    public void SET_Common_10_02_SetShutDownTvTimeSubValues() {
+        try {
+            this.openAdvancedSettingsPage();
+
+            mTask.moveToSpecifiedSettingsItem(
+                    By.res("tv.fun.settings:id/setting_item_screen_shutdown_time"));
+            SystemClock.sleep(Constants.WAIT);
+
+            String message = "Verify the set shutdown tv time sub value at position %d.";
+            for (int i = 1; i < SUB_VALUES_SHUTDOWN_TV_TIME.length; i++) {
+                mDevice.pressDPadRight();
+                SystemClock.sleep(Constants.WAIT);
+                UiObject2 itemValue = mTask.getTextViewOfSwitcher(mDevice.findObject(
+                        By.res("tv.fun.settings:id/setting_item_screen_shutdown_time")));
+                Assert.assertEquals(String.format(message, i),
+                        SUB_VALUES_SHUTDOWN_TV_TIME[i], itemValue.getText());
+            }
+
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 itemValue = mTask.getTextViewOfSwitcher(mDevice.findObject(
+                    By.res("tv.fun.settings:id/setting_item_screen_shutdown_time")));
+            Utils.writeCaseResult("Verify move from last to first value of set shutdown tv time.",
+                    SUB_VALUES_SHUTDOWN_TV_TIME[0].equals(itemValue.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    private void openAdvancedSettingsPage() {
+        mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_advanced"));
+        mDevice.pressEnter();
+        SystemClock.sleep(Constants.WAIT);
+    }
+
+    @Test
+    public void SET_Common_14_01_InputMethodDefaultValue() {
+        try {
+            UiObject2 itemInput =
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_inputmethod"));
+
+            UiObject2 itemKey = itemInput.findObject(By.res("tv.fun.settings:id/item_title"));
+            Utils.writeCaseResult("Verify the item key for input method setting item.",
+                    "输入法".equals(itemKey.getText()), mExecTime);
+
+            UiObject2 inputMethod = mTask.getTextViewOfSwitcher(itemInput);
+            Utils.writeCaseResult("Verify the default input method.",
+                    TEXT_INPUT_METHOD.equals(inputMethod.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void SET_Common_14_02_SelectInputMethod() {
+        try {
+            mTask.moveToSpecifiedSettingsItem(By.res("tv.fun.settings:id/setting_item_inputmethod"));
+
+            mDevice.pressDPadLeft();
+            SystemClock.sleep(Constants.WAIT);
+            UiObject2 inputMethod = mTask.getTextViewOfSwitcher(
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_inputmethod")));
+            Utils.writeCaseResult("Verify select input method by left key event.",
+                    TEXT_INPUT_METHOD.equals(inputMethod.getText()), mExecTime);
+
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.WAIT);
+            mDevice.pressDPadRight();
+            SystemClock.sleep(Constants.WAIT);
+            inputMethod = mTask.getTextViewOfSwitcher(
+                    mDevice.findObject(By.res("tv.fun.settings:id/setting_item_inputmethod")));
+            Utils.writeCaseResult("Verify select input method by right key event.",
+                    TEXT_INPUT_METHOD.equals(inputMethod.getText()), mExecTime);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -580,7 +719,7 @@ public final class TestCommonSettings {
             if (cancelBtn != null) {
                 cancelBtn.click();
             }
-            SystemClock.sleep(3000L);
+            SystemClock.sleep(Constants.WAIT);
             UiObject2 recoverItemOfBack =
                     mDevice.findObject(By.res("tv.fun.settings:id/setting_item_recovery"));
             Utils.writeCaseResult(

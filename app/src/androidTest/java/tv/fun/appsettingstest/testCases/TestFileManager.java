@@ -34,40 +34,60 @@ import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestFileManager {
-    // total 15
+    // total 21
 
     private UiDevice mDevice;
     private TaskFileManager mTask;
     private long mExecTime;
     private String mErrorStack = null;
 
-    private static final String TEXT_REMOVE_BUTTON = "删除";
-    private static final String TEXT_HIDDEN_BUTTON = "隐藏";
-    private static final String TEXT_SHOWALL_BUTTON = "显示全部";
-
-    private static final String TEST_ROOT_DIR_NAME = "TestFile";
+    private static final String TEST_ROOT_DIR_NAME = "AutoTestFiles";
     private static final String TEST_ROOT_DIR_PATH;
-    private static final String TEST_DIR_NAME = "TestDirectory";
+    private static final String TEST_DIR_NAME = "TestNonMediaDir";
     private static final String TEST_DIR_PATH;
+    private static final String TEST_MEDIA_DIR_NAME = "TestMediaDir";
+    private static final String TEST_MEDIA_DIR_PATH;
+
     private static final String TEST1_FILE_NAME = "TestFile1.log";
     private static final String TEST1_FILE_PATH;
     private static final String TEST2_FILE_NAME = "TestFile2.log";
     private static final String TEST2_FILE_PATH;
+    private static final String TEST1_VIDEO_FILE_NAME = "TestVideo1.mp4";
+    private static final String TEST1_VIDEO_FILE_PATH;
+    private static final String TEST2_VIDEO_FILE_NAME = "TestVideo2.mp4";
+    private static final String TEST2_VIDEO_FILE_PATH;
+
+    private static final String TEXT_REMOVE_BUTTON = "删除";
+    private static final String TEXT_HIDDEN_BUTTON = "隐藏";
+    private static final String TEXT_SHOWALL_BUTTON = "显示全部";
+
+    private final String TEXT_NO_VIDEO_IN_CATEGORY = "未发现可播放的视频";
 
     static {
         TEST_ROOT_DIR_PATH =
                 String.format("%s/%s", Utils.getExternalStoragePath(), TEST_ROOT_DIR_NAME);
+
         TEST_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_DIR_NAME);
         TEST1_FILE_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST1_FILE_NAME);
         TEST2_FILE_PATH = String.format("%s/%s", TEST_DIR_PATH, TEST2_FILE_NAME);
+
+        TEST_MEDIA_DIR_PATH = String.format("%s/%s", TEST_ROOT_DIR_PATH, TEST_MEDIA_DIR_NAME);
+        TEST1_VIDEO_FILE_PATH = String.format("%s/%s", TEST_MEDIA_DIR_PATH, TEST1_VIDEO_FILE_NAME);
+        TEST2_VIDEO_FILE_PATH = String.format("%s/%s", TEST_MEDIA_DIR_PATH, TEST2_VIDEO_FILE_NAME);
     }
 
     private static void prepareData() {
         String message = "Prepare files for file manager test.";
-        String cmdCreateHiddenDir = String.format("mkdir -p %s", TEST_DIR_PATH);
+        String cmdCreateTestDir = String.format("mkdir -p %s", TEST_DIR_PATH);
         String cmdCreateTxtFile1 = String.format("touch %s", TEST1_FILE_PATH);
         String cmdCreateTxtFile2 = String.format("touch %s", TEST2_FILE_PATH);
-        String commands[] = {cmdCreateHiddenDir, cmdCreateTxtFile1, cmdCreateTxtFile2};
+
+        String cmdCreateMediaDir = String.format("mkdir -p %s", TEST_MEDIA_DIR_PATH);
+        String cmdCreateVideoFile1 = String.format("touch %s", TEST1_VIDEO_FILE_PATH);
+        String cmdCreateVideoFile2 = String.format("touch %s", TEST2_VIDEO_FILE_PATH);
+
+        String commands[] = {cmdCreateTestDir, cmdCreateTxtFile1, cmdCreateTxtFile2,
+                cmdCreateMediaDir, cmdCreateVideoFile1, cmdCreateVideoFile2};
 
         Utils.CommandResult result = Utils.execCommand(commands, false, false);
         Assert.assertTrue(message, (result.mResult == 0));
@@ -83,13 +103,13 @@ public final class TestFileManager {
 
     @BeforeClass
     public static void classSetup() {
+        Utils.stopAndClearProcess(FILEMANAGER_PKG_NAME);
         prepareData();
     }
 
     @AfterClass
     public static void classClearUp() {
         removeData();
-        Utils.stopAndClearProcess(FILEMANAGER_PKG_NAME);
     }
 
     @Before
@@ -98,7 +118,6 @@ public final class TestFileManager {
         mTask = TaskFileManager.getInstance();
         mExecTime = Utils.getCurSecond();
 
-        Utils.stopAndClearProcess(FILEMANAGER_PKG_NAME);
         mDevice.pressHome();
         Utils.waitForPackageOpened(mDevice, LAUNCHER_PKG_NAME);
         Utils.startActivity(FILEMANAGER_PKG_NAME, FILEMANAGER_HOME_ACTIVITY);
@@ -139,28 +158,6 @@ public final class TestFileManager {
                     mDevice.findObject(By.res("tv.fun.filemanager:id/activity_sub_title_sub"));
             Utils.writeCaseResult("Verify navigate to the specified path.",
                     TEST_ROOT_DIR_NAME.equals(subTitle.getText()), mExecTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mErrorStack = e.toString();
-        } finally {
-            if (mErrorStack != null) {
-                Utils.writeCaseResult(mErrorStack, false, mExecTime);
-            }
-        }
-    }
-
-    @Test
-    public void FileM_Category_12_02_MessageWhenEmptyFoVideoCard() {
-        try {
-            mTask.openCategoryVideoCard();
-            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
-            Utils.writeCaseResult("Verify the tips when no files in APP card.",
-                    "未发现可播放的视频".equals(tips.getText()), mExecTime);
-
-            mDevice.pressMenu();
-            SystemClock.sleep(Constants.SHORT_WAIT);
-            UiObject2 menu = mDevice.findObject(By.res("android:id/tv_fun_menu"));
-            Assert.assertNull("Verify the menu is NOT shown when no files in video card.", menu);
         } catch (Exception e) {
             e.printStackTrace();
             mErrorStack = e.toString();
@@ -333,7 +330,9 @@ public final class TestFileManager {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
 
-            mDevice.pressDPadRight();
+            mDevice.pressDPadUp();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            mDevice.pressDPadLeft();
             SystemClock.sleep(Constants.SHORT_WAIT);
             mDevice.pressDPadLeft();
             SystemClock.sleep(Constants.SHORT_WAIT);
@@ -410,7 +409,7 @@ public final class TestFileManager {
     }
 
     @Test
-    public void FileM_Menu_01_06_RemoveFile() {
+    public void FileM_Menu_01_06_RemoveFileAndConfirm() {
         try {
             mTask.openLocalFilesCard();
             mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
@@ -489,6 +488,229 @@ public final class TestFileManager {
             if (mErrorStack != null) {
                 Utils.writeCaseResult(mErrorStack, false, mExecTime);
             }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_01_HideVideoFile() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
+            mTask.moveUntilSpecifiedItemSelected(TEST1_VIDEO_FILE_NAME);  // request focus
+
+            mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+            UiObject2 fileHiddenFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is hidden after click Hide button.",
+                    fileHiddenFromAll == null, mExecTime);
+
+            this.backToFileManagerHome();
+            mTask.openCategoryVideoCard();
+
+            UiObject2 fileHiddenFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is hidden from video category.",
+                    fileHiddenFromCate == null, mExecTime);
+
+            UiObject2 fileUnchanged = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the unchanged video file is shown from video category.",
+                    fileUnchanged != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_02_ShowVideoFile() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
+
+            mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+            UiObject2 fileShownFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is shown after click Show All button.",
+                    fileShownFromAll != null, mExecTime);
+
+            this.backToFileManagerHome();
+            mTask.openCategoryVideoCard();
+
+            UiObject2 fileShownFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is shown from video category.",
+                    fileShownFromCate != null, mExecTime);
+
+            UiObject2 fileUnchanged = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the unchanged video file is shown from video category.",
+                    fileUnchanged != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_03_HideVideoDirectory() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+            mTask.moveUntilSpecifiedItemSelected(TEST_MEDIA_DIR_NAME);
+
+            mTask.showMenuAndClickBtn(TEXT_HIDDEN_BUTTON);
+            UiObject2 mediaDirHidden = mDevice.findObject(By.text(TEST_MEDIA_DIR_NAME));
+            Utils.writeCaseResult("Verify the video directory is hidden from All Files category.",
+                    mediaDirHidden == null, mExecTime);
+
+            this.backToFileManagerHome();
+            mTask.openCategoryVideoCard();
+
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult(
+                    "Verify all video files in directory is hidden from Video category.",
+                    TEXT_NO_VIDEO_IN_CATEGORY.equals(tips.getText()), mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_04_ShowVideoDirectory() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.showMenuAndClickBtn(TEXT_SHOWALL_BUTTON);
+            mTask.navigateToSpecifiedPath(TEST_ROOT_DIR_PATH);
+
+            UiObject2 mediaDirShown = mDevice.findObject(By.text(TEST_MEDIA_DIR_NAME));
+            Utils.writeCaseResult("Verify the video directory is shown from All Files category.",
+                    mediaDirShown != null, mExecTime);
+
+            this.backToFileManagerHome();
+            mTask.openCategoryVideoCard();
+
+            String message =
+                    "Verify all video files(%s) in directory is shown from Video category.";
+            UiObject2 videoFileTest1 = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult(String.format(message, TEST1_VIDEO_FILE_NAME),
+                    videoFileTest1 != null, mExecTime);
+
+            UiObject2 videoFileTest2 = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+            Utils.writeCaseResult(String.format(message, TEST2_VIDEO_FILE_NAME),
+                    videoFileTest2 != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_05_RemoveVideoFileFromAllFilesCategory() {
+        try {
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
+            mTask.moveUntilSpecifiedItemSelected(TEST1_VIDEO_FILE_NAME);
+
+            this.removeFileAndConfirm();
+            UiObject2 fileRemovedFromAll = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is removed after click Show All button.",
+                    fileRemovedFromAll == null, mExecTime);
+
+            this.backToFileManagerHome();
+            mTask.openCategoryVideoCard();
+
+            UiObject2 fileRemovedFromCate = mDevice.findObject(By.text(TEST1_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is removed from video category.",
+                    fileRemovedFromCate == null, mExecTime);
+
+            UiObject2 fileUnchanged = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the unchanged video file is shown from video category.",
+                    fileUnchanged != null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_06_RemoveVideoFileFromVideoCategory() {
+        try {
+            mTask.openCategoryVideoCard();
+            mTask.moveUntilSpecifiedItemSelected(TEST2_VIDEO_FILE_NAME);
+
+            this.removeFileAndConfirm();
+            UiObject2 fileRemovedFromCate = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is removed from video category.",
+                    fileRemovedFromCate == null, mExecTime);
+
+            this.backToFileManagerHome();
+            mTask.openLocalFilesCard();
+            mTask.navigateToSpecifiedPath(TEST_MEDIA_DIR_PATH);
+
+            UiObject2 fileRemovedFromAll = mDevice.findObject(By.text(TEST2_VIDEO_FILE_NAME));
+            Utils.writeCaseResult("Verify the video file is removed from all files category.",
+                    fileRemovedFromAll == null, mExecTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    @Test
+    public void FileM_Menu_03_07_MessageWhenEmptyFoVideoCard() {
+        try {
+            mTask.openCategoryVideoCard();
+            UiObject2 tips = mDevice.findObject(By.res("tv.fun.filemanager:id/sub_blank_tips"));
+            Utils.writeCaseResult("Verify the tips when no files in APP card.",
+                    TEXT_NO_VIDEO_IN_CATEGORY.equals(tips.getText()), mExecTime);
+
+            mDevice.pressMenu();
+            SystemClock.sleep(Constants.SHORT_WAIT);
+            UiObject2 menu = mDevice.findObject(By.res("android:id/tv_fun_menu"));
+            Assert.assertNull("Verify the menu is NOT shown when no files in video card.", menu);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mErrorStack = e.toString();
+        } finally {
+            if (mErrorStack != null) {
+                Utils.writeCaseResult(mErrorStack, false, mExecTime);
+            }
+        }
+    }
+
+    private void backToFileManagerHome() {
+        Utils.startActivity(FILEMANAGER_PKG_NAME, FILEMANAGER_HOME_ACTIVITY);
+        SystemClock.sleep(Constants.WAIT);
+    }
+
+    private void removeFileAndConfirm() {
+        mTask.showMenuAndClickBtn(TEXT_REMOVE_BUTTON);
+        UiObject2 btnConfirm =
+                mDevice.findObject(By.res("tv.fun.filemanager:id/confirm_dialog_btn_confirm"));
+        SystemClock.sleep(Constants.WAIT);
+        if (btnConfirm != null) {
+            btnConfirm.click();
+            SystemClock.sleep(Constants.WAIT);
         }
     }
 
