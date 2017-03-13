@@ -28,6 +28,7 @@ public class UiIds{
 	public static final String SLISTBACK_BTN_STRING = SPACKAGE_STRING + "btn_head_bar_left"; // back button
 	public static final String SLOADINGBAR_STRING = SPACKAGE_STRING + "loading_progress_bar"; // loading bar
 	public static final String SREFRESH_STRING = SPACKAGE_STRING + "btn_head_bar_right"; // refresh button
+	public static final String SSELECT_WIFI_STRING = "com.funshion.remotecontrol:id/list_item_select";  // selected wifi
 
 	// remote controller
 	public static final String SCONTROLCLEAR_BTN_STRING = SPACKAGE_STRING + "iv_close"; // close controller button

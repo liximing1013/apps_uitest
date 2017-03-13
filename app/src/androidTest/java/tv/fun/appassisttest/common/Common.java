@@ -121,7 +121,7 @@ public class Common {
 		}
 		return device.swipe(centerX, centerY-iSwipeLen, centerX, centerY+iSwipeLen, steps);
 	}
-	
+
 	public boolean SwipeB2T(int centerX, int centerY, int iSwipeLen, int steps){
 		if(0 == centerX){
 			centerX = iWidth/2;
@@ -339,9 +339,9 @@ public class Common {
 	}
 	
 	public void waitTillOccur(UiObject uiObj, int iWaitSec){
-		long iCurSec = Funcs.CurSecond();
+		long iCurSec = Funcs.getCurSecond();
 		while(!uiObj.exists()) {
-			if(Funcs.CurSecond() >= iCurSec + 10){
+			if(Funcs.getCurSecond() >= iCurSec + 10){
 				Funcs.Print("waiting time is up, obj not occur!");
 				break;
 			}
@@ -349,9 +349,9 @@ public class Common {
 	}
 	
 	public void waitTillGone(UiObject uiObj, int iWaitSec){
-		long iCurSec = Funcs.CurSecond();
+		long iCurSec = Funcs.getCurSecond();
 		while(uiObj.exists()) {
-			if(Funcs.CurSecond() >= iCurSec + 10){
+			if(Funcs.getCurSecond() >= iCurSec + 10){
 				Funcs.Print("waiting time is up, obj not gone!");
 				break;
 			}

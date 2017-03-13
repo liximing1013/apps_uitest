@@ -1,5 +1,6 @@
 package tv.fun.appassisttest.common;
 
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -9,32 +10,34 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import static tv.fun.common.Utils.makeDir;
+
 public class Funcs{
 	public static final String sTAG = "xuzx";
-	public static String CurDate(){
+	public static String getCurDate(){
 		Date date = new Date();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		return df.format(date);
 	}
 	
-	public static String CurTime(){
+	public static String getCurTime(){
 		Date date = new Date();
 		DateFormat df = new SimpleDateFormat("HH:mm:ss");
 		return df.format(date);
 	}
 	
-	public static long CurSecond(){
+	public static long getCurSecond(){
 		Date date = new Date();
 		return date.getTime() / 1000;
 	}
 	
 	public static void Print(Object text){
-		String sHead = String.format("[%s][%s]", CurDate(), CurTime());
+		String sHead = String.format("[%s][%s]", getCurDate(), getCurTime());
 		Log.d(sTAG, sHead + text);
 	}
 
 	public static void Print(String sFormat, Object... args){
-		String sHead = String.format("[%s][%s]", CurDate(), CurTime());
+		String sHead = String.format("[%s][%s]", getCurDate(), getCurTime());
 		Log.d(sTAG, sHead + String.format(sFormat, args));
 	}
 	
@@ -64,13 +67,27 @@ public class Funcs{
 		}
 	}
 	
-	public static void Log(String sFileName, String sLogText) {
-		String sHead = String.format("[%s][%s]", CurDate(), CurTime());
-		String sFolderName = "/data/local/tmp/log/";
-		MakeDir(sFolderName);
-		WriteLine(String.format("%s%s_%s.log", sFolderName, sFileName, CurDate()), sHead + sLogText + "\r\n", true);
-	}
-	
+    public static void Log(String sFileName, String sLogText) {
+        String sPath = Environment.getExternalStorageDirectory().getPath();
+        Log(sPath + "/autotest_phone/log/", sFileName, sLogText);
+    }
+    public static void Log(String sFolderName, String sFileName, String sLogText) {
+        String sHead = String.format("[%s][%s]", getCurDate(), getCurTime());
+        makeDir(sFolderName);
+        writeLine(String.format("%s%s_%s.log", sFolderName, sFileName, getCurDate()), sHead + sLogText + "\r\n", true);
+    }
+
+    public static void writeLine(String sFileName, String sContent, boolean appendFlag){
+        FileWriter fw = null;
+        try{
+            fw = new FileWriter(sFileName, appendFlag);
+            fw.write(sContent);
+            fw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 	public static void WriteLogs(String sContent){
 		Print(sContent);
 		Log("runtime_log", sContent);
