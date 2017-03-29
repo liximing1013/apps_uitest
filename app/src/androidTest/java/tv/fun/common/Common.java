@@ -93,9 +93,12 @@ public class Common {
     }
 
     public void Enter(){
-        // device.pressEnter();
         device.pressDPadCenter();
         Sleep(iDelay * 4);
+    }
+    public void EnterW(int iSecs){
+        device.pressDPadCenter();
+        Sleep(iDelay * iSecs);
     }
 
     public void Enter(int iTimes){

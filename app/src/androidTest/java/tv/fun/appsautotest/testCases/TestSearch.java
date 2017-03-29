@@ -203,8 +203,8 @@ public class TestSearch {
     @Test
     public void Voice_SCH_07_cannotOpenMenuAtSetting(){
         try {
-            m_sResult = "此时不应该打开Menu菜单！页面中出现了“搜索”按钮";
-            m_com.Navigation("hh9901111"); // 进入设置页
+            m_sResult = "此时不应该打开Menu菜单！出现了“搜索”按钮";
+            m_enterPage.enterSettingPage();
             m_com.Menu();
             m_bPass = !isMenuExists(0);
         }catch(Throwable e){

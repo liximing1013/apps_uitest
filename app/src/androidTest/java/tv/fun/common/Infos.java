@@ -5,7 +5,7 @@ package tv.fun.common;
  * 将一些公共信息记录在这里
  */
 public class Infos {
-    public static String S_TV_VERSION = "2.10.0.7_s";
+    public static String S_TV_VERSION = "3.0.0.7_s";
     public static String S_BESTV_OTT = "com.bestv.ott:id/";
 
     // text info

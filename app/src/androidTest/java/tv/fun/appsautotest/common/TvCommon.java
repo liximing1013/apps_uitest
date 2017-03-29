@@ -8,6 +8,9 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.UiWatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tv.fun.common.Common;
 import tv.fun.common.Utils;
 
@@ -366,6 +369,10 @@ public class TvCommon extends Common{
         }
     }
 
+    public void longPressHome(int iSecond){
+        longPress(-1, iSecond);
+    }
+
     public void longPressUp(int iSecond){
         longPress(0, iSecond);
     }
@@ -382,11 +389,19 @@ public class TvCommon extends Common{
         longPress(3, iSecond);
     }
 
-    // 需要将/dev/input/event3的权限设置为666才能运行长按操作
+    // 需要将电视上的/dev/input/event3的权限设置为666才能运行长按操作
     public void longPress(int iKey, int iSecond){
         String [] asCmd = new String[7];
-
-        if(0 == iKey){ // Up
+        if(-1 == iKey) { // Home
+            asCmd[0] = "sendevent /dev/input/event3 4 4 458826";
+            asCmd[1] = "sendevent /dev/input/event3 1 102 1";
+            asCmd[2] = "sendevent /dev/input/event3 0 0 0";
+            asCmd[3] = String.format("/system/bin/sleep %s", iSecond);
+            asCmd[4] = asCmd[0];
+            asCmd[5] = "sendevent /dev/input/event3 1 102 0";
+            asCmd[6] = asCmd[2];
+        }
+        else if(0 == iKey){ // Up
             asCmd[0] = "sendevent /dev/input/event3 4 4 458834";
             asCmd[1] = "sendevent /dev/input/event3 1 103 1";
             asCmd[2] = "sendevent /dev/input/event3 0 0 0";
@@ -455,5 +470,54 @@ public class TvCommon extends Common{
             return false;
         }
     }
-}
 
+    public UiObject[] getChildren(int iPType, String sParent, int iCType, String sChild) {
+
+        UiObject uiPObj = getUiObject(iPType, sParent);
+        int iChild;
+        UiObject [] uiObjects;
+
+        try {
+            iChild = uiPObj.getChildCount();
+        } catch (UiObjectNotFoundException e) {
+            iChild = 0;
+            return null;
+        }
+        uiObjects = new UiObject[iChild];
+        for (int i = 0; i < iChild; i++) {
+            try {
+                uiObjects[i] = getUiObjChild(uiPObj, iCType, sChild, i);
+            } catch (Throwable e) {
+                uiObjects[i] = null;
+            }
+        }
+        return uiObjects;
+    }
+
+    // 获取主页Tab列表，返回一个List<String>类型的对象
+    public List<String> getHomeTabList(){
+        Home();
+        String sId = "com.bestv.ott:id/home_root";
+        String sTitileId = "com.bestv.ott:id/tab_title";
+        List<String> sTabList = new ArrayList<>();
+
+        UiObject uiObj = getUiObjByResId(sId);
+        int iChild;
+        try {
+            iChild = uiObj.getChildCount();
+        } catch (UiObjectNotFoundException e) {
+            iChild = 10;
+        }
+        UiObject uiChildObj;
+        int i;
+        for(i = 0; i < iChild; i++){
+            try {
+                uiChildObj = getUiObjChild(uiObj, BY_RESID, sTitileId, i);
+                 sTabList.add(i, uiChildObj.getText());
+            }catch (Throwable e){
+                break;
+            }
+        }
+        return sTabList;
+    }
+}
