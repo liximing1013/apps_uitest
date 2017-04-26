@@ -429,13 +429,6 @@ public class TestLongVideoPlay {
         UiObject Swipe = uiDevice.findObject(new UiSelector().className("android.widget.SeekBar")
                 .resourceId("com.bestv.ott:id/media_progress"));
         Swipe.swipeRight(10);
-//        Utils.execCommand("adb shell sendevent /dev/input/event3 4 4 458831", false, false);
-//        Utils.execCommand("adb shell sendevent /dev/input/event3 1 106 1", false, false);
-//        Utils.execCommand("adb shell sendevent /dev/input/event3 0 0 0", false, false);
-//        Utils.execCommand("adb shell /system/bin/sleep " + iSeconds, false, false);
-//        Utils.execCommand("adb shell sendevent /dev/input/event3 4 4 458831", false, false);
-//        Utils.execCommand("adb shell sendevent /dev/input/event3 1 106 0", false, false);
-//        Utils.execCommand("adb shell sendevent /dev/input/event3 0 0 0", false, false);
     } //快速滑动右移
 
     private void LeftLeftSpeedSpeed() throws UiObjectNotFoundException {
