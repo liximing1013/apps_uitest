@@ -82,6 +82,16 @@ public class TestLauncherFunctionV3 {
         TvCommon.printAllMethods(this.getClass().getName());
     }
 
+    @Test //首页搜索选项
+    public void LC_Tab_01_LauncherSearchButton(){
+        uiDevice.pressKeyCode(260);
+    }
+
+    @Test //首页+选项
+    public void LC_Tab_02_LauncherAddButton(){
+
+    }
+
     @Test //小视频收藏
     public void LC_SV_10_SmallVideoCollectRecord() {
         try {

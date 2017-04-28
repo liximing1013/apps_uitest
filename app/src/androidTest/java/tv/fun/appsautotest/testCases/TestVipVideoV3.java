@@ -72,7 +72,7 @@ public final class TestVipVideoV3 {
         m_Time=Utils.getCurSecond();   //耗时
 
         uiDevice.pressHome();
-        uiDevice.waitForIdle(3000);
+        uiDevice.waitForIdle(5000);
         UiObject2 VipArea = this.getTabFromLauncherHomeByText(uiDevice, "金卡会员");
         this.openTabFromLauncherHomeByTextView(uiDevice, VipArea);
         systemWait(WAIT);
@@ -327,7 +327,10 @@ public final class TestVipVideoV3 {
         try {
             EnterPersonalCenterPage();
             UiObject2 WelCard = uiDevice.findObject(By.text("福利领取"));
-            Assert.assertEquals("福利领取",WelCard.getText());
+            m_Expect = "福利领取";
+            m_Actual = WelCard.getText();
+            m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
+            Utils.writeCaseResult("个人中心未抓到关键字", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -502,6 +505,7 @@ public final class TestVipVideoV3 {
     @Test //播放金卡电视剧
     public void LC_VIP_18_PlayVipTVVideo(){
         try {
+            uiDevice.waitForIdle();
             UiObject2 VipVideo = uiDevice.findObject(By.text("金卡-电视剧").res("com.bestv.ott:id/title"));
             this.openTabFromLauncherHomeByTextView(uiDevice,VipVideo);
             this.RandomPlayFilm(9);
@@ -610,6 +614,7 @@ public final class TestVipVideoV3 {
     @Test //金卡少儿
     public void LC_VIP_21_PlayKidVideo() {
         try {
+            uiDevice.waitForIdle();
             RightMoveMethod(2);
             DownMoveMethod(1);
             uiDevice.pressDPadCenter();
@@ -651,6 +656,7 @@ public final class TestVipVideoV3 {
     @Test //金卡动漫
     public void LC_VIP_22_PlayComicVideo() {
         try {
+            uiDevice.waitForIdle();
             UiObject2 VipVideo = uiDevice.findObject(By.text("金卡-动漫").res("com.bestv.ott:id/title"));
             this.openTabFromLauncherHomeByTextView(uiDevice,VipVideo);
             this.RandomPlayFilm(3);
@@ -867,6 +873,5 @@ public final class TestVipVideoV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }
