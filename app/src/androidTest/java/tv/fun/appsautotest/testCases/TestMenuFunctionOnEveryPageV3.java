@@ -483,7 +483,23 @@ public class TestMenuFunctionOnEveryPageV3 {
     @Test  //播放记录页Tab menu-视频分类
     public void LC_MENU_17_EmptyRecordInPlayRecordTab() {
         try {
-
+            EnterPlayRecordPage();
+            UiObject2 Recycle = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
+            List<UiObject2> Cards = Recycle.findObjects(By.clazz("android.widget.RelativeLayout"));
+            if(Cards.size() == 0){
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                RightMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+                m_Actual = Classify.getText();
+                m_Expect = "最新";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
+            }else {
+                Log.d("LXM", "LC_MENU_17_EmptyRecordInPlayRecordTab: 播放记录不为空");
+            }
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -531,7 +547,7 @@ public class TestMenuFunctionOnEveryPageV3 {
     }
 
     @Test  //我的收藏卡片menu-已收藏
-    public void LC_MENU_18_HadCollectInMyCollectPageCard(){
+    public void LC_MENU_19_HadCollectInMyCollectPageCard(){
         try {
             EnterMyCollectPage();
             UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
@@ -558,39 +574,92 @@ public class TestMenuFunctionOnEveryPageV3 {
     }
 
     @Test  //我的收藏卡片menu-清空全部
-    public void LC_MENU_18_EmptyAllCollectInMyCollectPageCard(){
-
+    public void LC_MENU_20_EmptyAllCollectInMyCollectPageCard(){
+        try {
+            EnterMyCollectPage();
+            DownMoveMethod(1);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            RightMoveMethod(2);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 Col1 = uiDevice.findObject(By.text("亲，您确定要清空所有我的收藏吗？"));
+            m_Actual = Col1.getText();
+            m_Expect = "亲，您确定要清空所有我的收藏吗？";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("弹框错误",m_Pass,m_Time);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            UiObject2 Col2 = uiDevice.findObject(By.text("视频分类"));
+            m_Actual = Col2.getText();
+            m_Expect = "视频分类";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("弹框错误",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     @Test  //赛事预约页面menu-取消预约
-    public void LC_MENU_19_CancelAppointInMatchPageCard(){
-
+    public void LC_MENU_21_CancelAppointInMatchPageCard(){
+        try{
+            EnterMyCollectPage();
+            UiObject GameOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("赛事预约"));
+            if(GameOrder.exists()){
+                RightMoveMethod(1);
+                systemWait(WAIT);
+                DownMoveMethod(1);
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                UiObject2 CancelOrder = uiDevice.findObject(By.text("取消预约"));
+                m_Expect = "取消预约";
+                m_Actual = CancelOrder.getText();
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("menu显示错误",m_Pass,m_Time);
+                BackPageMethod();
+            }else{
+                Utils.writeCaseResult("未预约赛事",false,m_Time);
+                BackPageMethod();
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     @Test  //赛事预约Tab menu操作
-    public void LC_MENU_20_LiveBookingPageMenuOperation(){
+    public void LC_MENU_22_LiveBookingPageMenuOperation(){
         try{
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            uiDevice.pressDPadUp();
-            uiDevice.pressDPadUp();
-            systemWait(SHORT_WAIT);
-            UiObject ZhiBoOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
-            if(ZhiBoOrder.getText().equals("赛事预约")){
-                uiDevice.pressDPadRight();
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadRight();
+            EnterMyCollectPage();
+            UiObject ZhiBoOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("赛事预约"));
+            if(ZhiBoOrder.exists()){
+                RightMoveMethod(1);
                 systemWait(WAIT);
+                DownMoveMethod(1);
                 uiDevice.pressMenu();
                 systemWait(WAIT);
-                UiObject2 SouSuo = uiDevice.findObject(By.text("取消全部"));
-                m_Expect = "取消全部";
-                m_Actual = SouSuo.getText();
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("menu选项错误",m_Pass,m_Time);
+                RightMoveMethod(2);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 Col1 = uiDevice.findObject(By.text("亲，您确定要清空所有赛事预约吗？"));
+                m_Actual = Col1.getText();
+                m_Expect = "亲，您确定要清空所有赛事预约吗？";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("弹框错误",m_Pass,m_Time);
+                BackPageMethod();
             }else{
+                Utils.writeCaseResult("未预约赛事",false,m_Time);
                 uiDevice.pressBack();
             }
         }catch(Throwable e){
@@ -604,31 +673,25 @@ public class TestMenuFunctionOnEveryPageV3 {
     }
 
     @Test  //赛事预约页面清空全部比赛
-    public void LC_MENU_21_EmptyMatchOrderInterface() {
+    public void LC_MENU_23_EmptyMatchOrderInterface() {
         try {
-            uiDevice.pressDPadRight();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            UiObject2 TabViewer= uiDevice.findObject(By.text("赛事预约"));
-            if(TabViewer == null){
-                System.out.println("没有预约赛事Tab，么么哒！Please go order");
+            EnterMyCollectPage();
+            UiObject2 GameOrder= uiDevice.findObject(By.text("赛事预约"));
+            if(GameOrder == null){
+                Utils.writeCaseResult("未预约赛事",false,m_Time);
             }else {
-                uiDevice.pressDPadUp();
-                uiDevice.pressDPadRight();
-                uiDevice.pressDPadRight();
-                systemWait(SHORT_WAIT);
+                RightMoveMethod(1);
+                systemWait(WAIT);
                 uiDevice.pressMenu();
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadRight();
+                systemWait(WAIT);
+                RightMoveMethod(1);
+                uiDevice.pressDPadCenter();
                 systemWait(SHORT_WAIT);
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(SHORT_WAIT);
-                UiObject2 TextViewer = uiDevice.findObject(text("赛事预约"));
-                //赛事预约界面清空时会Tab消失&TextViewer为空值时不能使用get取值
+                UiObject2 TextViewer = uiDevice.findObject(text("赛事预约"));//赛事预约界面清空时会Tab消失&TextViewer为空值时不能使用get取值
                 Assert.assertNull(TextViewer);
+                uiDevice.pressBack();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -643,17 +706,19 @@ public class TestMenuFunctionOnEveryPageV3 {
     @Test  //列表页Tab Menu操作-搜索
     public void LC_MENU_31_ListTabMenuOperationTab1(){
         try {
-            uiDevice.pressDPadDown();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
+            EnterFilmListPage();
+            wait(3000);
             uiDevice.pressMenu();
             systemWait(WAIT);
-            UiObject2 TextView = uiDevice.findObject(By.text("搜索"));
-            m_Actual = TextView.getText();
-            m_Expect = "搜索";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("弹框显示错误",m_Pass,m_Time);
+            UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
+            Assert.assertEquals("搜索",Menu.getText());
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
+            m_Actual = SearchPage.getText();
+            m_Expect = "用手机搜片";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -666,67 +731,401 @@ public class TestMenuFunctionOnEveryPageV3 {
 
     @Test  //列表页Tab Menu操作-筛选
     public void LC_MENU_32_ListTabMenuOperationTab2(){
-
+        try {
+            EnterFilmListPage();
+            wait(3000);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            RightMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 FilterPage = uiDevice.findObject(By.text("地区").res("com.bestv.ott:id/filter_page_title"));
+            Assert.assertEquals("地区",FilterPage.getText());
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     @Test  //列表页卡片-搜索
     public void LC_MENU_33_ListTabMenuOperationCard1(){
-
+        try {
+            EnterFilmListPage();
+            wait(3000);
+            RightMoveMethod(2);
+            systemWait(WAIT);
+            DownMoveMethod(1);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
+            Assert.assertEquals("搜索",Menu.getText());
+            LeftMoveMethod(2);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
+            m_Actual = SearchPage.getText();
+            m_Expect = "用手机搜片";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     @Test  //列表页卡片-筛选
     public void LC_MENU_34_ListTabMenuOperationCard2(){
-
+        try {
+            EnterFilmListPage();
+            wait(3000);
+            RightMoveMethod(2);
+            systemWait(WAIT);
+            DownMoveMethod(1);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            UiObject2 Menu = uiDevice.findObject(By.text("筛选"));
+            Assert.assertEquals("筛选",Menu.getText());
+            LeftMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 FilterPage = uiDevice.findObject(By.text("地区").res("com.bestv.ott:id/filter_page_title"));
+            Assert.assertEquals("地区",FilterPage.getText());
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
     @Test  //列表页卡片-收藏
     public void LC_MENU_35_ListTabMenuOperationCard3(){
-
+        try {
+            EnterFilmListPage();
+            wait(3000);
+            RightMoveMethod(2);
+            systemWait(WAIT);
+            DownMoveMethod(1);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            UiObject2 Menu = uiDevice.findObject(By.text("收藏"));
+            Assert.assertEquals("收藏",Menu.getText());
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 Collect = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            m_Actual = Collect.getText();
+            m_Expect = "已收藏";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("详情页显示已收藏",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
-    @Test //详情页menu-搜索
+    @Test  //详情页menu-搜索
     public void LC_MENU_36_DetailsPageMenuOperation1(){
-
+        try {
+            RightMoveMethod(2);
+            DownMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            uiDevice.waitForIdle(20000);
+            systemWait(LONG_WAIT);
+            UiObject2 Rel = uiDevice.findObject(By.text("相关推荐"));
+            Assert.assertEquals("相关推荐",Rel.getText());
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
+            m_Actual = SearchPage.getText();
+            m_Expect = "用手机搜片";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
-    @Test //详情页menu-视频分类
+    @Test  //详情页menu-视频分类
     public void LC_MENU_37_DetailsPageMenuOperation2(){
-
+        try {
+            RightMoveMethod(2);
+            DownMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            uiDevice.waitForIdle(20000);
+            systemWait(LONG_WAIT);
+            UiObject2 Rel = uiDevice.findObject(By.text("相关推荐"));
+            Assert.assertEquals("相关推荐",Rel.getText());
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            RightMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+            m_Actual = Classify.getText();
+            m_Expect = "最新";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
-    @Test //轮播menu-查看详情
+    @Test  //轮播menu-查看详情
     public void LC_MENU_41_CarouselMenuOperation1(){
-
+        try {
+            EnterTVTabPage();
+            RightMoveMethod(1);
+            systemWait(WAIT);
+            UiObject2 PageTitle = uiDevice.findObject(By.res("com.bestv.ott:id/home_tv_feature_two_subtitle")
+                    .clazz("android.widget.TextView"));
+            String PT =PageTitle.getText().split("-")[0];  //截断字符
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoTime);
+            uiDevice.pressMenu();
+            systemWait(SHORT_WAIT);
+            UpMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            uiDevice.waitForIdle(20000);
+            systemWait(LONG_WAIT);
+            UiObject2 DelPage = uiDevice.findObject(By.res("com.bestv.ott:id/detail_title")
+                    .clazz("android.widget.TextView"));
+            if(PT.equals(DelPage.getText())){
+                Assert.assertTrue(true);
+            }else {
+                Assert.assertTrue(false);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
-    @Test //轮播menu-清晰度
+    @Test  //轮播menu-清晰度
     public void LC_MENU_42_CarouselMenuOperation2(){
-
+        try {
+            EnterTVTabPage();
+            RightMoveMethod(1);
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoTime);
+            uiDevice.pressMenu();
+            systemWait(SHORT_WAIT);
+            LeftMoveMethod(1);
+            DownMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoTime);
+            m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+            m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
+            Utils.writeCaseResult("金卡电视剧视频播放失败",m_uiObj !=null,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
-    @Test //轮播menu-画面比例
+    @Test  //轮播menu-画面比例
     public void LC_MENU_43_CarouselMenuOperation3(){
-
+        try {
+            EnterTVTabPage();
+            RightMoveMethod(1);
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoTime);
+            uiDevice.pressMenu();
+            systemWait(SHORT_WAIT);
+            DownMoveMethod(1);
+            LeftMoveMethod(1);
+            DownMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(PlayVideoTime);
+            m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
+            m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
+            Utils.writeCaseResult("金卡电视剧视频播放失败",m_uiObj !=null,m_Time);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
     }
 
-    @Test //我的应用-清理数据
+    @Test  //我的应用-清理数据
     public void LC_MENU_51_MyAppMenuOperation1InTopBar(){
-
+        try {
+            UpMoveMethod(2);
+            uiDevice.waitForIdle();
+            UiObject2 MyApp = uiDevice.findObject(By.res("com.bestv.ott:id/app"));
+            this.openTabFromLauncherHomeByresId(uiDevice, MyApp);
+            systemWait(WAIT);
+            UiObject2 AppTitle = uiDevice.findObject(text("我的应用"));
+            Assert.assertEquals("我的应用",AppTitle.getText());
+            UiObject2 Recycle = uiDevice.findObject(By.res("tv.fun.appstore:id/listview"));
+            List<UiObject2> Cards = Recycle.findObjects(By.clazz("android.widget.RelativeLayout"));
+            if(Cards.size()>=1){
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                RightMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 Uninstall = uiDevice.findObject(By.text("应用清理"));
+                m_Actual = Uninstall.getText();
+                m_Expect = "应用清理";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("跳转页面错误",m_Pass,m_Time);
+            }else {
+                Utils.writeCaseResult("无应用存在",false,m_Time);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
     }
 
-    @Test //我的应用-卸载
+    @Test  //我的应用-卸载
     public void LC_MENU_52_MyAppMenuOperation2InTopBar(){
-
+        try {
+            UpMoveMethod(2);
+            uiDevice.waitForIdle();
+            UiObject2 MyApp = uiDevice.findObject(By.res("com.bestv.ott:id/app"));
+            this.openTabFromLauncherHomeByresId(uiDevice, MyApp);
+            systemWait(WAIT);
+            UiObject2 AppTitle = uiDevice.findObject(text("我的应用"));
+            Assert.assertEquals("我的应用",AppTitle.getText());
+            UiObject2 Recycle = uiDevice.findObject(By.res("tv.fun.appstore:id/listview"));
+            List<UiObject2> Cards = Recycle.findObjects(By.clazz("android.widget.RelativeLayout"));
+            if(Cards.size()>=1){
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                UiObject2 Uninstall = uiDevice.findObject(By.text("卸载"));
+                m_Actual = Uninstall.getText();
+                m_Expect = "卸载";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("menu选项错误",m_Pass,m_Time);
+            }else {
+                Utils.writeCaseResult("无应用存在",false,m_Time);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
     }
 
-    @Test //消息中心-删除单条
+    @Test  //消息中心-删除单条
     public void LC_MENU_53_MessageCenterMenuOperation2InTopBar(){
-
+        try {
+            UpMoveMethod(2);
+            uiDevice.waitForIdle();
+            UiObject2 Message = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
+            this.openTabFromLauncherHomeByresId1(uiDevice, Message);
+            UiObject2 AppTitle = uiDevice.findObject(text("消息中心"));
+            Assert.assertEquals("消息中心",AppTitle.getText());
+            UiObject Title = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title_tip"));
+            systemWait(WAIT);
+            if(!Title.exists()){
+                UiObject2 PageText = uiDevice.findObject(By.text("暂未收到任何消息"));
+                m_Actual = PageText.getText();
+                m_Expect = "暂未收到任何消息";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("显示错误",m_Pass,m_Time);
+                BackPageMethod();
+            }else {
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                UiObject2 Delete = uiDevice.findObject(By.text("删除单条"));
+                m_Actual = Delete.getText();
+                m_Expect = "删除单条";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("显示错误",m_Pass,m_Time);
+                BackPageMethod();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
     }
 
-    @Test //消息中心-清空全部
+    @Test  //消息中心-清空全部
     public void LC_MENU_54_MessageCenterMenuOperation2InTopBar(){
-
+        try {
+            UpMoveMethod(2);
+            uiDevice.waitForIdle();
+            UiObject2 Message = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
+            this.openTabFromLauncherHomeByresId1(uiDevice, Message);
+            UiObject2 AppTitle = uiDevice.findObject(text("消息中心"));
+            Assert.assertEquals("消息中心",AppTitle.getText());
+            UiObject Title = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title_tip"));
+            systemWait(WAIT);
+            if(!Title.exists()){
+                UiObject2 PageText = uiDevice.findObject(By.text("暂未收到任何消息"));
+                m_Actual = PageText.getText();
+                m_Expect = "暂未收到任何消息";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("显示错误",m_Pass,m_Time);
+                BackPageMethod();
+            }else {
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                UiObject2 Empty = uiDevice.findObject(By.text("清空全部"));
+                m_Actual = Empty.getText();
+                m_Expect = "清空全部";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("显示错误",m_Pass,m_Time);
+                BackPageMethod();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }
     }
 
     private UiObject2 getTabFromLauncherHomeByText(UiDevice device, String tabText) {
@@ -746,6 +1145,23 @@ public class TestMenuFunctionOnEveryPageV3 {
         TabView.click();
         systemWait(SHORT_WAIT);
         device.pressEnter();
+        device.waitForIdle();
+        systemWait(WAIT);
+    }
+
+    private void openTabFromLauncherHomeByresId(UiDevice device, UiObject2 resourceId) {
+        resourceId.click();
+        //resourceId.getParent().click();
+        systemWait(SHORT_WAIT);
+        device.pressDPadCenter();
+        device.waitForIdle();
+        systemWait(WAIT);
+    }
+
+    private void openTabFromLauncherHomeByresId1(UiDevice device, UiObject2 resourceId) {
+        resourceId.click();
+        //resourceId.getParent().click();
+        systemWait(SHORT_WAIT);
         device.waitForIdle();
         systemWait(WAIT);
     }
@@ -787,6 +1203,28 @@ public class TestMenuFunctionOnEveryPageV3 {
         }
     }  //进入我的收藏页
 
+    private void EnterFilmListPage(){
+        DownMoveMethod(1);
+        uiDevice.pressDPadCenter();
+        systemWait(WAIT);
+        uiDevice.waitForIdle();
+        UiObject2 Recommend = uiDevice.findObject(By.text("推荐"));
+        Assert.assertEquals("推荐",Recommend.getText());
+    }  //进入电影列表页
+
+    private void EnterTVTabPage(){
+        UpMoveMethod(1);
+        LeftMoveMethod(1);
+        systemWait(WAIT);
+        UiObject2 TabName = uiDevice.findObject(By.text("电视"));
+        if(TabName.isSelected()) {
+            DownMoveMethod(1);
+            systemWait(WAIT);
+        }else {
+            Assert.assertTrue(false);
+        }
+    } //进入电视Tab页面
+
     private void RightMoveMethod(int RightMove){
         int i = 1;
         while (i <= RightMove){
@@ -795,6 +1233,15 @@ public class TestMenuFunctionOnEveryPageV3 {
             systemWait(SHORT_WAIT);
         }
     } //Right*
+
+    private void LeftMoveMethod(int LeftMove){
+        int i = 1;
+        while (i <= LeftMove){
+            i++;
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+        }
+    } //Left*
 
     private void DownMoveMethod(int DownMove){
         int i = 1;

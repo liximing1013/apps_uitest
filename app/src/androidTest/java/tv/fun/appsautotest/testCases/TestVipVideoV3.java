@@ -60,7 +60,7 @@ public final class TestVipVideoV3 {
     private boolean m_Pass = false;
 
     @BeforeClass
-    public static void BeforeClass(){
+    public static void BeforeClass() {
 
         System.out.println("进入金卡会员页面，开启金卡专区的自动化测试了..");
     }
