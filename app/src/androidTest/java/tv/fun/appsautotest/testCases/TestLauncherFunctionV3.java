@@ -32,8 +32,8 @@ import static android.content.ContentValues.TAG;
 import static android.support.test.uiautomator.By.text;
 
 /**
- * Created by lixm on 2016/10/28
- * test case: 38
+ * Created by lxm on 2017/5/3
+ * testCase:
  **/
 
 @RunWith(AndroidJUnit4.class)
@@ -76,19 +76,91 @@ public class TestLauncherFunctionV3 {
         systemWait(WAIT);
     }
 
-    @Test //获取用例名
+    @Test  //获取用例名
     public void test(){
 
         TvCommon.printAllMethods(this.getClass().getName());
     }
 
-    @Test //首页搜索选项
+    @Test  //首页搜索选项
     public void LC_Tab_01_LauncherSearchButton(){
+
         uiDevice.pressKeyCode(260);
     }
 
-    @Test //首页+选项
-    public void LC_Tab_02_LauncherAddButton(){
+    @Test  //中文搜索
+    public void LC_Tab_02_ChineseSearch(){
+
+    }
+
+    @Test  //首页+选项
+    public void LC_Tab_03_LauncherAddButton(){
+
+    }
+
+    @Test  //信源界面
+    public void LC_Source_01_SourcePageDisplay(){
+
+    }
+
+    @Test  //电视Tab看看新闻直播
+    public void LC_TV_01_News24InTVTab(){
+
+    }
+
+    @Test  //看看新闻切换清晰度
+    public void LC_TV_02_News24ChooseDefinitionInTVTab(){
+
+    }
+
+    @Test  //看看新闻切换画面比例
+    public void LC_TV_03_News24ChooseScaleInTVTab(){
+
+    }
+
+    @Test  //轮播列表显示
+    public void LC_Carousel_01_CarouselListDisplay(){
+
+    }
+
+    @Test  //轮播一级列表节目播放
+    public void LC_Carousel_02_CarouselAListPlayVideo(){
+
+    }
+
+    @Test  //轮播二级列表节目播放
+    public void LC_Carousel_03_CarouselBListPlayVideo(){
+
+    }
+
+    @Test  //节目暂停后快进快退
+    public void LC_Carousel_04_PlayingVideoAdjustSpeed(){
+
+    }
+
+    @Test  //节目键使用
+    public void LC_Carousel_05_UseProgramKey(){
+
+    }
+
+
+    @Test  //桌面设置
+    public void LC_Table_01_TableSettings(){
+
+    }
+
+    @Test  //儿童桌面设置显示
+    public void LC_Table_02_ChildrenTableSettings(){
+
+    }
+
+    @Test  //标准设置显示
+    public void LC_Table_03_StandardTableSettings(){
+
+    }
+
+    @Test  //桌面名称更改
+    public void LC_Table_04_ChangeTableName(){
 
     }
 
@@ -182,6 +254,11 @@ public class TestLauncherFunctionV3 {
         }
     }
 
+    @Test  //NBA播放窜口切换相关视频
+    public void LC_NBA_02_SwitchRelatedVideo(){
+
+    }
+
     @Test //NBA赛程表页面
     public void LC_NBA_26_EnterNBARaceCard() {
         try {
@@ -205,6 +282,11 @@ public class TestLauncherFunctionV3 {
         }
     }
 
+    @Test //球队赛程页面
+    public void LC_NBA_26_EnterNBATeamGameCard(){
+
+    }
+
     @Test //NBA一键预约页面
     public void LC_NBA_38_EnterNBAKeyAppointment(){
         try {
@@ -226,6 +308,11 @@ public class TestLauncherFunctionV3 {
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
+    }
+
+    @Test //NBA一键预约后播放记录进入
+    public void LC_NBA_26_EnterKeyAppointmentFromGameOrder(){
+
     }
 
     @Test //购买NBA包
@@ -562,6 +649,11 @@ public class TestLauncherFunctionV3 {
         }
     }
 
+    @Test //顶部快捷栏--智能桌面
+    public void LC_TB_05_EnterTableTopBars(){
+
+    }
+
     @Test //顶部快捷栏--消息中心
     public void LC_TB_06_EnterMessageTopBars() {
         try {
@@ -586,7 +678,7 @@ public class TestLauncherFunctionV3 {
         }
     }
 
-    @Test //顶部快捷栏--通用设置
+    @Test //顶部快捷栏--设置
     public void LC_TB_07_EnterSettingsTopBars() {
         try {
             uiDevice.pressDPadUp();
@@ -669,6 +761,16 @@ public class TestLauncherFunctionV3 {
             Utils.writeCaseResult(resultStr, resultFlag, m_Time);
         }
     }
+
+    @Test //顶部快捷栏--小助手
+    public void LC_TB_05_EnterHelperTopBars(){
+
+    }
+    @Test  //进入英超主页
+    public void LC_PL_01_EnterPremierLeaguePage(){
+
+    }
+
 
     @Test //英超播放小视频专题
     public void LC_PL_03_PremierLeaguePlaySmallVideo() {

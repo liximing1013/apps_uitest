@@ -31,9 +31,9 @@ import tv.fun.common.Utils;
 import static android.support.test.uiautomator.By.text;
 
 /**
- * Created by lixm on 2017/4/26
+ * Created by lxm on 2017/4/26
  * 测试menu键在各个页面的操作
- * TestCase:
+ * TestCase: 34
  **/
 
 @RunWith(AndroidJUnit4.class)
@@ -399,25 +399,30 @@ public class TestMenuFunctionOnEveryPageV3 {
         }
     }
 
-    @Test  //播放记录卡片menu-删除单个
+    @Test  //播放记录卡片menu-删除单个(播放记录>=2)
     public void LC_MENU_14_DelOnlyOneInPlayRecordCard(){
         try {
             EnterPlayRecordPage();
-            UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
-            List<UiObject2> Cards1 = Recycle1.findObjects(By.clazz("android.widget.RelativeLayout"));
-            int RecordCount1 = Cards1.size();//获取初次进入时页面卡片数量
-            uiDevice.pressMenu();
-            systemWait(WAIT);
-            RightMoveMethod(1);
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            UiObject2 Recycle2 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
-            List<UiObject2> Cards2 = Recycle2.findObjects(By.clazz("android.widget.RelativeLayout"));
-            int RecordCount2 = Cards2.size();//获取删除单个后页面卡片数量
-            if(RecordCount2 != RecordCount1){
-                Assert.assertTrue(true);
+            UiObject2 Record = uiDevice.findObject(By.text("播放记录").res("com.bestv.ott:id/tab_title"));
+            if(Record.isFocused()) {
+                Utils.writeCaseResult("播放记录为空",false,m_Time);
             }else {
-                Assert.assertTrue(false);
+                UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
+                List<UiObject2> Cards1 = Recycle1.findObjects(By.clazz("android.widget.RelativeLayout"));
+                int RecordCount1 = Cards1.size();//获取初次进入时页面卡片数量
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                RightMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 Recycle2 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
+                List<UiObject2> Cards2 = Recycle2.findObjects(By.clazz("android.widget.RelativeLayout"));
+                int RecordCount2 = Cards2.size();//获取删除单个后页面卡片数量
+                if (RecordCount2 != RecordCount1) {
+                    Assert.assertTrue(true);
+                } else {
+                    Assert.assertTrue(false);
+                }
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -458,18 +463,35 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_16_EmptyVideoRecordInPlayRecordTab() {
         try {
             EnterPlayRecordPage();
-            UpMoveMethod(1);
             uiDevice.pressMenu();
-            RightMoveMethod(1);
-            uiDevice.pressDPadCenter();
-            systemWait(SHORT_WAIT);
-            uiDevice.pressDPadCenter();    //加入判定是否已清空播放记录页面
-            systemWait(SHORT_WAIT);
-            UiObject2 TextView = uiDevice.findObject(text("您还没有看过任何影片，去看几部片子再回来吧"));
-            m_Expect = "您还没有看过任何影片，去看几部片子再回来吧";
-            m_Actual = TextView.getText();
-            m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-            Utils.writeCaseResult("清空跳转失败or清空后提示错误", m_Pass, m_Time);
+            systemWait(WAIT);
+            UiObject2 MenuIcon = uiDevice.findObject(By.res("android:id/tv_fun_menu"));
+            List<UiObject2> Card = MenuIcon.findObjects(By.clazz("android.widget.LinearLayout"));
+            if(Card.size() > 3){    //menu选项隐藏一个，所有+1
+                uiDevice.pressBack();
+                systemWait(SHORT_WAIT);
+                UpMoveMethod(1);
+                uiDevice.pressMenu();
+                RightMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 SearchPage = uiDevice.findObject(By.text("您还没有看过任何影片，去看几部片子再回来吧"));
+                m_Actual = SearchPage.getText();
+                m_Expect = "您还没有看过任何影片，去看几部片子再回来吧";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("播放记录页面显示错误", m_Pass, m_Time);
+            } else {
+                RightMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+                m_Actual = Classify.getText();
+                m_Expect = "最新";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
+            }
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -484,22 +506,22 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_17_EmptyRecordInPlayRecordTab() {
         try {
             EnterPlayRecordPage();
-            UiObject2 Recycle = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
-            List<UiObject2> Cards = Recycle.findObjects(By.clazz("android.widget.RelativeLayout"));
-            if(Cards.size() == 0){
-                uiDevice.pressMenu();
-                systemWait(WAIT);
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            UiObject2 MenuIcon = uiDevice.findObject(By.res("android:id/tv_fun_menu"));
+            List<UiObject2> Card = MenuIcon.findObjects(By.clazz("android.widget.LinearLayout"));
+            if(Card.size() == 3){    //menu选项隐藏一个，所有+1
                 RightMoveMethod(1);
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 UiObject2 Classify = uiDevice.findObject(By.text("最新"));
                 m_Actual = Classify.getText();
                 m_Expect = "最新";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
-            }else {
-                Log.d("LXM", "LC_MENU_17_EmptyRecordInPlayRecordTab: 播放记录不为空");
-            }
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
+            } else {
+                Utils.writeCaseResult("播放记录不为空,说明Case18是错误的", false, m_Time);
+                }
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -611,10 +633,10 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_21_CancelAppointInMatchPageCard(){
         try{
             EnterMyCollectPage();
+            systemWait(WAIT);
             UiObject GameOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("赛事预约"));
             if(GameOrder.exists()){
                 RightMoveMethod(1);
-                systemWait(WAIT);
                 DownMoveMethod(1);
                 uiDevice.pressMenu();
                 systemWait(WAIT);
@@ -625,8 +647,7 @@ public class TestMenuFunctionOnEveryPageV3 {
                 Utils.writeCaseResult("menu显示错误",m_Pass,m_Time);
                 BackPageMethod();
             }else{
-                Utils.writeCaseResult("未预约赛事",false,m_Time);
-                BackPageMethod();
+                Utils.writeCaseResult("未有预约赛事",false,m_Time);
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -642,10 +663,10 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_22_LiveBookingPageMenuOperation(){
         try{
             EnterMyCollectPage();
+            systemWait(WAIT);
             UiObject ZhiBoOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("赛事预约"));
             if(ZhiBoOrder.exists()){
                 RightMoveMethod(1);
-                systemWait(WAIT);
                 DownMoveMethod(1);
                 uiDevice.pressMenu();
                 systemWait(WAIT);
@@ -660,7 +681,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 BackPageMethod();
             }else{
                 Utils.writeCaseResult("未预约赛事",false,m_Time);
-                uiDevice.pressBack();
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -676,6 +696,7 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_23_EmptyMatchOrderInterface() {
         try {
             EnterMyCollectPage();
+            systemWait(WAIT);
             UiObject2 GameOrder= uiDevice.findObject(By.text("赛事预约"));
             if(GameOrder == null){
                 Utils.writeCaseResult("未预约赛事",false,m_Time);
@@ -707,11 +728,8 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_31_ListTabMenuOperationTab1(){
         try {
             EnterFilmListPage();
-            wait(3000);
             uiDevice.pressMenu();
             systemWait(WAIT);
-            UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
-            Assert.assertEquals("搜索",Menu.getText());
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
@@ -733,7 +751,6 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_32_ListTabMenuOperationTab2(){
         try {
             EnterFilmListPage();
-            wait(3000);
             uiDevice.pressMenu();
             systemWait(WAIT);
             RightMoveMethod(1);
@@ -755,8 +772,7 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_33_ListTabMenuOperationCard1(){
         try {
             EnterFilmListPage();
-            wait(3000);
-            RightMoveMethod(2);
+            RightMoveMethod(1);
             systemWait(WAIT);
             DownMoveMethod(1);
             uiDevice.pressMenu();
@@ -784,9 +800,8 @@ public class TestMenuFunctionOnEveryPageV3 {
     @Test  //列表页卡片-筛选
     public void LC_MENU_34_ListTabMenuOperationCard2(){
         try {
-            EnterFilmListPage();
-            wait(3000);
-            RightMoveMethod(2);
+            this.EnterFilmListPage();
+            RightMoveMethod(1);
             systemWait(WAIT);
             DownMoveMethod(1);
             uiDevice.pressMenu();
@@ -812,23 +827,22 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_35_ListTabMenuOperationCard3(){
         try {
             EnterFilmListPage();
-            wait(3000);
             RightMoveMethod(2);
             systemWait(WAIT);
             DownMoveMethod(1);
-            uiDevice.pressMenu();
             systemWait(WAIT);
-            UiObject2 Menu = uiDevice.findObject(By.text("收藏"));
-            Assert.assertEquals("收藏",Menu.getText());
+            UiObject2 Col = uiDevice.findObject(By.text("收藏"));
+            Assert.assertEquals("显示错误，则证明Case20错误","收藏",Col.getText());
             uiDevice.pressDPadCenter();
-            systemWait(WAIT);
+            systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            UiObject2 Collect = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            m_Actual = Collect.getText();
+            uiDevice.waitForIdle(18000);
+            systemWait(LONG_WAIT);
+            UiObject2 DelCol = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            m_Actual = DelCol.getText();
             m_Expect = "已收藏";
-            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("详情页显示已收藏",m_Pass,m_Time);
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("收藏成功",m_Pass,m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -1059,6 +1073,7 @@ public class TestMenuFunctionOnEveryPageV3 {
         try {
             UpMoveMethod(2);
             uiDevice.waitForIdle();
+            systemWait(WAIT);
             UiObject2 Message = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
             this.openTabFromLauncherHomeByresId1(uiDevice, Message);
             UiObject2 AppTitle = uiDevice.findObject(text("消息中心"));
@@ -1096,6 +1111,7 @@ public class TestMenuFunctionOnEveryPageV3 {
         try {
             UpMoveMethod(2);
             uiDevice.waitForIdle();
+            systemWait(WAIT);
             UiObject2 Message = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
             this.openTabFromLauncherHomeByresId1(uiDevice, Message);
             UiObject2 AppTitle = uiDevice.findObject(text("消息中心"));
@@ -1206,7 +1222,7 @@ public class TestMenuFunctionOnEveryPageV3 {
     private void EnterFilmListPage(){
         DownMoveMethod(1);
         uiDevice.pressDPadCenter();
-        systemWait(WAIT);
+        systemWait(LONG_WAIT);
         uiDevice.waitForIdle();
         UiObject2 Recommend = uiDevice.findObject(By.text("推荐"));
         Assert.assertEquals("推荐",Recommend.getText());

@@ -146,8 +146,8 @@ public class TestEnterPage {
                 }
             }
             if(m_bPass) {
-                String sTitle1 = "24小时放映";
-                String sTitle2 = "最新上线";
+                String sTitle1 = "新片前瞻";
+                String sTitle2 = "今夜看啥";
                 m_bPass = m_com.isUiObjExists(m_com.BY_TEXT, sTitle1, "") ||
                         m_com.isUiObjExists(m_com.BY_TEXT, sTitle2, "");
                 m_sResult = String.format("进入\"电影\"页失败，没有[%s]和[%s]栏目！",

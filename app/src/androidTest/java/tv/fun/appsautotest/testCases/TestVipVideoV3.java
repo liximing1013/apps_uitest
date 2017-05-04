@@ -32,7 +32,7 @@ import tv.fun.common.Utils;
 import static android.support.test.uiautomator.By.text;
 
 /**
- * Created Lixm on 2016/4/26
+ * Created lxm on 2016/4/26
  * TestCase:24
  **/
 
@@ -873,5 +873,4 @@ public final class TestVipVideoV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 }
