@@ -69,14 +69,15 @@ public class TestMenuFunctionOnEveryPageV3 {
         uiDevice = UiDevice.getInstance(instrument);
         m_Time= Utils.getCurSecond();   //耗时
 
-        uiDevice.pressHome();
+        backToLauncherHome(uiDevice);
         uiDevice.waitForIdle();
         systemWait(WAIT);
     }
 
     @After //运行脚本之后回到launcher
     public void clearUp() {
-        backToLauncherHome(uiDevice);
+
+        BackPageMethod();
         systemWait(WAIT);
     }
 
@@ -103,14 +104,15 @@ public class TestMenuFunctionOnEveryPageV3 {
                 uiDevice.pressMenu();
                 systemWait(WAIT);
                 UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
-                Assert.assertEquals("搜索",Menu.getText());
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
-                m_Actual = SearchPage.getText();
-                m_Expect = "用手机搜片";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
+                if(Menu != null) {
+                    uiDevice.pressDPadCenter();
+                    systemWait(WAIT);
+                    UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
+                    m_Actual = SearchPage.getText();
+                    m_Expect = "用手机搜片";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
+                }
             }else {
                 Assert.assertTrue(false);
             }
@@ -134,16 +136,17 @@ public class TestMenuFunctionOnEveryPageV3 {
                 uiDevice.pressMenu();
                 systemWait(WAIT);
                 UiObject2 Menu = uiDevice.findObject(By.text("视频分类"));
-                Assert.assertEquals("视频分类",Menu.getText());
-                RightMoveMethod(1);
-                systemWait(SHORT_WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 Classify = uiDevice.findObject(By.text("最新"));
-                m_Actual = Classify.getText();
-                m_Expect = "最新";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
+                if(Menu != null) {
+                    RightMoveMethod(1);
+                    systemWait(SHORT_WAIT);
+                    uiDevice.pressDPadCenter();
+                    systemWait(WAIT);
+                    UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+                    m_Actual = Classify.getText();
+                    m_Expect = "最新";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
+                }
             }else {
                 Assert.assertTrue(false);
             }
@@ -347,7 +350,9 @@ public class TestMenuFunctionOnEveryPageV3 {
             resultFlag =false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -387,7 +392,6 @@ public class TestMenuFunctionOnEveryPageV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("视频播放失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
@@ -447,7 +451,6 @@ public class TestMenuFunctionOnEveryPageV3 {
             m_Expect = "用手机搜片";
             m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
@@ -644,7 +647,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Actual = CancelOrder.getText();
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("menu显示错误",m_Pass,m_Time);
-                BackPageMethod();
             }else{
                 Utils.writeCaseResult("未有预约赛事",false,m_Time);
             }
@@ -677,7 +679,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Expect = "亲，您确定要清空所有赛事预约吗？";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("弹框错误",m_Pass,m_Time);
-                BackPageMethod();
             }else{
                 Utils.writeCaseResult("未预约赛事",false,m_Time);
             }
@@ -711,7 +712,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 systemWait(WAIT);
                 UiObject2 TextViewer = uiDevice.findObject(text("赛事预约"));//赛事预约界面清空时会Tab消失&TextViewer为空值时不能使用get取值
                 Assert.assertNull(TextViewer);
-                uiDevice.pressBack();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -1085,7 +1085,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Expect = "暂未收到任何消息";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("显示错误",m_Pass,m_Time);
-                BackPageMethod();
             }else {
                 uiDevice.pressMenu();
                 systemWait(WAIT);
@@ -1123,7 +1122,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Expect = "暂未收到任何消息";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("显示错误",m_Pass,m_Time);
-                BackPageMethod();
             }else {
                 uiDevice.pressMenu();
                 systemWait(WAIT);
@@ -1132,7 +1130,6 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Expect = "清空全部";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("显示错误",m_Pass,m_Time);
-                BackPageMethod();
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -1180,17 +1177,6 @@ public class TestMenuFunctionOnEveryPageV3 {
         device.waitForIdle();
         systemWait(WAIT);
     }
-
-    private void backToLauncherHome(UiDevice device) {
-        device.pressHome();
-        device.waitForIdle();
-        systemWait(WAIT);
-    }
-
-    private void systemWait(int seconds) {
-
-        SystemClock.sleep(seconds * 1000);
-    } //等待时间
 
     private void EnterPlayRecordPage(){
         uiDevice.pressDPadRight();
@@ -1240,6 +1226,17 @@ public class TestMenuFunctionOnEveryPageV3 {
         }
     } //进入电视Tab页面
 
+    private void systemWait(int seconds) {
+
+        SystemClock.sleep(seconds * 1000);
+    } //等待时间
+
+    private void backToLauncherHome(UiDevice device) {
+        device.pressHome();
+        device.waitForIdle();
+        systemWait(WAIT);
+    }
+
     private void RightMoveMethod(int RightMove){
         int i = 1;
         while (i <= RightMove){
@@ -1281,6 +1278,5 @@ public class TestMenuFunctionOnEveryPageV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }
