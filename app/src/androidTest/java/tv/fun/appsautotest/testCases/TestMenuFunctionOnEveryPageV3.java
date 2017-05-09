@@ -188,7 +188,6 @@ public class TestMenuFunctionOnEveryPageV3 {
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
-
     }
 
     @Test  //生活Tab页面menu操作
@@ -832,7 +831,7 @@ public class TestMenuFunctionOnEveryPageV3 {
             DownMoveMethod(1);
             systemWait(WAIT);
             UiObject2 Col = uiDevice.findObject(By.text("收藏"));
-            Assert.assertEquals("显示错误，则证明Case20错误","收藏",Col.getText());
+            Assert.assertEquals("收藏",Col.getText());
             uiDevice.pressDPadCenter();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
@@ -1282,5 +1281,6 @@ public class TestMenuFunctionOnEveryPageV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
 
 }

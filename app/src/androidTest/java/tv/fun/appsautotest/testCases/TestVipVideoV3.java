@@ -434,6 +434,7 @@ public final class TestVipVideoV3 {
             systemWait(WAIT);
             UiObject2 tabView2 = this.getTabFromLauncherHomeByText(uiDevice, "即将上映");
             this.openTabFromLauncherHomeByTextView(uiDevice, tabView2); //进入即将上映页面
+            RightMoveMethod(1);
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
             UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/fav_state"));//通过Res_id来获取Text值，判断当前button选项
@@ -873,4 +874,5 @@ public final class TestVipVideoV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
 }
