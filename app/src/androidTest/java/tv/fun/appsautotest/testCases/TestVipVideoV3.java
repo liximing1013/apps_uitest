@@ -410,8 +410,8 @@ public final class TestVipVideoV3 {
             EnterPersonalCenterPage();
             UiObject2 record = uiDevice.findObject(By.text("消费记录"));
             this.openTabFromLauncherHomeByTextView(uiDevice,record);
-            UiObject2 tabView = uiDevice.findObject(text("客服电话：400 600 6258"));
-            m_Expect = "客服电话：400 600 6258";
+            UiObject2 tabView = uiDevice.findObject(text("客服电话: 400 600 6258"));
+            m_Expect = "客服电话: 400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult("进入消费记录页面时跳转失败：未抓到关键字", m_Pass, m_Time);
@@ -433,8 +433,8 @@ public final class TestVipVideoV3 {
             EnterPersonalCenterPage();
             UiObject2 coupon = uiDevice.findObject(By.text("观影券"));
             this.openTabFromLauncherHomeByTextView(uiDevice,coupon);
-            UiObject2 tabView = uiDevice.findObject(text("客服电话：400 600 6258"));
-            m_Expect = "客服电话：400 600 6258";
+            UiObject2 tabView = uiDevice.findObject(text("客服电话: 400 600 6258"));
+            m_Expect = "客服电话: 400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult("进入观影券页面时跳转失败：未抓到关键字", m_Pass, m_Time);
@@ -967,5 +967,6 @@ public final class TestVipVideoV3 {
         SystemClock.sleep(1000);
         uiDevice.pressBack();
     } //Back*
+
 
 }

@@ -65,16 +65,13 @@ public class TestLauncherFunctionV3 {
         uiDevice = UiDevice.getInstance(instrument);
         m_Time= Utils.getCurSecond();   //耗时
 
-        uiDevice.pressHome();
-        uiDevice.waitForIdle();
-        systemWait(WAIT);
-
+        backToLauncherHome(uiDevice);
     }
 
     @After //运行脚本之后回到launcher
     public void clearUp() {
-        backToLauncherHome(uiDevice);
-        systemWait(WAIT);
+        BackPageMethod();
+        SystemClock.sleep(6000);
     }
 
     @Test  //获取用例名
@@ -99,7 +96,6 @@ public class TestLauncherFunctionV3 {
                 m_Expect = "用手机搜片";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
-                BackPageMethod();
             }else {
                 Assert.assertTrue(false);
             }
@@ -119,22 +115,26 @@ public class TestLauncherFunctionV3 {
             uiDevice.pressMenu();
             systemWait(WAIT);
             UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
-            Assert.assertEquals("搜索",Menu.getText());
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            UiObject2 SearchPage = uiDevice.findObject(By.text("中文"));
-            m_Actual = SearchPage.getText();
-            m_Expect = "中文";
-            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("中文搜索显示正确",m_Pass,m_Time);
-            uiDevice.pressBack();
+            if(Menu != null) {
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 SearchPage = uiDevice.findObject(By.text("中文"));
+                m_Actual = SearchPage.getText();
+                m_Expect = "中文";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("中文搜索显示正确", m_Pass, m_Time);
+            }else {
+                Assert.assertTrue(false);
+            }
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -175,14 +175,15 @@ public class TestLauncherFunctionV3 {
             m_Expect = "当前选择";
             m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("信源页面显示正确",m_Pass,m_Time);
-            uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -197,14 +198,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("看看新闻播放失败",m_uiObj !=null,m_Time);
-            uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -222,14 +224,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("看看新闻播放失败",m_uiObj !=null,m_Time);
-            uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -248,14 +251,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("看看新闻播放失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -268,18 +272,19 @@ public class TestLauncherFunctionV3 {
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             uiDevice.pressDPadUp();
-            systemWait(SHORT_WAIT);
+            SystemClock.sleep(2000);
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/carsousel_fragment").clazz("android.widget.LinearLayout"));
             m_ObjId = Infos.S_Carsousel_List;
             Utils.writeCaseResult("轮播列表显示错误",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -297,14 +302,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("轮播一级列表播放失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -324,14 +330,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("轮播二级列表播放失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -372,7 +379,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -388,14 +397,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("轮播一级列表播放失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -411,7 +421,6 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("轮播一级列表播放失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
@@ -431,7 +440,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -452,7 +463,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -472,7 +485,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -531,7 +546,7 @@ public class TestLauncherFunctionV3 {
                 systemWait(LONG_WAIT);
                 UiObject2 ColButton1 = uiDevice.findObject(By.res("com.bestv.ott:id/special_player_favorite"));
                 if (ColButton1.getText().equals("已收藏")) {
-                    BackPageMethod();
+                    Utils.writeCaseResult("小视频已被收藏",false,m_Time);
                 } else {
                     UpMoveMethod(1);
                     uiDevice.pressDPadCenter();
@@ -569,7 +584,6 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/live_hall_title"));
             m_ObjId = "com.bestv.ott:id/live_hall_title";
             Utils.writeCaseResult("进入直播大厅失败",m_uiObj != null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
@@ -589,14 +603,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("NBA小窗口播放小视频专题失败", m_uiObj != null, m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag =false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -613,14 +628,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("NBA小窗口切换播放小视频专题失败", m_uiObj != null, m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag =false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -636,14 +652,15 @@ public class TestLauncherFunctionV3 {
             m_Expect = "NBA全部赛程";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入NBA全部赛程页面失败",m_Pass,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -664,14 +681,15 @@ public class TestLauncherFunctionV3 {
             m_Expect = "NBA球队赛程";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入NBA球队赛程页面失败",m_Pass,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -687,14 +705,15 @@ public class TestLauncherFunctionV3 {
             m_Expect = "全部球队";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入NBA一键预约页面失败",m_Pass,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -726,7 +745,6 @@ public class TestLauncherFunctionV3 {
                 m_Expect = "NBA球队赛程";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("进入NBA球队赛程页面失败",m_Pass,m_Time);
-                BackPageMethod();
             }else {
                 backToLauncherHome(uiDevice);
                 uiDevice.waitForIdle();
@@ -740,7 +758,6 @@ public class TestLauncherFunctionV3 {
                 m_Expect = "NBA球队赛程";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("进入NBA球队赛程页面失败",m_Pass,m_Time);
-                BackPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -767,7 +784,6 @@ public class TestLauncherFunctionV3 {
                 m_Expect = "请选择要购买的媒体或服务";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("进入NBA购买页面失败",m_Pass,m_Time);
-                BackPageMethod();
             }else {
                 Utils.writeCaseResult(NBAPay.getText(),false,m_Time);
             }
@@ -777,7 +793,9 @@ public class TestLauncherFunctionV3 {
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -799,7 +817,6 @@ public class TestLauncherFunctionV3 {
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 m_uiObj = uiDevice.findObject(By.clazz(Infos.S_CLASS_VIDEO_PLAYER));
                 Utils.writeCaseResult("视频正常播放",m_uiObj != null,m_Time);
-                BackPageMethod();
             }else {
                 Utils.writeCaseResult("False",false,m_Time);
             }
@@ -809,7 +826,9 @@ public class TestLauncherFunctionV3 {
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -830,14 +849,15 @@ public class TestLauncherFunctionV3 {
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj =uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("新闻大厅播放新闻失败",m_uiObj !=null,m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr= e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -853,14 +873,15 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             Utils.writeCaseResult("看看新闻无法播放", m_uiObj != null, m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr = e.toString();
             resultFlag =false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -891,7 +912,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -915,14 +938,15 @@ public class TestLauncherFunctionV3 {
             systemWait(PlayVideoTime);
             UiObject2 VideoClazz = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Assert.assertNotNull(VideoClazz);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag =false;
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -952,7 +976,9 @@ public class TestLauncherFunctionV3 {
             resultFlag =false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -969,14 +995,15 @@ public class TestLauncherFunctionV3 {
             m_Actual = TextViewer1.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入顶部快捷栏--天气：失败", m_Pass, m_Time);
-            uiDevice.pressBack();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -993,13 +1020,14 @@ public class TestLauncherFunctionV3 {
             m_Actual = TextViewer2.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入顶部快捷栏--我的应用：失败", m_Pass, m_Time);
-            uiDevice.pressBack();
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1016,13 +1044,14 @@ public class TestLauncherFunctionV3 {
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入顶部快捷栏--播放记录：失败", m_Pass, m_Time);
-            uiDevice.pressBack();
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1039,13 +1068,14 @@ public class TestLauncherFunctionV3 {
             m_Actual = TextViewer3.getText();
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入顶部快捷栏--智能桌面：失败", m_Pass, m_Time);
-            uiDevice.pressBack();
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1074,7 +1104,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1096,7 +1128,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1118,7 +1152,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
             resultStr += e.toString();
         } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1140,7 +1176,9 @@ public class TestLauncherFunctionV3 {
             resultStr += e.toString();
             resultFlag = false;
         } finally {
-            Utils.writeCaseResult(resultStr,resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1155,13 +1193,14 @@ public class TestLauncherFunctionV3 {
             m_uiObj = uiDevice.findObject(By.clazz("android.view.View").res("tv.fun.master:id/one_key_opt"));
             m_ObjId = "tv.fun.master:id/one_key_opt";
             Utils.writeCaseResult("新闻大厅播放新闻失败",m_uiObj != null,m_Time);
-            uiDevice.pressBack();
         } catch (Throwable e) {
             e.printStackTrace();
             resultStr += e.toString();
             resultFlag = false;
         } finally {
-            Utils.writeCaseResult(resultStr,resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1180,7 +1219,9 @@ public class TestLauncherFunctionV3 {
             resultStr +=e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1193,14 +1234,15 @@ public class TestLauncherFunctionV3 {
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("英超首页小视频播放失败", m_uiObj != null, m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
             resultStr +=e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1228,7 +1270,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1250,7 +1294,9 @@ public class TestLauncherFunctionV3 {
             resultStr = e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1273,10 +1319,9 @@ public class TestLauncherFunctionV3 {
                     .resourceId("com.bestv.ott:id/fa_round_title"));
             if(SaiJi == SaiJi2){
                 Utils.writeLogs("修改成功后历史赛季显示应不相同","历史赛季更改成功");
-                BackPageMethod();
+
             }else{
                 Utils.Print("历史赛季未更改成功");
-                BackPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -1306,7 +1351,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1335,7 +1382,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1353,14 +1402,15 @@ public class TestLauncherFunctionV3 {
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
             Utils.writeCaseResult("视频播放失败or初次进入页面时重试", m_uiObj != null, m_Time);
-            BackPageMethod();
         }catch (Throwable e){
             e.printStackTrace();
             resultStr = e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1392,14 +1442,15 @@ public class TestLauncherFunctionV3 {
             m_Expect = "金卡会员30天";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("进入会员开通失败", m_Pass, m_Time);
-            BackPageMethod();
         }catch(Throwable e){
             e.printStackTrace();
             resultStr +=e.toString();
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -1423,12 +1474,14 @@ public class TestLauncherFunctionV3 {
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
     @Test  //详情页--演职员表跳转
-    public void LC_DETAIL_06_DetailsPagePerformerJump(){
+    public void LC_DETAIL_01_DetailsPagePerformerJump(){
         try{
             RightMoveMethod(2);
             DownMoveMethod(1);
@@ -1452,12 +1505,14 @@ public class TestLauncherFunctionV3 {
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
     @Test  //详情页--付费选项跳转
-    public void LC_DETAIL_07_DetailsPagePayPackPageJump() {
+    public void LC_DETAIL_02_DetailsPagePayPackPageJump() {
         try {
             RightMoveMethod(2);
             DownMoveMethod(1);
@@ -1491,12 +1546,14 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
     @Test  //详情页--片花选项
-    public void LC_DETAIL_08_DetailsPageTrailers(){
+    public void LC_DETAIL_03_DetailsPageTrailers(){
         try{
             RightMoveMethod(2);
             DownMoveMethod(1);
@@ -1521,12 +1578,14 @@ public class TestLauncherFunctionV3 {
             resultStr += e.toString();
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
     @Test  //详情页--更多选项
-    public void LC_DETAIL_09_DetailsPageMoreButton(){
+    public void LC_DETAIL_04_DetailsPageMoreButton(){
         try{
             RightMoveMethod(2);
             DownMoveMethod(1);
@@ -1552,13 +1611,15 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
 
     }
 
     @Test  //详情页--跟播剧收藏提醒
-    public void LC_DETAIL_10_DetailsPageCorner(){
+    public void LC_DETAIL_05_DetailsPageCorner(){
         try{
             RightMoveMethod(2);
             DownMoveMethod(1);
@@ -1588,7 +1649,7 @@ public class TestLauncherFunctionV3 {
     }
 
     @Test  //详情页--继续播放
-    public void LC_DETAIL_01_DetailPageResumePlay(){
+    public void LC_DETAIL_06_DetailPageResumePlay(){
         try{
             RightMoveMethod(2);
             DownMoveMethod(1);
@@ -1860,6 +1921,7 @@ public class TestLauncherFunctionV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
 
 }
 
