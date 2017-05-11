@@ -86,13 +86,13 @@ public class TestLauncherFunctionV3 {
             UpMoveMethod(1);
             uiDevice.pressDPadLeft();
             systemWait(WAIT);
-            UiObject2 TabName = uiDevice.findObject(By.text("电视"));
-            if(TabName.isSelected()){
+            UiObject2 tabName = uiDevice.findObject(By.text("电视"));
+            if(tabName.isSelected()){
                 LeftMoveMethod(1);
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
-                UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
-                m_Actual = SearchPage.getText();
+                UiObject2 searchPage = uiDevice.findObject(By.text("用手机搜片"));
+                m_Actual = searchPage.getText();
                 m_Expect = "用手机搜片";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
@@ -118,8 +118,8 @@ public class TestLauncherFunctionV3 {
             if(Menu != null) {
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
-                UiObject2 SearchPage = uiDevice.findObject(By.text("中文"));
-                m_Actual = SearchPage.getText();
+                UiObject2 searchPage = uiDevice.findObject(By.text("中文"));
+                m_Actual = searchPage.getText();
                 m_Expect = "中文";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("中文搜索显示正确", m_Pass, m_Time);
@@ -150,8 +150,8 @@ public class TestLauncherFunctionV3 {
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            UiObject2 SearchPage = uiDevice.findObject(By.text("设置桌面频道"));
-            m_Actual = SearchPage.getText();
+            UiObject2 searchPage = uiDevice.findObject(By.text("设置桌面频道"));
+            m_Actual = searchPage.getText();
             m_Expect = "设置桌面频道";
             m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("跳转正确", m_Pass, m_Time);
@@ -170,8 +170,8 @@ public class TestLauncherFunctionV3 {
         try {
             uiDevice.pressKeyCode(260);  //信源键KeyCode
             systemWait(WAIT);
-            UiObject2 SourcePage = uiDevice.findObject(By.text("当前选择").res("tv.fun.settings:id/title_tips"));
-            m_Actual = SourcePage.getText();
+            UiObject2 sourcePage = uiDevice.findObject(By.text("当前选择").res("tv.fun.settings:id/title_tips"));
+            m_Actual = sourcePage.getText();
             m_Expect = "当前选择";
             m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
             Utils.writeCaseResult("信源页面显示正确",m_Pass,m_Time);
@@ -296,7 +296,7 @@ public class TestLauncherFunctionV3 {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
-            RandomPlayFilm(4);
+            randomPlayFilm(4);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -322,9 +322,9 @@ public class TestLauncherFunctionV3 {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             uiDevice.pressDPadUp();
-            RandomPlayFilm(9);
+            randomPlayFilm(9);
             uiDevice.pressDPadRight();
-            RandomPlayFilm(66);
+            randomPlayFilm(66);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -497,8 +497,8 @@ public class TestLauncherFunctionV3 {
             this.EnterTableSettings();
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            UiObject2 ChildrenPage = uiDevice.findObject(By.text("桌面中显示的频道"));
-            Assert.assertEquals("桌面中显示的频道",ChildrenPage.getText());
+            UiObject2 childrenPage = uiDevice.findObject(By.text("桌面中显示的频道"));
+            Assert.assertEquals("桌面中显示的频道",childrenPage.getText());
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             UiObject editText = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/standard_desktop_name_edit")
@@ -515,9 +515,9 @@ public class TestLauncherFunctionV3 {
             systemWait(WAIT);
             uiDevice.pressKeyCode(260);
             systemWait(WAIT);
-            UiObject SourcePage = uiDevice.findObject(new UiSelector().resourceId("tv.fun.settings:id/title"));
-            String StandName = SourcePage.getText();
-            if(StandName.equals("LauncherTV")){
+            UiObject sourcePage = uiDevice.findObject(new UiSelector().resourceId("tv.fun.settings:id/title"));
+            String standName = sourcePage.getText();
+            if(standName.equals("LauncherTV")){
                 Assert.assertTrue(true);
             }else {
                 Utils.writeCaseResult("标准桌面更改错误", false, m_Time);
@@ -590,7 +590,9 @@ public class TestLauncherFunctionV3 {
             resultFlag =false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
@@ -622,7 +624,7 @@ public class TestLauncherFunctionV3 {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             DownMoveMethod(1);
-            this.RandomPlaySmallVideo(9);
+            this.randomPlaySmallVideo(9);
             uiDevice.pressDPadCenter();
             systemWait(PlayVideoTime);
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -838,7 +840,7 @@ public class TestLauncherFunctionV3 {
             RightMoveMethod(2);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            RandomPlayFilm(11);  //随机选择一新闻播放
+            randomPlayFilm(11);  //随机选择一新闻播放
             RightMoveMethod(1);
             uiDevice.pressEnter();//选择二级标题播放
             systemWait(SHORT_WAIT);
@@ -925,7 +927,7 @@ public class TestLauncherFunctionV3 {
             DownMoveMethod(1);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
-            RandomPlayFilm(13);
+            randomPlayFilm(13);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
@@ -1278,11 +1280,11 @@ public class TestLauncherFunctionV3 {
 
     @Test  //英超首页全部轮次新增选项--查看历史赛季
     public void LC_PL_04_EnterPremierLeagueAllRound(){
-        this.EnterPLHomePage();
-        DownMoveMethod(1);
-        uiDevice.pressDPadCenter();
-        systemWait(WAIT);
         try {
+            this.EnterPLHomePage();
+            DownMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
             UiObject2 TextView = uiDevice.findObject(By.text("查看历史赛季"));
             m_Actual = TextView.getText();
             m_Expect = "查看历史赛季";
@@ -1302,26 +1304,29 @@ public class TestLauncherFunctionV3 {
 
     @Test  //英超--查看历史赛季切换对比
     public void LC_PL_05_PremierLeagueAllRoundContrast(){
-        this.EnterPLHomePage();
-        DownMoveMethod(1);
-        uiDevice.pressDPadCenter();
-        systemWait(WAIT);
-        UiObject SaiJi = uiDevice.findObject(new UiSelector().text("2016-2017赛季")
-                .resourceId("com.bestv.ott:id/fa_round_title"));
         try {
-            UpMoveMethod(1);
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
+            this.EnterPLHomePage();
             DownMoveMethod(1);
             uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            UiObject SaiJi2 = uiDevice.findObject(new UiSelector().text("2015-2016赛季")
+            systemWait(WAIT);
+            UiObject season1 = uiDevice.findObject(new UiSelector().text("2016-2017赛季")
                     .resourceId("com.bestv.ott:id/fa_round_title"));
-            if(SaiJi == SaiJi2){
-                Utils.writeLogs("修改成功后历史赛季显示应不相同","历史赛季更改成功");
-
-            }else{
-                Utils.Print("历史赛季未更改成功");
+            UiObject2 history = uiDevice.findObject(By.text("查看历史赛季").res("com.bestv.ott:id/round_history"));
+            if(history != null){
+                UpMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                DownMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                UiObject season2 = uiDevice.findObject(new UiSelector().text("2015-2016赛季")
+                        .resourceId("com.bestv.ott:id/fa_round_title"));
+                if(season1 == season2){
+                    Assert.assertTrue(false);
+                    Utils.writeLogs("修改成功后历史赛季显示应不相同","历史赛季更改成功");
+                }else{
+                    Utils.Print("历史赛季未更改成功");
+                }
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -1361,16 +1366,18 @@ public class TestLauncherFunctionV3 {
     public void LC_PL_07_PremierLeaguePageOrderMatch(){
         try{
             EnterPLHomePage();
-            UiObject OrderIcon = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/livehint")
-                    .text("预约"));
-            if(OrderIcon.exists()){
-                LeftMoveMethod(1);
-                uiDevice.pressDPadCenter();   systemWait(WAIT);
-                uiDevice.pressDPadCenter();   systemWait(WAIT);
-                uiDevice.pressDPadCenter();   systemWait(WAIT);
-                UiObject2 OrderText = uiDevice.findObject(By.text("取消预约"));
+            UiObject orderIcon = uiDevice.findObject(new UiSelector().textContains("\uE68F  预约"));
+            if(orderIcon.exists()){
+                orderIcon.clickAndWaitForNewWindow(3000);
+                orderIcon.click();
+                SystemClock.sleep(3000);
+                uiDevice.pressDPadCenter();
+                SystemClock.sleep(3000);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 orderText = uiDevice.findObject(By.text("取消预约"));
                 m_Actual = "取消预约";
-                m_Expect = OrderText.getText();
+                m_Expect = orderText.getText();
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("页面选项显示正确",m_Pass,m_Time);
             }else {
@@ -1393,11 +1400,11 @@ public class TestLauncherFunctionV3 {
         try {
             this.EnterVideoClassifyPage();
             uiDevice.pressDPadCenter();
-            systemWait(WAIT);
+            SystemClock.sleep(6000);
             DownMoveMethod(1);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-            uiDevice.pressDPadCenter();
+            uiDevice.pressEnter();
             systemWait(PlayVideoTime);
             m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
             m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -1431,17 +1438,17 @@ public class TestLauncherFunctionV3 {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
-            m_Actual = TextView.getText();
-            m_Expect = "开通金卡会员";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("开通会员提示弹框失败", m_Pass, m_Time);
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            UiObject2 TextView1 = uiDevice.findObject(By.text("金卡会员30天"));
-            m_Actual = TextView1.getText();
-            m_Expect = "金卡会员30天";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("进入会员开通失败", m_Pass, m_Time);
+            if (TextView != null ) {
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 TextView1 = uiDevice.findObject(By.text("金卡会员30天"));
+                m_Actual = TextView1.getText();
+                m_Expect = "金卡会员30天";
+                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("进入会员开通失败", m_Pass, m_Time);
+            }else {
+                Assert.assertTrue(false);
+            }
         }catch(Throwable e){
             e.printStackTrace();
             resultStr +=e.toString();
@@ -1852,7 +1859,7 @@ public class TestLauncherFunctionV3 {
         systemWait(WAIT);
     }
 
-    private void RandomPlayFilm(int RandomMove){
+    private void randomPlayFilm(int RandomMove){
         Random moveTimes = new Random();
         int i;
         i=moveTimes.nextInt(RandomMove);
@@ -1866,7 +1873,7 @@ public class TestLauncherFunctionV3 {
         }
     } //随机播放轮播
 
-    private void RandomPlaySmallVideo(int RandomMove){
+    private void randomPlaySmallVideo(int RandomMove){
         Random moveTimes = new Random();
         int i;
         i=moveTimes.nextInt(RandomMove);
@@ -1921,7 +1928,6 @@ public class TestLauncherFunctionV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }
 

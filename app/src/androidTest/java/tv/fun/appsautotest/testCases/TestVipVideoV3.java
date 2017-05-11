@@ -84,7 +84,7 @@ public final class TestVipVideoV3 {
 
     @After
     public void clearUp() {
-        BackPageMethod();
+        backPageMethod();
         Configurator configurator = Configurator.getInstance();
         configurator.setActionAcknowledgmentTimeout(5000);
     }
@@ -143,14 +143,14 @@ public final class TestVipVideoV3 {
         try {
             uiDevice.pressEnter();
             systemWait(LONG_WAIT);
-            UiObject2 DetEnter = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
-            Assert.assertNotNull(DetEnter);
+            UiObject2 detEnter = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
+            Assert.assertNotNull(detEnter);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 VipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            UiObject2 WatchMin = uiDevice.findObject(text("试看"));
-            if(VipType.getText().equals("播放") || VipType.getText().equals("继续播放")){
+            UiObject2 vipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            UiObject2 watchMin = uiDevice.findObject(text("试看"));
+            if(vipType.getText().equals("播放") || vipType.getText().equals("继续播放")){
                 uiDevice.pressDPadLeft(); //防止详情页活动
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
@@ -158,10 +158,10 @@ public final class TestVipVideoV3 {
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡电影视频播放失败",m_uiObj !=null,m_Time);
             }else {
-                this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
+                this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
                 systemWait(PlayVideoLongTime);
-                UiObject2 PayMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
-                m_Actual = PayMedia.getText();
+                UiObject2 payMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
+                m_Actual = payMedia.getText();
                 m_Expect = "请选择要购买的媒体或服务";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
@@ -178,7 +178,7 @@ public final class TestVipVideoV3 {
     @Test //会员特权页面
     public void LC_VIP_04_VipMemberPage() {
         try {
-            RightMoveMethod(10);
+            rightMoveMethod(10);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             m_ObjId = "com.bestv.ott:id/detail_background";
@@ -197,7 +197,7 @@ public final class TestVipVideoV3 {
     @Test //开通金卡会员选项跳转
     public void LC_VIP_05_PersonalSkipVipPage() {
         try {
-            UpMoveMethod(1);
+            upMoveMethod(1);
             UiObject vipText = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/vip"));
             if(vipText.exists()){
                 uiDevice.pressDPadCenter();
@@ -225,7 +225,7 @@ public final class TestVipVideoV3 {
         try {
             uiDevice.pressDPadUp();
             SystemClock.sleep(3000);
-            RightMoveMethod(2);
+            rightMoveMethod(2);
             UiObject exchange = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/exchange"));
             if(exchange.exists()) {
                 uiDevice.pressDPadCenter();
@@ -253,7 +253,7 @@ public final class TestVipVideoV3 {
         try {
             uiDevice.pressDPadUp();
             SystemClock.sleep(3000);
-            RightMoveMethod(2);
+            rightMoveMethod(2);
             UiObject exchange = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/exchange"));
             if(exchange.exists()) {
                 uiDevice.pressDPadCenter();
@@ -267,7 +267,7 @@ public final class TestVipVideoV3 {
                 SystemClock.sleep(1000);
                 uiDevice.pressBack();
                 SystemClock.sleep(1000);
-                DownMoveMethod(1);
+                downMoveMethod(1);
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 UiObject2 textView = uiDevice.findObject(text("兑换码输入错误，请重试！"));
@@ -291,7 +291,7 @@ public final class TestVipVideoV3 {
     @Test //个人中心页面
     public void LC_VIP_08_ButtonSkipPersonalPage() {
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
         }catch (Exception e){
             e.printStackTrace();
             resultFlag = false;
@@ -307,7 +307,7 @@ public final class TestVipVideoV3 {
     @Test //会员开通or会员续费页面
     public void LC_VIP_09_VipDisplayCardInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             UiObject2 cardNum = uiDevice.findObject(By.res("com.bestv.ott:id/scollview"));
@@ -335,7 +335,7 @@ public final class TestVipVideoV3 {
     @Test //支付代扣页面
     public void LC_VIP_10_PaymentWithHoldingInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             UiObject2 payCard = uiDevice.findObject(By.text("支付代扣"));
             this.openTabFromLauncherHomeByTextView(uiDevice,payCard);
             UiObject2 tabView = uiDevice.findObject(text("取消代扣"));
@@ -358,7 +358,7 @@ public final class TestVipVideoV3 {
     @Test //福利领取
     public void LC_VIP_11_WelfareCollectionInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             UiObject2 cardNum = uiDevice.findObject(By.res("com.bestv.ott:id/grid"));
             List<UiObject2> cardCount = cardNum.findObjects(By.clazz("android.widget.RelativeLayout"));
             Log.d(TAG, "lxm: "+cardCount.size());
@@ -384,7 +384,7 @@ public final class TestVipVideoV3 {
     @Test //卡券兑换
     public void LC_VIP_12_CardExchangeInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             UiObject2 cardEx = uiDevice.findObject(By.text("卡券兑换"));
             this.openTabFromLauncherHomeByTextView(uiDevice,cardEx);
             UiObject2 tabView = uiDevice.findObject(text("兑换"));
@@ -407,11 +407,11 @@ public final class TestVipVideoV3 {
     @Test //消费记录
     public void LC_VIP_13_PayRecordInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             UiObject2 record = uiDevice.findObject(By.text("消费记录"));
             this.openTabFromLauncherHomeByTextView(uiDevice,record);
-            UiObject2 tabView = uiDevice.findObject(text("客服电话: 400 600 6258"));
-            m_Expect = "客服电话: 400 600 6258";
+            UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话"));
+            m_Expect = "客服电话：400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult("进入消费记录页面时跳转失败：未抓到关键字", m_Pass, m_Time);
@@ -430,11 +430,11 @@ public final class TestVipVideoV3 {
     @Test //观影券
     public void LC_VIP_14_ViewingCouponInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             UiObject2 coupon = uiDevice.findObject(By.text("观影券"));
             this.openTabFromLauncherHomeByTextView(uiDevice,coupon);
-            UiObject2 tabView = uiDevice.findObject(text("客服电话: 400 600 6258"));
-            m_Expect = "客服电话: 400 600 6258";
+            UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话"));
+            m_Expect = "客服电话：400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult("进入观影券页面时跳转失败：未抓到关键字", m_Pass, m_Time);
@@ -453,7 +453,7 @@ public final class TestVipVideoV3 {
     @Test //会员状态页
     public void LC_VIP_15_MemberStatusInPersonalPage(){
         try {
-            EnterPersonalCenterPage();
+            enterPersonalCenterPage();
             uiDevice.pressDPadLeft();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
@@ -477,8 +477,8 @@ public final class TestVipVideoV3 {
 
     @Test //即将上映--影片收藏
     public void LC_VIP_16_ComingMoviesCollectAndPlay() {
-                    try {
-            RightMoveMethod(3);
+        try {
+            rightMoveMethod(3);
             systemWait(WAIT);
             UiObject2 tabView = this.getTabFromLauncherHomeByText(uiDevice, "即将上映");
             this.openTabFromLauncherHomeByTextView(uiDevice, tabView); //进入即将上映页面
@@ -487,28 +487,22 @@ public final class TestVipVideoV3 {
             SystemClock.sleep(3000);
             Log.d(TAG, "lxm: "+cardCount.size());
             for(int i= 0; i<=cardCount.size(); i++){
-                RightMoveMethod(1);
-                UiObject2 ResId = uiDevice.findObject(By.res("com.bestv.ott:id/fav_state"));//通过Res_id来获取Text值，判断当前button选项
-                try{
-                    if (ResId != null && ResId.getText().equals("加入收藏")) {
-                        DownMoveMethod(1);
-                        uiDevice.pressDPadCenter();   //点击确定加入收藏
-                        systemWait(SHORT_WAIT);
-                        UpMoveMethod(1);
-                        uiDevice.pressDPadCenter();
-                        uiDevice.waitForIdle(18000);
-                        systemWait(LONG_WAIT);
-                        UiObject2 Text = uiDevice.findObject(text("已收藏"));  //加入断言判定详情页是否变为已收藏
-                        m_Expect = "已收藏";
-                        m_Actual = Text.getText();
-                        m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                        Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    resultStr += e.toString();
-                }
-                if(i > 6){
+                rightMoveMethod(1);
+                UiObject2 resId = uiDevice.findObject(By.res("com.bestv.ott:id/fav_state"));//通过Res_id来获取Text值，判断当前button选项
+                if (resId != null && resId.getText().equals("加入收藏")) {
+                    downMoveMethod(1);
+                    uiDevice.pressDPadCenter();   //点击确定加入收藏
+                    systemWait(SHORT_WAIT);
+                    upMoveMethod(1);
+                    uiDevice.pressDPadCenter();
+                    uiDevice.waitForIdle(18000);
+                    systemWait(LONG_WAIT);
+                    UiObject2 Text = uiDevice.findObject(text("已收藏"));  //加入断言判定详情页是否变为已收藏
+                    m_Expect = "已收藏";
+                    m_Actual = Text.getText();
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
+                }if(i > 5){
                     break;
                 }else {
                     System.out.print("没有更多的上映新片");
@@ -527,34 +521,34 @@ public final class TestVipVideoV3 {
     @Test //播放金卡电影
     public void LC_VIP_17_PlayVipVideo() {
         try {
-            RightMoveMethod(2);
+            rightMoveMethod(2);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.text("最新院线")),10000);
-            systemWait(WAIT);
-            RandomPlayFilm(18);
+            SystemClock.sleep(8000);
+            randomPlayFilm(18);
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 VipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            UiObject2 WatchMin = uiDevice.findObject(text("试看"));
-            if(VipType.getText().equals("播放") || VipType.getText().equals("继续播放")){
+            UiObject2 vipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            UiObject2 watchMin = uiDevice.findObject(text("试看"));
+            if(vipType.getText().equals("播放") || vipType.getText().equals("继续播放")){
                 uiDevice.pressDPadLeft(); //防止详情页活动
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡电影视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }else {
-                this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
+                this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
                 systemWait(PlayVideoLongTime);
-                UiObject2 PayMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
-                m_Actual = PayMedia.getText();
+                UiObject2 payMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
+                m_Actual = payMedia.getText();
                 m_Expect = "请选择要购买的媒体或服务";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -572,7 +566,7 @@ public final class TestVipVideoV3 {
             uiDevice.waitForIdle();
             UiObject2 VipVideo = uiDevice.findObject(By.text("金卡-电视剧").res("com.bestv.ott:id/title"));
             this.openTabFromLauncherHomeByTextView(uiDevice,VipVideo);
-            this.RandomPlayFilm(9);
+            this.randomPlayFilm(9);
             systemWait(WAIT);
             uiDevice.pressDPadDown();
             SystemClock.sleep(1500);
@@ -588,14 +582,14 @@ public final class TestVipVideoV3 {
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡电视剧视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }else {
                 this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡电视剧视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -610,35 +604,35 @@ public final class TestVipVideoV3 {
     @Test //4K专区
     public void LC_VIP_19_Play4KVideo() {
         try {
-            RightMoveMethod(2);
-            DownMoveMethod(2);
+            rightMoveMethod(2);
+            downMoveMethod(2);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.text("4K")),18000);
-            systemWait(WAIT);
-            RandomPlayFilm(19);
+            SystemClock.sleep(8000);
+            randomPlayFilm(19);
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 VipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            UiObject2 WatchMin = uiDevice.findObject(text("试看"));
-            if(VipType.getText().equals("播放") || VipType.getText().equals("继续播放")){
+            UiObject2 vipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            UiObject2 watchMin = uiDevice.findObject(text("试看"));
+            if(vipType.getText().equals("播放") || vipType.getText().equals("继续播放")){
                 uiDevice.pressDPadLeft(); //防止详情页活动
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("4K视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }else {
-                this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
+                this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
                 systemWait(PlayVideoLongTime);
-                UiObject2 PayMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
-                m_Actual = PayMedia.getText();
+                UiObject2 payMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
+                m_Actual = payMedia.getText();
                 m_Expect = "请选择要购买的媒体或服务";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -653,16 +647,16 @@ public final class TestVipVideoV3 {
     @Test //金卡纪实
     public void LC_VIP_20_PlayDocumentaryVideo() {
         try {
-            UiObject2 VipVideo = uiDevice.findObject(By.text("金卡-纪实").res("com.bestv.ott:id/title"));
-            this.openTabFromLauncherHomeByTextView(uiDevice,VipVideo);
-            RandomPlayFilm(20);
+            UiObject2 vipVideo = uiDevice.findObject(By.text("金卡-纪实").res("com.bestv.ott:id/title"));
+            this.openTabFromLauncherHomeByTextView(uiDevice,vipVideo);
+            randomPlayFilm(20);
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 TextViewer = uiDevice.findObject(By.text("相关推荐"));
+            UiObject2 textView = uiDevice.findObject(By.text("相关推荐"));
             m_Expect = "相关推荐";
-            m_Actual = TextViewer.getText();
+            m_Actual = textView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult("进入详情页失败", m_Pass, m_Time);
         }catch (Throwable e){
@@ -679,33 +673,33 @@ public final class TestVipVideoV3 {
     public void LC_VIP_21_PlayKidVideo() {
         try {
             uiDevice.waitForIdle();
-            RightMoveMethod(2);
-            DownMoveMethod(1);
+            rightMoveMethod(2);
+            downMoveMethod(1);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.text("动画电影")),18000);
-            systemWait(WAIT);
-            RandomPlayFilm(27);
+            SystemClock.sleep(8000);
+            randomPlayFilm(27);
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 VipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            UiObject2 WatchMin = uiDevice.findObject(text("试看"));
-            if(VipType.getText().equals("播放") || VipType.getText().equals("继续播放")){
+            UiObject2 vipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            UiObject2 watchMin = uiDevice.findObject(text("试看"));
+            if(vipType.getText().equals("播放") || vipType.getText().equals("继续播放")){
                 uiDevice.pressDPadLeft(); //防止详情页活动
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("4K视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }else {
-                this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
+                this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡少儿播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -723,30 +717,30 @@ public final class TestVipVideoV3 {
             uiDevice.waitForIdle();
             UiObject2 VipVideo = uiDevice.findObject(By.text("金卡-动漫").res("com.bestv.ott:id/title"));
             this.openTabFromLauncherHomeByTextView(uiDevice,VipVideo);
-            this.RandomPlayFilm(3);
+            this.randomPlayFilm(3);
             systemWait(WAIT);
             uiDevice.pressDPadDown();
             systemWait(SHORT_WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 VipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            UiObject2 WatchMin = uiDevice.findObject(text("试看"));
-            if(VipType.getText().equals("播放") || VipType.getText().equals("继续播放")){
+            UiObject2 vipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            UiObject2 watchMin = uiDevice.findObject(text("试看"));
+            if(vipType.getText().equals("播放") || vipType.getText().equals("继续播放")){
                 uiDevice.pressDPadLeft(); //防止详情页活动
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡动漫视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }else {
-                this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
+                this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡动漫视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -761,9 +755,9 @@ public final class TestVipVideoV3 {
     @Test //视频分类页入口进入金卡列表页
     public void LC_VIP_23_VideoClassifySkipVip() {
         try {
-            BackToLauncherHome(uiDevice);
-            this.EnterVideoClassifyPage();
-            DownMoveMethod(2);
+            backToLauncherHome(uiDevice);
+            this.enterVideoClassifyPage();
+            downMoveMethod(2);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.text("金卡电影")),18000);
             systemWait(LONG_WAIT);
@@ -772,25 +766,25 @@ public final class TestVipVideoV3 {
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             uiDevice.waitForIdle(20000);
-            UiObject2 VipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
-            UiObject2 WatchMin = uiDevice.findObject(text("试看"));
-            if(VipType.getText().equals("播放") || VipType.getText().equals("继续播放")){
+            UiObject2 vipType = uiDevice.findObject(By.res("com.bestv.ott:id/discripse"));
+            UiObject2 watchMin = uiDevice.findObject(text("试看"));
+            if(vipType.getText().equals("播放") || vipType.getText().equals("继续播放")){
                 uiDevice.pressDPadLeft(); //防止详情页活动
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡电影视频播放失败",m_uiObj !=null,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }else {
-                this.openTabFromLauncherHomeByVipText(uiDevice,WatchMin);
+                this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
                 systemWait(PlayVideoLongTime);
                 UiObject2 PayMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
                 m_Actual = PayMedia.getText();
                 m_Expect = "请选择要购买的媒体或服务";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
-                BackPageMethod();
+                backPageMethod();
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -805,11 +799,11 @@ public final class TestVipVideoV3 {
     @Test //会员包月支付流程
     public void LC_VIP_24_PersonalPagePayVip() {
         try {
-            UpMoveMethod(1);
+            upMoveMethod(1);
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
-            UiObject2 TextView = uiDevice.findObject(text("金卡会员30天").res("com.bestv.ott:id/commodity_type"));
-            this.openTabFromLauncherHomeByTextView(uiDevice,TextView);
+            UiObject2 textView = uiDevice.findObject(text("金卡会员30天").res("com.bestv.ott:id/commodity_type"));
+            this.openTabFromLauncherHomeByTextView(uiDevice,textView);
             uiDevice.waitForIdle(6000);
             systemWait(WAIT);
             UiObject zhiFuBao = uiDevice.findObject(new UiSelector().className("android.widget.ImageView")
@@ -860,10 +854,10 @@ public final class TestVipVideoV3 {
         systemWait(WAIT);
     }
 
-    private void EnterVideoClassifyPage(){
+    private void enterVideoClassifyPage(){
         uiDevice.pressDPadRight();
         SystemClock.sleep(1000);
-        DownMoveMethod(2);
+        downMoveMethod(2);
         uiDevice.pressEnter();
         systemWait(WAIT);
         UiObject2 Classify = uiDevice.findObject(By.text("最新"));
@@ -871,10 +865,10 @@ public final class TestVipVideoV3 {
         systemWait(WAIT);
     } //进入视频分类页面
 
-    private void EnterPersonalCenterPage(){
+    private void enterPersonalCenterPage(){
         uiDevice.pressDPadUp();
         systemWait(WAIT);
-        RightMoveMethod(1);
+        rightMoveMethod(1);
         UiObject account = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/account"));
         if(account.exists()){
             uiDevice.pressDPadCenter();
@@ -886,7 +880,7 @@ public final class TestVipVideoV3 {
         }
     } //进入个人中心页面
 
-    private void RandomPlayFilm(int RandomMove){
+    private void randomPlayFilm(int RandomMove){
         uiDevice.pressDPadDown();
         systemWait(WAIT);
         Random moveTimes = new Random();
@@ -902,7 +896,7 @@ public final class TestVipVideoV3 {
         }
     } //随机播放电影
 
-    private void BackToLauncherHome(UiDevice device) {
+    private void backToLauncherHome(UiDevice device) {
         device.pressHome();
         device.waitForIdle();
         systemWait(WAIT);
@@ -935,7 +929,7 @@ public final class TestVipVideoV3 {
         SystemClock.sleep(seconds * 1000);
     } //等待时间设定
 
-    private void RightMoveMethod(int RightMove){
+    private void rightMoveMethod(int RightMove){
         int i = 1;
         while (i <= RightMove){
             i++;
@@ -944,7 +938,7 @@ public final class TestVipVideoV3 {
         }
     } //Right*
 
-    private void DownMoveMethod(int DownMove){
+    private void downMoveMethod(int DownMove){
         int i = 1;
         while (i <= DownMove){
             i++;
@@ -953,7 +947,7 @@ public final class TestVipVideoV3 {
         }
     } //Down*
 
-    private void UpMoveMethod(int UpMove){
+    private void upMoveMethod(int UpMove){
         int i = 1;
         while (i <= UpMove){
             i++;
@@ -962,11 +956,10 @@ public final class TestVipVideoV3 {
         }
     } //Up*
 
-    private void BackPageMethod(){
+    private void backPageMethod(){
         uiDevice.pressBack();
         SystemClock.sleep(1000);
         uiDevice.pressBack();
     } //Back*
-
 
 }
