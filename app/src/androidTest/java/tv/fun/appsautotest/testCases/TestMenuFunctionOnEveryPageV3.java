@@ -164,24 +164,30 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_04_SportsTabMenuOperation(){
         try {
             upMoveMethod(1);
-            uiDevice.pressDPadRight();
-            systemWait(WAIT);
-            UiObject2 tabName = uiDevice.findObject(By.text("体育"));
-            if(tabName.isSelected()){
-                uiDevice.pressMenu();
-                systemWait(WAIT);
-                UiObject2 Menu = uiDevice.findObject(By.text("设置"));
-                Assert.assertEquals("设置",Menu.getText());
-                rightMoveMethod(2);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 Classify = uiDevice.findObject(By.text("设 置"));
-                m_Actual = Classify.getText();
-                m_Expect = "设 置";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转设置页面错误",m_Pass,m_Time);
-            }else {
-                Assert.assertTrue(false);
+            String[] TabName = {"体育", "生活", "会员", "应用", "游戏", "设置"};
+            int i = 0;
+            for (; i <= TabName.length-1; i++) {
+                if (TabName[i].equals("体育")) {
+                    rightMoveMethod(i + 1);
+                    UiObject2 tabName = uiDevice.findObject(By.text("体育"));
+                    if (tabName.isSelected()) {
+                        uiDevice.pressMenu();
+                        systemWait(WAIT);
+                        UiObject2 Menu = uiDevice.findObject(By.text("设置"));
+                        Assert.assertEquals("设置", Menu.getText());
+                        rightMoveMethod(2);
+                        uiDevice.pressDPadCenter();
+                        systemWait(WAIT);
+                        UiObject2 Classify = uiDevice.findObject(By.text("设 置"));
+                        m_Actual = Classify.getText();
+                        m_Expect = "设 置";
+                        m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                        Utils.writeCaseResult("跳转设置页面错误", m_Pass, m_Time);
+                    } else {
+                        Assert.assertTrue(false);
+                    }
+                    break;
+                }
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -463,6 +469,8 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Expect = "用手机搜片";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
+            }else {
+                Assert.assertTrue(false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -598,7 +606,7 @@ public class TestMenuFunctionOnEveryPageV3 {
                 rightMoveMethod(1);
                 uiDevice.pressDPadCenter();
             }else {
-                Log.d("LXM", "LC_MENU_18_HadCollectInMyCollectPageCard: 我的收藏无记录");
+                Log.d("lxm", "LC_MENU_18_HadCollectInMyCollectPageCard: 我的收藏无记录");
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -636,6 +644,8 @@ public class TestMenuFunctionOnEveryPageV3 {
                 m_Expect = "视频分类";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("弹框错误", m_Pass, m_Time);
+            }else {
+                Assert.assertTrue(false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -857,6 +867,8 @@ public class TestMenuFunctionOnEveryPageV3 {
                 systemWait(WAIT);
                 UiObject2 filterPage = uiDevice.findObject(By.text("地区").res("com.bestv.ott:id/filter_page_title"));
                 Assert.assertEquals("地区",filterPage.getText());
+            }else {
+                Assert.assertTrue(false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -1347,5 +1359,6 @@ public class TestMenuFunctionOnEveryPageV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
 
 }

@@ -93,6 +93,7 @@ public final class TestVipVideoV3 {
     public static void AfterClass(){
 
         System.out.println("See You Later");
+        System.gc();
     }
 
     @Test  //获取用例名
@@ -502,11 +503,10 @@ public final class TestVipVideoV3 {
                     m_Actual = Text.getText();
                     m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                     Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
-                }if(i > 5){
+                }if(i > 8){
                     break;
-                }else {
-                    System.out.print("没有更多的上映新片");
                 }
+                System.out.print("没有更多的上映新片");
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -608,7 +608,7 @@ public final class TestVipVideoV3 {
             downMoveMethod(2);
             uiDevice.pressDPadCenter();
             uiDevice.wait(Until.findObject(By.text("4K")),18000);
-            SystemClock.sleep(8000);
+            SystemClock.sleep(10000);
             randomPlayFilm(19);
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
@@ -961,5 +961,6 @@ public final class TestVipVideoV3 {
         SystemClock.sleep(1000);
         uiDevice.pressBack();
     } //Back*
+
 
 }

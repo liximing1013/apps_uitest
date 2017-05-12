@@ -389,6 +389,62 @@ public class TestLongVideoPlay {
         }
     }
 
+    @Test //视频分类轮询
+    public void testDemo(){
+        try{
+            enterVideoClassifyPage();
+            UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
+            UiObject2 title= uiDevice.findObject(By.text("com.bestv.ott:id/maintitle"));
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressBack();
+            for(int i =1;i<=8;i++){
+                rightMoveMethod(1);
+                systemWait(WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                if(Classify == null){
+                    continue;
+                }
+                uiDevice.pressBack();
+            }
+            systemWait(WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressBack();
+            for (int j=1;j<=8;j++){
+                leftMoveMethod(1);
+                systemWait(WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                if(Classify == null){
+                    continue;
+                }
+                uiDevice.pressBack();
+            }
+            systemWait(WAIT);
+            uiDevice.pressDPadDown();
+            systemWait(WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(LONG_WAIT);
+            uiDevice.pressBack();
+            for(int i =1;i<=8;i++){
+                rightMoveMethod(1);
+                systemWait(WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                if(Classify == null){
+                    continue;
+                }
+                uiDevice.pressBack();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     private void EnterTVVideoListPage() {
         systemWait(SHORT_WAIT);
         uiDevice.pressDPadDown();
@@ -461,6 +517,44 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
         }
     } //随机播放电影
+
+    private void enterVideoClassifyPage(){
+        uiDevice.pressDPadRight();
+        SystemClock.sleep(1000);
+        downMoveMethod(2);
+        uiDevice.pressEnter();
+        systemWait(WAIT);
+        UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+        Assert.assertEquals("最新",Classify.getText());
+        systemWait(WAIT);
+    } //进入视频分类页面
+
+    private void downMoveMethod(int DownMove){
+        int i = 1;
+        while (i <= DownMove){
+            i++;
+            uiDevice.pressDPadDown();
+            SystemClock.sleep(1000);
+        }
+    } //Down*
+
+    private void rightMoveMethod(int RightMove){
+        int i = 1;
+        while (i <= RightMove){
+            i++;
+            uiDevice.pressDPadRight();
+            SystemClock.sleep(1000);
+        }
+    } //Right*
+
+    private void leftMoveMethod(int LeftMove){
+        int i = 1;
+        while (i <= LeftMove){
+            i++;
+            uiDevice.pressDPadLeft();
+            systemWait(SHORT_WAIT);
+        }
+    } //Left*
 
     private void ProgressBarExists(int Second){
         UiObject ProBar = uiDevice.findObject(new UiSelector().resourceId(Infos.S_PROCESS_BAR_ID));

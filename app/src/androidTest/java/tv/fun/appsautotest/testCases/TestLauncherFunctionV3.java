@@ -35,7 +35,7 @@ import static android.support.test.uiautomator.Until.findObject;
 
 /**
  * Created by lxm on 2017/5/3
- * testCase:
+ * testCase:57
  **/
 
 @RunWith(AndroidJUnit4.class)
@@ -1928,6 +1928,7 @@ public class TestLauncherFunctionV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
 
 }
 
