@@ -264,7 +264,7 @@ public final class TestVipVideoV3 {
                 UiObject2 editText = uiDevice.findObject(text("请输入兑换券编码"));
                 Configurator configurator = Configurator.getInstance();
                 configurator.setKeyInjectionDelay(1000);
-                editText.setText("testdata");
+                editText.setText("TestData");
                 SystemClock.sleep(1000);
                 uiDevice.pressBack();
                 SystemClock.sleep(1000);
@@ -275,7 +275,7 @@ public final class TestVipVideoV3 {
                 m_Expect = "兑换码输入错误，请重试！";
                 m_Actual = textView.getText();
                 m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-                Utils.writeCaseResult("兑换系统出现问题：错误兑换码显示成功", m_Pass, m_Time);
+                Utils.writeCaseResult("兑换系统出现问题：错误兑换码兑换成功", m_Pass, m_Time);
             }else {
                 Assert.assertTrue(false);
             }
@@ -412,10 +412,11 @@ public final class TestVipVideoV3 {
             UiObject2 record = uiDevice.findObject(By.text("消费记录"));
             this.openTabFromLauncherHomeByTextView(uiDevice,record);
             UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话"));
+            Log.d(TAG, "lxm: "+tabView.getText());
             m_Expect = "客服电话：400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-            Utils.writeCaseResult("进入消费记录页面时跳转失败：未抓到关键字", m_Pass, m_Time);
+            Utils.writeCaseResult(tabView.getText()+" 显示错误", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -438,7 +439,7 @@ public final class TestVipVideoV3 {
             m_Expect = "客服电话：400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
-            Utils.writeCaseResult("进入观影券页面时跳转失败：未抓到关键字", m_Pass, m_Time);
+            Utils.writeCaseResult(tabView.getText()+" 显示错误", m_Pass, m_Time);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -691,7 +692,7 @@ public final class TestVipVideoV3 {
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
-                Utils.writeCaseResult("4K视频播放失败",m_uiObj !=null,m_Time);
+                Utils.writeCaseResult("视频播放失败",m_uiObj !=null,m_Time);
                 backPageMethod();
             }else {
                 this.openTabFromLauncherHomeByVipText(uiDevice,watchMin);
@@ -961,6 +962,5 @@ public final class TestVipVideoV3 {
         SystemClock.sleep(1000);
         uiDevice.pressBack();
     } //Back*
-
 
 }

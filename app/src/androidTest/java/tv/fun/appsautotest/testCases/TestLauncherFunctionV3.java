@@ -18,6 +18,7 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -161,7 +162,9 @@ public class TestLauncherFunctionV3 {
             resultFlag = false;
         }
         finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
@@ -1250,10 +1253,10 @@ public class TestLauncherFunctionV3 {
 
     @Test  //购买英超包页面跳转
     public void LC_PL_03_PayPremierLeague() {
-        this.EnterPLHomePage();
-        uiDevice.pressDPadUp();
-        systemWait(WAIT);
         try {
+            this.EnterPLHomePage();
+            uiDevice.pressDPadUp();
+            systemWait(WAIT);
             UiObject2 PLPay = uiDevice.findObject(By.res("com.bestv.ott:id/pay_la_txt"));
             if (PLPay.getText() == null) {
                 System.out.println("电视已开通英超付费包");
@@ -1488,6 +1491,7 @@ public class TestLauncherFunctionV3 {
     }
 
     @Test  //详情页--演职员表跳转
+    @Ignore //忽略
     public void LC_DETAIL_01_DetailsPagePerformerJump(){
         try{
             RightMoveMethod(2);
@@ -1699,19 +1703,6 @@ public class TestLauncherFunctionV3 {
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
-    }
-
-    private UiObject2 getTabFromLauncherHomeByText(UiDevice device, String tabText) {
-        List<UiObject2> tabTitles = device.findObjects(By.res("com.bestv.ott:id/title"));
-        Assert.assertTrue("Verify tabs on launcher home.", tabTitles.size() > 0);
-        UiObject2 retTitle = null;
-        for (UiObject2 title : tabTitles) {
-            if (tabText.equals(title.getText())) {
-                retTitle = title;
-            }
-        }
-        Assert.assertNotNull(retTitle);
-        return retTitle;
     }
 
     private void openTabFromLauncherHomeByTextView(UiDevice device, UiObject2 TabView) {
@@ -1928,7 +1919,6 @@ public class TestLauncherFunctionV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }
 

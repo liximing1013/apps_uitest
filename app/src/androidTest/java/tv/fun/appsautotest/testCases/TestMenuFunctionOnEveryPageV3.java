@@ -56,6 +56,7 @@ public class TestMenuFunctionOnEveryPageV3 {
     private String m_Expect = "";
     private String m_Actual = "";
     private String resultStr = "";
+    private static final String TAG = "";
 
     @BeforeClass
     public static void BeforeClass(){
@@ -625,8 +626,8 @@ public class TestMenuFunctionOnEveryPageV3 {
             downMoveMethod(1);
             uiDevice.pressMenu();
             systemWait(WAIT);
-            UiObject2 Menu = uiDevice.findObject(By.text("清空全部"));
-            if(Menu != null) {
+            UiObject2 menu = uiDevice.findObject(By.text("清空全部"));
+            if(menu != null) {
                 rightMoveMethod(2);
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
@@ -885,18 +886,20 @@ public class TestMenuFunctionOnEveryPageV3 {
         try {
             enterFilmListPage();
             rightMoveMethod(1);
-            SystemClock.sleep(2000);
+            SystemClock.sleep(3000);
             rightMoveMethod(1);
             systemWait(WAIT);
             downMoveMethod(1);
             systemWait(WAIT);
             uiDevice.pressMenu();
             systemWait(WAIT);
-            UiObject Col = uiDevice.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text"));
-            if(Col.exists()) {
-                if (Col.getText().equals("收藏")) {
+            UiObject colText = uiDevice.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text")
+            .textContains("收藏").enabled(true));
+            UiObject colIcon= uiDevice.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_icon").enabled(true));
+            if(colText.exists()) {
+                if (colText.getText().equals("收藏") && colIcon.isEnabled()) {
                     uiDevice.pressDPadCenter();
-                    systemWait(SHORT_WAIT);
+                    SystemClock.sleep(2000);
                     uiDevice.pressDPadCenter();
                     uiDevice.waitForIdle(18000);
                     systemWait(LONG_WAIT);
@@ -1359,6 +1362,5 @@ public class TestMenuFunctionOnEveryPageV3 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }

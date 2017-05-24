@@ -393,8 +393,7 @@ public class TestLongVideoPlay {
     public void testDemo(){
         try{
             enterVideoClassifyPage();
-            UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
-            UiObject2 title= uiDevice.findObject(By.text("com.bestv.ott:id/maintitle"));
+            UiObject2 classify = uiDevice.findObject(By.text("视频分类"));
             uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             uiDevice.pressBack();
@@ -403,7 +402,7 @@ public class TestLongVideoPlay {
                 systemWait(WAIT);
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
-                if(Classify == null){
+                if(classify == null){
                     continue;
                 }
                 uiDevice.pressBack();
@@ -419,7 +418,7 @@ public class TestLongVideoPlay {
                 systemWait(WAIT);
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
-                if(Classify == null){
+                if(classify == null){
                     continue;
                 }
                 uiDevice.pressBack();
@@ -435,7 +434,7 @@ public class TestLongVideoPlay {
                 systemWait(WAIT);
                 uiDevice.pressDPadCenter();
                 systemWait(LONG_WAIT);
-                if(Classify == null){
+                if(classify == null){
                     continue;
                 }
                 uiDevice.pressBack();
