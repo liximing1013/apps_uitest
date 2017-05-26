@@ -5,8 +5,6 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.view.KeyEvent;
 
-import java.io.IOException;
-
 /**
  * Created by liuqing on 2016/10/24.
  */
@@ -21,14 +19,17 @@ public class MasterApp extends AppStorePage {
         if(!findElementByID(launcherTabID).exists()){
             home();
         }
-        moveToTargetTab(launcherTabs, appTab, launcherTabID, 5);
+        moveToLauncherTargetTab(appTab);
         //点击“电视助手”卡片
         UiObject tvMasterCard = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
-        device.pressDPadDown();
-        device.pressDPadDown();
+        moveDownForMultiple(2);
+        moveRight();
         if (!tvMasterCard.isSelected()) {
-            device.pressDPadRight();
-            device.pressDPadRight();
+            moveUpForMultiple(2);
+            moveLeft();
+            moveRight();
+            moveDownForMultiple(2);
+            moveRight();
         }
         device.pressEnter();
         waitForElementPresentByID("tv.fun.master:id/iv_settings");
@@ -95,7 +96,7 @@ public class MasterApp extends AppStorePage {
         //Launcher应用tab页面，点击电视助手
         enterTVMasterPage();
         //点击“自启动管理”
-        moveToRightForMultiple(5);
+        moveRightForMultiple(5);
         UiObject cardObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
         cardObj.clickAndWaitForNewWindow();
     }
@@ -104,7 +105,7 @@ public class MasterApp extends AppStorePage {
      * Click "自启动管理"卡片，进入页面
      */
     public void gotoAutoLaunchPageFromMaster() throws UiObjectNotFoundException {
-        moveToRightForMultiple(5);
+        moveRightForMultiple(5);
         UiObject cardObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
         cardObj.clickAndWaitForNewWindow();
     }
@@ -125,7 +126,7 @@ public class MasterApp extends AppStorePage {
         for(int i=0; i< keywordForAutoLApp.length; i++){
             device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/search_single_key").text(keywordForAutoLApp[i])).click();
         }
-        moveToRightForMultiple(6);
+        moveRightForMultiple(6);
         UiObject appObj = findElementByID("tv.fun.appstore:id/app_title");
         device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
         waitForAppDetailPageDisplay();
@@ -136,7 +137,7 @@ public class MasterApp extends AppStorePage {
      * Click "网络诊断"卡片，进入页面
      */
     public void gotoNetworkCheckPageFromMaster() throws UiObjectNotFoundException {
-        moveToRightForMultiple(5);
+        moveRightForMultiple(5);
         UiObject cardObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
         cardObj.clickAndWaitForNewWindow();
     }
@@ -148,4 +149,5 @@ public class MasterApp extends AppStorePage {
         UiObject setObj = findElementByID("tv.fun.master:id/iv_settings");
         setObj.clickAndWaitForNewWindow();
     }
+
 }

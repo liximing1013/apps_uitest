@@ -10,12 +10,11 @@ import android.support.test.uiautomator.UiSelector;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.runners.model.Statement;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import tv.fun.common.Utils;
 
@@ -28,15 +27,18 @@ public class Common {
     public int timeout = 60;
     public int nextPageTime = 3000;
     public int sleepInterval = 500;
+    public String appTabName = "应用";
+    public String addIconInLauncherTab = "addIcon";
     public String appStoreIconName = "应用市场";
     public String tvMasterIconName = "电视助手";
+    public String systemAppIconName = "系统应用";
     public String myAppIconName = "我的应用";
     public String myAppCountUnit = "个)";
     public String[] tabs = {"推荐", "游戏", "娱乐", "生活", "教育"};
-    public String appstorePackage = "tv.fun.appstore";
+    public String appstorePackage = "tv.fun.appstore";//{{add("推荐"); "游戏", "娱乐", "生活", "教育", "应用管理"};
     public String[] appStoreTabs = {"推荐", "游戏", "娱乐", "生活", "教育", "应用管理"};
-    public String[] launcherTabs = {"电视", "视频", "体育", "少儿", "应用", "设置"};
     public String appTab = "应用";
+    public String videoTab = "视频";
     public String launcherTabID = "com.bestv.ott:id/tab_title";
     public String networkIconIDInPopup = "com.bestv.ott:id/network";//launcher悬浮框上网络设置按钮的resource id
     public static boolean resultFlag = true;
@@ -44,26 +46,68 @@ public class Common {
     public long execTime;
     public String runTool = "Auto";//Studio or Auto
     public String errorLog = "";
-    private static Process process;
     public String[] keywordForAutoLApp = {"D", "S", "Y", "Y", "G", "J"};//有自启动管理权限的应用“电视应用管家”搜索关键字
+    public ArrayList<String> launcherTabs = new ArrayList<>();
+    public String[] launchTabStrs = new String[10];
+    private static String COMMAND_EXIT = "exit\n";
+    private static String COMMAND_LINE_END = "\n";
+    public final static String CHILDREN_PKG_NAME = "tv.fun.children";
+    public String[] childTabs = {"推荐", "少儿", "品牌专区"};
+    public String childrenTabName = childTabs[1];
 
     @Before
-    public void setup() throws RemoteException, IOException {
+    public void setup() throws RemoteException, IOException, UiObjectNotFoundException {
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         execTime = Utils.getCurSecond();
         resultStr = "";
         resultFlag = true;
-        if(!device.isScreenOn()){
-            device.wakeUp();
-        }
-        executeAdbShellCommond("am force-stop tv.fun.appstore");
-        device.pressHome();
+       if(!device.isScreenOn()){
+           device.wakeUp();
+       }
+//        executeAdbShellCommond("am force-stop tv.fun.appstore");
+        home();
+//        launcherTabs = getTabsNameInLauncherPage();
     }
 
     @After
     public void tearDown() throws IOException {
 //        device.pressHome();
         executeAdbShellCommond("am force-stop tv.fun.appstore");
+    }
+
+    public void longPressHomeByCommand() throws IOException {
+//        String cmd = String.format("input keyevent --longpress 3");
+        String cmd = String.format("am force-stop %s", "tv.fun.children");
+        executeCommand(new String[]{cmd}, false);
+    }
+
+    public void executeCommand(String[] commands, Boolean isRoot) throws IOException {
+       Process lprocess = null;
+        DataOutputStream dos = null;
+        try {
+            int result = -1;
+            lprocess = Runtime.getRuntime().exec(isRoot ? "su" : "sh");
+            dos = new DataOutputStream(lprocess.getOutputStream());
+            for (String command : commands) {
+                dos.write(command.getBytes());
+                dos.writeBytes(COMMAND_LINE_END);
+                dos.flush();
+            }
+            dos.writeBytes(COMMAND_EXIT);
+            dos.flush();
+            lprocess.waitFor();
+            result = lprocess.exitValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (dos != null) {
+                try {
+                    dos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -168,17 +212,17 @@ public class Common {
         return childObj;
     }
 
-    /**
-     * 初始化进程
-     */
-    private static void initProcess() {
-        if (process == null)
-            try {
-                process = Runtime.getRuntime().exec("su");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-    }
+//    /**
+//     * 初始化进程
+//     */
+//    private static void initProcess() {
+//        if (process == null)
+//            try {
+//                process = Runtime.getRuntime().exec("su");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//    }
 
     /**
      * 适用于所有系统
@@ -198,7 +242,7 @@ public class Common {
      * @param commondStr
      */
     public void executeAdbCommond(String commondStr) throws IOException {
-        device.executeShellCommand(commondStr);
+            device.executeShellCommand(commondStr);
     }
 
     /**
@@ -248,7 +292,7 @@ public class Common {
     /**
      * 按遥控器向上键
      */
-    public void moveToUp(){
+    public void moveUp(){
         device.pressDPadUp();
     }
 
@@ -257,7 +301,7 @@ public class Common {
      *
      * step  连续向右移的次数
      */
-    public void moveToUpForMultiple(int step){
+    public void moveUpForMultiple(int step){
         for(int i=1; i<=step; i++){
             device.pressDPadUp();
         }
@@ -266,7 +310,7 @@ public class Common {
     /**
      * 按遥控器右键
      */
-    public void moveToRight(){
+    public void moveRight(){
         device.pressDPadRight();
     }
 
@@ -275,16 +319,18 @@ public class Common {
      *
      * step  连续向右移的次数
      */
-    public void moveToRightForMultiple(int step){
-        for(int i=1; i<=step; i++){
-            device.pressDPadRight();
+    public void moveRightForMultiple(int step){
+        if(step>0) {
+            for (int i = 1; i <= step; i++) {
+                device.pressDPadRight();
+            }
         }
     }
 
     /**
      * 按遥控器左键
      */
-    public void moveToLeft(){
+    public void moveLeft(){
         device.pressDPadLeft();
     }
 
@@ -293,7 +339,7 @@ public class Common {
      *
      * step  连续向左移的次数
      */
-    public void moveToLeftForMultiple(int step){
+    public void moveLeftForMultiple(int step){
         if(step<0){
             step=-step;
         }
@@ -307,7 +353,7 @@ public class Common {
      *
      * 向下移
      */
-    public void moveToDown(){
+    public void moveDown(){
         device.pressDPadDown();
     }
 
@@ -316,7 +362,7 @@ public class Common {
      *
      * step  连续向下移的次数
      */
-    public void moveToDownForMultiple(int step){
+    public void moveDownForMultiple(int step){
         if(step<0){
             step=-step;
         }
@@ -326,10 +372,37 @@ public class Common {
     }
 
     /**
+     * Input password in children key popup window
+     */
+    public void inputChildrenKeyPasswordIfPopupDisplay() throws UiObjectNotFoundException {
+        if(device.findObject(new UiSelector().text("输入密码或扫码解锁")).exists()|findElementByID("tv.fun.children:id/keypad").exists()){
+            //input 1111
+            UiObject keyObj = findElementByID("tv.fun.children:id/keypad").getChild(new UiSelector().className("android.widget.ImageView").index(0));
+            moveDownForMultiple(3);
+            moveUp();
+            device.pressEnter();
+            device.pressEnter();
+            device.pressEnter();
+            device.pressEnter();
+            if(device.findObject(new UiSelector().text("输入密码或扫码解锁")).exists()|findElementByID("tv.fun.children:id/keypad").exists()){
+                back();
+            }
+        }
+    }
+
+    /**
      * 按遥控器Home键
      */
-    public void home(){
+    public void home() throws UiObjectNotFoundException {
         device.pressHome();
+        inputChildrenKeyPasswordIfPopupDisplay();
+    }
+
+    /**
+     * 按遥控器确定键
+     */
+    public void enter(){
+        device.pressEnter();
     }
 
     /**
@@ -379,6 +452,17 @@ public class Common {
             }
             Thread.sleep(sleepInterval);
         }
+    }
+
+    /**
+     * Wait for time
+     *
+     * an element locator
+     * @throws InterruptedException
+     */
+    public void wait(int timeUnit)
+            throws InterruptedException {
+            Thread.sleep(timeUnit * 60* 2 * sleepInterval);
     }
 
     /**
@@ -529,16 +613,127 @@ public class Common {
      * @param targetTab
      * @return
      */
-    public int stepFrom1stTabToTargetTab(String[] tablist, String currentTab, String targetTab){
+    public int stepFromCurrentTabToTargetTab(String[] tablist, String currentTab, String targetTab){
         HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
         int tabCount = tablist.length;
         for(int i=0; i<tabCount; i++){
-            tabMap.put(tablist[i], i+1);
+            tabMap.put((String) tablist[i], i+1);
         }
         int startStep = tabMap.get(currentTab);
         int targetTabStep = tabMap.get(targetTab);
         int step = targetTabStep - startStep;
         return step;
+    }
+
+    /**
+     * Use to get the step need to move from the first tab to target tab
+     *
+     * @param targetTab
+     * @return
+     */
+    public int stepFromCurrentTabToTargetTab(ArrayList tablist, String currentTab, String targetTab){
+        HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
+        int tabCount = tablist.size();
+        for(int i=0; i<tabCount; i++){
+            tabMap.put((String) tablist.get(i), i+1);
+        }
+        int startStep = tabMap.get(currentTab);
+        int targetTabStep = tabMap.get(targetTab);
+        int step = targetTabStep - startStep;
+        return step;
+    }
+
+    /**
+     * Use to get the step need to move from the current tab to add icon
+     *
+     * @param currentTab
+     * @return
+     */
+    public int stepFromCurrentTabToAdd(ArrayList tablist, String currentTab){
+        HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
+        int tabCount = tablist.size();
+        for(int i=0; i<tabCount; i++){
+            tabMap.put((String) tablist.get(i), i+1);
+        }
+        int startStep = tabMap.get(currentTab);
+        int targetTabStep = tabCount+1;
+        int step = targetTabStep - startStep;
+        return step;
+    }
+
+    /**
+     * Get the launcher tabs list
+     */
+    public String[] getTabsNameInLauncherPage() {
+//        HashMap<Integer, String> tabs = new HashMap<Integer, String>();
+        String[] launcherTabObj = new String[10];
+        try {
+            UiObject launcherScrollObject = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
+            UiObject tabListObj = launcherScrollObject.getChild(new UiSelector().className("android.widget.LinearLayout"));
+            int tabCount = tabListObj.getChildCount();
+//            UiObject lastObj = tabListObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(tabCount - 1));
+//            Boolean f = lastObj.getChild(new UiSelector().className("android.widget.ImageView")).exists();
+//            if (!lastObj.getChild(new UiSelector().className("android.widget.ImageView")).exists()) {
+//                moveUp();
+//            }
+            if(findElementByID(networkIconIDInPopup).exists()){
+                device.pressDPadDown();
+            }
+            for (int i = 0; i < tabCount; i++) {
+                UiObject tabEle = tabListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
+                UiObject tabObj = tabEle.getChild(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
+                if(i==tabCount-1){
+                    launcherTabObj[i] = addIconInLauncherTab;
+                }else {
+                    String tabName = tabObj.getText();
+                    launcherTabObj[i] = tabName;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return launcherTabObj;
+        }
+    }
+
+    /**
+     * Prepare data to make sure the app tab is displayed in Launcher page
+     */
+    public void displayAppTabInLauncher() throws UiObjectNotFoundException, InterruptedException {
+            launchTabStrs = getTabsNameInLauncherPage();
+            UiObject launcherScrollObject = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
+            UiObject tabListObj = launcherScrollObject.getChild(new UiSelector().className("android.widget.LinearLayout"));
+            int tabCount = tabListObj.getChildCount();
+            UiObject lastObj = tabListObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(tabCount - 1));
+            UiObject currentTabObj = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").selected(true));
+            String currentTabName = currentTabObj.getText();
+            int stepFromCurrent = stepFromCurrentTabToTargetTab(launchTabStrs, currentTabName, addIconInLauncherTab);
+            if(stepFromCurrent>0){
+            moveRightForMultiple(stepFromCurrent);
+            }else {
+            moveLeftForMultiple(stepFromCurrent);
+            }
+            device.pressEnter();
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_manager_title", "设置桌面频道");
+            UiObject appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
+            appTabInList.click();
+            appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
+            if(!appTabInList.isSelected()){
+                device.pressEnter();
+            }
+        back();
+    }
+
+    /**
+     * Check if the expected tab is displaying
+     */
+    public Boolean checkWhetherTabDisplay(String targetTab, String tabResouceID){
+        Boolean tabFalg = false;
+        UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
+        if(device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab)).exists()){
+            tabFalg=true;
+        }
+        return tabFalg;
     }
 
     /**
@@ -549,7 +744,7 @@ public class Common {
     public void moveToTargetTab(String[] tablist, String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException {
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
         if(!tab.isSelected()){
-            moveToUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
+            moveUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
             if(tabResouceID.equalsIgnoreCase(launcherTabID)){
                 if(findElementByID(networkIconIDInPopup).exists()){
                     device.pressDPadDown();
@@ -557,11 +752,42 @@ public class Common {
             }
             UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
             String currentTab = currentTabObj.getText();
-            int needStep = stepFrom1stTabToTargetTab(tablist, currentTab, targetTab);
+            int needStep = stepFromCurrentTabToTargetTab(tablist, currentTab, targetTab);
             if(needStep>0){
-                moveToRightForMultiple(needStep);
+                moveRightForMultiple(needStep);
             }else {
-                moveToLeftForMultiple(needStep);
+                moveLeftForMultiple(needStep);
+            }
+        }
+    }
+
+    /**
+     * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
+     * @param targetTab
+     * @throws UiObjectNotFoundException
+     */
+    public void moveToLauncherTargetTab(String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException, InterruptedException {
+        UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
+        if(!tab.exists()){
+            displayAppTabInLauncher();
+        }
+        home();
+        tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
+        if(!tab.isSelected()){
+            moveUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
+            if(tabResouceID.equalsIgnoreCase(launcherTabID)){
+                if(findElementByID(networkIconIDInPopup).exists()){
+                    device.pressDPadDown();
+                }
+            }
+            UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
+            String currentTab = currentTabObj.getText();
+            launchTabStrs = getTabsNameInLauncherPage();
+            int needStep = stepFromCurrentTabToTargetTab(launchTabStrs, currentTab, targetTab);
+            if(needStep>0){
+                moveRightForMultiple(needStep);
+            }else {
+                moveLeftForMultiple(needStep);
             }
         }
     }
@@ -666,17 +892,17 @@ public class Common {
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, expected.contains(actual));
         } else {
-            if (expected.indexOf(actual) > -1) {
-                verifyFlag = true;
-                return verifyFlag;
-            } else {
-                resultFlag = false;
-                resultStr += "Expected [" + expected + "] contains actual [" + actual
-                        + "], but actually not contain; ";
-                verifyFlag = false;
-                return verifyFlag;
-            }
+        if (expected.indexOf(actual) > -1) {
+            verifyFlag = true;
+            return verifyFlag;
+        } else {
+            resultFlag = false;
+            resultStr += "Expected [" + expected + "] contains actual [" + actual
+                    + "], but actually not contain; ";
+            verifyFlag = false;
+            return verifyFlag;
         }
+    }
         return verifyFlag;
     }
 
@@ -748,6 +974,33 @@ public class Common {
             Assert.assertTrue(failMsg, actualNum > smallNum);
         } else {
             if (actualNum > smallNum) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                resultStr += "Expected the [" + actualNum + "] is larger than [" + smallNum
+                        + "]; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
+     * Verify the actual number is larger than the input number.
+     *
+     * @param actualNum
+     * @param smallNum
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyNumberEqualORLarger(String failMsg,int actualNum, int smallNum) throws IOException {
+        Boolean verifyFlag =true;
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, actualNum >= smallNum);
+        } else {
+            if (actualNum >= smallNum) {
                 verifyFlag = true;
                 return verifyFlag;
             } else {
@@ -852,6 +1105,37 @@ public class Common {
     }
 
     /**
+     * Verify the element present.
+     *
+     * @param locator
+     * @param failMsg
+     * @return result of verification
+     * @throws IOException
+     */
+    public Boolean verifyElementPresent(String failMsg, String locator) throws IOException {
+        Boolean verifyFlag =true;
+        UiObject actualObj = findElementByID(locator);
+        if (runTool.equalsIgnoreCase("Studio")) {
+            Assert.assertTrue(failMsg, actualObj.exists());
+        } else {
+            if (actualObj.exists()) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                if (failMsg != "") {
+                    resultStr += failMsg+";";
+                } else {
+                    resultStr += "Element [" + actualObj + "] is NOT present; ";
+                }
+                verifyFlag = false;
+                return verifyFlag;
+            }
+        }
+        return verifyFlag;
+    }
+
+    /**
      * Verify the element not present.
      *
      * @param obj
@@ -911,6 +1195,7 @@ public class Common {
         }
         return verifyFlag;
     }
+
 //
 //    public void evaluate() throws Throwable {
 //        List<Throwable> errors = new ArrayList<Throwable>();
@@ -946,4 +1231,5 @@ public class Common {
 //        System.out.println("dom4j parserXml");
 //        return testKind;
 //    }
+
 }
