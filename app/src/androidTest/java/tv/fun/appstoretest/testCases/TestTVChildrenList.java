@@ -3,7 +3,9 @@ package tv.fun.appstoretest.testCases;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiSelector;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import tv.fun.appstoretest.common.ChildrenPage;
 import tv.fun.common.Utils;
@@ -12,11 +14,12 @@ import tv.fun.common.Utils;
 /**
  * Created by liuqing on 2017/5/4.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestTVChildrenList extends ChildrenPage {
 
     /**
      * Test that the UI of multiple tabs page displays correctly
-     *
+     * <p>
      * 多tab列表页UI显示正确
      */
     @Test
@@ -24,14 +27,11 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
-//            if (!multipleTabObj.isFocused()) {
-//                multipleTabObj.click();
-//            }
             multipleTabObj.clickAndWaitForNewWindow();
-            //Press enter to goto multiple tabs page
-//            device.pressEnter();
             waitForElementPresentByID("tv.fun.children:id/filter");
             //断言
             UiObject searchIconObj = findElementByID("tv.fun.children:id/search");
@@ -55,7 +55,7 @@ public class TestTVChildrenList extends ChildrenPage {
 
     /**
      * Test that can clicking any tab without changing
-     *
+     * <p>
      * 点击tab无异常
      */
     @Test
@@ -63,6 +63,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -89,7 +91,7 @@ public class TestTVChildrenList extends ChildrenPage {
 
     /**
      * Test that the video info displays correctly
-     *
+     * <p>
      * 影片简介信息显示正确
      */
     @Test
@@ -97,6 +99,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -104,17 +108,17 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(3);
             //向下选中任一影片
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
             UiObject videoInfoObj = findElementByID("tv.fun.children:id/briefContainer");
-            String infoStr =  videoInfoObj.getText();
-            do{
-              moveRight();
+            String infoStr = videoInfoObj.getText();
+            do {
+                moveRight();
                 videoInfoObj = findElementByID("tv.fun.children:id/briefContainer");
-                infoStr =  videoInfoObj.getText();
-            }while(!infoStr.contains("集)"));
+                infoStr = videoInfoObj.getText();
+            } while (!infoStr.contains("集)"));
             //断言
             UiObject selectedVideo = device.findObject(new UiSelector().resourceId("tv.fun.children:id/title").selected(true));
             videoInfoObj = findElementByID("tv.fun.children:id/briefContainer");
@@ -154,18 +158,20 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.children:id/filter");
             moveRightForMultiple(3);
             UiObject topicTabObj = findElementByID("tv.fun.children:id/tabContainer").getChild(new UiSelector().className("android.widget.Button").text("专题"));
-            do{
+            do {
                 moveRight();
-            }while(!topicTabObj.isSelected());
+            } while (!topicTabObj.isSelected());
             //向下选中任一影片
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
@@ -200,6 +206,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -230,6 +238,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -262,6 +272,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             waitForElementPresentByID("tv.fun.children:id/tab_title_children");
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
@@ -296,6 +308,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -326,16 +340,17 @@ public class TestTVChildrenList extends ChildrenPage {
     }
 
     /*
-* Test that can cancel collecting video or topic by Menu
-*
-* 在列表页中，可以取消收藏影片/专题
-
-*/
+     * Test that can cancel collecting video or topic by Menu
+     *
+     * 在列表页中，可以取消收藏影片/专题
+     */
     @Test
     public void Child_List_32_testCollectVideoByMenu() {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -343,7 +358,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(3);
             //向下选中任一影片
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
@@ -353,7 +368,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String currentVideoName = videoInfo.split(" ")[0];
             //按遥控器Menu键
             menu();
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
                 menu();
@@ -395,6 +410,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -402,7 +419,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(3);
             //向下选中任一影片
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
@@ -412,7 +429,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String currentVideoName = videoInfo.split(" \\(")[0];
             //按遥控器Menu键
             menu();
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
 //                moveDown();
@@ -433,11 +450,10 @@ public class TestTVChildrenList extends ChildrenPage {
             back();
             //再次进入列表页，取消收藏
             multipleTabObj.clickAndWaitForNewWindow();
-//            waitForElementPresentByID("tv.fun.children:id/filter");
             moveRightForMultiple(3);
             //向下选中任一影片
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
@@ -446,9 +462,9 @@ public class TestTVChildrenList extends ChildrenPage {
             String selectedVideoInfo = selectedVideoInfoObj.getText();
             String selectedVideoName = selectedVideoInfo.split(" \\(")[0];
             menu();
-            if(findElementByText("收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject collectBtnTwoInMenu = findElementByText("收藏", "tv.fun.children:id/menu_text");
-                firstCollectName=selectedVideoName;
+                firstCollectName = selectedVideoName;
                 collectBtnTwoInMenu.click();
                 moveDown();
                 menu();
@@ -458,9 +474,9 @@ public class TestTVChildrenList extends ChildrenPage {
             back();
             //断言
             findElementByText("我的收藏", "tv.fun.children:id/children_menu").clickAndWaitForNewWindow();
-            if(findElementByID("tv.fun.children:id/empty").exists()){
+            if (findElementByID("tv.fun.children:id/empty").exists()) {
                 verifyElementNotPresent("", "tv.fun.children:id/listView");
-            }else {
+            } else {
                 UiObject firstActualCollectObj = collectListObj.getChild(new UiSelector().className("android.widget.FrameLayout").index(0));
                 UiObject firstActualCollectNameObj = firstCollectObj.getChild(new UiSelector().resourceId("tv.fun.children:id/title"));
                 String firstActualCollectName = firstCollectNameObj.getText();
@@ -488,6 +504,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -495,7 +513,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(5);
             //向下选中任一专题
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
@@ -505,10 +523,9 @@ public class TestTVChildrenList extends ChildrenPage {
             String currentTopicName = topicInfo.split("　")[0];
             //按遥控器Menu键
             menu();
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
-//                moveDown();
                 moveRight();
                 menu();
             }
@@ -529,7 +546,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(5);
             //向下选中任一影片
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(3);
                 moveDown();
             }
@@ -538,7 +555,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String selectedTopicInfo = selectedTopicInfoObj.getText();
             String selectedTopicName = selectedTopicInfo.split(" ")[0];
             menu();
-            if(findElementByText("收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject collectBtnTwoInMenu = findElementByText("收藏", "tv.fun.children:id/menu_text");
                 collectBtnTwoInMenu.click();
                 moveDown();
@@ -574,6 +591,8 @@ public class TestTVChildrenList extends ChildrenPage {
         try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -583,7 +602,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyTrue("", currentSelectedTab.isSelected());
             //向下选中任一专题
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(5);
                 moveDown();
             }
@@ -593,10 +612,9 @@ public class TestTVChildrenList extends ChildrenPage {
             String currentTopicName = topicInfo.split(" ")[0];
             //按遥控器Menu键
             menu();
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
-//                moveDown();
                 moveRight();
                 menu();
             }
@@ -618,7 +636,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(5);
             //向下选中任一专题
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(5);
                 moveDown();
             }
@@ -627,7 +645,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String selectedTopicInfo = selectedTopicInfoObj.getText();
             String selectedTopicName = selectedTopicInfo.split("　")[0];
             menu();
-            if(findElementByText("收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject collectBtnTwoInMenu = findElementByText("收藏", "tv.fun.children:id/menu_text");
                 collectBtnTwoInMenu.click();
                 moveDown();
@@ -655,13 +673,14 @@ public class TestTVChildrenList extends ChildrenPage {
 
     /**
      * 大背景专题页可以正确响应Menu键操作
-     *
      */
     @Test
-    public void Child_List_44_testPressMenuInTopicPage(){
-        try{
-//进入少儿页面
+    public void Child_List_44_testPressMenuInTopicPage() {
+        try {
+            //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -671,7 +690,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyTrue("", currentSelectedTab.isSelected());
             //向下选中任一专题
             moveDown();
-            device.pressEnter();
+            enter();
             UiObject collectBtnInTopic = findElementByID("tv.fun.children:id/addFav");
             verifyElementPresent("", collectBtnInTopic);
             moveRight();
@@ -684,45 +703,52 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyElementPresent("", menuPopupObj);
             verifyElementPresent("", searchBtnObj);
             verifyElementPresent("", menuPopupObj);
-    } catch (Throwable e) {
-        e.printStackTrace();
-        resultFlag = false;
-        resultStr = e.toString();
-    } finally {
-        Utils.writeCaseResult(resultStr,
-                resultFlag, execTime);
-    }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
     }
 
     /**
      * 大背景专题页可以正确响应Back键操作
-     *
      */
     @Test
-    public void Child_List_45_testPressBackInTopicPage(){
-        try{
+    public void Child_List_45_testPressBackInTopicPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
             waitForElementPresentByID("tv.fun.children:id/filter");
             moveRightForMultiple(5);
             UiObject currentSelectedTab = findElementByID("tv.fun.children:id/tabTitleSection").getChild(new UiSelector().className("android.widget.Button").text("专题"));
-            verifyTrue("", currentSelectedTab.isSelected());
+            Boolean f = verifyTrue("", currentSelectedTab.isSelected());
             //向下选中任一专题
             moveDown();
-            device.pressEnter();
-            UiObject collectBtnInTopic = findElementByID("tv.fun.children:id/addFav");
-            verifyElementPresent("", collectBtnInTopic);
+            enter();
+            waitForElementPresentByID("com.bestv.ott:id/special_player_progress");
+            if (findElementByID("com.bestv.ott:id/special_player_progress").exists()) {
+                UiObject videoListObj = findElementByID("com.bestv.ott:id/special_play_list");
+                boolean f11 = verifyElementPresent("", videoListObj);
+            } else {
+                UiObject collectBtnInTopic = findElementByID("tv.fun.children:id/addFav");
+                verifyElementPresent("", collectBtnInTopic);
+            }
             //按遥控器Back键
             back();
             //断言
             UiObject filterObj = findElementByID("tv.fun.children:id/filter");
             UiObject suggestTabObj = device.findObject(new UiSelector().className("android.widget.Button").text("推荐"));
             verifyElementPresent("", suggestTabObj);
-            verifyElementPresent("", "tv.fun.children:id/listView");
             verifyElementPresent("", filterObj);
+            verifyElementPresent("", "tv.fun.children:id/listView");
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -735,13 +761,14 @@ public class TestTVChildrenList extends ChildrenPage {
 
     /**
      * 大背景专题页可以正确响应Home键操作
-     *
      */
     @Test
-    public void Child_List_46_testPressHomeInTopicPage(){
-        try{
+    public void Child_List_46_testPressHomeInTopicPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -751,7 +778,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyTrue("", currentSelectedTab.isSelected());
             //向下选中任一专题
             moveDown();
-            device.pressEnter();
+            enter();
             UiObject collectBtnInTopic = findElementByID("tv.fun.children:id/addFav");
             verifyElementPresent("", collectBtnInTopic);
             //按遥控器Home键
@@ -776,10 +803,12 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在大背景专题页可以通过menu键进入搜索页面
      */
     @Test
-    public void Child_List_47_testGotoSearchPageFromTopicPageByMenu(){
-        try{
+    public void Child_List_47_testGotoSearchPageFromTopicPageByMenu() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
+            //移动到少儿tab
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -789,7 +818,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyTrue("", currentSelectedTab.isSelected());
             //向下选中任一专题
             moveDown();
-            device.pressEnter();
+            enter();
             UiObject collectBtnInTopic = findElementByID("tv.fun.children:id/addFav");
             verifyElementPresent("", collectBtnInTopic);
             moveRight();
@@ -822,12 +851,12 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在大背景专题页可以通过menu键收藏影片
      */
     @Test
-    public void Child_List_48_1_testCollectVideoInTopicPageByMenu(){
-        try{
+    public void Child_List_48_1_testCollectVideoInTopicPageByMenu() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
-            moveToTargetTabInChildren("少儿");
+            moveToTargetTabInChildren(childrenTabName);
             //Clicking multiple tab card
             UiObject multipleTabObj = findElementByID("tv.fun.children:id/children_view_item2");
             multipleTabObj.clickAndWaitForNewWindow();
@@ -837,7 +866,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyTrue("", currentSelectedTab.isSelected());
             //向下选中任一专题
             moveDown();
-            device.pressEnter();
+            enter();
             UiObject collectBtnInTopic = findElementByID("tv.fun.children:id/addFav");
             verifyElementPresent("", collectBtnInTopic);
             moveDown();
@@ -846,17 +875,13 @@ public class TestTVChildrenList extends ChildrenPage {
             String videoNameInBrief = briefInfoStr.split(" \\(")[0];//小蜜蜂 第一季 (全40集)　8.1分　2016/英国/早教　"萌萌哒的小蜜蜂们"
             //按遥控器Menu键
             menu();
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
-//                moveDown();
                 back();
                 moveRightForMultiple(5);
                 moveDown();
-                device.pressEnter();
-//                device.pressEnter();
-//                moveLeft();
-//                moveDown();
+                enter();
                 menu();
             }
             UiObject collectBtnObj = findElementByText("收藏", "tv.fun.children:id/menu_text");
@@ -883,8 +908,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在大背景专题页可以通过menu键取消收藏影片
      */
     @Test
-    public void Child_List_48_2_testCancelCollectVideoInTopicPageByMenu(){
-        try{
+    public void Child_List_48_2_testCancelCollectVideoInTopicPageByMenu() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -904,10 +929,9 @@ public class TestTVChildrenList extends ChildrenPage {
             String currentTopicName = topicInfo.split("　")[0];//奇趣大自然　"好多毛蓬蓬的小动物啊"
             //按遥控器Menu键
             menu();
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
-//                moveDown();
                 moveRight();
                 menu();
             }
@@ -930,7 +954,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveRightForMultiple(5);
             //向下选中任一专题
             moveDown();
-            if(!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()){
+            if (!device.findObject(new UiSelector().resourceId("tv.fun.children:id/image").selected(true)).exists()) {
                 moveUpForMultiple(5);
                 moveDown();
             }
@@ -939,7 +963,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String selectedTopicInfo = selectedTopicInfoObj.getText();
             String selectedTopicName = selectedTopicInfo.split("　")[0];
             menu();
-            if(findElementByText("收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject collectBtnTwoInMenu = findElementByText("收藏", "tv.fun.children:id/menu_text");
                 collectBtnTwoInMenu.click();
                 moveDown();
@@ -969,8 +993,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 无tab列表页UI显示正确
      */
     @Test
-    public void Child_List_58_testSingleTabPageUI(){
-        try{
+    public void Child_List_58_testSingleTabPageUI() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -988,7 +1012,6 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyElementNotPresent("", "tv.fun.children:id/tabScrollContainer");
             verifyElementNotPresent("", "tv.fun.children:id/filter");
             verifyElementNotPresent("", "tv.fun.children:id/tabTitleSection");
-
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -1003,8 +1026,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 早教学堂页面UI显示正确清晰
      */
     @Test
-    public void Child_Early_01_testEarlySchoolPageUI(){
-        try{
+    public void Child_Early_01_testEarlySchoolPageUI() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1012,7 +1035,6 @@ public class TestTVChildrenList extends ChildrenPage {
             //Clicking multiple tab card
             UiObject earlySchoolObj = findElementByID("tv.fun.children:id/children_view_item5");
             earlySchoolObj.clickAndWaitForNewWindow();
-
             //断言
             UiObject languageClassObj = findElementByID("tv.fun.children:id/language_class");
             UiObject afterClassObj = findElementByID("tv.fun.children:id/after_class");
@@ -1037,8 +1059,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 早教学堂页面可以正确响应Back键操作
      */
     @Test
-    public void Child_Early_03_testPressBackInEarlySchoolPage(){
-        try{
+    public void Child_Early_03_testPressBackInEarlySchoolPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1054,7 +1076,6 @@ public class TestTVChildrenList extends ChildrenPage {
             UiObject settingBtnObj = findElementByID("tv.fun.children:id/tab_title_setting");
             verifyElementPresent("", settingBtnObj);
             verifyElementPresent("", childTabObj);
-
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -1069,8 +1090,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 早教学堂页面可以正确响应Home键操作
      */
     @Test
-    public void Child_Early_04_testPressHomeInEarlySchoolPage(){
-        try{
+    public void Child_Early_04_testPressHomeInEarlySchoolPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1101,8 +1122,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 早教学堂页面不响应Menu键操作
      */
     @Test
-    public void Child_Early_05_testNoMenuResponseInEarlySchoolPage(){
-        try{
+    public void Child_Early_05_testNoMenuResponseInEarlySchoolPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1130,8 +1151,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 学堂页面UI显示正确
      */
     @Test
-    public void Child_Early_09_testEarlyClassPageUI(){
-        try{
+    public void Child_Early_09_testEarlyClassPageUI() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1165,8 +1186,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 学堂页面可正确响应Back键操作
      */
     @Test
-    public void Child_Early_11_testPressBackInClassPage(){
-        try{
+    public void Child_Early_11_testPressBackInClassPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1199,8 +1220,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 学堂页面可正确响应Home键操作
      */
     @Test
-    public void Child_Early_12_testPressHomeInClassPage(){
-        try{
+    public void Child_Early_12_testPressHomeInClassPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1234,8 +1255,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 学堂页面不响应Menu键操作
      */
     @Test
-    public void Child_Early_03_testNoMenuResponseInClassPage(){
-        try{
+    public void Child_Early_03_testNoMenuResponseInClassPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1266,8 +1287,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在全屏播放页面可以通过向上或向下键呼出所有课程
      */
     @Test
-    public void Child_Early_36_testAllClassDisplayInFullScreen(){
-        try{
+    public void Child_Early_36_testAllClassDisplayInFullScreen() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1314,8 +1335,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 影片播放时，全屏播放页面可以通过Back键正确切换到小窗口
      */
     @Test
-    public void Child_Early_40_testBackFromFullScreenToSmall(){
-        try{
+    public void Child_Early_40_testBackFromFullScreenToSmall() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1358,8 +1379,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 全屏播放页面可以正确响应Home键操作
      */
     @Test
-    public void Child_Early_42_testPressHomeInFullScreen(){
-        try{
+    public void Child_Early_42_testPressHomeInFullScreen() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1401,8 +1422,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 全屏播放页面可以正确响应Menu键操作
      */
     @Test
-    public void Child_Early_44_testPressMenuInFullScreen(){
-        try{
+    public void Child_Early_44_testPressMenuInFullScreen() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1483,8 +1504,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 全屏播放页面, Back键可取消Menu弹框
      */
     @Test
-    public void Child_Early_45_testCancelMenuPopupByBack(){
-        try{
+    public void Child_Early_45_testCancelMenuPopupByBack() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1509,7 +1530,7 @@ public class TestTVChildrenList extends ChildrenPage {
             //按遥控器menu键
             menu();
             //Menu框
-            if(!findElementByID("tv.fun.children:id/video_clarity_view").exists()){
+            if (!findElementByID("tv.fun.children:id/video_clarity_view").exists()) {
                 waitForElementNotPresent("tv.fun.children:id/loading_icon");
                 menu();
             }
@@ -1537,8 +1558,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * Back键可取消今日课程表显示
      */
     @Test
-    public void Child_Early_63_testCancelClassScheduleByBack(){
-        try{
+    public void Child_Early_63_testCancelClassScheduleByBack() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1546,6 +1567,7 @@ public class TestTVChildrenList extends ChildrenPage {
             //Clicking multiple tab card
             UiObject earlySchoolObj = findElementByID("tv.fun.children:id/children_view_item5");
             earlySchoolObj.clickAndWaitForNewWindow();
+            waitForElementPresentByID("tv.fun.children:id/language_class");
             UiObject languageClassObj = findElementByID("tv.fun.children:id/language_class");
             languageClassObj.clickAndWaitForNewWindow();
             UiObject classMenuTitleObj = findElementByID("tv.fun.children:id/video_menu_title");
@@ -1561,7 +1583,8 @@ public class TestTVChildrenList extends ChildrenPage {
             waitForElementNotPresent("tv.fun.children:id/loading_icon");
             //按遥控器向下键
             moveDown();
-            UiObject classListObj = findElementByID("tv.fun.children:id/video_schedule_list");
+            waitForElementPresentByID("tv.fun.children:id/video_schedule_list");
+            UiObject classListObj = device.findObject(new UiSelector().className("android.widget.TextView").text("今日课程表"));
             UiObject classTitleObj = findElementByID("tv.fun.children:id/video_schedule_title");
             verifyElementPresent("", classListObj);
             verifyElementPresent("", classTitleObj);
@@ -1584,8 +1607,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 卡通明星页面UI显示正确
      */
     @Test
-    public void Child_Star_01_testCartoonStarPageUI(){
-        try{
+    public void Child_Star_01_testCartoonStarPageUI() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1600,7 +1623,7 @@ public class TestTVChildrenList extends ChildrenPage {
             int starCount = starListObj.getChildCount();
             verifyElementPresent("", starListObj);
             verifyNumberLarger("", starCount, 1);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1614,8 +1637,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 卡通明星页面可以正确响应Menu键操作
      */
     @Test
-    public void Child_Star_17_testPressMenuInCartoonStarPage(){
-        try{
+    public void Child_Star_17_testPressMenuInCartoonStarPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1628,7 +1651,7 @@ public class TestTVChildrenList extends ChildrenPage {
             moveUpForMultiple(2);
             menu();
             //断言
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 findElementByText("取消收藏", "tv.fun.children:id/menu_text").click();
                 moveUpForMultiple(2);
                 menu();
@@ -1637,7 +1660,7 @@ public class TestTVChildrenList extends ChildrenPage {
             UiObject searchBtnInMenu = findElementByText("搜索", "tv.fun.children:id/menu_text");
             verifyElementPresent("", storeBtnInMenu);
             verifyElementPresent("", searchBtnInMenu);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1651,8 +1674,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在卡通明星页面可以通过Menu键跳转到搜索页面
      */
     @Test
-    public void Child_Star_18_testGotoSearchPageViaMenu(){
-        try{
+    public void Child_Star_18_testGotoSearchPageViaMenu() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1673,7 +1696,7 @@ public class TestTVChildrenList extends ChildrenPage {
             UiObject phoneSearchBtn = findElementByID("tv.fun.children:id/phoneSearch");
             verifyElementPresent("搜索页面中输入框未显示", inputBox);
             verifyElementPresent("搜索页面中删除按钮未显示", phoneSearchBtn);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1687,8 +1710,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在卡通明星页面可以通过Menu键收藏卡通明星
      */
     @Test
-    public void Child_Star_19_testStoreCartoonStarViaMenu(){
-        try{
+    public void Child_Star_19_testStoreCartoonStarViaMenu() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1703,7 +1726,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String currentStarName = currentStarObj.getText();
             menu();
             //点击menu弹框上收藏按钮
-            if(findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                 cancelCollectBtnInMenu.click();
                 moveUpForMultiple(2);
@@ -1719,7 +1742,7 @@ public class TestTVChildrenList extends ChildrenPage {
             UiObject firstCollectNameObj = firstCollectObj.getChild(new UiSelector().resourceId("tv.fun.children:id/title"));
             String firstCollectName = firstCollectNameObj.getText();
             verifyString("", firstCollectName, currentStarName);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1733,8 +1756,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 在卡通明星页面可以通过Menu键取消收藏卡通明星
      */
     @Test
-    public void Child_Star_20_testCancelStoreCartoonStarViaMenu(){
-        try{
+    public void Child_Star_20_testCancelStoreCartoonStarViaMenu() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1751,7 +1774,7 @@ public class TestTVChildrenList extends ChildrenPage {
             menu();
             String currentStarNameInSec = null;
             //点击menu弹框上取消收藏按钮
-            if(findElementByText("收藏", "tv.fun.children:id/menu_text").exists()){
+            if (findElementByText("收藏", "tv.fun.children:id/menu_text").exists()) {
                 UiObject storeBtnInMenu = findElementByText("收藏", "tv.fun.children:id/menu_text");
                 storeBtnInMenu.click();
                 back();
@@ -1779,7 +1802,7 @@ public class TestTVChildrenList extends ChildrenPage {
             String firstCollectName = firstCollectNameObj.getText();
             verifyString("", firstCollectName, currentStarNameInSec);
             verifyString("", currentStarNameInSec, currentStarName);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1793,8 +1816,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 卡通明星页面可以正确响应Back键操作
      */
     @Test
-    public void Child_Star_21_testPressBackInCartoonStarPage(){
-        try{
+    public void Child_Star_21_testPressBackInCartoonStarPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1809,7 +1832,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyElementNotPresent("", "tv.fun.children:id/filter");
             verifyElementPresent("", "tv.fun.children:id/tab_title_setting");
             verifyElementPresent("", "tv.fun.children:id/tab_title_brand");
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1823,8 +1846,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 卡通明星页面可以正确响应Home键操作
      */
     @Test
-    public void Child_Star_22_testPressHomeInCartoonStarPage(){
-        try{
+    public void Child_Star_22_testPressHomeInCartoonStarPage() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1841,7 +1864,7 @@ public class TestTVChildrenList extends ChildrenPage {
             UiObject launcherVideoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(videoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", launcherVideoTab.isSelected());
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();
@@ -1855,8 +1878,8 @@ public class TestTVChildrenList extends ChildrenPage {
      * 卡通明星页面中点击大背景图专题可以进入大背景图专题页面
      */
     @Test
-    public void Child_Star_24_testGotoTopicPageByClickingStar(){
-        try{
+    public void Child_Star_24_testGotoTopicPageByClickingStar() {
+        try {
             //进入少儿页面
             navigateToChildrenByChildrenCardUnderVideo();
             //移动到期望的tab
@@ -1868,7 +1891,7 @@ public class TestTVChildrenList extends ChildrenPage {
             //点击任一明星专题
             moveUpForMultiple(2);
             moveLeftForMultiple(5);
-            device.pressEnter();
+            enter();
             //断言
             waitForElementPresentByID("tv.fun.children:id/addFav");
             UiObject storeBtn = findElementByID("tv.fun.children:id/addFav");
@@ -1879,7 +1902,7 @@ public class TestTVChildrenList extends ChildrenPage {
             verifyElementPresent("", videoList);
             verifyNumberLarger("", videoCount, 1);
             verifyElementPresent("", videoInfo);
-        }catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
             resultStr = e.toString();

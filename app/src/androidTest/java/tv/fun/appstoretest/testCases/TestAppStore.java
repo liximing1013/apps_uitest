@@ -437,6 +437,7 @@ public class TestAppStore extends AppStorePage {
             moveToLauncherTargetTab(videoTab, launcherTabID, 4);
             moveUpForMultiple(2);
             //选中我的应用卡片，并点击
+
             waitForElementPresentByID("com.bestv.ott:id/app");
             UiObject myAppCardObj = findElementByID("com.bestv.ott:id/app");
             UiObject titleObj = findElementByID("com.bestv.ott:id/app_title");
