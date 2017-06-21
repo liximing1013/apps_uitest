@@ -946,7 +946,7 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
             // 既有视频又有明星的搜索
-            m_sExpect = "JKJ";
+            m_sExpect = "GFC";
             enterLetters(m_sExpect);
             if(!m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list").exists()){
                 m_bPass = false;
