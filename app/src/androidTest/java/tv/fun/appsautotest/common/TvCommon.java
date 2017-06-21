@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tv.fun.common.Common;
+import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
 public class TvCommon extends Common{
@@ -369,28 +370,36 @@ public class TvCommon extends Common{
         }
     }
 
-    public void longPressHome(int iSecond){
-        longPress(-1, iSecond);
+    public String longPressHome(int iSecond){
+        return longPress(-1, iSecond);
     }
 
-    public void longPressUp(int iSecond){
-        longPress(0, iSecond);
+    public String longPressUp(int iSecond){
+        return longPress(0, iSecond);
     }
 
-    public void longPressRight(int iSecond){
-        longPress(1, iSecond);
+    public String longPressRight(int iSecond){
+        return longPress(1, iSecond);
     }
 
-    public void longPressDown(int iSecond){
-        longPress(2, iSecond);
+    public String longPressDown(int iSecond){
+        return longPress(2, iSecond);
     }
 
-    public void longPressLeft(int iSecond){
-        longPress(3, iSecond);
+    public String longPressLeft(int iSecond){
+        return longPress(3, iSecond);
     }
 
     // 需要将电视上的/dev/input/event3的权限设置为666才能运行长按操作
-    public void longPress(int iKey, int iSecond){
+    // adb shell chmod 666 /dev/input/event3
+    public String longPress(int iKey, int iSecond){
+        Utils.CommandResult comResult = Utils.execCommand("ls -l /dev/input/event3", false, true);
+        String sResult = comResult.mSuccessMsg.substring(0, 10);
+        if(!sResult.equalsIgnoreCase("crw-rw-rw-")){
+            sResult = String.format("/dev/input/event3的权限[%s]错误", sResult);
+            Utils.Print(sResult);
+            return sResult;
+        }
         String [] asCmd = new String[7];
         if(-1 == iKey) { // Home
             asCmd[0] = "sendevent /dev/input/event3 4 4 458826";
@@ -438,6 +447,7 @@ public class TvCommon extends Common{
             asCmd[6] = asCmd[2];
         }
         Utils.execCommand(asCmd, false, true);
+        return "OK";
     }
 
     public String checkExpectResult(UiObject uiObj, String sExpect){
@@ -480,7 +490,6 @@ public class TvCommon extends Common{
         try {
             iChild = uiPObj.getChildCount();
         } catch (UiObjectNotFoundException e) {
-            iChild = 0;
             return null;
         }
         uiObjects = new UiObject[iChild];
@@ -513,11 +522,22 @@ public class TvCommon extends Common{
         for(i = 0; i < iChild; i++){
             try {
                 uiChildObj = getUiObjChild(uiObj, BY_RESID, sTitileId, i);
-                 sTabList.add(i, uiChildObj.getText());
+                sTabList.add(i, uiChildObj.getText());
             }catch (Throwable e){
                 break;
             }
         }
         return sTabList;
+    }
+
+    // 获取节目详情页的标题
+    public String getDetailTitle(){
+        try {
+            waitTillOccur(BY_RESID, Infos.S_LC_DETAIL_TITLE_ID, 0, 15);
+            UiObject uiObj = getUiObjByResId(Infos.S_LC_DETAIL_TITLE_ID);
+            return uiObj.getText();
+        }catch(Throwable e){
+            return "";
+        }
     }
 }

@@ -49,10 +49,10 @@ public class TestDataReport {
     public void LC_Data_01_playCarousel(){
 //        Utils.Print("play case1 播放轮播视频 START");
         try {
-            m_sResult = "进入电视页失败！页面中没有“轮播”字样";
-            m_com.Navigation("hh93999"); // 进入电视页
+            m_com.Navigation("hh9933199"); // 进入电视页
             // test point 1
-            m_sExpect = "轮播"; // 如果没有"轮播"就表示不在电视页
+            m_sExpect = "24小时热播"; // 如果没有"轮播"就表示不在电视页
+            m_sResult = String.format("进入电视页失败！页面中没有“%s”字样", m_sExpect);
             m_sActual = m_com.getUiObjText(m_com.getUiObjByText(m_sExpect));
             m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
 
@@ -69,7 +69,7 @@ public class TestDataReport {
             m_sResult = "轮播视频打开失败！轮播视频里没有《24小时热播》";
             m_com.Enter(); // 打开轮播视频
             m_com.Sleep(m_iWaitSec);
-            m_com.Enter(); // 调出轮播菜单
+            m_com.Up(); // 调出轮播菜单
 
             m_sObjId = Infos.S_LC_CAROUSEL_CHANNLE; // 轮播菜单里的控件
             m_uiObj = m_com.getUiObject(m_com.BY_RESID, m_sObjId, 0); // 第一个节目: 24小时热播
@@ -126,7 +126,7 @@ public class TestDataReport {
         }
         m_com.Sleep(m_iWaitSec);
         m_com.Navigation("24994"); // 播放全部里的第1个免费视频，位置需要调整
-        m_com.Sleep(m_iWaitSec);
+        m_com.Sleep(18000); // 可能有15秒广告
         m_com.Enter(); // 暂停
 
         m_sObjId = Infos.S_LC_CONTROL_PAUSE_BTN; // 暂停按钮的id
@@ -168,7 +168,7 @@ public class TestDataReport {
         m_com.Enter();
         m_com.Sleep(m_iOneSecond * 8);
         m_com.Enter();
-        m_com.Sleep(m_iWaitSec);
+        m_com.Sleep(18000); // 可能有15秒广告
         m_com.Enter();
         m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_LC_CONTROL_PAUSE_BTN, "");
         Utils.writeCaseResult("没有开始播放观看记录", m_bPass, m_lConsumeTime);
@@ -180,6 +180,7 @@ public class TestDataReport {
 //        Utils.Print("play case7 播放电影-推荐里的大图视频");
         m_enterPage.enterFilmPage();
         m_com.Navigation("2499999999499994");
+        m_com.Sleep(18000); // 可能有15秒广告
         m_bPass = m_com.isUiObjExists(m_com.BY_RESID, Infos.S_LC_CONTROL_PAUSE_BTN, "");
         Utils.writeCaseResult("没有播放电影-推荐里的大图视频", m_bPass, m_lConsumeTime);
     }
@@ -495,8 +496,8 @@ public class TestDataReport {
 //        }
     }
 
-//    @Test
-//    public void test(){
-//        TvCommon.printAllMethods(this.getClass().getName());
-//    }
+    @Test
+    public void test(){
+        TvCommon.printAllMethods(this.getClass().getName());
+    }
 }

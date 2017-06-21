@@ -7,6 +7,7 @@ package tv.fun.common;
 public class Infos {
     public static String S_TV_VERSION = "3.0.0.7_s";
     public static String S_BESTV_OTT = "com.bestv.ott:id/";
+    public static int I_TABS = 8; // 3.1
 
     // text info
     public static String S_LC_TEXT_VIP_TITLE = "续费金卡会员";

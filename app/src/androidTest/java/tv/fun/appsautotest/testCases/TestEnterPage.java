@@ -335,7 +335,7 @@ public class TestEnterPage {
     public boolean enterCustomTabsPage(){
         m_com.Navigation("h0");
         m_com.longPressRight(2);
-        m_com.Navigation("334");
+        m_com.Enter();
         m_sExpect = "设置桌面频道";
         m_sActual = m_com.getUiObjText(m_com.getUiObjByText(m_sExpect));
         return m_sActual.equalsIgnoreCase(m_sExpect);
@@ -390,8 +390,19 @@ public class TestEnterPage {
     }
 
     public void enterSettingPage(){
-        m_com.Navigation("hh990"); // 进入设置页
-        m_com.longPressRight(2);
+        m_com.Home(2);
+        m_com.Menu();
+        m_com.Right(2);
+        m_com.Enter();
+    }
+
+    public void enterOTAPage(){
+        enterSettingPage();
+        m_com.Right(4);
+        m_com.Down(2);
+        m_com.Enter(); // enter about
+        m_com.Up(10);
+        m_com.Down(2);
         m_com.Enter();
     }
 

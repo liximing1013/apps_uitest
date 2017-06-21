@@ -110,7 +110,7 @@ public class TestFunTvTVPlay {
         String sTitle = m_com.getUiObjText(m_uiObj);
         Utils.funAssert(String.format("播放电视剧[%s]失败", sTitle), "" != sTitle);
         m_com.Enter(); // 播放电视剧
-        m_com.Sleep(iWaitSec);
+        m_com.Sleep(18000); // 可能有15秒广告
         m_com.Enter();
         m_com.isUiObjExists(m_com.BY_RESID,  Infos.S_LC_CONTROL_PAUSE_BTN,
                 String.format("没有开始播放电视剧[%s]",sTitle));

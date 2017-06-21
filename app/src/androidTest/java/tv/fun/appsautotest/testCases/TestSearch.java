@@ -10,6 +10,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.HttpUtils;
 import tv.fun.common.Infos;
@@ -36,8 +39,10 @@ public class TestSearch {
     private long m_lConsumeTime = -1;
     private boolean m_bPass = true;
 
+    private int m_iBtns = 30; // 左侧区域的按钮数量
+    private int m_iNotLetter = 4; // 非字母的按钮数量
     // #表示123按键，*表示清空按键，<表示删除按键
-    private String m_sLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#*<";
+    private String m_sLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#*<>";
     private String m_sClearId = "com.bestv.voiceAssist:id/clear_icon"; // 清空按钮
     private String m_sDeletId = "com.bestv.voiceAssist:id/delete_icon"; // 删除按钮
     private String m_sSchList = "com.bestv.voiceAssist:id/hot_search_list"; // 右侧热门搜索列表
@@ -70,7 +75,7 @@ public class TestSearch {
     public void Voice_SCH_01_enterSearchPage(){
         try {
             m_sResult = "从主页搜索按钮进入搜索页失败！没有出现字母区域或“大家都在搜”字样";
-            m_com.Navigation("hh990111114"); // 进入搜索页
+            m_com.Navigation("hh990334"); // 进入搜索页
             m_bPass = isInSearchPage();
         }catch(Throwable e){
             e.printStackTrace();
@@ -254,7 +259,6 @@ public class TestSearch {
     }
     @Test
     public void Voice_SCH_10_checkLeftTopLayout() {
-        UiObject uiObj;
         // case 10
         try {
             // 进入搜索页的功能函数
@@ -289,14 +293,13 @@ public class TestSearch {
 
              m_sResult = "case11运行失败！";
              m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_LETTER);
-             int iBtns = 29; // 29个按键
              int iChilds = m_uiObj.getChildCount();
-             if (iBtns != iChilds) {
+             if (m_iBtns != iChilds) {
                  m_sResult += "搜索页左侧中部按键数量不对！";
                  m_bPass = false;
              } else {
                  m_sResult += "左侧按键阵列出现错误！";
-                 for (int i = 0; i < iBtns - 3; ++i) {
+                 for (int i = 0; i < m_iBtns - m_iNotLetter; ++i) {
                      uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS,
                              Infos.S_TXTVIEW_CLASS, i);
                      m_sActual = m_com.checkExpectResult(uiObj,
@@ -309,7 +312,7 @@ public class TestSearch {
                  }
 
                  uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS,
-                         Infos.S_TXTVIEW_CLASS, iBtns - 3); // 123按键
+                         Infos.S_TXTVIEW_CLASS, m_iBtns - m_iNotLetter); // 123按钮
                  m_sActual = m_com.checkExpectResult(uiObj, "123");
                  if (!m_sActual.equalsIgnoreCase("OK")) {
                      m_sResult += m_sActual;
@@ -324,6 +327,13 @@ public class TestSearch {
                  }
                  if (!m_deletObj.exists()) {
                      m_sResult += " 没有删除按钮！";
+                     m_bPass = false;
+                 }
+
+                 uiObj = m_com.getUiObjByText("中文"); // 中文按钮
+                 Utils.Print(uiObj.getBounds());
+                 if (!uiObj.exists()) {
+                     m_sResult += " 没有“中文”按钮！";
                      m_bPass = false;
                  }
              }
@@ -439,10 +449,8 @@ public class TestSearch {
             }
 
             m_com.Enter(); // 进入节目详情页
-            m_com.waitTillOccur(m_com.BY_RESID, Infos.S_LC_DETAIL_TITLE_ID, 0, 15);
-            m_uiObj = m_com.getUiObjByResId(Infos.S_LC_DETAIL_TITLE_ID);
-            m_sActual = m_com.checkExpectResult(m_uiObj, m_sExpect);
-            if(!m_sActual.equalsIgnoreCase("OK")){
+            m_sActual = m_com.getDetailTitle();
+            if(!m_sActual.equalsIgnoreCase(m_sExpect)){
                 m_sResult += m_sActual;
                 m_bPass = false;
             }
@@ -464,7 +472,7 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
 
-            int iIndex = Utils.randInt(m_sLetters.length()); // 随机输入一个字母
+            int iIndex = Utils.randInt(m_sLetters.length() - m_iNotLetter); // 随机输入一个字母
             m_uiObj = m_com.getUiObjByText("A");
             if(m_uiObj.isFocused()){ // 焦点在A字母上
                 m_sResult = "输入的字母错误！";
@@ -498,7 +506,6 @@ public class TestSearch {
 
     // 输入一串字母sLetters
     private void enterLetters(String sLetters){
-        String sRet = "";
         int iNumsPerLine = 5;
         int iHorizontal;
         int iVertical;
@@ -590,8 +597,7 @@ public class TestSearch {
         }
     }
 
-    //@Test
-    // TODO 自动化脚本会导致程序代码的字符串判断有误，需要修改后再运行该脚本
+    @Test
     public void Voice_SCH_16_enter123Button(){
         try{
             // 进入搜索页的功能函数
@@ -600,7 +606,7 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
 
-            m_com.Navigation("222221"); // 【123】按钮
+            m_com.Navigation("2222214"); // 【123】按钮
             m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_NUM_LIST);
             if(!m_uiObj.exists()){
                 m_bPass = false;
@@ -789,16 +795,32 @@ public class TestSearch {
                 m_sResult = "焦点没有移动到语音按钮上！";
             }else{
                 m_com.Enter(); // 调出语音输入界面，无法获取语音区域的Dialog对象
-                m_com.Right(); // 移动到右边的结果页
-                m_com.Sleep(m_iOneSecond * 2);
-                m_com.Left(3);
-                m_sExpect = getSearchResultTxt(0); // 第一个结果的名字
-                // 只有这个poster_bg的UI被选中后才能获取焦点状态
-                m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_RESID,
-                        m_sSchPoster, 0); // 可选择的对象
-                if(!m_uiObj.isFocused()){
+                String sIcon = "com.bestv.voiceAssist:id/unspread";
+                String sHint = "com.bestv.voiceAssist:id/short_press_hint";
+                String sRecList = "com.bestv.voiceAssist:id/short_press_list";
+                UiObject uiObj1 = m_com.getUiObjByResId(sIcon);
+                UiObject uiObj2 = m_com.getUiObjByResId(sHint);
+                m_uiObj = m_com.getUiObjByResId(sRecList);
+                m_bPass = m_uiObj.exists() && uiObj1.exists() && uiObj2.exists();
+                m_sResult = "没有出现语音图标、操作提示以及相关推荐列表！";
+
+                m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS, "android.widget.LinearLayout", 0);
+                List<String> sNameList = new ArrayList<>();
+
+                int iChild = m_uiObj.getChildCount();
+                for(int i = 0; i < iChild; ++i) {
+                    UiObject uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS, Infos.S_TXTVIEW_CLASS, i);
+                    sNameList.add(i, uiObj.getText());
+                }
+
+                int iNum = Utils.randInt(iChild);
+                m_com.Down(iNum);
+                m_com.Enter(); // 进入节目详情页
+                m_sExpect = sNameList.get(iNum);
+                m_sActual = m_com.getDetailTitle();
+                if(!m_sActual.equalsIgnoreCase(m_sExpect)){
+                    m_sResult += m_sActual;
                     m_bPass = false;
-                    m_sResult = String.format("焦点不在右侧第一个结果【%s】上了！", m_sExpect);
                 }
             }
         }catch (Throwable e){
@@ -810,7 +832,7 @@ public class TestSearch {
         }
     }
 
-    //@Test
+    @Test
     // TODO 自动化脚本会导致程序代码的字符串判断有误，需要修改后再运行该脚本
     public void Voice_SCH_24_numberInputLayout(){
         try{
@@ -820,19 +842,74 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
 
-            m_com.Navigation("222221"); // 【123】按钮
+            m_com.Navigation("2222214"); // 【123】按钮
             m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_NUM_LIST);
             if(!m_uiObj.exists()){
                 m_bPass = false;
                 m_sResult = "点击【123】按钮，没有出现数字输入界面！";
             }
+            else{
+                UiObject uiObj;
+                String sNumbers = "0123456789";
+                String sNumBtnsLeft = "com.bestv.voiceAssist:id/number";
+                m_uiObj = m_com.getUiObjByResId(sNumBtnsLeft);
+                // 检查数字布局顺序是否正确
+                for(int i = 0; i < sNumbers.length(); ++i){
+                    uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS,
+                            Infos.S_TXTVIEW_CLASS, i);
+                    m_sActual = m_com.checkExpectResult(uiObj,
+                            String.valueOf(sNumbers.charAt(i)));
+                    if (!m_sActual.equalsIgnoreCase("OK")) {
+                        m_sResult += m_sActual;
+                        m_bPass = false;
+                        break;
+                    }
+                }
 
+                // 输入517
+                m_com.Up();
+                m_com.EnterW(0);
+                m_com.Right();
+                m_com.Up();
+                m_com.EnterW(0);
+                m_com.Right();
+                m_com.Down();
+                m_com.EnterW(0);
+
+                m_sExpect = "517";
+                checkInput();
+
+                m_com.Down();
+                m_com.EnterW(0);
+                m_sExpect = "51";
+                checkInput();
+
+                m_com.Left();
+                m_com.EnterW(0);
+                m_sExpect = "输入影片首字母或全拼";
+                checkInput();
+            }
         }catch (Throwable e){
             e.printStackTrace();
             m_bPass = false;
             m_sResult += e.toString();
         }finally {
             Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
+    }
+
+    // only use in search page
+    private void checkInput(){
+        try {
+            m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_SEARCH_EDIT);
+            m_sActual = m_uiObj.getText();
+            if (!m_sActual.equalsIgnoreCase(m_sExpect)) {
+                m_bPass = false;
+                m_sResult += String.format("输入框的内容实际值[%s]与期望值[%s]不符！", m_sActual, m_sExpect);
+            }
+        }catch(Throwable e){
+            m_bPass = false;
+            m_sResult = "checkInput函数发生错误！" + e;
         }
     }
 
@@ -869,7 +946,7 @@ public class TestSearch {
                 Utils.writeCaseResult(m_sResult, false, m_lConsumeTime);
             }
             // 既有视频又有明星的搜索
-            m_sExpect = "JK";
+            m_sExpect = "JKJ";
             enterLetters(m_sExpect);
             if(!m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list").exists()){
                 m_bPass = false;
@@ -927,10 +1004,8 @@ public class TestSearch {
             }
 
             m_com.Enter(); // 进入节目详情页
-            m_com.waitTillOccur(m_com.BY_RESID, Infos.S_LC_DETAIL_TITLE_ID, 0, 15);
-            m_uiObj = m_com.getUiObjByResId(Infos.S_LC_DETAIL_TITLE_ID);
-            m_sActual = m_com.checkExpectResult(m_uiObj, m_sExpect);
-            if(!m_sActual.equalsIgnoreCase("OK")){
+            m_sActual = m_com.getDetailTitle();
+            if(!m_sActual.equalsIgnoreCase(m_sExpect)){
                 m_sResult += m_sActual;
                 m_bPass = false;
             }
