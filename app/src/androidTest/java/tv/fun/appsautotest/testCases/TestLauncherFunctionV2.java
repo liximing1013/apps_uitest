@@ -38,7 +38,7 @@ import static android.support.test.uiautomator.By.text;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestVideoPlayCollectAndRecord {
+public class TestLauncherFunctionV2 {
     private Instrumentation instrument;
     private UiDevice uiDevice;
     //设定等待时间

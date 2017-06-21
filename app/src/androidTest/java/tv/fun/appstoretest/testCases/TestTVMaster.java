@@ -5,7 +5,6 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.view.KeyEvent;
 
-import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -13,16 +12,17 @@ import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
 
-import tv.fun.appsautotest.common.TvCommon;
-import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.appstoretest.common.MasterApp;
 import tv.fun.common.Utils;
+
 
 /**
  * Created by liuqing on 2016/9/7.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestTVMaster extends MasterApp {
+    public int optionNumOfNetworkCheck = 10;
+
     /**
      * 验证可以通过点击Launcher应用页面“电视助手”卡片，进入电视助手页面
      *
@@ -114,9 +114,9 @@ public class TestTVMaster extends MasterApp {
             device.pressHome();
             waitForElementNotPresentByID("tv.fun.master:id/home_item_title");
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTabObj = device.findObject(new UiSelector().resourceId(launcherTabID).text(videoTab));
             verifyElementPresent("", tvCard);
-            verifyTrue("", videoTab.isSelected());
+            verifyTrue("", videoTabObj.isSelected());
         } catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;
@@ -142,7 +142,7 @@ public class TestTVMaster extends MasterApp {
             waitForElementNotPresentByID("tv.fun.master:id/home_item_title");
             waitForElementPresentByIDAndText("com.bestv.ott:id/title", "电视助手");
             UiObject tvMasterCard = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").text(tvMasterIconName));
-            UiObject appTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[4]));
+            UiObject appTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherAppTab));
             verifyElementPresent("", tvMasterCard);
             verifyTrue("", appTab.isSelected());
         } catch (Throwable e) {
@@ -246,7 +246,7 @@ public class TestTVMaster extends MasterApp {
             home();
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -479,7 +479,7 @@ public class TestTVMaster extends MasterApp {
             home();
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -640,10 +640,10 @@ public class TestTVMaster extends MasterApp {
             verifyElementPresent("", findElementByID("tv.fun.master:id/retry_button"));
             //按遥控器Home键
             home();
-            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherVideoTab);
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -757,7 +757,7 @@ public class TestTVMaster extends MasterApp {
             int appsNum = getAppNumInAppCleanPage();
 //            float appsTotalSize = getAppTotalSizeInAppCleanPage();
 //            float firstAppSize = getAppSizeInAppClean(0);
-            moveToRightForMultiple(3);
+            moveRightForMultiple(3);
             //点击“卸载”按钮
             device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);//cannot use click method in here
             waitForElementPresentByID("com.android.packageinstaller:id/uninstall_confirm");
@@ -777,7 +777,6 @@ public class TestTVMaster extends MasterApp {
             waitForTextNotPresent("正在卸载");
             waitForTextNotPresent("卸载完成");
             String currentFirstAppName = getAppNameInAppCleanPage(0);
-            verifyFalse("", currentFirstAppName.equalsIgnoreCase(firstAppName));
             verifyString("", currentFirstAppName, secondAppName);
             int currentAppNum = getAppNumInAppCleanPage();
             verifyTrue("", currentAppNum==appsNum-1);
@@ -816,7 +815,7 @@ public class TestTVMaster extends MasterApp {
             String firstAppName = firstApp.getChild(new UiSelector().resourceId("tv.fun.master:id/appNameView")).getText();
             UiObject uninstallBtn = firstApp.getChild(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
             int appsNum = getAppNumInAppCleanPage();
-            moveToRightForMultiple(3);
+            moveRightForMultiple(3);
             //点击“卸载”按钮
             device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);//cannot use click method in here
             waitForElementPresentByID("com.android.packageinstaller:id/uninstall_confirm");
@@ -906,12 +905,12 @@ public class TestTVMaster extends MasterApp {
                 appNum = 4;
             }
             for (int i = 0; i < appNum - 1; i++) {
-                moveToRight();
+                moveRight();
                 UiObject listView = findElementByID("tv.fun.master:id/listView");
                 UiObject firstApp = listView.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
                 UiObject sizeOfFirstApp = firstApp.getChild(new UiSelector().resourceId("tv.fun.master:id/totalSize"));
                 String firstAppSizeStr = sizeOfFirstApp.getText().replace("MB", "").replace("总计 ", "");//总计 41.6MB
-                moveToDown();
+                moveDown();
                 float secondAppSize = getAppSizeInAppClean(i + 1);
                 verifyTrue("", stringToFloat(firstAppSizeStr) >= secondAppSize);
             }
@@ -963,10 +962,10 @@ public class TestTVMaster extends MasterApp {
             gotoAppCleanPageInMaster();
             //按遥控器Home键
             home();
-            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherVideoTab);
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -1012,7 +1011,7 @@ public class TestTVMaster extends MasterApp {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1062,7 +1061,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1107,7 +1106,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1125,10 +1124,10 @@ public class TestTVMaster extends MasterApp {
             curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
             UiObject btnObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/switchButton"));
             UiObject disableAllBtn = findElementByID("tv.fun.master:id/disable_all_btn");
-            moveToDown();
-            moveToUp();
+            moveDown();
+            moveUp();
             if(disableAllBtn.isFocused()){
-                moveToDown();
+                moveDown();
             }
             if("已允许".equalsIgnoreCase(curStatusObj.getText())){
                 device.pressEnter();
@@ -1160,7 +1159,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             UiObject statusObj = autoLObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1178,10 +1177,10 @@ public class TestTVMaster extends MasterApp {
             curStatusObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appStartState"));
             UiObject btnObj = appObj.getChild(new UiSelector().resourceId("tv.fun.master:id/switchButton"));
             UiObject disableAllBtn = findElementByID("tv.fun.master:id/disable_all_btn");
-            moveToDown();
-            moveToUp();
+            moveDown();
+            moveUp();
             if(disableAllBtn.isFocused()){
-                moveToDown();
+                moveDown();
             }
             if("已禁止".equalsIgnoreCase(curStatusObj.getText())){
                 device.pressEnter();
@@ -1211,7 +1210,7 @@ public class TestTVMaster extends MasterApp {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             autoLObj.clickAndWaitForNewWindow();
@@ -1238,7 +1237,7 @@ public class TestTVMaster extends MasterApp {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             autoLObj.clickAndWaitForNewWindow();
@@ -1246,7 +1245,7 @@ public class TestTVMaster extends MasterApp {
             home();
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -1267,7 +1266,7 @@ public class TestTVMaster extends MasterApp {
         try {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“自启动管理”卡片
             UiObject autoLObj = findElementByText("自启动管理", "tv.fun.master:id/home_item_title");
             autoLObj.clickAndWaitForNewWindow();
@@ -1294,7 +1293,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“网络诊断”卡片
             UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
             UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1311,7 +1310,7 @@ public class TestTVMaster extends MasterApp {
             verifyIncludeString("", macObj.getText(), "MAC 地址：28:76:CD:");
             UiObject checkOptionList = findElementByID("tv.fun.master:id/check_network_result");
             int optionsCount = checkOptionList.getChildCount();
-            verifyNumber("", optionsCount, 8);
+            verifyNumber("", optionsCount, optionNumOfNetworkCheck);
             UiObject firstOptionObj = checkOptionList.getChild(new UiSelector().className("android.widget.LinearLayout").index(0));
             UiObject firstOptionIcon = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_icon"));
             UiObject firstOptionText = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_text"));
@@ -1335,7 +1334,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“网络诊断”卡片
             UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
             UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1375,7 +1374,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“网络诊断”卡片
             UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
             UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1408,7 +1407,7 @@ public class TestTVMaster extends MasterApp {
         try{
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
-            moveToRightForMultiple(5);
+            moveRightForMultiple(5);
             //点击“网络诊断”卡片
             UiObject checkObj = findElementByText("网络诊断", "tv.fun.master:id/home_item_title");
             UiObject statusObj = checkObj.getFromParent(new UiSelector().resourceId("tv.fun.master:id/home_item_status"));
@@ -1468,15 +1467,16 @@ public class TestTVMaster extends MasterApp {
             //Launcher应用tab页面，点击电视助手
             enterTVMasterPage();
             //点击"网络诊断"卡片
+            waitForElementNotPresent("findElementByText(\"网络诊断\", \"tv.fun.master:id/home_item_title\")");
             gotoNetworkCheckPageFromMaster();
             UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
             verifyElementPresent("", checkingObj);
             //按遥控器Home键
             home();
-            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherVideoTab);
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -1599,10 +1599,10 @@ public class TestTVMaster extends MasterApp {
             verifyElementPresent("", eleObj);
             //按遥控器Home键
             home();
-            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherTabs[0]);
+            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_title", launcherVideoTab);
             //断言
             UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherTabs[1]));
+            UiObject videoTab = device.findObject(new UiSelector().resourceId(launcherTabID).text(launcherVideoTab));
             verifyElementPresent("", tvCard);
             verifyTrue("", videoTab.isSelected());
         } catch (Throwable e) {
@@ -1641,8 +1641,8 @@ public class TestTVMaster extends MasterApp {
                     resultFlag, execTime);
         }
     }
-            @Test
-    public void test(){
-        TvCommon.printAllMethods(this.getClass().getName());
-    }
+//            @Test
+//    public void test(){
+//        TvCommon.printAllMethods(this.getClass().getName());
+//    }
 }

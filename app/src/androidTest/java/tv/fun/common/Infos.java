@@ -39,4 +39,5 @@ public class Infos {
     public static String S_TXTVIEW_CLASS = "android.widget.TextView";
     public static String S_RELATELAYOUT_CLASS = "android.widget.RelativeLayout";
     public static String S_CLASS_VIDEO_PLAYER = "com.funshion.player.play.funshionplayer.VideoViewPlayer";
+    public static String S_Carsousel_List = "com.bestv.ott:id/carsousel_fragment";
 }

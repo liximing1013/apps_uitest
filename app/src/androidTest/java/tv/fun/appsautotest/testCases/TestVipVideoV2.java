@@ -35,7 +35,7 @@ import static android.support.test.uiautomator.By.text;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestVipVideo {
+public final class TestVipVideoV2 {
     Instrumentation instrument;
     UiDevice uiDevice;
     //设定等待时间
