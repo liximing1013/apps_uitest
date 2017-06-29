@@ -392,6 +392,9 @@ public class TestLongVideoPlay {
     @Test //视频分类轮询
     public void testDemo(){
         try{
+            String cmd = "am start -n com.bestv.ott/com.bestv.ott.piano.PianoActivity";
+            Utils.execCommand(cmd, false, false);
+            systemWait(LONG_WAIT);
             enterVideoClassifyPage();
             UiObject2 classify = uiDevice.findObject(By.text("视频分类"));
             uiDevice.pressDPadCenter();
