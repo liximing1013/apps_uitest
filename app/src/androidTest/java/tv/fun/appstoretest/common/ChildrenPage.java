@@ -50,18 +50,19 @@ public class ChildrenPage extends Common {
      * Goto children page via children card under video tab
      */
     public void navigateToChildrenByChildrenCardUnderVideo() throws UiObjectNotFoundException, InterruptedException {
-        //点击launcher悬浮框上智能桌面卡片
-        home();
-        UiObject videoTabObj = findElementByText("视频", "com.bestv.ott:id/tab_title");
-        if (!videoTabObj.isSelected()) {
-            home();
-        }
-        UiObject childrenCardObj = findElementByText("少儿", "com.bestv.ott:id/title");
-        if(!childrenCardObj.isSelected()){
-            childrenCardObj.click();
-        }
-        childrenCardObj.clickAndWaitForNewWindow();
-        waitForElementPresentByID("tv.fun.children:id/tab_title");
+        navigateToChildrenDesktopPage();//少儿卡片点击进入不是到少儿桌面，故先用其他方法代替
+//        //点击launcher悬浮框上智能桌面卡片
+//        home();
+//        UiObject videoTabObj = findElementByText("视频", "com.bestv.ott:id/tab_title");
+//        if (!videoTabObj.isSelected()) {
+//            home();
+//        }
+//        UiObject childrenCardObj = findElementByText("少儿", "com.bestv.ott:id/title");
+//        if(!childrenCardObj.isSelected()){
+//            childrenCardObj.click();
+//        }
+//        childrenCardObj.clickAndWaitForNewWindow();
+//        waitForElementPresentByID("tv.fun.children:id/tab_title");
     }
 
     /**

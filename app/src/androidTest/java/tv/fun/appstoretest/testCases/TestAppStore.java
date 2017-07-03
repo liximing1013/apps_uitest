@@ -437,9 +437,8 @@ public class TestAppStore extends AppStorePage {
             moveToLauncherTargetTab(videoTab, launcherTabID, 4);
             moveUpForMultiple(2);
             //选中我的应用卡片，并点击
-
             waitForElementPresentByID("com.bestv.ott:id/app");
-            UiObject myAppCardObj = findElementByID("com.bestv.ott:id/app");
+            UiObject myAppCardObj = findElementByID("com.bestv.ott:id/app_icon");
             UiObject titleObj = findElementByID("com.bestv.ott:id/app_title");
             String nameOfCard = titleObj.getText();
             verifyString("", nameOfCard, "我的应用");
@@ -658,8 +657,8 @@ public class TestAppStore extends AppStorePage {
             UiObject requiredTopic = findElementByText("装机必备", "tv.fun.appstore:id/title");
             UiObject cardListObj = findElementByID("tv.fun.appstore:id/app_pager").getChild(new UiSelector().className("android.widget.FrameLayout"));
             int cardNum = cardListObj.getChildCount();
-            UiObject appPaiHObj = findElementByText("应用排行榜", "tv.fun.appstore:id/cardTitle");
-            UiObject gamePaiHObj = findElementByText("游戏排行榜", "tv.fun.appstore:id/cardTitle");
+            UiObject appPaiHObj = findElementByText("应用周排行榜", "tv.fun.appstore:id/cardTitle");
+            UiObject gamePaiHObj = findElementByText("游戏周排行榜", "tv.fun.appstore:id/cardTitle");
             UiObject paihbj = cardListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(4));
             UiObject appPaiHTitle = paihbj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/cardTitle"));
             UiObject appPaiHRank = paihbj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/rank"));
@@ -673,7 +672,7 @@ public class TestAppStore extends AppStorePage {
             verifyTrue("", cardNum==13);
             verifyElementPresent("", appPaiHObj);
             verifyElementPresent("", gamePaiHObj);
-            verifyString("", "应用排行榜", appPaiHTitle.getText());
+            verifyString("", "应用周排行榜", appPaiHTitle.getText());
             verifyElementPresent("", appPaiHRank);
             verifyElementPresent("", appTitleInPaiH);
             verifyElementPresent("", appDownloadInPaiH);
@@ -3148,11 +3147,8 @@ public class TestAppStore extends AppStorePage {
             //移动焦点到导航条 >应用管理tab
             moveToAppStoreTargetTab(appStoreTabs[5]);
             UiObject appManageTab = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/column_title").text(appStoreTabs[5]));
-            Assert.assertTrue("The focus is not on the appManage tab", appManageTab.isSelected());
-            moveDown();
-            //Move to About card
-            moveRightForMultiple(2);
-            moveDown();
+            Boolean flag = verifyTrue("The focus is not on the appManage tab", appManageTab.isSelected());
+            //点击应用管理tab下关于卡片
             UiObject aboutCard = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/tool_about"));
             aboutCard.clickAndWaitForNewWindow();
             UiObject aboutPageTitle = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/main"));

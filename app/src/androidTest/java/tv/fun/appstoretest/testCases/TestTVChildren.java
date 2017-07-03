@@ -304,8 +304,8 @@ public class TestTVChildren extends ChildrenPage {
                 //点击播放记录卡片
                 navigateToPlayRecordPage();
                 //准备测试条件：有播放记录
-                if(findElementByID("tv.fun.children:id/empty").exists()){
-                    back();
+                    if(findElementByID("tv.fun.children:id/empty").exists()){
+                        back();
                     UiObject historyObj = findElementByID("tv.fun.children:id/children_history_icon");
                     historyObj.clickAndWaitForNewWindow();
                     Thread.sleep(2000);
@@ -1653,10 +1653,10 @@ public class TestTVChildren extends ChildrenPage {
         }
 
         /*
-* Test that can cancel collecting video or topic by Menu
-*
-* 在列表页中，可以取消收藏影片/专题
-*/
+         * Test that can cancel collecting video or topic by Menu
+         *
+         * 在列表页中，可以取消收藏影片/专题
+         */
         @Test
         public void Child_List_33_testCancelCollectVideoByMenu() {
             try {
@@ -1684,7 +1684,6 @@ public class TestTVChildren extends ChildrenPage {
                 if (findElementByText("取消收藏", "tv.fun.children:id/menu_text").exists()) {
                     UiObject cancelCollectBtnInMenu = findElementByText("取消收藏", "tv.fun.children:id/menu_text");
                     cancelCollectBtnInMenu.click();
-//                moveDown();
                     moveRight();
                     menu();
                 }
@@ -2551,12 +2550,14 @@ public class TestTVChildren extends ChildrenPage {
                 UiObject languageClassObj = findElementByID("tv.fun.children:id/language_class");
                 languageClassObj.clickAndWaitForNewWindow();
                 UiObject classMenuTitleObj = findElementByID("tv.fun.children:id/video_menu_title");
+                Boolean flag1 = classMenuTitleObj.exists();
                 verifyElementPresent("", classMenuTitleObj);
+
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
-                moveUp();
                 moveLeft();
+                moveRight();
                 UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
                 verifyElementPresent("", processObj);
                 waitForElementNotPresent(processObj);
@@ -2567,9 +2568,6 @@ public class TestTVChildren extends ChildrenPage {
                 UiObject classListObj = findElementByID("tv.fun.children:id/video_schedule_list");
                 UiObject classTitleObj = findElementByID("tv.fun.children:id/video_schedule_title");
                 UiObject scheduleObj = findElementByID("tv.fun.children:id/video_schedule_view");
-//            UiObject listTitleObj = scheduleObj.getChild(new UiSelector().className("android.widget.TextView").index(1));
-//            String tt = listTitleObj.getText();
-//            verifyString("", listTitleObj.getText(), "今日课程表");
                 verifyElementPresent("", classListObj);
                 verifyElementPresent("", classTitleObj);
                 verifyElementPresent("", scheduleObj);
@@ -2592,7 +2590,7 @@ public class TestTVChildren extends ChildrenPage {
                 //进入少儿页面
                 navigateToChildrenByChildrenCardUnderVideo();
                 //移动到期望的tab
-//            moveToTargetTabInChildren("少儿");
+                moveToTargetTabInChildren("少儿");
                 //Clicking multiple tab card
                 UiObject earlySchoolObj = findElementByID("tv.fun.children:id/children_view_item5");
                 earlySchoolObj.clickAndWaitForNewWindow();
@@ -2603,8 +2601,8 @@ public class TestTVChildren extends ChildrenPage {
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
-                moveUp();
                 moveLeft();
+                moveRight();
                 UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
                 verifyElementPresent("", processObj);
                 waitForElementNotPresent(processObj);
@@ -2647,18 +2645,16 @@ public class TestTVChildren extends ChildrenPage {
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
-                moveUp();
-                moveLeft();
-                UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
-                verifyElementPresent("", processObj);
-                waitForElementNotPresent(processObj);
                 waitForElementNotPresent("tv.fun.children:id/loading_icon");
+                Thread.sleep(1000);
+                verifyElementNotPresent("", classMenuTitleObj);
                 //按遥控器home键
                 home();
                 //断言
+                waitForElementPresentByID("com.bestv.ott:id/title");
                 UiObject tvCard = findElementByText("电视剧", "com.bestv.ott:id/title");
-                UiObject videoTabObj = device.findObject(new UiSelector().resourceId(launcherTabID).text(videoTab));
                 verifyElementPresent("", tvCard);
+                UiObject videoTabObj = device.findObject(new UiSelector().resourceId(launcherTabID).text(videoTab));
                 verifyTrue("", videoTabObj.isSelected());
             } catch (Throwable e) {
                 e.printStackTrace();
@@ -2690,14 +2686,25 @@ public class TestTVChildren extends ChildrenPage {
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
-                moveUp();
                 moveLeft();
+                moveRight();
                 UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
                 verifyElementPresent("", processObj);
                 waitForElementNotPresent(processObj);
                 waitForElementNotPresent("tv.fun.children:id/loading_icon");
+                Thread.sleep(1000);
                 //按遥控器menu键
                 menu();
+                //Menu框
+                for(int i=0; i<5; i++) {
+                    if (!findElementByID("tv.fun.children:id/video_clarity_view").exists()) {
+                        waitForElementNotPresent("tv.fun.children:id/loading_icon");
+                        menu();
+                    }else{
+                        break;
+                    }
+                }
+
                 //断言
                 UiObject menuViewObj = findElementByID("tv.fun.children:id/video_clarity_view");
                 UiObject menuListObj = findElementByID("tv.fun.children:id/video_clarity_list");
@@ -2773,10 +2780,10 @@ public class TestTVChildren extends ChildrenPage {
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
-                moveUp();
                 moveLeft();
+                moveRight();
                 UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
-                Boolean flag2 = verifyElementPresent("", processObj);
+                verifyElementPresent("", processObj);
                 waitForElementNotPresent(processObj);
                 waitForElementNotPresent("tv.fun.children:id/loading_icon");
                 //按遥控器menu键
@@ -2789,13 +2796,12 @@ public class TestTVChildren extends ChildrenPage {
                 Thread.sleep(500);
                 UiObject menuViewObj = findElementByID("tv.fun.children:id/video_clarity_view");
                 UiObject menuListObj = menuViewObj.getChild(new UiSelector().resourceId("tv.fun.children:id/video_clarity_list"));
-                Boolean flag3 = verifyElementPresent("3 is not pass", menuViewObj);
-//            Boolean flag4 = verifyElementPresent("4 is not pass", menuListObj);//有时有问题
+                verifyElementPresent("3 is not pass", menuViewObj);
                 //按遥控器Back键
                 back();
                 //断言
-                Boolean flag5 = verifyElementNotPresent("5 is not pass", "tv.fun.children:id/video_clarity_view");
-                Boolean flag6 = verifyElementNotPresent("6 is not pass", "tv.fun.children:id/video_clarity_list");
+                verifyElementNotPresent("5 is not pass", "tv.fun.children:id/video_clarity_view");
+                verifyElementNotPresent("6 is not pass", "tv.fun.children:id/video_clarity_list");
             } catch (Throwable e) {
                 e.printStackTrace();
                 resultFlag = false;
@@ -2827,8 +2833,8 @@ public class TestTVChildren extends ChildrenPage {
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
-                moveUp();
                 moveLeft();
+                moveRight();
                 UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
                 verifyElementPresent("", processObj);
                 waitForElementNotPresent(processObj);
@@ -2844,7 +2850,6 @@ public class TestTVChildren extends ChildrenPage {
                 back();
                 //断言
                 verifyElementNotPresent("", "tv.fun.children:id/video_schedule_list");
-//            verifyElementNotPresent("", "tv.fun.children:id/video_schedule_title");
             } catch (Throwable e) {
                 e.printStackTrace();
                 resultFlag = false;
