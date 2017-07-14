@@ -345,11 +345,12 @@ public class TestMenuFunctionOnEveryPageV3_2 {
             uiDevice.pressBack();
             UiObject2 PlayRecord = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
             this.openTabFromLauncherHomeByTextView(uiDevice, PlayRecord);
-            UiObject title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
-            if(title1.getText().equals(title2.getText())){
+            UiObject title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title"));
+            if(title2.getText().equals("新闻大厅")){
                 Assert.assertTrue(true);
             }else {
                 Assert.assertTrue(false);
+                Log.d(TAG, "LC_MENU_11_DeleteVideoRecordInPlayRecord: "+title1.getText());
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -397,6 +398,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_13_PlayingInPlayRecordCard(){
         try {
             enterPlayRecordPage();
+            downMoveMethod(1);
             uiDevice.pressMenu();
             systemWait(WAIT);
             UiObject2 Menu = uiDevice.findObject(By.text("播放"));
@@ -423,26 +425,22 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_14_DelOnlyOneInPlayRecordCard(){
         try {
             enterPlayRecordPage();
-            UiObject2 Record = uiDevice.findObject(By.text("播放记录").res("com.bestv.ott:id/tab_title"));
-            if(Record.isFocused()) {
-                Utils.writeCaseResult("播放记录为空",false,m_Time);
-            }else {
-                UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
-                List<UiObject2> cards1 = Recycle1.findObjects(By.clazz("android.widget.RelativeLayout"));
-                int recordCount1 = cards1.size();//获取初次进入时页面卡片数量
-                uiDevice.pressMenu();
-                systemWait(WAIT);
-                rightMoveMethod(1);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 recycle2 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
-                List<UiObject2> cards2 = recycle2.findObjects(By.clazz("android.widget.RelativeLayout"));
-                int recordCount2 = cards2.size();//获取删除单个后页面卡片数量
-                if (recordCount2 != recordCount1) {
-                    Assert.assertTrue(true);
-                } else {
-                    Assert.assertTrue(false);
-                }
+            uiDevice.pressDPadDown();
+            UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/local_data"));
+            List<UiObject2> cards1 = Recycle1.findObjects(By.clazz("android.widget.RelativeLayout"));
+            int recordCount1 = cards1.size();//获取初次进入时页面卡片数量
+            uiDevice.pressMenu();
+            systemWait(WAIT);
+            rightMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 recycle2 = uiDevice.findObject(By.res("com.bestv.ott:id/local_data"));
+            List<UiObject2> cards2 = recycle2.findObjects(By.clazz("android.widget.RelativeLayout"));
+            int recordCount2 = cards2.size();//获取删除单个后页面卡片数量
+            if (recordCount2 != recordCount1) {
+                Assert.assertTrue(true);
+            } else {
+                Assert.assertTrue(false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -458,7 +456,6 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_15_SearchInPlayRecordCardTab(){
         try {
             enterPlayRecordPage();
-            upMoveMethod(1);
             uiDevice.pressMenu();
             systemWait(WAIT);
             UiObject2 Menu = uiDevice.findObject(By.text("搜索"));

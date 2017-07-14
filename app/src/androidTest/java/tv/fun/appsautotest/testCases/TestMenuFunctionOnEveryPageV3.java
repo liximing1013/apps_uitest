@@ -699,8 +699,8 @@ public class TestMenuFunctionOnEveryPageV3 {
         try{
             enterMyCollectPage();
             systemWait(WAIT);
-            UiObject zhiBoOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("赛事预约"));
-            if(zhiBoOrder.exists()){
+            UiObject liveOrder = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("赛事预约"));
+            if(liveOrder.exists()){
                 rightMoveMethod(1);
                 downMoveMethod(1);
                 uiDevice.pressMenu();
@@ -719,7 +719,7 @@ public class TestMenuFunctionOnEveryPageV3 {
                     Assert.assertTrue(false);
                 }
             }else{
-                Utils.writeCaseResult("未预约赛事",false,m_Time);
+                System.out.print("未预约赛事");
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -738,7 +738,7 @@ public class TestMenuFunctionOnEveryPageV3 {
             systemWait(WAIT);
             UiObject2 gameOrder= uiDevice.findObject(By.text("赛事预约"));
             if(gameOrder == null){
-                Utils.writeCaseResult("未预约赛事",false,m_Time);
+                Utils.writeCaseResult("未预约赛事",true,m_Time);
             }else {
                 rightMoveMethod(1);
                 systemWait(WAIT);
