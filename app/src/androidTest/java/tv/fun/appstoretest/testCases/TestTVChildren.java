@@ -133,6 +133,7 @@ public class TestTVChildren extends ChildrenPage {
                     desktopIconObj.click();
                 }
                 desktopIconObj.click();
+                waitForElementPresentByID("tv.fun.settings:id/title");
                 //点击智能桌面弹框上儿童桌面
                 UiObject childDesktopObj = findElementByText("儿童桌面", "tv.fun.settings:id/title");
                 moveRight();
@@ -2515,15 +2516,15 @@ public class TestTVChildren extends ChildrenPage {
                 //Clicking multiple tab card
                 UiObject earlySchoolObj = findElementByID("tv.fun.children:id/children_view_item5");
                 earlySchoolObj.clickAndWaitForNewWindow();
+                waitForElementPresentByID("tv.fun.children:id/language_class");
                 UiObject languageClassObj = findElementByID("tv.fun.children:id/language_class");
                 languageClassObj.clickAndWaitForNewWindow();
-                UiObject classMenuTitleObj = findElementByID("tv.fun.children:id/video_menu_title");
-                verifyElementPresent("", classMenuTitleObj);
+                waitForElementPresentByID("tv.fun.children:id/video_menu_title");
                 //press menu
                 menu();
                 //断言
                 Thread.sleep(500);
-                verifyElementNotPresent("", "android:id/tv_fun_menu");
+                verifyElementNotPresent("Menu popup window is expected NOT display, but actual displayed", "android:id/tv_fun_menu");
             } catch (Throwable e) {
                 e.printStackTrace();
                 resultFlag = false;
@@ -2568,9 +2569,9 @@ public class TestTVChildren extends ChildrenPage {
                 UiObject classListObj = findElementByID("tv.fun.children:id/video_schedule_list");
                 UiObject classTitleObj = findElementByID("tv.fun.children:id/video_schedule_title");
                 UiObject scheduleObj = findElementByID("tv.fun.children:id/video_schedule_view");
-                verifyElementPresent("", classListObj);
-                verifyElementPresent("", classTitleObj);
-                verifyElementPresent("", scheduleObj);
+                verifyElementPresent("The class list is expected displayed, but actual not", classListObj);
+                verifyElementPresent("The class title is expected displayed, but actual not", classTitleObj);
+                verifyElementPresent("The class schedule is expected displayed, but actual not", scheduleObj);
             } catch (Throwable e) {
                 e.printStackTrace();
                 resultFlag = false;
@@ -2828,20 +2829,22 @@ public class TestTVChildren extends ChildrenPage {
                 waitForElementPresentByID("tv.fun.children:id/language_class");
                 UiObject languageClassObj = findElementByID("tv.fun.children:id/language_class");
                 languageClassObj.clickAndWaitForNewWindow();
-                UiObject classMenuTitleObj = findElementByID("tv.fun.children:id/video_menu_title");
-                verifyElementPresent("", classMenuTitleObj);
+                waitForElementPresentByID("tv.fun.children:id/video_menu_title");
                 //点击小窗口播放
                 UiObject smallPlayObj = findElementByID("tv.fun.children:id/video_view");
                 smallPlayObj.clickAndWaitForNewWindow();
                 moveLeft();
                 moveRight();
-                UiObject processObj = findElementByID("tv.fun.children:id/video_progress");
-                verifyElementPresent("", processObj);
-                waitForElementNotPresent(processObj);
+                if(findElementByID("tv.fun.children:id/video_progress").exists()){
+                    waitForElementNotPresent("tv.fun.children:id/video_progress");
+                }
                 waitForElementNotPresent("tv.fun.children:id/loading_icon");
                 //按遥控器向下键
                 moveDown();
                 waitForElementPresentByID("tv.fun.children:id/video_schedule_list");
+                if(!findElementByID("tv.fun.children:id/video_schedule_list").exists()){
+                    moveDown();
+                }
                 UiObject classListObj = device.findObject(new UiSelector().className("android.widget.TextView").text("今日课程表"));
                 UiObject classTitleObj = findElementByID("tv.fun.children:id/video_schedule_title");
                 verifyElementPresent("", classListObj);
