@@ -37,12 +37,13 @@ public class ChildrenPage extends Common {
         //点击智能桌面弹框上儿童桌面
         waitForElementPresentByID("tv.fun.settings:id/title");
         UiObject childDesktopObj = findElementByText("儿童桌面", "tv.fun.settings:id/title");
+        moveUp();
         moveRight();
-        if (!childDesktopObj.isSelected()) {
+        if (!findElementByText("儿童桌面", "tv.fun.settings:id/title").isSelected()) {
             moveUp();
             moveRight();
         }
-        device.pressEnter();
+        enter();
         waitForElementPresentByID("tv.fun.children:id/tab_title");
     }
 
