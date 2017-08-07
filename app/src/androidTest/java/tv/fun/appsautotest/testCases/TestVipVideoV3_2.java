@@ -151,6 +151,8 @@ public final class TestVipVideoV3_2 {
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
             UiObject payButton = uiDevice.findObject(new UiSelector().text("付费"));
+//            UiObject watchTry = uiDevice.findObject(new UiSelector().text("精彩预告，付费看正片")
+//                    .resourceId("com.bestv.ott:id/watch_try_text"));
             if(payButton.exists()){
                 systemWait(PlayVideoLongTime);
                 UiObject2 payMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
@@ -159,7 +161,9 @@ public final class TestVipVideoV3_2 {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
             }else {
-                leftMoveMethod(2);
+//                leftMoveMethod(2);
+                UiObject2 fullScreen = uiDevice.findObject(By.text("全屏"));
+                this.openTabFromLauncherHomeByVipText(uiDevice,fullScreen);
                 uiDevice.pressDPadCenter();
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
@@ -503,7 +507,7 @@ public final class TestVipVideoV3_2 {
                     m_Actual = Text.getText();
                     m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                     Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
-                }if(i > 8){
+                }if(i > 6){
                     break;
                 }
                 System.out.print("没有更多的上映新片");
@@ -639,13 +643,13 @@ public final class TestVipVideoV3_2 {
         try {
             UiObject2 vipVideo = uiDevice.findObject(By.text("金卡-纪实").res("com.bestv.ott:id/title"));
             this.openTabFromLauncherHomeByTextView(uiDevice,vipVideo);
-            randomPlayFilm(20);
+            randomPlayFilm(6);
             systemWait(WAIT);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
-            UiObject2 textView = uiDevice.findObject(By.text("相关推荐"));
-            m_Expect = "相关推荐";
+            UiObject2 textView = uiDevice.findObject(By.text("金卡专享").res("com.bestv.ott:id/detail_vip_text"));
+            m_Expect = "金卡专享";
             m_Actual = textView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult("进入详情页失败", m_Pass, m_Time);
@@ -816,8 +820,6 @@ public final class TestVipVideoV3_2 {
             this.openTabFromLauncherHomeByTextView(uiDevice,VipVideo);
             this.randomPlayFilm(3);
             systemWait(WAIT);
-            uiDevice.pressDPadDown();
-            SystemClock.sleep(1500);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
@@ -846,7 +848,7 @@ public final class TestVipVideoV3_2 {
                     Utils.writeCaseResult("跳转开通会员页失败", m_Pass, m_Time);
                 }
             }else {
-                Utils.writeCaseResult("vip用户",m_Pass,m_Time);
+                Log.d(TAG, "LC_VIP_25_VipEpisodesListClickable:"+"付费用户");
             }
         }catch (Throwable e){
             e.printStackTrace();

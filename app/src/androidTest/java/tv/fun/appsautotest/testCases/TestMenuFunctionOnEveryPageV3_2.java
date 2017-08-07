@@ -18,6 +18,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -94,6 +95,40 @@ public class TestMenuFunctionOnEveryPageV3_2 {
         TvCommon.printAllMethods(this.getClass().getName());
     }
 
+    @Test  //搜索Tab页面menu操作
+    public void LC_MENU_01_SearchTabMenuOperation(){
+        try {
+            upMoveMethod(1);
+            leftMoveMethod(1);
+            systemWait(WAIT);
+            UiObject2 tabName = uiDevice.findObject(By.text("电视"));
+            if(tabName.isSelected()){
+                leftMoveMethod(1);
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
+                if(Menu != null) {
+                    uiDevice.pressDPadCenter();
+                    systemWait(WAIT);
+                    UiObject2 SearchPage = uiDevice.findObject(By.text("用手机搜片"));
+                    m_Actual = SearchPage.getText();
+                    m_Expect = "用手机搜片";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
+                }
+            }else {
+                Assert.assertTrue(false);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
     @Test  //电视Tab页面menu操作
     public void LC_MENU_02_TVTabMenuOperation() {
         try {
@@ -161,8 +196,42 @@ public class TestMenuFunctionOnEveryPageV3_2 {
         }
     }
 
+    @Test  //会员Tab页面menu操作
+    public void LC_MENU_04_VipTabMenuOperation(){
+        try {
+            upMoveMethod(1);
+            rightMoveMethod(3);
+            systemWait(WAIT);
+            UiObject2 tabName = uiDevice.findObject(By.text("会员"));
+            if(tabName.isSelected()){
+                uiDevice.pressMenu();
+                systemWait(WAIT);
+                UiObject2 Menu = uiDevice.findObject(By.text("设置"));
+                Assert.assertEquals("设置",Menu.getText());
+                rightMoveMethod(2);
+                uiDevice.pressDPadCenter();
+                systemWait(WAIT);
+                UiObject2 classify = uiDevice.findObject(By.text("设 置"));
+                m_Actual = classify.getText();
+                m_Expect = "设 置";
+                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+                Utils.writeCaseResult("跳转设置页面错误",m_Pass,m_Time);
+            }else {
+                Assert.assertTrue(false);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+
+    }
+
     @Test  //体育Tab页面menu操作
-    public void LC_MENU_04_SportsTabMenuOperation(){
+    public void LC_MENU_05_SportsTabMenuOperation(){
         try {
             upMoveMethod(1);
             String[] TabName = {"体育", "生活", "会员", "应用", "游戏", "设置"};
@@ -201,7 +270,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //生活Tab页面menu操作
-    public void LC_MENU_05_LifeTabMenuOperation(){
+    public void LC_MENU_06_LifeTabMenuOperation(){
         try {
             upMoveMethod(1);
             rightMoveMethod(2);
@@ -220,40 +289,6 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                 m_Expect = "最新";
                 m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
-            }else {
-                Assert.assertTrue(false);
-            }
-        }catch (Throwable e){
-            e.printStackTrace();
-            resultStr += e.toString();
-            resultFlag = false;
-        }
-        finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
-        }
-
-    }
-
-    @Test  //会员Tab页面menu操作
-    public void LC_MENU_06_VipTabMenuOperation(){
-        try {
-            upMoveMethod(1);
-            rightMoveMethod(3);
-            systemWait(WAIT);
-            UiObject2 tabName = uiDevice.findObject(By.text("会员"));
-            if(tabName.isSelected()){
-                uiDevice.pressMenu();
-                systemWait(WAIT);
-                UiObject2 Menu = uiDevice.findObject(By.text("设置"));
-                Assert.assertEquals("设置",Menu.getText());
-                rightMoveMethod(2);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 classify = uiDevice.findObject(By.text("设 置"));
-                m_Actual = classify.getText();
-                m_Expect = "设 置";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转设置页面错误",m_Pass,m_Time);
             }else {
                 Assert.assertTrue(false);
             }
@@ -422,6 +457,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //播放记录卡片menu-删除单个(播放记录>=2)
+    @Ignore
     public void LC_MENU_14_DelOnlyOneInPlayRecordCard(){
         try {
             enterPlayRecordPage();
@@ -481,6 +517,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //播放记录页Tab menu-清空全部
+    @Ignore
     public void LC_MENU_16_EmptyVideoRecordInPlayRecordTab() {
         try {
             enterPlayRecordPage();
@@ -531,18 +568,24 @@ public class TestMenuFunctionOnEveryPageV3_2 {
             systemWait(WAIT);
             UiObject2 MenuIcon = uiDevice.findObject(By.res("android:id/tv_fun_menu"));
             List<UiObject2> card = MenuIcon.findObjects(By.clazz("android.widget.LinearLayout"));
-            if(card.size() == 3){    //menu选项隐藏一个，所有+1
-                rightMoveMethod(1);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 classify = uiDevice.findObject(By.text("最新"));
-                m_Actual = classify.getText();
-                m_Expect = "最新";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
-            } else {
-                Utils.writeCaseResult("播放记录不为空,说明Case18是错误的", false, m_Time);
-            }
+//            Log.d("lxm", "LC_MENU_17_EmptyRecordInPlayRecordTab: "+card.size());
+            UiObject delAll = uiDevice.findObject(new UiSelector().text("清空全部"));
+            if(card.size() == 3) {    //menu选项隐藏一个，所有+1
+                if (!delAll.exists()) {
+                    rightMoveMethod(1);
+                    uiDevice.pressDPadCenter();
+                    systemWait(WAIT);
+                    UiObject2 classify = uiDevice.findObject(By.text("最新"));
+                    m_Actual = classify.getText();
+                    m_Expect = "最新";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
+                } else {
+                    Utils.writeCaseResult("播放记录不为空,说明Case16是错误的", false, m_Time);
+                }
+            }else {
+                Assert.assertTrue(false);
+                }
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
