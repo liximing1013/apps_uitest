@@ -31,7 +31,7 @@ public class MasterApp extends AppStorePage {
             moveDownForMultiple(2);
             moveRight();
         }
-        device.pressEnter();
+        enter();
         waitForElementPresentByID("tv.fun.master:id/iv_settings");
     }
 

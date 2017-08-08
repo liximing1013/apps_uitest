@@ -125,7 +125,7 @@ public class TestTVChildren extends ChildrenPage {
                 //点击launcher悬浮框上智能桌面卡片
                 home();
                 moveUpForMultiple(2);
-                if(!findElementByID(networkIconIDInPopup).exists()){
+                if(!findElementByID(timeIDInPopup).exists()){
                     moveUpForMultiple(2);
                 }
                 UiObject desktopIconObj = findElementByText("智能桌面", "com.bestv.ott:id/launcher_title");

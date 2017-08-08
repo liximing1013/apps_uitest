@@ -40,7 +40,8 @@ public class Common {
     public String appTab = "应用";
     public String videoTab = "视频";
     public String launcherTabID = "com.bestv.ott:id/tab_title";
-    public String networkIconIDInPopup = "com.bestv.ott:id/network";//launcher悬浮框上网络设置按钮的resource id
+    public String timeIDInPopup = "com.bestv.ott:id/time";//launcher悬浮框上时间控件的resource id
+    public String weatherIDInPopup = "com.bestv.ott:id/weather";//launcher悬浮框上天气按钮的resource id
     public static boolean resultFlag = true;
     public static String resultStr = "";
     public long execTime;
@@ -54,6 +55,7 @@ public class Common {
     public final static String CHILDREN_PKG_NAME = "tv.fun.children";
     public String[] childTabs = {"推荐", "少儿", "品牌专区"};
     public String childrenTabName = childTabs[1];
+    public int maxCountOfTabs = 10;
 
     @Before
     public void setup() throws RemoteException, IOException, UiObjectNotFoundException {
@@ -61,9 +63,9 @@ public class Common {
         execTime = Utils.getCurSecond();
         resultStr = "";
         resultFlag = true;
-       if(!device.isScreenOn()){
-           device.wakeUp();
-       }
+        if (!device.isScreenOn()) {
+            device.wakeUp();
+        }
 //        executeAdbShellCommond("am force-stop tv.fun.appstore");
         home();
 //        launcherTabs = getTabsNameInLauncherPage();
@@ -82,7 +84,7 @@ public class Common {
     }
 
     public void executeCommand(String[] commands, Boolean isRoot) throws IOException {
-       Process lprocess = null;
+        Process lprocess = null;
         DataOutputStream dos = null;
         try {
             int result = -1;
@@ -116,34 +118,36 @@ public class Common {
      * @param resouceID
      * @return obj
      */
-    public UiObject findElementByID(String resouceID){
+    public UiObject findElementByID(String resouceID) {
         UiObject obj = device.findObject(new UiSelector().resourceId(resouceID));
         return obj;
     }
 
     /**
      * Find Element By Resource ID
-     *@param textStr
+     *
+     * @param textStr
      * @param resouceID
      * @return obj
      */
-    public UiObject findElementByText(String textStr, String resouceID){
+    public UiObject findElementByText(String textStr, String resouceID) {
         UiObject obj = device.findObject(new UiSelector().text(textStr).resourceId(resouceID));
         return obj;
     }
 
     /**
      * Find Element By Resource ID
-     * @param  type
+     *
+     * @param type
      * @param locator
      * @param index
      * @return obj
      */
-    public UiObject findElementByIndex(String type, String locator, int index){
+    public UiObject findElementByIndex(String type, String locator, int index) {
         UiObject obj = null;
-        if(type.equalsIgnoreCase("id")){
+        if (type.equalsIgnoreCase("id")) {
             obj = device.findObject(new UiSelector().resourceId(locator).index(index));
-        }else if(type.equalsIgnoreCase("class")){
+        } else if (type.equalsIgnoreCase("class")) {
             obj = device.findObject(new UiSelector().className(locator).index(index));
         }
         return obj;
@@ -155,7 +159,7 @@ public class Common {
      * @param className
      * @return obj
      */
-    public UiObject findElementByClass(String className){
+    public UiObject findElementByClass(String className) {
         UiObject obj = device.findObject(new UiSelector().className(className));
         return obj;
     }
@@ -164,7 +168,7 @@ public class Common {
      * Find child node of Element By Resource ID
      *
      * @param resID
-     * @param  parentResID
+     * @param parentResID
      * @return obj
      */
     public UiObject findChildNodeOfElementByID(String parentResID, String resID) throws UiObjectNotFoundException {
@@ -177,7 +181,7 @@ public class Common {
      * Find child node of Element By Class Name
      *
      * @param value
-     * @param  parentClass
+     * @param parentClass
      * @return obj
      */
     public UiObject findChildNodeOfElementByClass(String parentClass, String value) throws UiObjectNotFoundException {
@@ -190,7 +194,7 @@ public class Common {
      * Find child node of Lisy Element By Class Name and index
      *
      * @param parentClass
-     * @param  resID
+     * @param resID
      * @param indexf
      * @return obj
      */
@@ -202,6 +206,7 @@ public class Common {
 
     /**
      * Find Element By Resource ID
+     *
      * @param parentObj
      * @param resID
      * @param elemIndex
@@ -210,6 +215,20 @@ public class Common {
     public UiObject findChildNodeOfListElementByIDAndIndex(UiObject parentObj, String resID, int elemIndex) throws UiObjectNotFoundException {
         UiObject childObj = parentObj.getChild(new UiSelector().resourceId(resID).index(elemIndex));
         return childObj;
+    }
+
+    /**
+     * Judge whether the Element exists by Resource ID
+     *
+     * @param resouceID
+     * @return obj
+     */
+    public Boolean isElementPresent(String resouceID) {
+        Boolean flag = false;
+        if (findElementByID(resouceID).exists()) {
+            flag = true;
+        }
+        return flag;
     }
 
 //    /**
@@ -226,6 +245,7 @@ public class Common {
 
     /**
      * 适用于所有系统
+     *
      * @param commondStr
      */
     public void executeAdbShellCommond(String commondStr) throws IOException {
@@ -239,16 +259,17 @@ public class Common {
 
     /**
      * 仅适用于api21以上系统（5.0以上）
+     *
      * @param commondStr
      */
     public void executeAdbCommond(String commondStr) throws IOException {
-            device.executeShellCommand(commondStr);
+        device.executeShellCommand(commondStr);
     }
 
     /**
      * Change string type to the int type
      */
-    public int stringToInt(String intstr){
+    public int stringToInt(String intstr) {
         Integer integer;
         integer = Integer.valueOf(intstr);
         return integer.intValue();
@@ -257,7 +278,7 @@ public class Common {
     /**
      * Change string type to the float type
      */
-    public Float stringToFloat(String intstr){
+    public Float stringToFloat(String intstr) {
         Float value;
         value = Float.valueOf(intstr);
         return value;
@@ -266,17 +287,16 @@ public class Common {
     /**
      * Change float type to the string type
      */
-    public String floatToString(Float intstr){
+    public String floatToString(Float intstr) {
         String value;
         value = String.valueOf(intstr);
         return value;
     }
 
     /**
-     *  Change int type to the string type
+     * Change int type to the string type
      */
-    public static String intToString(int value)
-    {
+    public static String intToString(int value) {
         Integer integer = new Integer(value);
         return integer.toString();
     }
@@ -292,17 +312,17 @@ public class Common {
     /**
      * 按遥控器向上键
      */
-    public void moveUp(){
+    public void moveUp() {
         device.pressDPadUp();
     }
 
     /**
      * 连续按遥控器向上键
-     *
+     * <p>
      * step  连续向右移的次数
      */
-    public void moveUpForMultiple(int step){
-        for(int i=1; i<=step; i++){
+    public void moveUpForMultiple(int step) {
+        for (int i = 1; i <= step; i++) {
             device.pressDPadUp();
         }
     }
@@ -310,17 +330,17 @@ public class Common {
     /**
      * 按遥控器右键
      */
-    public void moveRight(){
+    public void moveRight() {
         device.pressDPadRight();
     }
 
     /**
      * 连续按遥控器右键
-     *
+     * <p>
      * step  连续向右移的次数
      */
-    public void moveRightForMultiple(int step){
-        if(step>0) {
+    public void moveRightForMultiple(int step) {
+        if (step > 0) {
             for (int i = 1; i <= step; i++) {
                 device.pressDPadRight();
             }
@@ -330,43 +350,43 @@ public class Common {
     /**
      * 按遥控器左键
      */
-    public void moveLeft(){
+    public void moveLeft() {
         device.pressDPadLeft();
     }
 
     /**
      * 连续按遥控器左键
-     *
+     * <p>
      * step  连续向左移的次数
      */
-    public void moveLeftForMultiple(int step){
-        if(step<0){
-            step=-step;
+    public void moveLeftForMultiple(int step) {
+        if (step < 0) {
+            step = -step;
         }
-        for(int i=1; i<=step; i++){
+        for (int i = 1; i <= step; i++) {
             device.pressDPadLeft();
         }
     }
 
     /**
      * 按遥控器向下键
-     *
+     * <p>
      * 向下移
      */
-    public void moveDown(){
+    public void moveDown() {
         device.pressDPadDown();
     }
 
     /**
      * 连续按遥控器下键
-     *
+     * <p>
      * step  连续向下移的次数
      */
-    public void moveDownForMultiple(int step){
-        if(step<0){
-            step=-step;
+    public void moveDownForMultiple(int step) {
+        if (step < 0) {
+            step = -step;
         }
-        for(int i=1; i<=step; i++){
+        for (int i = 1; i <= step; i++) {
             device.pressDPadDown();
         }
     }
@@ -375,7 +395,7 @@ public class Common {
      * Input password in children key popup window
      */
     public void inputChildrenKeyPasswordIfPopupDisplay() throws UiObjectNotFoundException {
-        if(device.findObject(new UiSelector().text("输入密码或扫码解锁")).exists()|findElementByID("tv.fun.children:id/keypad").exists()){
+        if (device.findObject(new UiSelector().text("输入密码或扫码解锁")).exists() | findElementByID("tv.fun.children:id/keypad").exists()) {
             //input 1111
             UiObject keyObj = findElementByID("tv.fun.children:id/keypad").getChild(new UiSelector().className("android.widget.ImageView").index(0));
             moveDownForMultiple(3);
@@ -384,7 +404,7 @@ public class Common {
             device.pressEnter();
             device.pressEnter();
             device.pressEnter();
-            if(device.findObject(new UiSelector().text("输入密码或扫码解锁")).exists()|findElementByID("tv.fun.children:id/keypad").exists()){
+            if (device.findObject(new UiSelector().text("输入密码或扫码解锁")).exists() | findElementByID("tv.fun.children:id/keypad").exists()) {
                 back();
             }
         }
@@ -401,25 +421,25 @@ public class Common {
     /**
      * 按遥控器确定键
      */
-    public void enter(){
+    public void enter() {
         device.pressEnter();
     }
 
     /**
      * 按遥控器Back键
      */
-    public void back(){
+    public void back() {
         device.pressBack();
     }
 
     /**
      * 连续多次按遥控器Back键
      */
-    public void backForMultiple(int times){
-        if(times<0){
-            times=-times;
+    public void backForMultiple(int times) {
+        if (times < 0) {
+            times = -times;
         }
-        for(int i=1; i<=times; i++){
+        for (int i = 1; i <= times; i++) {
             device.pressBack();
         }
     }
@@ -427,7 +447,7 @@ public class Common {
     /**
      * 按遥控器Menu键
      */
-    public void menu(){
+    public void menu() {
         device.pressMenu();
     }
 
@@ -435,13 +455,12 @@ public class Common {
      * Wait for an element present. The element on the page does not exist in
      * the pre-page, waiting for the element exist.
      *
-     * @param locator
-     *            an element locator
+     * @param locator an element locator
      * @throws InterruptedException
      */
     public void waitForElementPresentByID(String locator)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for element present <"
                         + locator + ">");
@@ -456,31 +475,30 @@ public class Common {
 
     /**
      * Wait for time
-     *
+     * <p>
      * an element locator
+     *
      * @throws InterruptedException
      */
     public void wait(int timeUnit)
             throws InterruptedException {
-            Thread.sleep(timeUnit * 60* 2 * sleepInterval);
+        Thread.sleep(timeUnit * 60 * 2 * sleepInterval);
     }
 
     /**
      * Wait for an element present. The element on the page does not exist in
      * the pre-page, waiting for the element exist.
      *
-     * @param locator
-     *            an element locator
-     *@param textStr
-     *            text of element
+     * @param locator an element locator
+     * @param textStr text of element
      * @throws InterruptedException
      */
     public void waitForElementPresentByIDAndText(String locator, String textStr)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for element present <"
-                        + locator + "> with text (" + textStr + ")" );
+                        + locator + "> with text (" + textStr + ")");
                 break;
             }
             if (device.findObject(new UiSelector().resourceId(locator).text(textStr)).exists()) {
@@ -494,18 +512,16 @@ public class Common {
      * Wait for an element present. The element on the page does not exist in
      * the pre-page, waiting for the element exist.
      *
-     * @param className
-     *            an element locator
-     *@param textStr
-     *            text of element
+     * @param className an element locator
+     * @param textStr   text of element
      * @throws InterruptedException
      */
     public void waitForElementPresentByClassAndText(String className, String textStr)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for element present <"
-                        + className + "> with text (" + textStr + ")" );
+                        + className + "> with text (" + textStr + ")");
                 break;
             }
             if (device.findObject(new UiSelector().text(textStr).className(className)).exists()) {
@@ -519,13 +535,12 @@ public class Common {
      * Wait for an element present. The element on the page does not exist in
      * the pre-page, waiting for the element exist.
      *
-     * @param locator
-     *            an element locator
+     * @param locator an element locator
      * @throws InterruptedException
      */
     public void waitForElementNotPresentByID(String locator)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for element present <"
                         + locator + ">");
@@ -542,13 +557,12 @@ public class Common {
      * Wait for an element not present. Wait for an element form "exist" to
      * "disappear" in page.
      *
-     * @param locator
-     *            an element locator
+     * @param locator an element locator
      * @throws InterruptedException
      */
     public void waitForElementNotPresent(String locator)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for element not present <"
                         + locator + ">");
@@ -565,13 +579,12 @@ public class Common {
      * Wait for an element not present. Wait for an element form "exist" to
      * "disappear" in page.
      *
-     * @param ele
-     *            an element
+     * @param ele an element
      * @throws InterruptedException
      */
     public void waitForElementNotPresent(UiObject ele)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for element not present <"
                         + ele + ">");
@@ -588,13 +601,12 @@ public class Common {
      * Wait for an text note present. The element on the page exists in
      * the pre-page, waiting for the element not exist.
      *
-     * @param textStr
-     *            a text
+     * @param textStr a text
      * @throws InterruptedException
      */
     public void waitForTextNotPresent(String textStr)
             throws InterruptedException {
-        for (int second = 0;; second++) {
+        for (int second = 0; ; second++) {
             if (second >= timeout) {
                 System.out.println("timeout: wait for text not present <"
                         + textStr + ">");
@@ -613,11 +625,11 @@ public class Common {
      * @param targetTab
      * @return
      */
-    public int stepFromCurrentTabToTargetTab(String[] tablist, String currentTab, String targetTab){
+    public int stepFromCurrentTabToTargetTab(String[] tablist, String currentTab, String targetTab) {
         HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
         int tabCount = tablist.length;
-        for(int i=0; i<tabCount; i++){
-            tabMap.put((String) tablist[i], i+1);
+        for (int i = 0; i < tabCount; i++) {
+            tabMap.put((String) tablist[i], i + 1);
         }
         int startStep = tabMap.get(currentTab);
         int targetTabStep = tabMap.get(targetTab);
@@ -631,11 +643,11 @@ public class Common {
      * @param targetTab
      * @return
      */
-    public int stepFromCurrentTabToTargetTab(ArrayList tablist, String currentTab, String targetTab){
+    public int stepFromCurrentTabToTargetTab(ArrayList tablist, String currentTab, String targetTab) {
         HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
         int tabCount = tablist.size();
-        for(int i=0; i<tabCount; i++){
-            tabMap.put((String) tablist.get(i), i+1);
+        for (int i = 0; i < tabCount; i++) {
+            tabMap.put((String) tablist.get(i), i + 1);
         }
         int startStep = tabMap.get(currentTab);
         int targetTabStep = tabMap.get(targetTab);
@@ -649,14 +661,14 @@ public class Common {
      * @param currentTab
      * @return
      */
-    public int stepFromCurrentTabToAdd(ArrayList tablist, String currentTab){
+    public int stepFromCurrentTabToAdd(ArrayList tablist, String currentTab) {
         HashMap<String, Integer> tabMap = new HashMap<String, Integer>();
         int tabCount = tablist.size();
-        for(int i=0; i<tabCount; i++){
-            tabMap.put((String) tablist.get(i), i+1);
+        for (int i = 0; i < tabCount; i++) {
+            tabMap.put((String) tablist.get(i), i + 1);
         }
         int startStep = tabMap.get(currentTab);
-        int targetTabStep = tabCount+1;
+        int targetTabStep = tabCount + 1;
         int step = targetTabStep - startStep;
         return step;
     }
@@ -676,15 +688,15 @@ public class Common {
 //            if (!lastObj.getChild(new UiSelector().className("android.widget.ImageView")).exists()) {
 //                moveUp();
 //            }
-            if(findElementByID(networkIconIDInPopup).exists()){
-                device.pressDPadDown();
+            if (findElementByID(timeIDInPopup).exists()) {
+                moveDown();
             }
             for (int i = 0; i < tabCount; i++) {
                 UiObject tabEle = tabListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
                 UiObject tabObj = tabEle.getChild(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
-                if(i==tabCount-1){
+                if (i == tabCount - 1) {
                     launcherTabObj[i] = addIconInLauncherTab;
-                }else {
+                } else if (i > 0) {
                     String tabName = tabObj.getText();
                     launcherTabObj[i] = tabName;
                 }
@@ -700,62 +712,63 @@ public class Common {
      * Prepare data to make sure the app tab is displayed in Launcher page
      */
     public void displayAppTabInLauncher() throws UiObjectNotFoundException, InterruptedException {
-            launchTabStrs = getTabsNameInLauncherPage();
-            UiObject launcherScrollObject = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
-            UiObject tabListObj = launcherScrollObject.getChild(new UiSelector().className("android.widget.LinearLayout"));
-            int tabCount = tabListObj.getChildCount();
-            UiObject lastObj = tabListObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(tabCount - 1));
-            UiObject currentTabObj = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").selected(true));
-            String currentTabName = currentTabObj.getText();
-            int stepFromCurrent = stepFromCurrentTabToTargetTab(launchTabStrs, currentTabName, addIconInLauncherTab);
-            if(stepFromCurrent>0){
+        launchTabStrs = getTabsNameInLauncherPage();
+        UiObject launcherScrollObject = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
+        UiObject tabListObj = launcherScrollObject.getChild(new UiSelector().className("android.widget.LinearLayout"));
+        int tabCount = tabListObj.getChildCount();
+        UiObject lastObj = tabListObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(tabCount - 1));
+        UiObject currentTabObj = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").selected(true));
+        String currentTabName = currentTabObj.getText();
+        int stepFromCurrent = stepFromCurrentTabToTargetTab(launchTabStrs, currentTabName, addIconInLauncherTab);
+        if (stepFromCurrent > 0) {
             moveRightForMultiple(stepFromCurrent);
-            }else {
+        } else {
             moveLeftForMultiple(stepFromCurrent);
-            }
+        }
+        device.pressEnter();
+        waitForElementPresentByIDAndText("com.bestv.ott:id/tab_manager_title", "设置桌面频道");
+        UiObject appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
+        appTabInList.click();
+        appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
+        if (!appTabInList.isSelected()) {
             device.pressEnter();
-            waitForElementPresentByIDAndText("com.bestv.ott:id/tab_manager_title", "设置桌面频道");
-            UiObject appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
-            appTabInList.click();
-            appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
-            if(!appTabInList.isSelected()){
-                device.pressEnter();
-            }
+        }
         back();
     }
 
     /**
      * Check if the expected tab is displaying
      */
-    public Boolean checkWhetherTabDisplay(String targetTab, String tabResouceID){
+    public Boolean checkWhetherTabDisplay(String targetTab, String tabResouceID) {
         Boolean tabFalg = false;
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
-        if(device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab)).exists()){
-            tabFalg=true;
+        if (device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab)).exists()) {
+            tabFalg = true;
         }
         return tabFalg;
     }
 
     /**
      * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
+     *
      * @param targetTab
      * @throws UiObjectNotFoundException
      */
     public void moveToTargetTab(String[] tablist, String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException {
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
-        if(!tab.isSelected()){
+        if (!tab.isSelected()) {
             moveUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
-            if(tabResouceID.equalsIgnoreCase(launcherTabID)){
-                if(findElementByID(networkIconIDInPopup).exists()){
-                    device.pressDPadDown();
+            if (tabResouceID.equalsIgnoreCase(launcherTabID)) {
+                if (findElementByID(timeIDInPopup).exists()) {
+                    moveDown();
                 }
             }
             UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
             String currentTab = currentTabObj.getText();
             int needStep = stepFromCurrentTabToTargetTab(tablist, currentTab, targetTab);
-            if(needStep>0){
+            if (needStep > 0) {
                 moveRightForMultiple(needStep);
-            }else {
+            } else {
                 moveLeftForMultiple(needStep);
             }
         }
@@ -763,35 +776,46 @@ public class Common {
 
     /**
      * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
+     *
      * @param targetTab
      * @throws UiObjectNotFoundException
      */
     public void moveToLauncherTargetTab(String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException, InterruptedException {
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
-        if(!tab.exists()){
+        if (!tab.exists()) {
             displayAppTabInLauncher();
+            home();
         }
-        home();
-        tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
-        if(!tab.isSelected()){
-            moveUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
-            if(tabResouceID.equalsIgnoreCase(launcherTabID)){
-                if(findElementByID(networkIconIDInPopup).exists()){
-                    device.pressDPadDown();
-                }
-            }
-            UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
-            String currentTab = currentTabObj.getText();
-            launchTabStrs = getTabsNameInLauncherPage();
+        moveUp();
+        if (!device.findObject(new UiSelector().resourceId(tabResouceID).selected(true)).exists()) {
+            moveUpForMultiple(2);//Move to navBar to avoid that the current focusot in narBar
+        }
+        if (isElementPresent(timeIDInPopup) || isElementPresent(weatherIDInPopup)) {
+            moveDown();
+        }
+        UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
+        String currentTab = currentTabObj.getText();
+        launchTabStrs = getTabsNameInLauncherPage();
+        String value = launchTabStrs[1];
+        if (value != null) {
             int needStep = stepFromCurrentTabToTargetTab(launchTabStrs, currentTab, targetTab);
-            if(needStep>0){
+            if (needStep > 0) {
                 moveRightForMultiple(needStep);
-            }else {
+            } else {
                 moveLeftForMultiple(needStep);
+            }
+        } else {
+            for (int j = 2; j < maxCountOfTabs; j++) {
+                currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
+                currentTab = currentTabObj.getText();
+                if (currentTab.equalsIgnoreCase(targetTab)) {
+                    break;
+                } else {
+                    moveRight();
+                }
             }
         }
     }
-
 
     /**
      * Verify not the string.
@@ -822,7 +846,7 @@ public class Common {
      */
     public Boolean verifyString(String failMsg, String actual, String expected)
             throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, expected.equalsIgnoreCase(actual));
         } else {
@@ -833,7 +857,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "Expected [" + expected + "] but actual [" + actual
                             + "]; ";
@@ -855,7 +879,7 @@ public class Common {
      */
     public Boolean verifyNotString(String failMsg, String actual, String expected)
             throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, !expected.equalsIgnoreCase(actual));
         } else {
@@ -866,7 +890,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "Expected [" + actual + "] is not same as the string [" + expected
                             + "]; but actually they are same";
@@ -888,21 +912,21 @@ public class Common {
      */
     public Boolean verifyIncludeString(String failMsg, String expected, String actual)
             throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, expected.contains(actual));
         } else {
-        if (expected.indexOf(actual) > -1) {
-            verifyFlag = true;
-            return verifyFlag;
-        } else {
-            resultFlag = false;
-            resultStr += "Expected [" + expected + "] contains actual [" + actual
-                    + "], but actually not contain; ";
-            verifyFlag = false;
-            return verifyFlag;
+            if (expected.indexOf(actual) > -1) {
+                verifyFlag = true;
+                return verifyFlag;
+            } else {
+                resultFlag = false;
+                resultStr += "Expected [" + expected + "] contains actual [" + actual
+                        + "], but actually not contain; ";
+                verifyFlag = false;
+                return verifyFlag;
+            }
         }
-    }
         return verifyFlag;
     }
 
@@ -914,8 +938,8 @@ public class Common {
      * @return result of verification
      * @throws IOException
      */
-    public Boolean verifyNumber(String failMsg,int actual, int expected) throws IOException {
-        Boolean verifyFlag =true;
+    public Boolean verifyNumber(String failMsg, int actual, int expected) throws IOException {
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, actual == expected);
         } else {
@@ -941,8 +965,8 @@ public class Common {
      * @return result of verification
      * @throws IOException
      */
-    public Boolean verifyNotNumber(String failMsg,int actual, int expected) throws IOException {
-        Boolean verifyFlag =true;
+    public Boolean verifyNotNumber(String failMsg, int actual, int expected) throws IOException {
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, actual != expected);
         } else {
@@ -968,8 +992,8 @@ public class Common {
      * @return result of verification
      * @throws IOException
      */
-    public Boolean verifyNumberLarger(String failMsg,int actualNum, int smallNum) throws IOException {
-        Boolean verifyFlag =true;
+    public Boolean verifyNumberLarger(String failMsg, int actualNum, int smallNum) throws IOException {
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, actualNum > smallNum);
         } else {
@@ -995,8 +1019,8 @@ public class Common {
      * @return result of verification
      * @throws IOException
      */
-    public Boolean verifyNumberEqualORLarger(String failMsg,int actualNum, int smallNum) throws IOException {
-        Boolean verifyFlag =true;
+    public Boolean verifyNumberEqualORLarger(String failMsg, int actualNum, int smallNum) throws IOException {
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, actualNum >= smallNum);
         } else {
@@ -1023,7 +1047,7 @@ public class Common {
      * @throws IOException
      */
     public Boolean verifyTrue(String failMsg, Boolean testFlag) throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, testFlag);
         } else {
@@ -1033,7 +1057,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "The return of [" + testFlag + "] is not True; ";
                 }
@@ -1053,7 +1077,7 @@ public class Common {
      * @throws IOException
      */
     public Boolean verifyFalse(String failMsg, Boolean testFlag) throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertFalse(failMsg, testFlag);
         } else {
@@ -1063,7 +1087,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "The return of [" + testFlag + "] is not False; ";
                 }
@@ -1083,7 +1107,7 @@ public class Common {
      * @throws IOException
      */
     public Boolean verifyElementPresent(String failMsg, UiObject obj) throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, obj.exists());
         } else {
@@ -1093,7 +1117,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "Element [" + obj + "] is NOT present; ";
                 }
@@ -1113,7 +1137,7 @@ public class Common {
      * @throws IOException
      */
     public Boolean verifyElementPresent(String failMsg, String locator) throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         UiObject actualObj = findElementByID(locator);
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertTrue(failMsg, actualObj.exists());
@@ -1124,7 +1148,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "Element [" + actualObj + "] is NOT present; ";
                 }
@@ -1144,7 +1168,7 @@ public class Common {
      * @throws IOException
      */
     public Boolean verifyElementNotPresent(String failMsg, UiObject obj) throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertFalse(failMsg, obj.exists());
         } else {
@@ -1154,7 +1178,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "Element [" + obj + "] is expected Not present, but actually present; ";
                 }
@@ -1174,7 +1198,7 @@ public class Common {
      * @throws IOException
      */
     public Boolean verifyElementNotPresent(String failMsg, String locator) throws IOException {
-        Boolean verifyFlag =true;
+        Boolean verifyFlag = true;
         UiObject obj = findElementByID(locator);
         if (runTool.equalsIgnoreCase("Studio")) {
             Assert.assertFalse(failMsg, obj.exists());
@@ -1185,7 +1209,7 @@ public class Common {
             } else {
                 resultFlag = false;
                 if (failMsg != "") {
-                    resultStr += failMsg+";";
+                    resultStr += failMsg + ";";
                 } else {
                     resultStr += "Element [" + locator + "] is expected Not present, but actually present; ";
                 }

@@ -66,6 +66,8 @@ public class TestAppStore extends AppStorePage {
         } finally {
             Utils.writeCaseResult(resultStr,
                     resultFlag, execTime);
+
+
         }
     }
 
@@ -3249,14 +3251,20 @@ public class TestAppStore extends AppStorePage {
             UiObject subtitleObj = findElementByID("tv.fun.appstore:id/subTitle");
             int appNum = stringToInt(subtitleObj.getText().split("有")[1].split("个应用")[0]);
             UiObject sysAppListObj = findElementByID("tv.fun.appstore:id/listview");
-            for(int i=0; i<appNum; i++){
+            for(int i=0; i<appNum; i++) {
                 UiObject appObj = sysAppListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
                 UiObject appNameObj = appObj.getChild(new UiSelector().resourceId("tv.fun.appstore:id/appName"));
                 String sysAppName = appNameObj.getText();
-                if(sysAppName.equalsIgnoreCase(systemAppList[2])){
+                if (sysAppName.equalsIgnoreCase(systemAppList[2])) {
                     break;
-                }else{
+                } else if (appNum > 6 && i < 6) {
                     moveRight();
+                } else {
+                    if (i == 6) {
+                        moveDown();
+                    } else {
+                        moveLeft();
+                    }
                 }
             }
             UiObject masterCard = findElementByText(systemAppList[2], "tv.fun.appstore:id/appName");
