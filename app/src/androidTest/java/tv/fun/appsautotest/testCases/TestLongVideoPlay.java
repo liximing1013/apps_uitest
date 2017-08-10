@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Random;
 
 import tv.fun.common.HttpUtils;
@@ -446,6 +447,15 @@ public class TestLongVideoPlay {
             e.printStackTrace();
         }
     }
+
+    @Test  //数组
+    public void testDemo1(){
+
+        String[] tabName = {"全部","推荐","劲爆热点","暑期vip尊享","网络大电影","最新"};
+        boolean n = Arrays.asList(tabName).contains("推荐");
+        System.out.print(n);
+    }
+
 
     private void EnterTVVideoListPage() {
         systemWait(SHORT_WAIT);

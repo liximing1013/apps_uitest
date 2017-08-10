@@ -1512,7 +1512,7 @@ public class TestLauncherFunctionV3_2 {
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(15000);
             systemWait(LONG_WAIT);
-            UiObject2 groomList = uiDevice.findObject(By.text("相关推荐"));
+            UiObject2 groomList = uiDevice.findObject(By.text("全屏"));
             if(groomList != null){
                 DownMoveMethod(5);
                 uiDevice.wait(Until.findObject(By.text("明星").res("com.bestv.ott:id/title")),18000);
@@ -2083,6 +2083,7 @@ public class TestLauncherFunctionV3_2 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
 
 }
 

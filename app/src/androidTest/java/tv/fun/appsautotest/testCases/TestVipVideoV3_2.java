@@ -1004,4 +1004,5 @@ public final class TestVipVideoV3_2 {
         uiDevice.pressBack();
     } //Back*
 
+
 }
