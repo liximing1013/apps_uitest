@@ -414,9 +414,9 @@ public final class TestVipVideoV3_2 {
             enterPersonalCenterPage();
             UiObject2 record = uiDevice.findObject(By.text("消费记录"));
             this.openTabFromLauncherHomeByTextView(uiDevice,record);
-            UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话"));
+            UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话:"));
             Log.d(TAG, "lxm: "+tabView.getText());
-            m_Expect = "客服电话：400 600 6258";
+            m_Expect = "客服电话: 400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult(tabView.getText()+" 显示错误", m_Pass, m_Time);
@@ -438,8 +438,8 @@ public final class TestVipVideoV3_2 {
             enterPersonalCenterPage();
             UiObject2 coupon = uiDevice.findObject(By.text("观影券"));
             this.openTabFromLauncherHomeByTextView(uiDevice,coupon);
-            UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话"));
-            m_Expect = "客服电话：400 600 6258";
+            UiObject2 tabView = uiDevice.findObject(By.textContains("客服电话:"));
+            m_Expect = "客服电话: 400 600 6258";
             m_Actual = tabView.getText();
             m_Pass = m_Expect.equalsIgnoreCase(m_Actual);
             Utils.writeCaseResult(tabView.getText()+" 显示错误", m_Pass, m_Time);
@@ -582,8 +582,9 @@ public final class TestVipVideoV3_2 {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("非金卡会员试看影片10min后，跳转开通会员页失败",m_Pass,m_Time);
             }else {
-                leftMoveMethod(2);
-                uiDevice.pressDPadCenter();
+                UiObject2 fullScreen = uiDevice.findObject(By.text("全屏"));
+                this.openTabFromLauncherHomeByVipText(uiDevice,fullScreen);
+                uiDevice.pressDPadCenter();   //+多语言
                 systemWait(PlayVideoTime);
                 m_uiObj = uiDevice.findObject(By.clazz("com.funshion.player.play.funshionplayer.VideoViewPlayer"));
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
@@ -824,12 +825,14 @@ public final class TestVipVideoV3_2 {
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
             systemWait(LONG_WAIT);
             UiObject payButton = uiDevice.findObject(new UiSelector().text("付费"));
-            UiObject episodeList = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/episode_group_title"));
+//            UiObject episodeList = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/episode_group_title"));
+            UiObject tvCell = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/tv_cell_mask")
+            .className("android.widget.ImageView"));
             uiDevice.wait(Until.findObject(By.text("试看第1集").res("com.bestv.ott:id/watch_try_text")),18000);
             if(payButton.exists()) {
-                if (episodeList.exists()) {
+                if (tvCell.exists()) {
                     downMoveMethod(1);
-                    rightMoveMethod(1);
+                    rightMoveMethod(5);
                     uiDevice.pressDPadCenter();
                     systemWait(LONG_WAIT);
                     UiObject2 payMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
@@ -1003,6 +1006,5 @@ public final class TestVipVideoV3_2 {
         SystemClock.sleep(1000);
         uiDevice.pressBack();
     } //Back*
-
 
 }

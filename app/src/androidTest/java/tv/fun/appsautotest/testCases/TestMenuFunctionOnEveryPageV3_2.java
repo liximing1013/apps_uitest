@@ -597,6 +597,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //猜你喜欢内视频menu收藏
+    @Ignore
     public void LC_MENU_18_WouldYouLikeCollectRecord() {
         try {
             enterPlayRecordPage();   //猜你喜欢进入时会重新刷新数据
@@ -636,7 +637,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_19_HadCollectInMyCollectPageCard(){
         try {
             enterMyCollectPage();
-            UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/recyclerview"));
+            UiObject2 Recycle1 = uiDevice.findObject(By.res("com.bestv.ott:id/inner_recyclerview"));
             List<UiObject2> Cards1 = Recycle1.findObjects(By.clazz("android.widget.RelativeLayout"));
             if(Cards1.size() >= 1) {
                 downMoveMethod(1);
@@ -722,7 +723,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                     Assert.assertTrue(false);
                 }
             }else{
-                Utils.writeCaseResult("未有预约赛事",false,m_Time);
+                Utils.writeCaseResult("未有预约赛事",true,m_Time);
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -759,7 +760,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                     Assert.assertTrue(false);
                 }
             }else{
-                Utils.writeCaseResult("未预约赛事",false,m_Time);
+                Utils.writeCaseResult("未预约赛事",true,m_Time);
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -862,7 +863,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_33_ListTabMenuOperationCard1(){
         try {
             enterFilmListPage();
-            rightMoveMethod(1);
+            rightMoveMethod(2);
             systemWait(WAIT);
             downMoveMethod(1);
             uiDevice.pressMenu();
@@ -896,7 +897,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_34_ListTabMenuOperationCard2(){
         try {
             this.enterFilmListPage();
-            rightMoveMethod(1);
+            rightMoveMethod(2);
             systemWait(WAIT);
             downMoveMethod(1);
             uiDevice.pressMenu();
@@ -925,10 +926,8 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_35_ListTabMenuOperationCard3(){
         try {
             enterFilmListPage();
-            rightMoveMethod(1);
+            rightMoveMethod(2);
             SystemClock.sleep(3000);
-            rightMoveMethod(1);
-            systemWait(WAIT);
             downMoveMethod(1);
             systemWait(WAIT);
             uiDevice.pressMenu();
@@ -976,6 +975,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //详情页menu-搜索
+    @Ignore //3.2以后版本详情页不支持menu键
     public void LC_MENU_36_DetailsPageMenuOperation1(){
         try {
             rightMoveMethod(2);
@@ -1005,6 +1005,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //详情页menu-视频分类
+    @Ignore //3.2以后版本详情页不支持menu键
     public void LC_MENU_37_DetailsPageMenuOperation2(){
         try {
             rightMoveMethod(2);
@@ -1192,7 +1193,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //消息中心-删除单条
-    public void LC_MENU_53_MessageCenterMenuOperation2InTopBar(){
+    public void LC_MENU_53_MessageCenterMenuOperation1InTopBar(){
         try {
             upMoveMethod(2);
             uiDevice.waitForIdle();
@@ -1313,29 +1314,37 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     } //进入播放记录页面
 
     private void enterMyCollectPage(){
-        uiDevice.pressDPadRight();
-        systemWait(SHORT_WAIT);
-        uiDevice.pressDPadCenter();
-        systemWait(WAIT);
-        uiDevice.waitForIdle();
-        upMoveMethod(1);
-        rightMoveMethod(1);
-        UiObject2 Collect = uiDevice.findObject(By.text("我的收藏"));
-        if(Collect.isSelected()){
-            Assert.assertTrue(true);
-        }else {
-            Assert.assertTrue(false);
-        }
+            uiDevice.pressDPadRight();
+            systemWait(SHORT_WAIT);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            uiDevice.waitForIdle();
+            rightMoveMethod(1);
+            UiObject2 Collect = uiDevice.findObject(By.text("我的收藏"));
+            if (Collect.isSelected()) {
+                Assert.assertTrue(true);
+            }else {
+                try {
+                    Assert.assertTrue(false);
+                }finally {
+                    Utils.writeCaseResult("my collect tab error",false,m_Time);
+                }
+            }
     }  //进入我的收藏页
 
     private void enterFilmListPage(){
+        try{
         downMoveMethod(1);
         uiDevice.pressDPadCenter();
         systemWait(LONG_WAIT);
         uiDevice.waitForIdle();
-        UiObject2 recommend = uiDevice.findObject(By.text("推荐"));
-        Assert.assertEquals("推荐",recommend.getText());
-    }  //进入电影列表页
+        UiObject2 recommend = uiDevice.findObject(By.text("全部"));
+        Assert.assertEquals("全部",recommend.getText());
+    } catch (Throwable e){
+            e.printStackTrace();
+        }
+    }
+    //进入电影列表页
 
     private void enterTVTabPage(){
         upMoveMethod(1);
@@ -1402,6 +1411,5 @@ public class TestMenuFunctionOnEveryPageV3_2 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }

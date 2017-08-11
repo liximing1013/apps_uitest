@@ -1928,7 +1928,11 @@ public class TestLauncherFunctionV3_2 {
             uiDevice.wait(findObject(By.text("赛程表 >")), 15000);
             systemWait(LONG_WAIT);
         }else {
-            Assert.assertTrue(false);
+            try {
+                Assert.assertTrue(false);
+            }finally {
+                Utils.writeCaseResult("Launcher首页Tab位置不符合",false,m_Time);
+            }
         }
     } //进入NBA首页
 
@@ -1946,7 +1950,11 @@ public class TestLauncherFunctionV3_2 {
             uiDevice.wait(findObject(By.text("赛程表")), 15000);
             systemWait(LONG_WAIT);
         }else {
-            Assert.assertTrue(false);
+            try {
+                Assert.assertTrue(false);
+            }finally {
+                Utils.writeCaseResult("Launcher首页Tab位置不符合",false,m_Time);
+            }
         }
     } //进入英超首页
 
@@ -1988,6 +1996,10 @@ public class TestLauncherFunctionV3_2 {
             systemWait(WAIT);
             UiObject2 Text2 = uiDevice.findObject(text("桌面设置"));
             Assert.assertEquals("桌面设置",Text2.getText());
+            RightMoveMethod(2);
+            DownMoveMethod(1);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
         }catch (Throwable e){
             e.printStackTrace();
         }
@@ -2083,7 +2095,6 @@ public class TestLauncherFunctionV3_2 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
-
 
 }
 
