@@ -21,8 +21,6 @@ public class AppStorePage extends Common {
      */
     public void navigateToLauncherAppTab() throws UiObjectNotFoundException, InterruptedException {
         home();
-        //按遥控器上键,移动焦点到视频tab
-        moveUp();
         moveToLauncherTargetTab(appTab);
     }
 

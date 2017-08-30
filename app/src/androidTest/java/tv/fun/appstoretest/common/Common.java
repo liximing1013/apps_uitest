@@ -686,9 +686,7 @@ public class Common {
             UiObject launcherScrollObject = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
             UiObject tabListObj = launcherScrollObject.getChild(new UiSelector().className("android.widget.LinearLayout"));
             int tabCount = tabListObj.getChildCount();
-            if (findElementByID(timeIDInPopup).exists()) {
-                moveDown();
-            }
+            cancelLauncherPopupDisplay();
             for (int i = 0; i < tabCount; i++) {
                 if (i == 0) {
                     tabEle = tabListObj.getChild(new UiSelector().resourceId("com.bestv.ott:id/search_entry").index(i));
@@ -770,9 +768,7 @@ public class Common {
         if (!tab.isSelected()) {
             moveUpForMultiple(step);//Move to navBar to avoid that the current focusot in narBar
             if (tabResouceID.equalsIgnoreCase(launcherTabID)) {
-                if (findElementByID(timeIDInPopup).exists()) {
-                    moveDown();
-                }
+                cancelLauncherPopupDisplay();
             }
             UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
             String currentTab = currentTabObj.getText();
@@ -786,6 +782,15 @@ public class Common {
     }
 
     /**
+     * Cancel launcher pop-up
+     */
+    public void cancelLauncherPopupDisplay(){
+        if (isElementPresent(timeIDInPopup) || isElementPresent(weatherIDInPopup)) {
+            moveDown();
+        }
+    }
+
+    /**
      * Sometimes, when entering appstore from Launcher, the default tab is not the first tab. This method is used to move the focus to the first tab
      *
      * @param targetTab
@@ -793,6 +798,7 @@ public class Common {
      */
     public void moveToLauncherTargetTab(String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException, InterruptedException {
         moveUp();
+        cancelLauncherPopupDisplay();
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
         if (!tab.exists()) {
             displayAppTabInLauncher();
@@ -802,9 +808,7 @@ public class Common {
         if (!device.findObject(new UiSelector().resourceId(tabResouceID).selected(true)).exists()) {
             moveUpForMultiple(2);//Move to navBar to avoid that the current focusot in narBar
         }
-        if (isElementPresent(timeIDInPopup) || isElementPresent(weatherIDInPopup)) {
-            moveDown();
-        }
+        cancelLauncherPopupDisplay();
         UiObject currentTabObj = device.findObject(new UiSelector().resourceId(tabResouceID).selected(true));
         String currentTab = currentTabObj.getText();
         launchTabStrs = getTabsNameInLauncherPage();
