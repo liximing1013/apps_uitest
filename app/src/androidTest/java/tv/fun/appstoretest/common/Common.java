@@ -29,6 +29,7 @@ public class Common {
     public int sleepInterval = 500;
     public String appTabName = "应用";
     public String addIconInLauncherTab = "addIcon";
+    public String searchIconInLauncherTab = "searchIcon";
     public String appStoreIconName = "应用市场";
     public String tvMasterIconName = "电视助手";
     public String systemAppIconName = "系统应用";
@@ -49,7 +50,7 @@ public class Common {
     public String errorLog = "";
     public String[] keywordForAutoLApp = {"D", "S", "Y", "Y", "G", "J"};//有自启动管理权限的应用“电视应用管家”搜索关键字
     public ArrayList<String> launcherTabs = new ArrayList<>();
-    public String[] launchTabStrs = new String[10];
+    public String[] launchTabStrs = new String[11];
     private static String COMMAND_EXIT = "exit\n";
     private static String COMMAND_LINE_END = "\n";
     public final static String CHILDREN_PKG_NAME = "tv.fun.children";
@@ -677,28 +678,35 @@ public class Common {
      * Get the launcher tabs list
      */
     public String[] getTabsNameInLauncherPage() {
-//        HashMap<Integer, String> tabs = new HashMap<Integer, String>();
         String[] launcherTabObj = new String[10];
+        UiObject tabEle = null;
+        UiObject tabObj = null;
+        String tabName ="";
         try {
             UiObject launcherScrollObject = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
             UiObject tabListObj = launcherScrollObject.getChild(new UiSelector().className("android.widget.LinearLayout"));
             int tabCount = tabListObj.getChildCount();
-//            UiObject lastObj = tabListObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(tabCount - 1));
-//            Boolean f = lastObj.getChild(new UiSelector().className("android.widget.ImageView")).exists();
-//            if (!lastObj.getChild(new UiSelector().className("android.widget.ImageView")).exists()) {
-//                moveUp();
-//            }
             if (findElementByID(timeIDInPopup).exists()) {
                 moveDown();
             }
             for (int i = 0; i < tabCount; i++) {
-                UiObject tabEle = tabListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
-                UiObject tabObj = tabEle.getChild(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
-                if (i == tabCount - 1) {
-                    launcherTabObj[i] = addIconInLauncherTab;
-                } else if (i > 0) {
-                    String tabName = tabObj.getText();
-                    launcherTabObj[i] = tabName;
+                if (i == 0) {
+                    tabEle = tabListObj.getChild(new UiSelector().resourceId("com.bestv.ott:id/search_entry").index(i));
+                    launcherTabObj[i] = searchIconInLauncherTab;
+                } else {
+                    tabEle = tabListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(i));
+                    tabObj = tabEle.getChild(new UiSelector().resourceId("com.bestv.ott:id/tab_title"));
+                    if (!tabObj.exists()&&i!=tabCount - 1) {
+                        tabObj = tabEle.getChild(new UiSelector().resourceId("com.bestv.ott:id/tab_image"));
+                        launcherTabObj[i] = "imageTab";
+                    } else {
+                        if (i == tabCount - 1) {
+                            launcherTabObj[i] = addIconInLauncherTab;
+                        } else {
+                            tabName = tabObj.getText();
+                            launcherTabObj[i] = tabName;
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -734,6 +742,9 @@ public class Common {
             device.pressEnter();
         }
         back();
+        //此时焦点会消失，以下步骤为了重新获取焦点
+        moveLeft();
+        moveRight();
     }
 
     /**
@@ -781,6 +792,7 @@ public class Common {
      * @throws UiObjectNotFoundException
      */
     public void moveToLauncherTargetTab(String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException, InterruptedException {
+        moveUp();
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
         if (!tab.exists()) {
             displayAppTabInLauncher();
