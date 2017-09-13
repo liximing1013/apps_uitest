@@ -609,6 +609,29 @@ public class TestLauncherFunctionV3_2 {
         }
     }
 
+    @Test  //桌面选择
+    public void LC_Table_05_tableChoose(){
+        try {
+            this.EnterTableSettings();
+            DownMoveMethod(2);
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            UiObject2 ChildrenPage = uiDevice.findObject(By.text("儿童桌面"));
+            m_Actual = ChildrenPage.getText();
+            m_Expect = "儿童桌面";
+            m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("桌面选择显示错误",m_Pass,m_Time);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr += e.toString();
+        } finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
+        }
+    }
+
     @Test  //小视频收藏
     public void LC_SV_10_SmallVideoCollectRecord() {
         try {
@@ -807,6 +830,7 @@ public class TestLauncherFunctionV3_2 {
             UiObject2 AllTeam = uiDevice.findObject(By.text("全部球队"));
             Assert.assertEquals("全部球队",AllTeam.getText());
             UiObject2 Order = uiDevice.findObject(By.clazz("android.widget.TextView").res("com.bestv.ott:id/subscribe"));
+            Log.d("LXM", "LC_NBA_06_EnterKeyAppointmentFromGameOrder: "+Order.getText());
             if(Order.getText().equals("一键预约")){
                 DownMoveMethod(1);
                 uiDevice.pressDPadCenter();
@@ -1136,9 +1160,9 @@ public class TestLauncherFunctionV3_2 {
                 DownMoveMethod(2);
                 uiDevice.pressDPadCenter();    //进入音乐模块
                 systemWait(WAIT);
-                UiObject2 TextViewer = uiDevice.findObject(text("按 \uE693 键查看更多操作"));
+                UiObject2 TextViewer = uiDevice.findObject(text("未发现可播放的音乐"));
                 m_Actual = TextViewer.getText();
-                m_Expect = "按 \uE693 键查看更多操作";
+                m_Expect = "未发现可播放的音乐";
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("进入U盘页面失败",m_Pass,m_Time);
             }
@@ -1271,10 +1295,10 @@ public class TestLauncherFunctionV3_2 {
             this.EnterPLHomePage();
             uiDevice.pressDPadUp();
             systemWait(WAIT);
-            UiObject2 plPay = uiDevice.findObject(By.res("com.bestv.ott:id/pay_la_txt"));
-            if (plPay.getText() == null) {
+            UiObject2 plPay = uiDevice.findObject(By.res("com.bestv.ott:id/pay_la_txt").clazz("android.widget.TextView"));
+            if (!plPay.isChecked()){
                 System.out.println("电视已开通英超付费包");
-            } else {
+            }else {
                 uiDevice.pressDPadCenter();
                 systemWait(WAIT);
                 UiObject2 plMonth = uiDevice.findObject(By.text("英超包月"));
@@ -1441,30 +1465,35 @@ public class TestLauncherFunctionV3_2 {
     @Test  //免费大片--清晰度引导开通金卡会员
     public void LC_VIP_22_VipViaDefinition() {
         try {
-            RightMoveMethod(2);
-            DownMoveMethod(1);
-            uiDevice.pressDPadCenter();
-            uiDevice.waitForIdle(15000);
-            systemWait(LONG_WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(PlayVideoTime);
-            uiDevice.pressMenu();
-            systemWait(SHORT_WAIT);
-            LeftMoveMethod(1);
-            UpMoveMethod(1);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
-            if (TextView != null ) {
+            UiObject2 vipTip = uiDevice.findObject(By.res("com.bestv.ott:id/vip_tip"));
+            if(vipTip.getText().equals("开通会员")){
+                RightMoveMethod(2);
+                DownMoveMethod(1);
                 uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 TextView1 = uiDevice.findObject(By.text("金卡会员30天"));
-                m_Actual = TextView1.getText();
-                m_Expect = "金卡会员30天";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("进入会员开通失败", m_Pass, m_Time);
-            }else {
-                Assert.assertTrue(false);
+                uiDevice.waitForIdle(15000);
+                systemWait(LONG_WAIT);
+                uiDevice.pressDPadCenter();
+                systemWait(PlayVideoTime);
+                uiDevice.pressMenu();
+                systemWait(SHORT_WAIT);
+                LeftMoveMethod(1);
+                UpMoveMethod(1);
+                uiDevice.pressDPadCenter();
+                systemWait(LONG_WAIT);
+                UiObject2 TextView = uiDevice.findObject(By.text("开通金卡会员"));
+                if (TextView != null ) {
+                    uiDevice.pressDPadCenter();
+                    systemWait(WAIT);
+                    UiObject2 TextView1 = uiDevice.findObject(By.text("金卡会员30天"));
+                    m_Actual = TextView1.getText();
+                    m_Expect = "金卡会员30天";
+                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                    Utils.writeCaseResult("进入会员开通失败", m_Pass, m_Time);
+                }else {
+                    Assert.assertTrue(false);
+                }
+            }else if(vipTip.getText().equals("开通会员")){
+                Utils.writeCaseResult("vip用户",true,m_Time);
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -1707,7 +1736,7 @@ public class TestLauncherFunctionV3_2 {
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("金卡电影视频播放失败",m_uiObj !=null,m_Time);
             }else {
-                Utils.writeCaseResult("vip用户",m_Pass,m_Time);
+                Utils.writeCaseResult("vip用户",true,m_Time);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -1841,6 +1870,88 @@ public class TestLauncherFunctionV3_2 {
             }
         }
     }
+
+    @Test  //新闻模板页播放窗口增加收藏
+    public void LC_NEWS_03_DeleteVideoRecordInPlayRecord() {
+        try {
+            RightMoveMethod(2);
+            systemWait(WAIT);
+            UiObject title1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
+            uiDevice.pressDPadCenter();
+            systemWait(WAIT);
+            RightMoveMethod(2);
+            DownMoveMethod(1);
+            UiObject2 collect = uiDevice.findObject(By.text("收藏").focused(true));
+            if(collect.getText().equals("收藏")){
+                uiDevice.pressDPadCenter();
+                systemWait(SHORT_WAIT);
+                uiDevice.pressBack();
+                UiObject2 PlayRecord = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
+                this.openTabFromLauncherHomeByTextView(uiDevice, PlayRecord);
+                RightMoveMethod(1);
+                DownMoveMethod(1);
+                UiObject title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title"));
+                if(title2.getText().equals(title1.getText())){
+                    Assert.assertTrue(true);
+                }else {
+                    Assert.assertTrue(false);
+                    Log.d(TAG, "LC_MENU_11_DeleteVideoRecordInPlayRecord: "+title1.getText());
+                }
+            }else if(collect.getText().equals("已收藏")) {
+                uiDevice.pressBack();
+                UiObject2 PlayRecord = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
+                this.openTabFromLauncherHomeByTextView(uiDevice, PlayRecord);
+                RightMoveMethod(1);
+                DownMoveMethod(1);
+                UiObject title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title").focused(true));
+                if(title2.getText().equals(title1.getText())){
+                    Assert.assertTrue(true);
+                }else {
+                    Assert.assertTrue(false);
+                    Log.d(TAG, "LC_MENU_11_DeleteVideoRecordInPlayRecord: "+title1.getText());
+                }
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag =false;
+        }
+        finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
+        }
+    }
+
+    @Test  //返回键回到顶部
+    public void LC_Back_01_BackToTop(){
+        try {
+            enterPlayRecordPage();
+            DownMoveMethod(9);
+            UiObject2 backKey = uiDevice.findObject(By.res("com.bestv.ott:id/back_to_top").clazz("android.widget.ImageView"));
+            if(backKey != null){
+                systemWait(WAIT);
+                uiDevice.pressBack();
+                UiObject2 recordTab = uiDevice.findObject(By.text("播放记录").res("com.bestv.ott:id/tab_title"));
+                if(recordTab.isSelected()){
+                    Assert.assertTrue(true);
+                }else {
+                    Assert.assertTrue(false);
+                }
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag =false;
+        }
+        finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
+        }
+    }
+
+    @Test  //
 
     private void openTabFromLauncherHomeByTextView(UiDevice device, UiObject2 TabView) {
         TabView.click();
@@ -2014,6 +2125,16 @@ public class TestLauncherFunctionV3_2 {
         UiObject2 Classify = uiDevice.findObject(By.text("最新"));
         Assert.assertEquals("最新",Classify.getText());
     } //进入视频分类
+
+    private void enterPlayRecordPage(){
+        uiDevice.pressDPadRight();
+        systemWait(SHORT_WAIT);
+        uiDevice.pressDPadCenter();
+        systemWait(WAIT);
+        uiDevice.waitForIdle();
+        UiObject2 Record = uiDevice.findObject(By.text("播放记录"));
+        Assert.assertEquals("播放记录",Record.getText());
+    } //进入播放记录页面
 
     private void systemWait(int seconds) {
 

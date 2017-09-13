@@ -23,7 +23,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Random;
 
 import tv.fun.common.HttpUtils;
@@ -448,14 +447,52 @@ public class TestLongVideoPlay {
         }
     }
 
-    @Test  //数组
-    public void testDemo1(){
-
-        String[] tabName = {"全部","推荐","劲爆热点","暑期vip尊享","网络大电影","最新"};
-        boolean n = Arrays.asList(tabName).contains("推荐");
-        System.out.print(n);
+    @Test
+    public void LOL(){
+            String[] LOL1 = new String[]{"强","磊","波","鹏"};
+            String[] LOL2 = new String[LOL1.length];
+        for(int i =0; i<LOL1.length;i++){
+            LOL2[i]=LOL1[i];
+            LOL2[3]="光";
+            System.out.println(LOL2[3]);
+        }
     }
 
+    @Test //时间转换
+    public void testDemo2(){
+        try {
+//            UiObject2 InitialTime = uiDevice.findObject(By.res("com.bestv.ott:id/time_current"));//起始时间
+//            String[] items = InitialTime.getText().split(":");
+//            String min = items[0];
+//            if (min.startsWith("0")) {
+//                min = min.substring(1);
+//            }
+//            int InitialT = Integer.parseInt(min);
+//            Log.d(TAG, "lxm: "+InitialT);
+
+            systemWait(PauseTime);
+
+
+            UiObject2 EndTime = uiDevice.findObject(By.res("com.bestv.ott:id/time_total")); //结束时间
+            Log.d(TAG, "lxm: "+EndTime.getText());
+            String[] items1 = EndTime.getText().split(":");
+            String min1 = items1[0];
+            if (min1.startsWith("0")) {
+                min1 = min1.substring(1);
+            }
+            int EndT = Integer.parseInt(min1);
+            Log.d(TAG, "lxm: "+EndT);
+        }catch (Throwable e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }
+        finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
+        }
+    }
 
     private void EnterTVVideoListPage() {
         systemWait(SHORT_WAIT);

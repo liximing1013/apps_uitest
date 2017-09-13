@@ -1343,8 +1343,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     } catch (Throwable e){
             e.printStackTrace();
         }
-    }
-    //进入电影列表页
+    }//进入电影列表页
 
     private void enterTVTabPage(){
         upMoveMethod(1);

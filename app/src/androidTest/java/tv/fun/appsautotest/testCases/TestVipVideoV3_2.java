@@ -51,8 +51,9 @@ public final class TestVipVideoV3_2 {
     private static final int LONG_WAIT = 15;
     //设定一段播放时间
     private static final int PlayVideoTime = 60;
+    //设定一段播放时间（中）
+    private static final int PlayVideoMidTime = 300;
     //设定播放视频时间（长）
-
     private static final int PlayVideoLongTime = 660;
     //初始化
     String m_ObjId = "";
@@ -127,7 +128,7 @@ public final class TestVipVideoV3_2 {
             uiDevice.pressEnter();
             systemWait(PlayVideoTime);//加入断言判定是否全屏播放,via全屏播放时唯一的标示
             m_ObjId = Infos.S_LC_VIP_FULLSCREEN_BUTTON_ID;
-            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
+            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/player_view"));
             Utils.writeCaseResult("进入全屏播放时失败，无法抓取到控件", m_uiObj != null, m_Time);
         }catch(Throwable e){
             e.printStackTrace();
@@ -145,7 +146,7 @@ public final class TestVipVideoV3_2 {
         try {
             uiDevice.pressEnter();
             systemWait(LONG_WAIT);
-            UiObject2 detEnter = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
+            UiObject2 detEnter = uiDevice.findObject(By.res("com.bestv.ott:id/player_view"));
             Assert.assertNotNull(detEnter);
             uiDevice.pressDPadCenter();
             uiDevice.waitForIdle(18000);//等待18s,如果界面还没有打开则超时异常
@@ -154,7 +155,7 @@ public final class TestVipVideoV3_2 {
 //            UiObject watchTry = uiDevice.findObject(new UiSelector().text("精彩预告，付费看正片")
 //                    .resourceId("com.bestv.ott:id/watch_try_text"));
             if(payButton.exists()){
-                systemWait(PlayVideoLongTime);
+                systemWait(PlayVideoMidTime);
                 UiObject2 payMedia = uiDevice.findObject(By.text("请选择要购买的媒体或服务"));
                 m_Actual = payMedia.getText();
                 m_Expect = "请选择要购买的媒体或服务";
@@ -199,7 +200,7 @@ public final class TestVipVideoV3_2 {
     }
 
     @Test //开通金卡会员选项跳转
-    public void LC_VIP_05_PersonalSkipVipPage() {
+    public void LC_VIP_05_PersonalSkipVipPage() throws NullPointerException {
         try {
             upMoveMethod(1);
             UiObject vipText = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/vip"));
@@ -1006,5 +1007,13 @@ public final class TestVipVideoV3_2 {
         SystemClock.sleep(1000);
         uiDevice.pressBack();
     } //Back*
+
+    /**
+     * @param id 根据ID查找对象，并返回对象UiObject
+     */
+    public UiObject findById(String id){
+        UiObject obj = uiDevice.findObject(new UiSelector().resourceId(id));
+        return obj;
+    }
 
 }
