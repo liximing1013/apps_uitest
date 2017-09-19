@@ -8,6 +8,7 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
+import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
@@ -374,14 +375,14 @@ public class TestMenuFunctionOnEveryPageV3_2 {
         try {
             rightMoveMethod(2);
             systemWait(WAIT);
-            UiObject title1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
+            UiObject title1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/maintitle"));
             uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
+            sleep(15000);
             uiDevice.pressBack();
             UiObject2 PlayRecord = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
             this.openTabFromLauncherHomeByTextView(uiDevice, PlayRecord);
             UiObject title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title"));
-            if(title2.getText().equals("新闻大厅")){
+            if(title2.getText().equals("头条")){
                 Assert.assertTrue(true);
             }else {
                 Assert.assertTrue(false);
@@ -897,9 +898,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     public void LC_MENU_34_ListTabMenuOperationCard2(){
         try {
             this.enterFilmListPage();
-            rightMoveMethod(2);
-            systemWait(WAIT);
-            downMoveMethod(1);
+            downMoveMethod(3);
             uiDevice.pressMenu();
             systemWait(WAIT);
             UiObject2 Menu = uiDevice.findObject(By.text("筛选"));
@@ -923,13 +922,11 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //列表页卡片-收藏
-    public void LC_MENU_35_ListTabMenuOperationCard3(){
+    public void LC_MENU_35_ListTabMenuOperationCard3() throws UiObjectNotFoundException{
         try {
             enterFilmListPage();
-            rightMoveMethod(2);
-            SystemClock.sleep(3000);
-            downMoveMethod(1);
-            systemWait(WAIT);
+            downMoveMethod(3);
+            sleep(3000);
             uiDevice.pressMenu();
             systemWait(WAIT);
             UiObject colText = uiDevice.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text")
@@ -938,7 +935,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
             if(colText.exists()) {
                 if (colText.getText().equals("收藏") && colIcon.isEnabled()) {
                     uiDevice.pressDPadCenter();
-                    SystemClock.sleep(2000);
+                    sleep(3000);
                     uiDevice.pressDPadCenter();
                     uiDevice.waitForIdle(18000);
                     systemWait(LONG_WAIT);
@@ -1197,7 +1194,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
         try {
             upMoveMethod(2);
             uiDevice.waitForIdle();
-            SystemClock.sleep(5000);
+            sleep(6000);
             UiObject2 Message = uiDevice.findObject(By.res("com.bestv.ott:id/message"));
             this.openTabFromLauncherHomeByresId1(uiDevice, Message);
             UiObject2 appTitle = uiDevice.findObject(text("消息中心"));
@@ -1411,4 +1408,11 @@ public class TestMenuFunctionOnEveryPageV3_2 {
         uiDevice.pressBack();
     } //Back*
 
+    private void sleep(int sleep){
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
