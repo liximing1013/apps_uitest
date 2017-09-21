@@ -165,7 +165,7 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_04_SportsTabMenuOperation(){
         try {
             upMoveMethod(1);
-            String[] TabName = {"体育", "生活", "会员", "应用", "游戏", "设置"};
+            String[] TabName = {"会员", "体育", "生活", "应用", "游戏", "设置"};
             int i = 0;
             for (; i <= TabName.length-1; i++) {
                 if (TabName[i].equals("体育")) {
@@ -185,7 +185,7 @@ public class TestMenuFunctionOnEveryPageV3 {
                         m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                         Utils.writeCaseResult("跳转设置页面错误", m_Pass, m_Time);
                     } else {
-                        Assert.assertTrue(false);
+                        Assert.assertTrue("首页Tab位置错误",false);
                     }
                     break;
                 }
@@ -204,24 +204,29 @@ public class TestMenuFunctionOnEveryPageV3 {
     public void LC_MENU_05_LifeTabMenuOperation(){
         try {
             upMoveMethod(1);
-            rightMoveMethod(2);
-            systemWait(WAIT);
-            UiObject2 tabName = uiDevice.findObject(By.text("生活"));
-            if(tabName.isSelected()){
-                uiDevice.pressMenu();
-                systemWait(WAIT);
-                UiObject2 Menu = uiDevice.findObject(By.text("视频分类"));
-                Assert.assertEquals("视频分类",Menu.getText());
-                rightMoveMethod(1);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 Classify = uiDevice.findObject(By.text("最新"));
-                m_Actual = Classify.getText();
-                m_Expect = "最新";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转视频分类页面错误",m_Pass,m_Time);
-            }else {
-                Assert.assertTrue(false);
+            String[] TabName = {"会员", "体育", "生活", "应用", "游戏", "设置"};
+            for(int i=0; i<= TabName.length-1;i++) {
+                if(TabName[i].equals("生活")) {
+                    rightMoveMethod(i + 1);
+                    UiObject2 tabName = uiDevice.findObject(By.text("生活"));
+                    if (tabName.isSelected()) {
+                        uiDevice.pressMenu();
+                        systemWait(WAIT);
+                        UiObject2 Menu = uiDevice.findObject(By.text("视频分类"));
+                        Assert.assertEquals("视频分类", Menu.getText());
+                        rightMoveMethod(1);
+                        uiDevice.pressDPadCenter();
+                        systemWait(WAIT);
+                        UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+                        m_Actual = Classify.getText();
+                        m_Expect = "最新";
+                        m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                        Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
+                    } else {
+                        Assert.assertTrue("首页Tab位置错误", false);
+                    }
+                    break;
+                }
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -235,27 +240,32 @@ public class TestMenuFunctionOnEveryPageV3 {
     }
 
     @Test  //会员Tab页面menu操作
-    public void LC_MENU_06_VipTabMenuOperation(){
+    public void LC_MENU_06_VipTabMenuOperation() {
         try {
             upMoveMethod(1);
-            rightMoveMethod(3);
-            systemWait(WAIT);
-            UiObject2 tabName = uiDevice.findObject(By.text("会员"));
-            if(tabName.isSelected()){
-                uiDevice.pressMenu();
-                systemWait(WAIT);
-                UiObject2 Menu = uiDevice.findObject(By.text("设置"));
-                Assert.assertEquals("设置",Menu.getText());
-                rightMoveMethod(2);
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 classify = uiDevice.findObject(By.text("设 置"));
-                m_Actual = classify.getText();
-                m_Expect = "设 置";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转设置页面错误",m_Pass,m_Time);
-            }else {
-                Assert.assertTrue(false);
+            String[] TabName = {"会员", "体育", "生活", "应用", "游戏", "设置"};
+            for (int i = 0; i <= TabName.length - 1; i++) {
+                if (TabName[i].equals("会员")) {
+                    rightMoveMethod(i + 1);
+                    UiObject2 tabName = uiDevice.findObject(By.text("会员"));
+                    if (tabName.isSelected()) {
+                        uiDevice.pressMenu();
+                        systemWait(WAIT);
+                        UiObject2 Menu = uiDevice.findObject(By.text("设置"));
+                        Assert.assertEquals("设置", Menu.getText());
+                        rightMoveMethod(2);
+                        uiDevice.pressDPadCenter();
+                        systemWait(WAIT);
+                        UiObject2 classify = uiDevice.findObject(By.text("设 置"));
+                        m_Actual = classify.getText();
+                        m_Expect = "设 置";
+                        m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                        Utils.writeCaseResult("跳转设置页面错误", m_Pass, m_Time);
+                    } else {
+                        Assert.assertTrue("首页Tab位置错误", false);
+                    }
+                    break;
+                }
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -265,30 +275,34 @@ public class TestMenuFunctionOnEveryPageV3 {
         finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
-
     }
 
     @Test  //应用Tab页面menu操作
     public void LC_MENU_07_AppTabMenuOperation() {
         try {
             upMoveMethod(1);
-            rightMoveMethod(4);
-            systemWait(WAIT);
-            UiObject2 tabName = uiDevice.findObject(By.text("应用"));
-            if(tabName.isSelected()){
-                uiDevice.pressMenu();
-                systemWait(WAIT);
-                UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
-                Assert.assertEquals("搜索",Menu.getText());
-                uiDevice.pressDPadCenter();
-                systemWait(WAIT);
-                UiObject2 searchPage = uiDevice.findObject(By.text("用手机搜片"));
-                m_Actual = searchPage.getText();
-                m_Expect = "用手机搜片";
-                m_Pass =m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转搜索页面错误",m_Pass,m_Time);
-            }else {
-                Assert.assertTrue(false);
+            String[] TabName = {"会员", "体育", "生活", "应用", "游戏", "设置"};
+            for (int i = 0; i <= TabName.length - 1; i++) {
+                if(TabName[i].equals("应用")){
+                    rightMoveMethod(i+1);
+                    UiObject2 tabName = uiDevice.findObject(By.text("应用"));
+                    if (tabName.isSelected()) {
+                        uiDevice.pressMenu();
+                        systemWait(WAIT);
+                        UiObject2 Menu = uiDevice.findObject(By.text("搜索"));
+                        Assert.assertEquals("搜索", Menu.getText());
+                        uiDevice.pressDPadCenter();
+                        systemWait(WAIT);
+                        UiObject2 searchPage = uiDevice.findObject(By.text("用手机搜片"));
+                        m_Actual = searchPage.getText();
+                        m_Expect = "用手机搜片";
+                        m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+                        Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
+                    } else {
+                        Assert.assertTrue(false);
+                    }
+                    break;
+                }
             }
         }catch (Throwable e){
             e.printStackTrace();

@@ -61,7 +61,7 @@ public class TestLauncherFunctionV3_2 {
     private boolean resultFlag = true;
     private boolean m_Pass = false;
     //七巧板
-    String cmd = "am start -n com.bestv.ott/com.bestv.ott.piano.PianoActivity";
+    private String cmd = "am start -n com.bestv.ott/com.bestv.ott.piano.PianoActivity";
 
     @Before
     public void setUp() {
@@ -1839,13 +1839,13 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //新闻模板页播放窗口增加收藏
-    public void LC_NEWS_03_DeleteVideoRecordInPlayRecord() {
+    public void LC_NEWS_03_DeleteVideoRecordInPlayRecord() throws NullPointerException {
         try {
             RightMoveMethod(2);
             systemWait(WAIT);
             UiObject title1 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/subtitle"));
             uiDevice.pressDPadCenter();
-            systemWait(WAIT);
+            sleep(10000);
             RightMoveMethod(2);
             DownMoveMethod(1);
             UiObject2 collect = uiDevice.findObject(By.text("收藏").focused(true));
@@ -1861,8 +1861,7 @@ public class TestLauncherFunctionV3_2 {
                 if (title2.getText().equals(title1.getText())) {
                     Assert.assertTrue(true);
                 } else {
-                    Assert.assertTrue(false);
-                    Log.d(TAG, "LC_MENU_11_DeleteVideoRecordInPlayRecord: " + title1.getText());
+                    Assert.assertTrue("false",false);
                 }
             } else if (collect.getText().equals("已收藏")) {
                 uiDevice.pressBack();
@@ -1874,8 +1873,7 @@ public class TestLauncherFunctionV3_2 {
                 if (title2.getText().equals(title1.getText())) {
                     Assert.assertTrue(true);
                 } else {
-                    Assert.assertTrue(false);
-                    Log.d(TAG, "LC_MENU_11_DeleteVideoRecordInPlayRecord: " + title1.getText());
+                    Assert.assertTrue("false",false);
                 }
             }
         } catch (Throwable e) {
@@ -1898,11 +1896,12 @@ public class TestLauncherFunctionV3_2 {
             if (backKey != null) {
                 systemWait(WAIT);
                 uiDevice.pressBack();
+                sleep(3000);
                 UiObject2 recordTab = uiDevice.findObject(By.text("播放记录").res("com.bestv.ott:id/tab_title"));
                 if (recordTab.isSelected()) {
                     Assert.assertTrue(true);
                 } else {
-                    Assert.assertTrue(false);
+                    Assert.assertTrue("未返回到顶部",false);
                 }
             }
         } catch (Throwable e) {
@@ -2175,6 +2174,14 @@ public class TestLauncherFunctionV3_2 {
         systemWait(SHORT_WAIT);
         uiDevice.pressBack();
     } //Back*
+
+    private void sleep(int sleep){
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 

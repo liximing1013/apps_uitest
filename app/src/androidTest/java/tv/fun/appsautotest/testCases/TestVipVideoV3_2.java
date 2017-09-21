@@ -491,8 +491,7 @@ public final class TestVipVideoV3_2 {
             this.openTabFromLauncherHomeByTextView(uiDevice, tabView); //进入即将上映页面
             UiObject2 cardNum = uiDevice.findObject(By.clazz("android.support.v7.widget.RecyclerView"));
             List<UiObject2> cardCount = cardNum.findObjects(By.clazz("android.widget.RelativeLayout"));
-            SystemClock.sleep(3000);
-            Log.d(TAG, "lxm: "+cardCount.size());
+            sleep(3000);
             for(int i= 0; i<=cardCount.size(); i++){
                 rightMoveMethod(1);
                 UiObject2 resId = uiDevice.findObject(By.res("com.bestv.ott:id/fav_state"));//通过Res_id来获取Text值，判断当前button选项
@@ -502,17 +501,10 @@ public final class TestVipVideoV3_2 {
                     systemWait(SHORT_WAIT);
                     upMoveMethod(1);
                     uiDevice.pressDPadCenter();
-                    uiDevice.waitForIdle(18000);
-                    systemWait(LONG_WAIT);
-                    UiObject2 Text = uiDevice.findObject(text("已收藏"));  //加入断言判定详情页是否变为已收藏
-                    m_Expect = "已收藏";
-                    m_Actual = Text.getText();
-                    m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                    Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
-                }if(i > 6){
+                    waitForNewWindowCollectButton(15000);
                     break;
                 }
-                System.out.print("没有更多的上映新片");
+               Utils.Print("没有更多的上映新片");
             }
         }catch(Throwable e){
             e.printStackTrace();
@@ -1027,4 +1019,25 @@ public final class TestVipVideoV3_2 {
         }
     }  //等待18s,如果界面还没有打开则超时异常
 
+    private void waitForNewWindowCollectButton(long time){
+        Tracer.trace(time);
+        sleep(time);
+        UiObject2 fullScreen = uiDevice.findObject(By.text("全屏").res("com.bestv.ott:id/discripse"));
+        if(fullScreen == null){
+            uiDevice.pressMenu();
+            sleep(2000);
+            UiObject2 Text = uiDevice.findObject(text("\uE6CF 已收藏").res("com.bestv.ott:id/fav_text"));  //加入断言判定详情页是否变为已收藏
+            m_Expect = "\uE6CF 已收藏";
+            m_Actual = Text.getText();
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("menu选项收藏后应变为已收藏", m_Pass, m_Time);
+        }else {
+            sleep(2000);
+            UiObject2 Text = uiDevice.findObject(text("已收藏"));  //加入断言判定详情页是否变为已收藏
+            m_Expect = "已收藏";
+            m_Actual = Text.getText();
+            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
+            Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
+        }
+    }
 }

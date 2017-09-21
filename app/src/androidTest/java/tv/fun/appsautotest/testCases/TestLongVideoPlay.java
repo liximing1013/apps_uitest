@@ -389,108 +389,83 @@ public class TestLongVideoPlay {
         }
     }
 
-    @Test //视频分类轮询
-    public void testDemo(){
-        try{
-            String cmd = "am start -n com.bestv.ott/com.bestv.ott.piano.PianoActivity";
-            Utils.execCommand(cmd, false, false);
-            systemWait(LONG_WAIT);
-            enterVideoClassifyPage();
-            UiObject2 classify = uiDevice.findObject(By.text("视频分类"));
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            uiDevice.pressBack();
-            for(int i =1;i<=8;i++){
-                rightMoveMethod(1);
-                systemWait(WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(LONG_WAIT);
-                if(classify == null){
-                    continue;
-                }
-                uiDevice.pressBack();
-            }
-            systemWait(WAIT);
-            uiDevice.pressDPadDown();
-            systemWait(WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            uiDevice.pressBack();
-            for (int j=1;j<=8;j++){
-                leftMoveMethod(1);
-                systemWait(WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(LONG_WAIT);
-                if(classify == null){
-                    continue;
-                }
-                uiDevice.pressBack();
-            }
-            systemWait(WAIT);
-            uiDevice.pressDPadDown();
-            systemWait(WAIT);
-            uiDevice.pressDPadCenter();
-            systemWait(LONG_WAIT);
-            uiDevice.pressBack();
-            for(int i =1;i<=8;i++){
-                rightMoveMethod(1);
-                systemWait(WAIT);
-                uiDevice.pressDPadCenter();
-                systemWait(LONG_WAIT);
-                if(classify == null){
-                    continue;
-                }
-                uiDevice.pressBack();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void LOL(){
-            String[] LOL1 = new String[]{"强","磊","波","鹏"};
-            String[] LOL2 = new String[LOL1.length];
-        for(int i =0; i<LOL1.length;i++){
-            LOL2[i]=LOL1[i];
-            LOL2[3]="光";
-            System.out.println(LOL2[3]);
-        }
-    }
-
     @Test //时间转换
     public void testDemo2(){
-        try {
-//            UiObject2 InitialTime = uiDevice.findObject(By.res("com.bestv.ott:id/time_current"));//起始时间
-//            String[] items = InitialTime.getText().split(":");
-//            String min = items[0];
-//            if (min.startsWith("0")) {
-//                min = min.substring(1);
-//            }
-//            int InitialT = Integer.parseInt(min);
-//            Log.d(TAG, "lxm: "+InitialT);
+        sleep(10000);
+        uiDevice.pressDPadCenter();
+        systemWait(WAIT);
+        UiObject2 time = uiDevice.findObject(By.res("com.bestv.ott:id/time_total").clazz("android.widget.TextView"));
+        timeTrans(time.getText());
+        Log.d(TAG, "testDemo2: "+timeTrans(time.getText()));
+    }
 
-            systemWait(PauseTime);
+    //将xx:xx:xx格式的时间转化为xxx秒
+    private int timeTrans(String sTime){
+        int iTime;
+        int iHour = 0;
+        int iMins = 0;
+        int iSecs;
+        String[] lsTime = sTime.split(":");
 
-
-            UiObject2 EndTime = uiDevice.findObject(By.res("com.bestv.ott:id/time_total")); //结束时间
-            Log.d(TAG, "lxm: "+EndTime.getText());
-            String[] items1 = EndTime.getText().split(":");
-            String min1 = items1[0];
-            if (min1.startsWith("0")) {
-                min1 = min1.substring(1);
-            }
-            int EndT = Integer.parseInt(min1);
-            Log.d(TAG, "lxm: "+EndT);
-        }catch (Throwable e){
-            e.printStackTrace();
-            resultStr += e.toString();
-            resultFlag = false;
+        if( lsTime.length == 3){
+            iHour = Integer.parseInt(lsTime[0]);
+            iMins = Integer.parseInt(lsTime[1]);
+            iSecs = Integer.parseInt(lsTime[2]);
         }
-        finally {
-            if(resultStr != null){
-                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
-            }
+        else if(lsTime.length == 2) {
+            iMins = Integer.parseInt(lsTime[0]);
+            iSecs = Integer.parseInt(lsTime[1]);
+        }
+        else{
+            iSecs = Integer.parseInt(lsTime[0]);
+        }
+
+        iTime = 3600 * iHour + 60 * iMins + iSecs;
+        return iTime;
+    }
+
+    //等待loading消失
+    private void ProgressBarExists(int Second){
+        UiObject ProBar = uiDevice.findObject(new UiSelector().resourceId(Infos.S_PROCESS_BAR_ID));
+        ProBar.waitUntilGone(Second);//在一定时间内判断控件是否消失
+        systemWait(SHORT_WAIT);
+    }
+
+    //快速滑动右移
+    private void RightRightSpeedSpeed() throws UiObjectNotFoundException {
+        uiDevice.pressDPadRight();
+        UiObject Swipe = uiDevice.findObject(new UiSelector().className("android.widget.SeekBar")
+                .resourceId("com.bestv.ott:id/media_progress"));
+        Swipe.swipeRight(10);
+    }
+
+    //快速滑动左移
+    private void LeftLeftSpeedSpeed() throws UiObjectNotFoundException {
+        uiDevice.pressDPadRight();
+        UiObject Swipe = uiDevice.findObject(new UiSelector().className("android.widget.SeekBar")
+                .resourceId("com.bestv.ott:id/media_progress"));
+        Swipe.swipeLeft(10);
+    }
+
+    //error截图功能
+    public String TakeScreenShot(String VideoName){
+        Environment.getExternalStoragePublicDirectory("/mnt/sdcard/autotest/image/");
+        File ImageFile = new File("/mnt/sdcard/autotest/image/test.png");
+        uiDevice.takeScreenshot(ImageFile);
+        if (!ImageFile.exists()) {
+            Assert.assertTrue(ImageFile.mkdirs());
+        }if(m_uiObj == null){
+            uiDevice.takeScreenshot(ImageFile);
+        }
+        return VideoName;
+    }
+
+    //等待时间
+    public void sleep(int sleep){
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -529,20 +504,6 @@ public class TestLongVideoPlay {
         SystemClock.sleep(seconds * 1000);
     } //等待时间
 
-    private void RightRightSpeedSpeed() throws UiObjectNotFoundException {
-        uiDevice.pressDPadRight();
-        UiObject Swipe = uiDevice.findObject(new UiSelector().className("android.widget.SeekBar")
-                .resourceId("com.bestv.ott:id/media_progress"));
-        Swipe.swipeRight(10);
-    } //快速滑动右移
-
-    private void LeftLeftSpeedSpeed() throws UiObjectNotFoundException {
-        uiDevice.pressDPadRight();
-        UiObject Swipe = uiDevice.findObject(new UiSelector().className("android.widget.SeekBar")
-                .resourceId("com.bestv.ott:id/media_progress"));
-        Swipe.swipeLeft(10);
-    } //快速滑动左移
-
     private void RandomPlayTVVideo() {
         systemWait(WAIT);
         Random moveTimes = new Random(1);
@@ -567,50 +528,6 @@ public class TestLongVideoPlay {
         }
     } //随机播放电影
 
-    private void enterVideoClassifyPage(){
-        uiDevice.pressDPadRight();
-        SystemClock.sleep(1000);
-        downMoveMethod(2);
-        uiDevice.pressEnter();
-        systemWait(WAIT);
-        UiObject2 Classify = uiDevice.findObject(By.text("最新"));
-        Assert.assertEquals("最新",Classify.getText());
-        systemWait(WAIT);
-    } //进入视频分类页面
-
-    private void downMoveMethod(int DownMove){
-        int i = 1;
-        while (i <= DownMove){
-            i++;
-            uiDevice.pressDPadDown();
-            SystemClock.sleep(1000);
-        }
-    } //Down*
-
-    private void rightMoveMethod(int RightMove){
-        int i = 1;
-        while (i <= RightMove){
-            i++;
-            uiDevice.pressDPadRight();
-            SystemClock.sleep(1000);
-        }
-    } //Right*
-
-    private void leftMoveMethod(int LeftMove){
-        int i = 1;
-        while (i <= LeftMove){
-            i++;
-            uiDevice.pressDPadLeft();
-            systemWait(SHORT_WAIT);
-        }
-    } //Left*
-
-    private void ProgressBarExists(int Second){
-        UiObject ProBar = uiDevice.findObject(new UiSelector().resourceId(Infos.S_PROCESS_BAR_ID));
-        ProBar.waitUntilGone(Second);//在一定时间内判断控件是否消失
-        systemWait(SHORT_WAIT);
-    } //等待loading消失
-
     private void LeftLeftLeft(){
         int i = 0;
         while( i <= 13){
@@ -619,17 +536,5 @@ public class TestLongVideoPlay {
             systemWait(SHORT_WAIT);
         }
     } //L*14
-
-    private String TakeScreenShot(String VideoName){
-        Environment.getExternalStoragePublicDirectory("/mnt/sdcard/autotest/image/");
-        File ImageFile = new File("/mnt/sdcard/autotest/image/test.png");
-        uiDevice.takeScreenshot(ImageFile);
-        if (!ImageFile.exists()) {
-            Assert.assertTrue(ImageFile.mkdirs());
-        }if(m_uiObj == null){
-            uiDevice.takeScreenshot(ImageFile);
-        }
-        return VideoName;
-    } //error截图功能调研
 
 }
