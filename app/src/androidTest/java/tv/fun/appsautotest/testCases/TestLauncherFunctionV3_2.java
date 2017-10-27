@@ -91,7 +91,6 @@ public class TestLauncherFunctionV3_2 {
             uiDevice.pressDPadLeft();
             systemWait(WAIT);
             UiObject2 tabName = uiDevice.findObject(By.text("电视"));
-//            Log.d(TAG, "lxm: "+tabName.getText());
             if (tabName.isSelected()) {
                 LeftMoveMethod(1);
                 uiDevice.pressDPadCenter();
@@ -102,7 +101,7 @@ public class TestLauncherFunctionV3_2 {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
             } else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("Tab未被选中",false);
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -128,7 +127,7 @@ public class TestLauncherFunctionV3_2 {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("中文搜索显示正确", m_Pass, m_Time);
             } else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("搜索不存在",false);
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -209,7 +208,7 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //信源界面
-    public void LC_Source_01_SourcePageDisplay() {
+    public void LC_Source_01_SourcePageDisplay() throws NullPointerException{
         try {
             uiDevice.pressKeyCode(260);  //信源键KeyCode
             systemWait(WAIT);
@@ -570,7 +569,7 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //桌面名称更改
-    public void LC_Table_04_ChangeTableName() {
+    public void LC_Table_04_ChangeTableName() throws UiObjectNotFoundException{
         try {
             this.EnterTableSettings();
             uiDevice.pressDPadCenter();
@@ -610,7 +609,7 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //桌面选择
-    public void LC_Table_05_tableChoose() {
+    public void LC_Table_05_tableChoose() throws NullPointerException{
         try {
             this.EnterTableSettings();
             DownMoveMethod(2);
@@ -1888,7 +1887,7 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //返回键回到顶部
-    public void LC_Back_01_BackToTop() {
+    public void LC_Back_01_BackToTop() throws NullPointerException{
         try {
             enterPlayRecordPage();
             DownMoveMethod(9);
@@ -1928,14 +1927,6 @@ public class TestLauncherFunctionV3_2 {
         //resourceId.getParent().click();
         systemWait(SHORT_WAIT);
         device.pressDPadCenter();
-        device.waitForIdle();
-        systemWait(WAIT);
-    }
-
-    private void openTabFromLauncherHomeByresId1(UiDevice device, UiObject2 resourceId) {
-        resourceId.click();
-        //resourceId.getParent().click();
-        systemWait(SHORT_WAIT);
         device.waitForIdle();
         systemWait(WAIT);
     }
@@ -2001,7 +1992,7 @@ public class TestLauncherFunctionV3_2 {
             uiDevice.wait(findObject(By.text("赛程表 >")), 15000);
             systemWait(LONG_WAIT);
         } else {
-            Assert.assertTrue(false);
+            Assert.assertTrue("Tab位置错误",false);
         }
     } //进入NBA首页
 

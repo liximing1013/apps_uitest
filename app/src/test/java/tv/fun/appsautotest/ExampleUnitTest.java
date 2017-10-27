@@ -84,10 +84,10 @@ public class ExampleUnitTest {
 //        String result = s.substring(2,6);
 //        System.out.print(result); //无悔无悔
 
-//        String s1 = new String("你好，");
-//        String name = new String("张三！");
-//        String sentence = s1.concat(name);
-//        System.out.print(sentence); //你好，张三！
+        String s1 = new String("你好，");
+        String name = new String("张三！");
+        String sentence = s1.concat(name);
+        System.out.print(sentence); //你好，张三！
 
 //        char p[] = {'a','b','c'};
 //        String q = "abc";
@@ -122,11 +122,11 @@ public class ExampleUnitTest {
 //            System.out.print(i);
 //        } // 0,5
 
-        int count =0;
-        for (int i = 0; i < 10; i++) {
-             count = count++;
-        }
-        System.out.println(count);
+//        int count =0;
+//        for (int i = 0; i < 10; i++) {
+//             count = count++;
+//        }
+//        System.out.println(count);
     }
 }
 

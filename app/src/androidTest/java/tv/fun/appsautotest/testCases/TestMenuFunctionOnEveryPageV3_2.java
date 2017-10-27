@@ -118,7 +118,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                     Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
                 }
             }else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("电视Tab未被选中",false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -151,7 +151,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                     Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
                 }
             }else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("电视Tab未被选中",false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -185,7 +185,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                     Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
                 }
             }else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("视频Tab未被选中",false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -350,7 +350,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //游戏Tab页面menu操作
-    public void LC_MENU_08_AppTabMenuOperation(){
+    public void LC_MENU_08_GameTabMenuOperation(){
         try {
             upMoveMethod(1);
             String[] TabName = {"会员", "体育", "生活", "应用", "游戏", "设置"};
@@ -372,7 +372,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                         m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                         Utils.writeCaseResult("跳转设置页面错误", m_Pass, m_Time);
                     } else {
-                        Assert.assertTrue("首页位置错误",false);
+                        Assert.assertTrue("首页Tab位置错误",false);
                     }
                     break;
                 }
@@ -402,8 +402,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
             if(title2.getText().equals("头条")){
                 Assert.assertTrue(true);
             }else {
-                Assert.assertTrue(false);
-                Log.d(TAG, "LC_MENU_11_DeleteVideoRecordInPlayRecord: "+title1.getText());
+                Assert.assertTrue(title1.getText(),false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -462,7 +461,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                 m_ObjId = Infos.S_CLASS_VIDEO_PLAYER;
                 Utils.writeCaseResult("视频播放失败", m_uiObj != null, m_Time);
             }else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("BUG",false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -522,7 +521,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("跳转搜索页面错误", m_Pass, m_Time);
             }else {
-                Assert.assertTrue(false);
+                Assert.assertTrue("BUG",false);
             }
         }catch (Throwable e){
             e.printStackTrace();
@@ -571,7 +570,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //播放记录页Tab menu-视频分类
-    public void LC_MENU_17_EmptyRecordInPlayRecordTab() {
+    public void LC_MENU_17_EmptyRecordInPlayRecordTab() throws NullPointerException{
         try {
             enterPlayRecordPage();
             uiDevice.pressMenu();
@@ -1198,7 +1197,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     }
 
     @Test  //消息中心-删除单条
-    public void LC_MENU_53_MessageCenterMenuOperation1InTopBar(){
+    public void LC_MENU_53_MessageCenterMenuOperation1InTopBar() throws NullPointerException{
         try {
             upMoveMethod(2);
             uiDevice.waitForIdle();
