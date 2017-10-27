@@ -869,14 +869,18 @@ public final class TestVipVideoV3_2 {
     }
 
     private void enterVideoClassifyPage(){
-        uiDevice.pressDPadRight();
-        SystemClock.sleep(1000);
-        downMoveMethod(2);
-        uiDevice.pressEnter();
-        systemWait(WAIT);
-        UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
-        Assert.assertEquals("视频分类",Classify.getText());
-        systemWait(WAIT);
+        try {
+            uiDevice.pressDPadRight();
+            SystemClock.sleep(1000);
+            downMoveMethod(2);
+            uiDevice.pressEnter();
+            systemWait(WAIT);
+            UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
+            Assert.assertEquals("视频分类", Classify.getText());
+            systemWait(WAIT);
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
     } //进入视频分类页面
 
     private void enterPersonalCenterPage(){

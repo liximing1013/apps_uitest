@@ -880,7 +880,7 @@ public class TestLauncherFunctionV3_2 {
                 m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                 Utils.writeCaseResult("进入NBA购买页面失败", m_Pass, m_Time);
             } else {
-                Utils.writeCaseResult(NBAPay.getText(), false, m_Time);
+                Utils.writeCaseResult(NBAPay.getText(), true, m_Time);
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -957,7 +957,6 @@ public class TestLauncherFunctionV3_2 {
     public void LC_NEWS_02_KanKanNewsNormalPlay() {
         try {
             this.EnterVideoClassifyPage();
-            RightMoveMethod(2);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             uiDevice.pressEnter();
@@ -980,7 +979,8 @@ public class TestLauncherFunctionV3_2 {
     public void LC_PHB_01_RankListPlayVideo() {
         try {
             this.EnterVideoClassifyPage();  //排行榜数据每天更新一次，每天运行脚本时，播放影片不同
-            DownMoveMethod(1);
+            DownMoveMethod(3);
+            RightMoveMethod(1);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             this.randomPlayFilm(6);
@@ -1007,7 +1007,8 @@ public class TestLauncherFunctionV3_2 {
     public void LC_PHB_02_EnterRankListPage() {
         try {
             this.EnterVideoClassifyPage();
-            DownMoveMethod(1);
+            DownMoveMethod(3);
+            RightMoveMethod(1);
             uiDevice.pressDPadCenter();
             systemWait(WAIT);
             DownMoveMethod(1);
@@ -1793,6 +1794,10 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //呼出七巧板展示页面
+    @Ignore
+    /**
+     * 需要root权限：在AndroidManifest.xml中添加android:sharedUserId="android.uid.system"
+     **/
     public void LC_Puzzle_01_ExhalePuzzle() {
         try {
             Utils.execCommand(cmd, false, false);
@@ -1814,6 +1819,10 @@ public class TestLauncherFunctionV3_2 {
     }
 
     @Test  //七巧板添加页面
+    @Ignore
+    /**
+     * 需要root权限：在AndroidManifest.xml中添加android:sharedUserId="android.uid.system"
+     **/
     public void LC_Puzzle_02_AddPuzzlePage() {
         try {
             Utils.execCommand(cmd, false, false);
@@ -2066,13 +2075,18 @@ public class TestLauncherFunctionV3_2 {
     }  //进入设置页面
 
     private void EnterVideoClassifyPage() {
-        RightMoveMethod(1);
-        DownMoveMethod(2);
-        uiDevice.pressDPadCenter();
-        systemWait(WAIT);
-        uiDevice.waitForIdle();
-        UiObject2 Classify = uiDevice.findObject(By.text("最新"));
-        Assert.assertEquals("最新", Classify.getText());
+        try {
+            uiDevice.pressDPadRight();
+            SystemClock.sleep(1000);
+            DownMoveMethod(2);
+            uiDevice.pressEnter();
+            systemWait(WAIT);
+            UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
+            Assert.assertEquals("视频分类", Classify.getText());
+            systemWait(WAIT);
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
     } //进入视频分类
 
     private void enterPlayRecordPage() {
