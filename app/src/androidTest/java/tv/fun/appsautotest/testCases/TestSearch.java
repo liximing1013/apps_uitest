@@ -43,12 +43,12 @@ public class TestSearch {
     private int m_iNotLetter = 4; // 非字母的按钮数量
     // #表示123按键，*表示清空按键，<表示删除按键
     private String m_sLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#*<>";
-    private String m_sClearId = "com.bestv.voiceAssist:id/clear_icon"; // 清空按钮
-    private String m_sDeletId = "com.bestv.voiceAssist:id/delete_icon"; // 删除按钮
-    private String m_sSchList = "com.bestv.voiceAssist:id/hot_search_list"; // 右侧热门搜索列表
-    private String m_sHotSchCell = "com.bestv.voiceAssist:id/hot_search_cell"; // 热门搜索
-    private String m_sSchPoster = "com.bestv.voiceAssist:id/poster_bg"; // 搜索结果
-    private String m_sRecycleView = "com.bestv.voiceAssist:id/recycleview";
+    private String m_sClearId = "com.funshion.xiriassist:id/clear_icon"; // 清空按钮
+    private String m_sDeletId = "com.funshion.xiriassist:id/delete_icon"; // 删除按钮
+    private String m_sSchList = "com.funshion.xiriassist:id/hot_search_list"; // 右侧热门搜索列表
+    private String m_sHotSchCell = "com.funshion.xiriassist:id/hot_search_cell"; // 热门搜索
+    private String m_sSchPoster = "com.funshion.xiriassist:id/poster_bg"; // 搜索结果
+    private String m_sRecycleView = "com.funshion.xiriassist:id/recycleview";
     private UiObject m_clearObj;
     private UiObject m_deletObj;
 
@@ -225,7 +225,7 @@ public class TestSearch {
         try{
             m_enterPage.enterSearchPage();
             if(isInSearchPage()){
-                m_sObjId = "com.bestv.voiceAssist:id/bubble_hint"; // 第一次进入搜索页
+                m_sObjId = "com.funshion.xiriassist:id/bubble_hint"; // 第一次进入搜索页
                 if(m_com.isUiObjExists(m_sObjId)){
                     m_com.Enter();
                     Utils.Log("special_log", "刷机后第一次进入搜索页才会出现这个Log！");
@@ -362,7 +362,7 @@ public class TestSearch {
             m_sActual = m_com.getUiObjText(m_com.getUiObjByText(m_sExpect));
             m_bPass = m_sActual.equalsIgnoreCase(m_sExpect);
 
-            m_sObjId = "com.bestv.voiceAssist:id/voice_search_hint";
+            m_sObjId = "com.funshion.xiriassist:id/voice_search_hint";
         }catch (Throwable e){
             e.printStackTrace();
             m_bPass = false;
@@ -373,7 +373,7 @@ public class TestSearch {
 
         try{
             m_sResult = "case12运行失败！";
-            m_sObjId = "com.bestv.voiceAssist:id/voice_search_hint";
+            m_sObjId = "com.funshion.xiriassist:id/voice_search_hint";
             m_uiObj = m_com.getUiObjByResId(m_sObjId);
             if(m_uiObj.getChildCount() != 3){
                 m_sResult += "使用语音搜索的提示控件数量不是3个！";
@@ -692,7 +692,7 @@ public class TestSearch {
             String sSearchTxt = "XLJ";
             enterLetters(sSearchTxt);
             // 如果没有结果就记录一下
-            if(m_com.getUiObjByResId("com.bestv.voiceAssist:id/nodata_hint").exists()){
+            if(m_com.getUiObjByResId("com.funshion.xiriassist:id/nodata_hint").exists()){
                 m_bPass = false;
                 m_sResult = String.format("没有搜索到【%s】相关的内容！", sSearchTxt);
                 Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
@@ -702,7 +702,7 @@ public class TestSearch {
             int iNumOfXLJ;
             int iNumOfXL;
             m_uiObj = m_com.getUiObjByResId(Infos.S_VOICE_SCH_SEARCH_EDIT);
-            String sId = "com.bestv.voiceAssist:id/search_txt_hint";
+            String sId = "com.funshion.xiriassist:id/search_txt_hint";
             UiObject uiObj = m_com.getUiObjByResId(sId);
             String sSearchNum = m_com.getUiObjText(uiObj).split("：")[1];
             iNumOfXLJ = Integer.parseInt(sSearchNum);
@@ -751,14 +751,14 @@ public class TestSearch {
             // 点击【用手机搜片】按钮
             m_com.Down(6);
 
-            if(!m_com.getUiObjByResId("com.bestv.voiceAssist:id/phone_btn").isFocused()){
+            if(!m_com.getUiObjByResId("com.funshion.xiriassist:id/phone_btn").isFocused()){
                 m_bPass = false;
                 m_sResult = "焦点没有移动到【用手机搜片】按钮上！";
             }
 
             m_com.Sleep(m_iOneSecond * 2);
             m_com.Enter();
-            if(!m_com.getUiObjByResId("com.bestv.voiceAssist:id/qr").exists()){
+            if(!m_com.getUiObjByResId("com.funshion.xiriassist:id/qr").exists()){
                 m_bPass = false;
                 m_sResult = "点击【用手机搜片】按钮后没有弹出下载电视助手的二维码！";
             }else{
@@ -789,15 +789,15 @@ public class TestSearch {
             // 焦点不能移动到语音浮层下方的按钮区域
             m_com.Enter(); // 输入字母A
             m_com.Up();
-            m_uiObj = m_com.getUiObjByResId("com.bestv.voiceAssist:id/voice_btn");
+            m_uiObj = m_com.getUiObjByResId("com.funshion.xiriassist:id/voice_btn");
             if(!m_uiObj.isFocused()){
                 m_bPass = false;
                 m_sResult = "焦点没有移动到语音按钮上！";
             }else{
                 m_com.Enter(); // 调出语音输入界面，无法获取语音区域的Dialog对象
-                String sIcon = "com.bestv.voiceAssist:id/unspread";
-                String sHint = "com.bestv.voiceAssist:id/short_press_hint";
-                String sRecList = "com.bestv.voiceAssist:id/short_press_list";
+                String sIcon = "com.funshion.xiriassist:id/unspread";
+                String sHint = "com.funshion.xiriassist:id/short_press_hint";
+                String sRecList = "com.funshion.xiriassist:id/short_press_list";
                 UiObject uiObj1 = m_com.getUiObjByResId(sIcon);
                 UiObject uiObj2 = m_com.getUiObjByResId(sHint);
                 m_uiObj = m_com.getUiObjByResId(sRecList);
@@ -851,7 +851,7 @@ public class TestSearch {
             else{
                 UiObject uiObj;
                 String sNumbers = "0123456789";
-                String sNumBtnsLeft = "com.bestv.voiceAssist:id/number";
+                String sNumBtnsLeft = "com.funshion.xiriassist:id/number";
                 m_uiObj = m_com.getUiObjByResId(sNumBtnsLeft);
                 // 检查数字布局顺序是否正确
                 for(int i = 0; i < sNumbers.length(); ++i){
@@ -924,7 +924,7 @@ public class TestSearch {
             // 只有明星的搜索
             m_sExpect = "JKJN";
             enterLetters(m_sExpect);
-            if(m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list").exists()){
+            if(m_com.getUiObjByResId("com.funshion.xiriassist:id/category_list").exists()){
                 m_bPass = false;
                 m_sResult = String.format("搜索【%s】时右侧出现了Tab栏！", m_sExpect);
             }
@@ -948,12 +948,12 @@ public class TestSearch {
             // 既有视频又有明星的搜索
             m_sExpect = "GFC";
             enterLetters(m_sExpect);
-            if(!m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list").exists()){
+            if(!m_com.getUiObjByResId("com.funshion.xiriassist:id/category_list").exists()){
                 m_bPass = false;
                 m_sResult = String.format("搜索【%s】时右侧没有出现Tab栏！", m_sExpect);
             }else{
                 // 第一级UI
-                m_uiObj = m_com.getUiObjByResId("com.bestv.voiceAssist:id/category_list");
+                m_uiObj = m_com.getUiObjByResId("com.funshion.xiriassist:id/category_list");
                 // 第二级UI
                 m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS, Infos.S_VIEW_CLASS, 0);
 
@@ -980,7 +980,7 @@ public class TestSearch {
         m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS,
                 Infos.S_RELATELAYOUT_CLASS, iIndex); // 编号为index的结果
         m_sExpect = m_com.getUiObjText(m_com.getUiObjChild(m_uiObj, m_com.BY_RESID,
-                "com.bestv.voiceAssist:id/name", 0));
+                "com.funshion.xiriassist:id/name", 0));
         return m_sExpect;
     }
 

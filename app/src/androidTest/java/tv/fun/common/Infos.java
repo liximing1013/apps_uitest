@@ -29,10 +29,10 @@ public class Infos {
     public static String S_LC_KANKAN_NEWS_LOG_ID =  S_BESTV_OTT + "kankan_logo"; // 看看新闻大厅的logo
     public static String S_LC_VIP_FULLSCREEN_BUTTON_ID = S_BESTV_OTT + "detail_enter";//金卡专区全屏后button
 
-    public static String S_VOICE_SCH_LETTER      = "com.bestv.voiceAssist:id/letter"; // 搜索字母区域
-    public static String S_VOICE_SCH_SEARCH_EDIT = "com.bestv.voiceAssist:id/search_edit"; // 搜索输入框
-    public static String S_VOICE_SCH_PHONE_BTN   = "com.bestv.voiceAssist:id/phone_btn"; // 【用手机搜片】按钮
-    public static String S_VOICE_SCH_NUM_LIST = "com.bestv.voiceAssist:id/number"; // 搜索数字输入区域
+    public static String S_VOICE_SCH_LETTER      = "com.funshion.xiriassist:id/letter"; // 搜索字母区域
+    public static String S_VOICE_SCH_SEARCH_EDIT = "com.funshion.xiriassist:id/search_edit"; // 搜索输入框
+    public static String S_VOICE_SCH_PHONE_BTN   = "com.funshion.xiriassist:id/phone_btn"; // 【用手机搜片】按钮
+    public static String S_VOICE_SCH_NUM_LIST = "com.funshion.xiriassist:id/number"; // 搜索数字输入区域
 
     // class info
     public static String S_VIEW_CLASS = "android.view.View";
