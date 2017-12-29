@@ -6,7 +6,6 @@ import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.Until;
-import android.util.Log;
 
 import junit.framework.Assert;
 
@@ -18,7 +17,6 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Random;
 
-import tv.fun.appsautotest.common.UiActions;
 import tv.fun.appsautotest.common.Utils;
 
 /**
@@ -67,7 +65,7 @@ public final class TestFunTvSerial {
 
     private void randomSelectNumberOfTvFromPlayer(int randomNumber) {
         mDevice.pressDPadDown();
-        Utils.systemWait(UiActions.SHORT_WAIT);
+//        Utils.systemWait(UiActions.SHORT_WAIT);
 
         List<UiObject2> tvCells = mDevice.findObjects(By.res("com.bestv.ott:id/tv_cell"));
         Assert.assertTrue("Tv cell is NOT found!", (tvCells.size() > 0));
@@ -86,28 +84,28 @@ public final class TestFunTvSerial {
         assertAndCaptureForFailed(ret, "Verify player is open and on the top.");
     }
 
-    private void randomSelectTvAndOpenTvDetails(int randomNumber) {
-        mDevice.pressDPadLeft();
-        mDevice.waitForIdle();
-        Utils.systemWait(UiActions.WAIT);
-
-        mDevice.pressDPadDown();
-        Utils.systemWait(UiActions.SHORT_WAIT);
-
-        int moveTimes = new Random().nextInt(randomNumber);
-        for (int i = 0; i <= moveTimes; i++) {
-            mDevice.pressDPadRight();
-            Utils.systemWait(UiActions.SHORT_WAIT);
-        }
-
-        mDevice.pressEnter();
-        mDevice.waitForIdle();
-        Utils.systemWait(UiActions.WAIT);
-
-        UiObject2 tvTitle = mDevice.findObject(By.res("com.bestv.ott:id/detail_title"));
-        assertAndCaptureForFailed((tvTitle != null), "Verify tv title of details page.");
-        Log.d(TAG, String.format("TV title: %s", tvTitle.getText()));
-    }
+//    private void randomSelectTvAndOpenTvDetails(int randomNumber) {
+//        mDevice.pressDPadLeft();
+//        mDevice.waitForIdle();
+//        Utils.systemWait(UiActions.WAIT);
+//
+//        mDevice.pressDPadDown();
+//        Utils.systemWait(UiActions.SHORT_WAIT);
+//
+//        int moveTimes = new Random().nextInt(randomNumber);
+//        for (int i = 0; i <= moveTimes; i++) {
+//            mDevice.pressDPadRight();
+//            Utils.systemWait(UiActions.SHORT_WAIT);
+//        }
+//
+//        mDevice.pressEnter();
+//        mDevice.waitForIdle();
+//        Utils.systemWait(UiActions.WAIT);
+//
+//        UiObject2 tvTitle = mDevice.findObject(By.res("com.bestv.ott:id/detail_title"));
+//        assertAndCaptureForFailed((tvTitle != null), "Verify tv title of details page.");
+//        Log.d(TAG, String.format("TV title: %s", tvTitle.getText()));
+//    }
 
     private void assertAndCaptureForFailed(boolean ret, String message) {
         if (!ret) {

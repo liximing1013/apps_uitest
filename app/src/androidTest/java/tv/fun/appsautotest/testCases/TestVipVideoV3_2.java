@@ -1,6 +1,9 @@
 package tv.fun.appsautotest.testCases;
 
 import android.app.Instrumentation;
+import android.app.Notification;
+import android.app.UiAutomation;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,9 +16,12 @@ import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
 
 import junit.framework.Assert;
+import junit.framework.TestCase;
 
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,6 +34,7 @@ import org.junit.runners.MethodSorters;
 import java.util.List;
 import java.util.Random;
 
+import tv.fun.appsautotest.common.CommonMethod;
 import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
@@ -43,7 +50,7 @@ import static android.support.test.uiautomator.By.text;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public final class TestVipVideoV3_2 {
+public final class TestVipVideoV3_2 extends TestCase{
     public Instrumentation instrument;
     private UiDevice uiDevice;
     //设定等待时间
@@ -57,7 +64,7 @@ public final class TestVipVideoV3_2 {
     //设定播放视频时间（长）
     private static final int PlayVideoLongTime = 660;
     //初始化
-    String m_ObjId = "";
+    private String m_ObjId = "";
     private UiObject2 m_uiObj = null;
     private long m_Time;
     private String m_Expect = "";
@@ -70,7 +77,7 @@ public final class TestVipVideoV3_2 {
     public static void BeforeClass() {
 
         System.out.println("进入金卡会员页面，开启金卡专区的自动化测试了..");
-    }
+    } //测试项目开始前运行（仅一次），如清除缓存数据、安装应用等
 
     @Before
     public void setUp() {
@@ -83,21 +90,21 @@ public final class TestVipVideoV3_2 {
         UiObject2 VipArea = this.getTabFromLauncherHomeByText(uiDevice, "金卡会员");
         this.openTabFromLauncherHomeByTextView(uiDevice, VipArea);
         systemWait(WAIT);
-    }
+    } //测试开始前运行（每个@Test运行前都会运行一次），如打开应用等
 
     @After
     public void clearUp() {
         backPageMethod();
         Configurator configurator = Configurator.getInstance();
         configurator.setActionAcknowledgmentTimeout(5000);
-    }
+    } //测试结束后（每个@Test结束后都会运行一次），如退出应用等
 
     @AfterClass
     public static void AfterClass(){
 
         System.out.println("See You Later");
         System.gc();
-    }
+    } //测试项目结束时运行（仅一次），如卸载应用等
 
     @Test  //获取用例名
     public void test(){
@@ -110,7 +117,7 @@ public final class TestVipVideoV3_2 {
         try {
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/vip_title"));
             m_ObjId = "com.bestv.ott:id/vip_title";
-            Utils.writeCaseResult("进入金卡会员页面失败",m_uiObj != null ,m_Time);
+            Utils.writeCaseResult("进入金卡会员页面失败",m_uiObj != null,m_Time);
         }catch (Exception e){
             e.printStackTrace();
             resultFlag= false;
@@ -127,7 +134,8 @@ public final class TestVipVideoV3_2 {
     public void LC_VIP_02_HatchToFullScreenPlay() {
         try {
             uiDevice.pressEnter();
-            systemWait(PlayVideoTime);//加入断言判定是否全屏播放,via全屏播放时唯一的标示
+            CommonMethod.systemWait(PlayVideoTime);
+            //加入断言判定是否全屏播放,via全屏播放时唯一的标示
             m_ObjId = Infos.S_LC_VIP_FULLSCREEN_BUTTON_ID;
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/player_view"));
             Utils.writeCaseResult("进入全屏播放时失败，无法抓取到控件", m_uiObj != null, m_Time);
@@ -146,11 +154,11 @@ public final class TestVipVideoV3_2 {
     public void LC_VIP_03_PlayCompleteVideo() {
         try {
             uiDevice.pressEnter();
-            systemWait(LONG_WAIT);
+            CommonMethod.systemWait(LONG_WAIT);
             UiObject2 detEnter = uiDevice.findObject(By.res("com.bestv.ott:id/player_view"));
             Assert.assertNotNull(detEnter);
             uiDevice.pressDPadCenter();
-            waitForNewWindowIdle(18000);
+            this.waitForNewWindowIdle(17000);
             UiObject payButton = uiDevice.findObject(new UiSelector().text("付费"));
             if(payButton.exists()){
                 systemWait(PlayVideoMidTime);
@@ -495,7 +503,7 @@ public final class TestVipVideoV3_2 {
                     systemWait(SHORT_WAIT);
                     upMoveMethod(1);
                     uiDevice.pressDPadCenter();
-                    waitForNewWindowCollectButton(15000);
+                    waitForNewWindowCollectButton(14000);
                     break;
                 }
                Utils.Print("没有更多的上映新片");
@@ -1027,7 +1035,7 @@ public final class TestVipVideoV3_2 {
             sleep(time);
             UiObject2 fullScreen = uiDevice.findObject(By.text("全屏").res("com.bestv.ott:id/discripse"));
             if (fullScreen != null) {
-                Assert.assertTrue(true);
+                Assert.assertTrue("进入详情页后未找到全屏选项",true);
             } else {
                 Utils.funAssert("等待18s,如果界面还没有打开则超时异常", false);
             }
@@ -1062,4 +1070,38 @@ public final class TestVipVideoV3_2 {
             e.printStackTrace();
         }
     }
+
+    public void initToastListener(){
+        instrument = InstrumentationRegistry.getInstrumentation();
+        instrument.getUiAutomation().setOnAccessibilityEventListener(new UiAutomation.OnAccessibilityEventListener() {
+            @Override
+            public void onAccessibilityEvent(AccessibilityEvent event) {
+                //判断是否是通知事件
+                try {
+                    if(event.getEventType() != AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED){
+                        return;
+                    }
+                    //获取消息来源
+                    String sourcePackageName = (String)event.getPackageName();
+                    //获取时间具体信息
+                    Parcelable parcelable = event.getParcelableData();
+                    //如果不是下拉框信息，则为其它通知消息，包括Toast
+                    if(!(parcelable instanceof Notification)){
+                        String toastMessage = (String)event.getText().get(0);
+                        long toastOccurTime = event.getEventTime();
+                        Log.i("autotest","信息名称:"+toastMessage);
+                        if(toastMessage.contains("")){
+                            JSONObject.quote(""); //jsonObject,put("")
+                        }else if(toastMessage.contains("")){
+                            JSONObject.quote(""); //jsonObject,put("")
+                        }else {
+                        }
+                    }
+                }catch (Throwable e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    } //Toast处理
 }

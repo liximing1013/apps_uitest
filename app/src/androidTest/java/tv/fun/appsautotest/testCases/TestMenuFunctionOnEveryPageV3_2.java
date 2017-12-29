@@ -13,6 +13,7 @@ import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
 import junit.framework.Assert;
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,7 +41,7 @@ import static android.support.test.uiautomator.By.text;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestMenuFunctionOnEveryPageV3_2 {
+public class TestMenuFunctionOnEveryPageV3_2 extends TestCase{
     private Instrumentation instrument;
     private UiDevice uiDevice;
     //设定等待时间
@@ -86,7 +87,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
 
     @AfterClass
     public static void AfterClass(){
-
+        System.gc();
         System.out.println("See You Later");
     }
 
@@ -178,9 +179,9 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                     systemWait(SHORT_WAIT);
                     uiDevice.pressDPadCenter();
                     systemWait(WAIT);
-                    UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+                    UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
                     m_Actual = Classify.getText();
-                    m_Expect = "最新";
+                    m_Expect = "视频分类";
                     m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                     Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
                 }
@@ -259,7 +260,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                         m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                         Utils.writeCaseResult("跳转设置页面错误", m_Pass, m_Time);
                     } else {
-                        Assert.assertTrue(false);
+                        Assert.assertTrue("首页Tab位置错误",false);
                     }
                     break;
                 }
@@ -291,9 +292,9 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                         rightMoveMethod(1);
                         uiDevice.pressDPadCenter();
                         systemWait(WAIT);
-                        UiObject2 Classify = uiDevice.findObject(By.text("最新"));
+                        UiObject2 Classify = uiDevice.findObject(By.text("视频分类"));
                         m_Actual = Classify.getText();
-                        m_Expect = "最新";
+                        m_Expect = "视频分类";
                         m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                         Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
                     } else {
@@ -399,7 +400,7 @@ public class TestMenuFunctionOnEveryPageV3_2 {
             UiObject2 PlayRecord = this.getTabFromLauncherHomeByText(uiDevice, "播放记录");
             this.openTabFromLauncherHomeByTextView(uiDevice, PlayRecord);
             UiObject title2 = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/title"));
-            if(title2.getText().equals("头条")){
+            if(title2.getText().equals("头条新闻")){
                 Assert.assertTrue(true);
             }else {
                 Assert.assertTrue(title1.getText(),false);
@@ -583,11 +584,9 @@ public class TestMenuFunctionOnEveryPageV3_2 {
                 if (!delAll.exists()) {
                     uiDevice.pressDPadCenter();
                     sleep(1000);
-                    uiDevice.pressDPadCenter();
-                    systemWait(WAIT);
-                    UiObject2 classify = uiDevice.findObject(By.text("最新"));
+                    UiObject2 classify = uiDevice.findObject(By.text("视频分类"));
                     m_Actual = classify.getText();
-                    m_Expect = "最新";
+                    m_Expect = "视频分类";
                     m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
                     Utils.writeCaseResult("跳转视频分类页面错误", m_Pass, m_Time);
                 } else {
@@ -1373,9 +1372,13 @@ public class TestMenuFunctionOnEveryPageV3_2 {
     } //等待时间
 
     private void backToLauncherHome(UiDevice device) {
-        device.pressHome();
-        device.waitForIdle();
-        systemWait(WAIT);
+        try {
+            device.pressHome();
+            device.waitForIdle();
+            systemWait(WAIT);
+        }catch (Throwable e){
+         e.printStackTrace();
+        }
     }
 
     private void rightMoveMethod(int RightMove){

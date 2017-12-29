@@ -1,6 +1,7 @@
 package tv.fun.appsautotest.testCases;
 
 import android.app.Instrumentation;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,6 +16,7 @@ import android.support.test.uiautomator.Until;
 import android.util.Log;
 
 import junit.framework.Assert;
+import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +44,7 @@ import static android.support.test.uiautomator.Until.findObject;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestLauncherFunctionV3_2 {
+public class TestLauncherFunctionV3_2 extends TestCase{
     private Instrumentation instrument;
     private UiDevice uiDevice;
     //设定等待时间
@@ -677,8 +679,11 @@ public class TestLauncherFunctionV3_2 {
         try {
             this.EnterVideoClassifyPage();
             systemWait(WAIT);
-            UiObject2 Live = uiDevice.findObject(text("直播"));
-            this.openTabFromLauncherHomeByTextView(uiDevice, Live);
+//            UiObject2 Live = uiDevice.findObject(text("直播"));
+//            this.openTabFromLauncherHomeByTextView(uiDevice, Live); //视频分类页面改成瀑布流
+            DownMoveMethod(2);
+            RightMoveMethod(1);
+            uiDevice.pressDPadCenter();
             systemWait(LONG_WAIT);
             m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/live_hall_title"));
             m_ObjId = "com.bestv.ott:id/live_hall_title";
@@ -1895,21 +1900,50 @@ public class TestLauncherFunctionV3_2 {
         }
     }
 
+    @Test
+    public void LC_NEWS_04_ScreenOn() throws RemoteException{
+        try {
+            RightMoveMethod(2);
+            uiDevice.pressDPadCenter();
+            systemWait(5);
+            uiDevice.pressMenu();
+            uiDevice.pressDPadCenter();
+            systemWait(5);
+            if (uiDevice.isScreenOn()) {
+                System.out.println("关屏正常");
+                Log.d("lxm", "LC_NEWS_04_ScreenOn: "+"关屏正常");
+            } else {
+                Assert.assertTrue("关屏Bug", false);
+            }
+        }catch (RemoteException e){
+            e.printStackTrace();
+            resultStr += e.toString();
+            resultFlag = false;
+        }finally {
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
+            uiDevice.wakeUp();
+        }
+    }
+
     @Test  //返回键回到顶部
-    public void LC_Back_01_BackToTop() throws NullPointerException{
+    public void LC_Back_01_BackToTop() throws NullPointerException {
         try {
             enterPlayRecordPage();
             DownMoveMethod(9);
-            UiObject2 backKey = uiDevice.findObject(By.res("com.bestv.ott:id/back_to_top").clazz("android.widget.ImageView"));
+            UiObject2 backKey = uiDevice.findObject(By.res("com.bestv.ott:id/back_to_top")
+                    .clazz("android.widget.ImageView"));
             if (backKey != null) {
                 systemWait(WAIT);
                 uiDevice.pressBack();
                 sleep(3000);
-                UiObject2 recordTab = uiDevice.findObject(By.text("播放记录").res("com.bestv.ott:id/tab_title"));
+                UiObject2 recordTab = uiDevice.findObject(By.text("播放记录")
+                        .res("com.bestv.ott:id/tab_title"));
                 if (recordTab.isSelected()) {
                     Assert.assertTrue(true);
                 } else {
-                    Assert.assertTrue("未返回到顶部",false);
+                    Assert.assertTrue("未返回到顶部", false);
                 }
             }
         } catch (Throwable e) {

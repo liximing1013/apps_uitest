@@ -389,6 +389,13 @@ public class TestLongVideoPlay {
         }
     }
 
+//    @Test
+//    public void testDemo(){
+//        uiDevice.pressDPadCenter();
+//        new CommonMethod().clickByText("全屏");
+//        sleep(1000);
+//    }
+
     @Test //时间转换
     public void testDemo2(){
         sleep(10000);
@@ -463,7 +470,7 @@ public class TestLongVideoPlay {
     //等待时间
     public void sleep(int sleep){
         try {
-            Thread.sleep(sleep);
+            Thread.sleep(sleep*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

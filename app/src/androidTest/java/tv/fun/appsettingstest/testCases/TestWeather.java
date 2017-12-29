@@ -51,6 +51,7 @@ public final class TestWeather {
     private final String ADD_CITY_1 = "青岛";
     private final String ADD_DEFAULT_PROVINCE_2 = "海南";
     private final String ADD_DEFAULT_CITY_2 = "三亚";
+    private final String TAG = "lxm";
 
     @BeforeClass
     public static void classSetUp() {
@@ -400,7 +401,6 @@ public final class TestWeather {
         try {
             mTask.openBottomMenu();
             mTask.ClickOnSpecifiedMenuButtonByText(mTask.WEATHER_MENU_BUTTON_TEXT_MODIFY_DEFAULT);
-
             // select 湖北 武汉
             mTask.selectSpecifiedLocationProvince(INIT_PROVINCE, true);
             mDevice.pressDPadRight();
