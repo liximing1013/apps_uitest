@@ -17,6 +17,7 @@ import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
+import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.appstoretest.common.AppStorePage;
 import tv.fun.common.Utils;
 
@@ -29,8 +30,7 @@ public class TestAppStore extends AppStorePage {
     private static final String AppStore_PACKAGE = "tv.fun.appstore";
     public String autoProjectKeyWord = "test";
     public int maxCountOfOneLine = 6;
-    public String[] textInSearchWindow = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
-            "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+
     public String systemAppPageTitle = "系统应用";
     public String[] systemAppList = {"应用市场", "文件管理", "电视助手", "系统升级","风行天气", "无线投屏", "玩转电视", "视频通话"};
 
@@ -66,8 +66,6 @@ public class TestAppStore extends AppStorePage {
         } finally {
             Utils.writeCaseResult(resultStr,
                     resultFlag, execTime);
-
-
         }
     }
 
@@ -131,17 +129,12 @@ public class TestAppStore extends AppStorePage {
                     device.pressEnter();
                 }
             }
-            //installBtn.click();不能实现点击安装按钮操作，故使用pressEnter
-            moveDown();
-            moveUp();
-            //点击安装按钮，安装应用
-            device.pressEnter();
-            waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
-            waitForElementPresentByClassAndText("android.widget.Button", "打开");
+            //安装应用
+            installAppInDetailPage();
             UiObject openBtn = device.findObject(new UiSelector().resourceId("tv.fun.appstore:id/emptyButton")).getChild(new UiSelector().resourceId("tv.fun.appstore:id/titleContainer"));
 
             //断言
-            Assert.assertTrue("Failed to install app from Launcher App page", openBtn.getText().equalsIgnoreCase("打开"));
+            verifyTrue("Failed to install app from Launcher App page", openBtn.getText().equalsIgnoreCase("打开"));
             back();
             waitForElementPresentByID("com.bestv.ott:id/tab_title");
             UiObject appTab = device.findObject(new UiSelector().resourceId("com.bestv.ott:id/tab_title").text("应用"));
