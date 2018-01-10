@@ -1151,10 +1151,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     * App_Install_1:每次只允许同时下载两个应用，其他等待下载
+     * Game_Install_1:每次只允许同时下载两个应用，其他等待下载
      */
     //@Test
-    public void App_Install_01_testOnlyAllowDownloadTwoAppsAtSameTime(){
+    public void Game_Install_01_testOnlyAllowDownloadTwoAppsAtSameTime(){
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
@@ -1200,10 +1200,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     * App_Install_2:下载中的应用可以暂停下载
+     * Game_Install_2:下载中的应用可以暂停下载
      */
     @Test
-    public void App_Install_02_testPauseTheDownloadingApp(){
+    public void Game_Install_02_testPauseTheDownloadingApp(){
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
@@ -1271,10 +1271,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     * App_Search_1:游戏搜索UI显示正确，且搜索默认推荐的是游戏应用
+     * Game_Search_1:游戏搜索UI显示正确，且搜索默认推荐的是游戏应用
      */
     @Test
-    public void App_Search_01_testDefaultUIInGameSearchPage() {
+    public void Game_Search_01_testDefaultUIInGameSearchPage() {
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
@@ -1324,10 +1324,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     *App_Search_2:可以正常进行搜索，且搜索出来的都是游戏应用
+     *Game_Search_2:可以正常进行搜索，且搜索出来的都是游戏应用
      */
     @Test
-    public void App_Search_02_testGameSearchResultOnlyDisplayGameApp() {
+    public void Game_Search_02_testGameSearchResultOnlyDisplayGameApp() {
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
@@ -1365,10 +1365,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     *App_Search_3:无结果搜索页面显示正确
+     *Game_Search_3:无结果搜索页面显示正确
      */
     @Test
-    public void App_Search_03_testGameSearchNoResultPageDisplay() {
+    public void Game_Search_03_testGameSearchNoResultPageDisplay() {
         String[] keywordForNoResult = {"H", "I"};
         try {
             //移动焦点到Launcher游戏tab
@@ -1401,10 +1401,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     *App_Search_6:搜索页可以正常响应BACK键操作
+     *Game_Search_6:搜索页可以正常响应BACK键操作
      */
     @Test
-    public void App_Search_06_testPressBackInGameSearchPage() {
+    public void Game_Search_06_testPressBackInGameSearchPage() {
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
@@ -1434,10 +1434,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     *App_Search_8:搜索页面可以正常响应Home键操作
+     *Game_Search_8:搜索页面可以正常响应Home键操作
      */
     @Test
-    public void App_Search_08_testPressHomeInGameSearchPage() {
+    public void Game_Search_08_testPressHomeInGameSearchPage() {
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
@@ -1468,10 +1468,10 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
-     *App_Search_9:搜索页面不会响应Menu键操作
+     *Game_Search_9:搜索页面不会响应Menu键操作
      */
     @Test
-    public void App_Search_09_testPressMenuInGameSearchPage() {
+    public void Game_Search_09_testPressMenuInGameSearchPage() {
         try {
             //移动焦点到Launcher游戏tab
             navigateToLauncherGameTab();
