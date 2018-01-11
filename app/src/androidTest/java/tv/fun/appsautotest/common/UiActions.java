@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.UiAutomation;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
@@ -18,53 +19,99 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-public class UiActions{
+@SuppressWarnings("deprecation") //表示不显示使用了不赞成使用的类或方法时的警告
+public class UiActions {
     public Instrumentation instrument;
     public UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     public final String TAG = "lxm";
+    private final static String PREFIX_UNICODE = "\\u";
+
+    //设定等待时间
+    public static final int WAIT = 5;
+    //初始化
+    protected long m_Time;
+    public String m_Expect = "";
+    public String m_Actual = "";
+    public boolean m_Pass = false;
+    public String resultStr = "";
+    public boolean resultFlag = true;
+
+
     //得到当前方法的名字
     public String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+
+    //存放tab List
+    public List tabToSelect;
 
     private final int CLICK_ID = 1000;
     private final int CLICK_text = 1001;
     private final int CLICK_clazz = 1002;
+    //视频分类_index
+    protected final int NEWS_INDEX = 0; //看看新闻
+    protected final int COMIC_INDEX = 1; //动漫
+    protected final int MUSIC_INDEX = 2; //歌曲
+    protected final int CHILD_INDEX = 3; //少儿
+    protected final int FILM_INDEX = 4; //电影
+    protected final int TELEPLAY_INDEX = 5; //电视剧
+    protected final int VARIETY_INDEX = 6; //综艺
+    protected final int VIP_INDEX = 7; //金卡专区
+    protected final int LIVE_INDEX= 8; //直播
+    protected final int NEWEST_INDEX= 9; //最新
+    protected final int GAME_INDEX= 10; //游戏竞技
+    protected final int DOCUMENTARY_INDEX = 11;//纪录片
+    protected final int NBA_INDEX = 12;//NBA
+    protected final int LIST_INDEX = 14;//排行榜
 
-    public UiDevice getDevice(){
+
+    public UiDevice getDevice() {
+
         return uiDevice;
     }
 
-//    public UiActions(UiDevice uiDevice){
-//        this.uiDevice = uiDevice;
-//    }
+    public UiActions() {
 
+        this.tabToSelect = new ArrayList();
+    }
+
+    public UiActions(UiDevice uiDevice){
+        this.uiDevice = uiDevice;
+    }
+
+    protected void setUp(){
+    }
+
+    protected void tearDown(){
+
+    }
 
     //id
-    public boolean clickById(String id){
+    public boolean clickById(String id) {
 
-        return clickByInfo(CLICK_ID,id);
+        return clickByInfo(CLICK_ID, id);
     }
 
     //text
-    public boolean clickByText(String text){
+    public boolean clickByText(String text) {
 
-        return clickByInfo(CLICK_text,text);
+        return clickByInfo(CLICK_text, text);
     }
 
     //classname
     public boolean clickByClazz(String clazz) {
 
-        return clickByInfo(CLICK_clazz,clazz);
+        return clickByInfo(CLICK_clazz, clazz);
     }
 
-    private boolean clickByInfo(int CLICK,String str){
+    private boolean clickByInfo(int CLICK, String str) {
 
         UiSelector uiselector;
         //switch根据不同的CLICK标示，创建出UiSelector对象
-        switch (CLICK)
-        {
+        switch (CLICK) {
             case CLICK_ID:
                 uiselector = new UiSelector().resourceId(str);
                 break;
@@ -81,12 +128,11 @@ public class UiActions{
         UiObject uiobject = new UiObject(uiselector);
         //判断该控件是否存在
         int i = 0;
-        while (!uiobject.exists()&&i<5)
-        {
+        while (!uiobject.exists() && i < 5) {
             SolveProblems();
             sleep(500);
-            if(i == 4){
-                takeScreenToFile(uiDevice,str+"not find");
+            if (i == 4) {
+                takeScreenToFile(uiDevice, str + "not find");
                 return false;
             }
             i++;
@@ -94,27 +140,28 @@ public class UiActions{
         //点击
         try {
             uiobject.click();
-        }catch (UiObjectNotFoundException e){
+        } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
         }
         return true;
     }
 
     //截图
-    public static void takeScreenToFile(UiDevice device, String des){
+    public static void takeScreenToFile(UiDevice device, String des) {
         //取得当前时间
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        String dat = calendar.get(Calendar.HOUR_OF_DAY)+"_"+calendar.get(Calendar.MINUTE)+"_"+calendar.get(Calendar.SECOND);
+        String dat = calendar.get(Calendar.HOUR_OF_DAY) + "_" + calendar.get(Calendar.MINUTE) + "_" + calendar.get(Calendar.SECOND);
 
         //保存文件
-        File file = new File("/mnt/sdcard/"+dat+"_"+des+".jpg");
-        if(!file.exists()){
+        File file = new File("/mnt/sdcard/1234" + dat + "_" + des + ".png");
+        if (!file.exists()) {
             file.mkdirs();
         }
         device.takeScreenshot(file);
     }
 
+    //截图
     public String screenShot(String name) {//截图并命名
         File file = new File("/mnt/sdcard/123/");
         if (!file.exists()) {
@@ -126,15 +173,15 @@ public class UiActions{
         return path;
     }
 
-    private void SolveProblems(){
+    private void SolveProblems() {
         try {
             initToastListener();
-        }catch (Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     } //NULL
 
-    private void sleep(int time){
+    private void sleep(int time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
@@ -143,33 +190,33 @@ public class UiActions{
     }
 
     //弹框消息处理
-    private void initToastListener(){
+    private void initToastListener() {
         instrument = InstrumentationRegistry.getInstrumentation();
         instrument.getUiAutomation().setOnAccessibilityEventListener(new UiAutomation.OnAccessibilityEventListener() {
             @Override
             public void onAccessibilityEvent(AccessibilityEvent event) {
                 //判断是否是通知事件
                 try {
-                    if(event.getEventType() != AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED){
+                    if (event.getEventType() != AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
                         return;
                     }
                     //获取消息来源
-                    String sourcePackageName = (String)event.getPackageName();
+                    String sourcePackageName = (String) event.getPackageName();
                     //获取时间具体信息
                     Parcelable parcelable = event.getParcelableData();
                     //如果不是下拉框信息，则为其它通知消息，包括Toast
-                    if(!(parcelable instanceof Notification)){
-                        String toastMessage = (String)event.getText().get(0);
+                    if (!(parcelable instanceof Notification)) {
+                        String toastMessage = (String) event.getText().get(0);
                         long toastOccurTime = event.getEventTime();
-                        Log.i("autotest","信息名称:"+toastMessage);
-                        if(toastMessage.contains("")){
+                        Log.i("autotest", "信息名称:" + toastMessage);
+                        if (toastMessage.contains("")) {
                             JSONObject.quote(""); //jsonObject,put("")
-                        }else if(toastMessage.contains("")){
+                        } else if (toastMessage.contains("")) {
                             JSONObject.quote(""); //jsonObject,put("")
-                        }else {
+                        } else {
                         }
                     }
-                }catch (Throwable e){
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -177,8 +224,8 @@ public class UiActions{
 
     }
 
-     //获取现在时间
-     public static String getCurDate(){
+    //获取现在时间
+    protected static String getCurDate() {
         Date currentTime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String nowDate = formatter.format(currentTime);
@@ -186,22 +233,22 @@ public class UiActions{
     }
 
     //获取输入月份的天数
-    public int getCurMonthOfDay(int year,int month){
-        Calendar time=Calendar.getInstance();
+    protected int getCurMonthOfDay(int year, int month) {
+        Calendar time = Calendar.getInstance();
         time.clear();//clear一下，否则很多信息会继承自系统当前时间
-        time.set(Calendar.YEAR,year);
-        time.set(Calendar.MONTH,month-1);//注意,Calendar对象默认一月为0
-        int day=time.getActualMaximum(Calendar.DAY_OF_MONTH);//本月份的天数
+        time.set(Calendar.YEAR, year);
+        time.set(Calendar.MONTH, month - 1);//注意,Calendar对象默认一月为0
+        int day = time.getActualMaximum(Calendar.DAY_OF_MONTH);//本月份的天数
         return day;
     }
 
     //计算某一天是一年中的第几星期
-    public int getCurWeekOfDayInYear(int year,int month,int day){
+    protected int getCurWeekOfDayInYear(int year, int month, int day) {
         Calendar time = Calendar.getInstance();
         time.clear();
-        time.set(Calendar.YEAR,year);
-        time.set(Calendar.MONTH,month-1);
-        time.set(Calendar.DAY_OF_MONTH,day-1);
+        time.set(Calendar.YEAR, year);
+        time.set(Calendar.MONTH, month - 1);
+        time.set(Calendar.DAY_OF_MONTH, day - 1);
         int week = time.get(Calendar.WEEK_OF_YEAR);
         return week;
     }
@@ -216,7 +263,6 @@ public class UiActions{
         return obj;
     }
 
-
     /**
      * 通过类名定位的方法
      * @param className
@@ -229,6 +275,7 @@ public class UiActions{
 
     /**
      * 通过ID定位的方法
+     *
      * @param id
      * @return obj
      */
@@ -242,8 +289,7 @@ public class UiActions{
      * @param des
      * @return obj
      */
-    public static UiObject getUiObjectByContentDes(String des)
-    {
+    public static UiObject getUiObjectByContentDes(String des) {
         UiObject obj = new UiObject(new UiSelector().description(des));
         return obj;
     }
@@ -303,12 +349,13 @@ public class UiActions{
      * @param index
      * @return
      */
+    @NonNull
     public static UiObject getUiObjectByClassNameAndInstanceIndex(String clsName, int index) {
 
         return new UiObject(new UiSelector().className(clsName).instance(index));
     }
 
-    public void pressRight(int RightMove){
+    protected void pressRight(int RightMove) {
         int i = 1;
         while (i <= RightMove) {
             i++;
@@ -317,7 +364,7 @@ public class UiActions{
         }
     } //Right*
 
-    public void pressLeft(int LeftMove){
+    public void pressLeft(int LeftMove) {
         int i = 1;
         while (i <= LeftMove) {
             i++;
@@ -326,7 +373,7 @@ public class UiActions{
         }
     } //Left*
 
-    public void pressDown(int DownMove){
+    public void pressDown(int DownMove) {
         int i = 1;
         while (i <= DownMove) {
             i++;
@@ -335,7 +382,7 @@ public class UiActions{
         }
     } //Down*
 
-    public void pressUp(int UpMove){
+    public void pressUp(int UpMove) {
         int i = 1;
         while (i <= UpMove) {
             i++;
@@ -362,9 +409,59 @@ public class UiActions{
         }
     } //Enter*
 
+    public void videoClassificationByIndexClick(int index,String cls) throws UiObjectNotFoundException{
+        UiObject title = uiDevice.findObject(new UiSelector().text("视频分类").resourceId("com.bestv.ott:id/top_title"));
+        if(title.exists()){
+            UiObject obj = uiDevice.findObject(new UiSelector().index(index).className("android.widget.RelativeLayout"));
+            obj.clickAndWaitForNewWindow();
+            UiObject newPage = uiDevice.findObject(new UiSelector().className(cls));
+            while (!newPage.exists()){
+                UiObject newPage1 = uiDevice.findObject(new UiSelector().className(cls));
+                if(!newPage1.exists()){
+                    sleep(2000);
+                }
+            }
+        }else{
+            output("不在视频分类");
+            screenShot("videoClassificationByIndexClick");
+        }
+    }
+
     //明显输出
-    public void output(String text) {
+    protected void output(String text) {
+
         System.out.println(text);
+    }
+
+    //将unicode转为汉字
+    @NonNull
+    protected static String ascii2Native(String str) {
+        StringBuilder sb = new StringBuilder();
+        int begin = 0;
+        int index = str.indexOf(PREFIX_UNICODE);
+        while (index != -1) {
+            sb.append(str.substring(begin, index));
+            sb.append(ascii2Char(str.substring(index, index + 6)));
+            begin = index + 6;
+            index = str.indexOf(PREFIX_UNICODE, begin);
+        }
+        sb.append(str.substring(begin));
+        return sb.toString();
+    }
+
+    private static char ascii2Char(String str) {
+        if (str.length() != 6) {
+            throw new IllegalArgumentException("Ascii string of a native character must be 6 character.");
+        }
+        if (!PREFIX_UNICODE.equals(str.substring(0, 2))) {
+            throw new IllegalArgumentException("Ascii string of a native character must start with \"\\u\".");
+        }
+        String tmp = str.substring(2, 4);
+        // 将十六进制转为十进制
+        int code = Integer.parseInt(tmp, 16) << 8; // 转为高位，后与地位相加
+        tmp = str.substring(4, 6);
+        code += Integer.parseInt(tmp, 16); // 与低8为相加
+        return (char) code;
     }
 
 }

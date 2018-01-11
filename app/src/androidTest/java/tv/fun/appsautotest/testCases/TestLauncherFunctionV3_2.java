@@ -66,7 +66,8 @@ public class TestLauncherFunctionV3_2 extends TestCase{
     private String cmd = "am start -n com.bestv.ott/com.bestv.ott.piano.PianoActivity";
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception{
+        super.setUp();
         instrument = InstrumentationRegistry.getInstrumentation();
         uiDevice = UiDevice.getInstance(instrument);
         m_Time = Utils.getCurSecond();   //耗时

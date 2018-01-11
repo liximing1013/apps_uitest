@@ -2,9 +2,10 @@ package tv.fun.appsautotest.common;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.Tracer;
 import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
@@ -19,6 +20,7 @@ import junit.framework.Assert;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.MappedByteBuffer;
@@ -28,13 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import tv.fun.common.Infos;
-
-import static android.os.SystemClock.uptimeMillis;
-import static android.support.test.uiautomator.By.text;
 
 /**
  * Created by lixm on 2017/12/1.
@@ -42,13 +37,6 @@ import static android.support.test.uiautomator.By.text;
 
 public class CommonMethod extends UiActions {
 //    public UiDevice uiDevice;
-    //设定等待时间
-    private static final int WAIT = 6;
-    //初始化
-    private long m_Time;
-    private String m_Expect = "";
-    private String m_Actual = "";
-    private boolean m_Pass = false;
 
 //
 //    //构造器
@@ -64,7 +52,7 @@ public class CommonMethod extends UiActions {
 //        this.instrument = instrument;
 //    }
 
-    private void sleep(int sleep){
+    public void sleep(int sleep){
         try {
             Thread.sleep(sleep);
         } catch (InterruptedException e) {
@@ -93,108 +81,66 @@ public class CommonMethod extends UiActions {
         sleep(2000);
     }
 
-    private void enterPersonalCenterPage(){
-        uiDevice.pressDPadUp();
-        systemWait(WAIT);
-        pressRight(1);
-        UiObject account = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/account"));
-        if(account.exists()){
-            uiDevice.pressDPadCenter();
-            systemWait(WAIT);
-            UiObject2 PerPage = uiDevice.findObject(By.text("个人中心"));
-            Assert.assertEquals("个人中心",PerPage.getText());
+    //列表页随机选择电影
+    public void randomPlayFilm(){
+        int i =1+(int)(Math.random()*30); //随机数
+        if(i < 15){
+            pressDown(i);
+            systemWait(1);
         }else {
-            Assert.assertTrue(account.exists());
-        }
-    } //进入个人中心页面
-
-    private void randomPlayFilm(int RandomMove){
-        uiDevice.pressDPadDown();
-        systemWait(WAIT);
-        Random moveTimes = new Random();
-        int i;
-        i=moveTimes.nextInt(RandomMove);
-        for(int j= 0;j<=i;j++){
-            SystemClock.sleep(1000);
-            uiDevice.pressDPadDown();
-            SystemClock.sleep(1000);
-            if(i > 18){
-                break;
-            }
-        }
-    } //随机播放电影
-
-    public void sleep(long ms) {
-        long start = uptimeMillis();
-        long duration = ms;
-        boolean interrupted = false;
-        do {
-            try {
-                Thread.sleep(duration);
-            }
-            catch (InterruptedException e) {
-                interrupted = true;
-            }
-            duration = start + ms - uptimeMillis();
-        } while (duration > 0);
-
-        if (interrupted) {
-            // Important: we don't want to quietly eat an interrupt() event,
-            // so we make sure to re-interrupt the thread so that the next
-            // call to Thread.sleep() or Object.wait() will be interrupted.
-            Thread.currentThread().interrupt();
+            pressDown(i-10);
+            systemWait(1);
         }
     }
 
+    //等待时间设定
     public static void systemWait(int seconds) {
 
         SystemClock.sleep(seconds * 1000);
-    } //等待时间设定
+    }
 
-    public void waitForNewWindowIdle(long time){
-        try {
-            uiDevice.wait(Until.findObject(By.text("全屏")),time);
-            UiObject2 fullScreen = uiDevice.findObject(By.text("全屏")
-                    .res("com.bestv.ott:id/discripse"));
-            if (fullScreen != null) {
-                output("全屏&True");
-            } else {
-                tv.fun.common.Utils.funAssert("等待18s,如果界面还没有打开则超时异常", false);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+    //验证是否进入媒体页
+    public void verifyEnterDetailsPage(long time) {
+        getDevice().wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), time*1000);
+        if (getDevice().hasObject(By.text("全屏").res("com.bestv.ott:id/discripse"))) {
+            output("Enter Details Page Success");
+        } else {
+            output("Enter Details Page Failed");
+            takeScreenToFile(getDevice(),"DetailsPage");
+            Assert.assertTrue(false);
         }
-    }  //等待18s,如果界面还没有打开则超时异常
+    }
 
-    private void waitForNewWindowCollectButton(long time){
+    //视频播放时间,获取时间轴时间转化为秒，然后等待时间替代播放时间
+    public void playVideoTime(){
         try {
-            Tracer.trace(time);
-            sleep(time);
-            UiObject2 fullScreen = uiDevice.findObject(By.text("全屏").res("com.bestv.ott:id/discripse"));
-            if (fullScreen == null) {
-                uiDevice.pressMenu();
-                sleep(2000);
-                UiObject2 Text = uiDevice.findObject(text("\uE6CF 已收藏")
-                        .res("com.bestv.ott:id/fav_text"));  //加入断言判定详情页是否变为已收藏
-                m_Expect = "\uE6CF 已收藏";
-                m_Actual = Text.getText();
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                tv.fun.common.Utils.writeCaseResult("menu选项收藏后应变为已收藏", m_Pass, m_Time);
-            } else {
-                sleep(2000);
-                UiObject2 Text = uiDevice.findObject(text("已收藏"));  //加入断言判定详情页是否变为已收藏
-                m_Expect = "已收藏";
-                m_Actual = Text.getText();
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                tv.fun.common.Utils.writeCaseResult("详情页收藏显示错误：收藏后应变为已收藏", m_Pass, m_Time);
+            pressEnter(1);//
+            verifyEnterDetailsPage(15);
+            pressLeft(1);
+            UiObject2 tryWatch = getDevice().findObject(By.text("精彩预告，付费看正片").res("com.bestv.ott:id/watch_try_text"));
+            if(tryWatch != null){
+                pressEnter(1);
+                pressUp(1);
+                pressEnter(1);
+                UiObject2 totalTime = getDevice().findObject(By.res("com.bestv.ott:id/time_total"));
+                int endTime = timeTrans(totalTime.getText());
+                pressEnter(1);
+                systemWait(endTime+30);
+            }else {
+                pressEnter(2);
+                UiObject2 totalTime = getDevice().findObject(By.res("com.bestv.ott:id/time_total"));
+                int endTime = timeTrans(totalTime.getText());
+                pressEnter(1);
+                systemWait(endTime+30);
             }
-        }catch (Throwable e){
+
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     //将xx:xx:xx格式的时间转化为xxx秒
-    public int timeTrans(String sTime){
+    private int timeTrans(String sTime){
         int iTime;
         int iHour = 0;
         int iMins = 0;
@@ -218,15 +164,21 @@ public class CommonMethod extends UiActions {
         return iTime;
     }
 
-    public void playTime(){
-
+    //等待对象出现
+    public void waitForObjExists(String res,long time){
+        UiObject obj = uiDevice.findObject(new UiSelector().resourceId(res));
+        obj.waitForExists(time);
+        if(obj.exists()){
+            return ;
+        }
+        sleep(1000);
     }
 
-    //等待loading消失
-    public void progressBarExists(int Second){
-        UiObject proBar = uiDevice.findObject(new UiSelector().resourceId(Infos.S_PROCESS_BAR_ID));
-        proBar.waitUntilGone(Second);//在一定时间内判断控件是否消失
-        if(!proBar.exists()){
+    //等待对象消失
+    public void waitUntilObjGone(String str,int time){
+        UiObject obj = uiDevice.findObject(new UiSelector().resourceId(str));
+        obj.waitUntilGone(time);//在一定时间内判断控件是否消失
+        if(!obj.exists()){
             return;
         }
         sleep(1000);
@@ -247,7 +199,7 @@ public class CommonMethod extends UiActions {
     }
 
     //获取当前时间
-    public String getNow() {//获取当前时间
+    protected String getNow() {//获取当前时间
         Date time = new Date();
         SimpleDateFormat now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timeNow = now.format(time);
@@ -270,7 +222,6 @@ public class CommonMethod extends UiActions {
 
     //判断电视是否是会员（launcher）
     public String checkVip() {
-        systemWait(1);
         UiObject2 vipTip = uiDevice.findObject(By.res("com.bestv.ott:id/vip_tip")
                 .clazz("android.widget.TextView").pkg("com.bestv.ott"));
         return vipTip.getText();
@@ -290,27 +241,6 @@ public class CommonMethod extends UiActions {
             }
         }
         return num;
-    }
-
-    public void selectLocation(String locat) throws UiObjectNotFoundException{
-        UiCollection collection = new UiCollection(new UiSelector().resourceId("com.bestv.ott:id/title"));
-        UiObject hotLocat = collection.getChild(new UiSelector().text(locat));
-        hotLocat.clickAndWaitForNewWindow();
-    }
-
-    public boolean assertLocation(String locat) throws UiObjectNotFoundException{
-        UiObject hotLocat  = new UiObject(new UiSelector().text(locat));
-        int x = hotLocat.getBounds().centerX();
-        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+x);
-        int H = UiDevice.getInstance().getDisplayHeight();
-        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+H);
-        int W = UiDevice.getInstance().getDisplayWidth(); //1920
-        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+W);
-        int max = (int)(W+W*0.05);
-        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+max);
-        int min = (int)(W-W*0.05);
-        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+min);
-        return (max>x & x>min);
     }
 
     /**
@@ -353,7 +283,7 @@ public class CommonMethod extends UiActions {
      * 相似度为1~100
      * 原理是提取每一个像素点比较，整张图相似度取决于像素点相同个数，所以还是比较准确的
      */
-    private static int ImageCompare(Bitmap bitmap0, Bitmap bitmap1) {
+    public static int ImageCompare(Bitmap bitmap0, Bitmap bitmap1) {
 
         int picPct = 0;
         int picCount = 0;
@@ -390,7 +320,8 @@ public class CommonMethod extends UiActions {
         return color;
     }
 
-    public void deleteScreenShot() {//删除截图文件夹
+    //删除截图文件夹
+    public void deleteScreenShot() {
         File file = new File("/mnt/sdcard/autotest/");
         if (file.exists()) {//如果file存在
             File[] files = file.listFiles();//获取文件夹下文件列表
@@ -406,39 +337,24 @@ public class CommonMethod extends UiActions {
 
     //获取随机数
     public int getRandomInt(int num) {
+
         return new Random().nextInt(num);
     }
 
+    //通过包名启动app
     public void startWishApp(String packName) throws IOException {
         Runtime.getRuntime().exec("am start -n"+packName);
     }
 
-    //获取内存信息
-    public int getMemInfo(String info) {
-        int result = 0;
-        Pattern r = Pattern.compile(" [0-9]+ ");
-        Matcher m = r.matcher(info);
-        if (m.find()) {
-            System.out.println(m.group());
-            result = changeStringToInt(m.group().trim());
-        }
-        return result;
-    }
-
-    //获取cpu运行信息
-    public double getCpuInfo(String info) {
-        String percent = info.substring(0, info.indexOf("%"));
-        double result = changeStringToDouble(percent.trim());
-        return result;
-    }
-
     //把string类型转化为int
-    private int changeStringToInt (String text) {
+    public int changeStringToInt(String text) {
+
         return Integer.valueOf(text);
     }
 
     //把string类型转化为double
-    private Double changeStringToDouble (String text) {
+    public Double changeStringToDouble(String text) {
+
         return Double.valueOf(text);
     }
 
@@ -538,6 +454,147 @@ public class CommonMethod extends UiActions {
             }
         }
         return value;
+    }
+
+    //时间比较
+    public int timeCompare(String str1, String str2) {
+        String[] strArr1 = str1.split("/");
+        String[] strArr2 = str2.split("/");
+        String[] formerArr = strArr1[0].trim().split(":");
+        String[] latterArr = strArr2[0].trim().split(":");
+
+        int time1 = Integer.parseInt(formerArr[0].trim()) * 3600
+                + Integer.parseInt(formerArr[01].trim()) * 60
+                + Integer.parseInt(formerArr[2].trim());
+        int time2 = Integer.parseInt(latterArr[0].trim()) * 3600
+                + Integer.parseInt(latterArr[01].trim()) * 60
+                + Integer.parseInt(latterArr[2].trim());
+        return (time2 - time1);
+    }
+
+    //图片比较
+    public boolean imageComapre() throws UiObjectNotFoundException {
+
+        String path = "/data/local/tmp/";
+        String imageName1 = "image1.png";
+        File image1 = new File(path + imageName1);
+        getDevice().takeScreenshot(image1, 0.5f, 30);
+
+        String imageName2 = "image2.png";
+        File image2 = new File(path + imageName2);
+        getDevice().takeScreenshot(image2, 0.5f, 30);
+
+        Bitmap bitmap1 = BitmapFactory.decodeFile(path + imageName1);
+        Bitmap bitmap2 = BitmapFactory.decodeFile(path + imageName2);
+
+        boolean isSame = Bitmap.createBitmap(bitmap1, 100, 200, 50, 50).sameAs(
+                Bitmap.createBitmap(bitmap2, 100, 200, 50, 50));
+
+        return isSame;
+    }
+
+    //存在&&可用
+    public boolean isExist(UiObject uiObj) {
+        try {
+            return uiObj.exists() && uiObj.isEnabled() ? true : false;//三元
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //获取某种搜索条件组件的数量
+    public void collectCount() throws UiObjectNotFoundException{
+        UiCollection collection = new UiCollection(new UiSelector().resourceId("com.bestv.ott:id/live_against_list"));
+        int we = collection.getChildCount(new UiSelector().resourceId("com.bestv.ott:id/container"));
+        Log.d(TAG, "selectLocation: "+we);
+    }
+
+    public boolean assertLocation(String locat) throws UiObjectNotFoundException{
+        UiObject hotLocat  = new UiObject(new UiSelector().text(locat));
+        int x = hotLocat.getBounds().centerX();
+        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+x);
+        int H = UiDevice.getInstance().getDisplayHeight();
+        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+H);
+        int W = UiDevice.getInstance().getDisplayWidth(); //1920
+        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+W);
+        int max = (int)(W+W*0.05);
+        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+max);
+        int min = (int)(W-W*0.05);
+        Log.d("lxm", "LC_VIP_01_EnterVipPage: "+min);
+        return (max>x & x>min);
+    }
+
+    public void testImageCapture() throws UiObjectNotFoundException {
+        UiObject record = uiDevice.findObject(new UiSelector().text("电影").resourceId("com.bestv.ott:id/title"));
+        //获取区域
+        Rect rect = record.getBounds();
+        //截图
+        String path = "/mnt/sdcard/test.jpg";
+        File file = new File(path);
+        UiDevice.getInstance().takeScreenshot(file);
+        Bitmap m = BitmapFactory.decodeFile(path);
+        //截取图片
+        ImageCapture(rect,path);
+        //获取某个点的像素值
+        int pixel = m.getPixel(rect.centerX(),rect.centerY());
+        Log.d(TAG, "testImageCapture: "+pixel);
+        //不用的Bitmap及时回收
+        if(!m.isRecycled()){
+            m.recycle();
+            System.gc();
+        }
+    }
+
+    //截图一张保存
+    public void ImageCapture(Rect rect,String path) throws UiObjectNotFoundException{
+        //新建一张图片
+        Bitmap image = BitmapFactory.decodeFile(path);
+        //通过坐标截取图片
+        image = image.createBitmap(image,rect.left,rect.top,rect.width(),rect.height());
+        //保存图片
+        saveBitmap(image,"Image");
+    }
+
+    public void saveBitmap(Bitmap bitmap,String name){
+        FileOutputStream out = null;
+        try{
+            out = new FileOutputStream("/mnt/sdcard/"+name+".jpg");
+            if(out != null){
+                //压缩图片
+                bitmap.compress(Bitmap.CompressFormat.JPEG,90,out);
+                out.close();
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    //获取某点的像素值
+    public int getPixel(int x,int y){
+        String path = "/mnt/sdcard/image11.png";
+        File file = new File(path);
+        UiDevice.getInstance().takeScreenshot(file);
+        Bitmap m = BitmapFactory.decodeFile(path);
+        int color = m.getPixel(x,y);
+        return color;
+    }
+
+    //Environment类提供了Android环境变量的访问和获取
+    public void environment(){
+        Log.d(TAG, "test1: "+Environment.isExternalStorageEmulated());//是否有外部存储设备
+        Log.d(TAG, "test1: "+Environment.isExternalStorageRemovable());//外部存储设备是否可移除
+        Log.d(TAG, "test1: "+Environment.getDataDirectory());//获取数据目录
+        Log.d(TAG, "test1: "+Environment.getDownloadCacheDirectory());//获取下载缓存目录
+        Log.d(TAG, "test1: "+Environment.getExternalStorageState());//获取外部存储状态
+        Log.d(TAG, "test1: "+Environment.getRootDirectory());//获取root目录
+        //列出目录下的所有文件
+        File downFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        //新建文件列表，用于存储所有文件的文件名
+        File[] files = downFile.listFiles();
+        for (File f:files) {
+            Log.d(TAG, "test1: "+f.getAbsolutePath()); //打印绝对路径
+        }
     }
 
 }

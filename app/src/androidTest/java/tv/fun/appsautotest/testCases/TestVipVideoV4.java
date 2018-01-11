@@ -1,12 +1,9 @@
 package tv.fun.appsautotest.testCases;
 
-import android.content.Context;
-import android.os.SystemClock;
-import android.support.test.InstrumentationRegistry;
+import android.os.RemoteException;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.Configurator;
-import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -14,12 +11,19 @@ import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import tv.fun.appsautotest.common.CommonMethod;
 import tv.fun.appsautotest.common.TvCommon;
@@ -28,54 +32,38 @@ import tv.fun.common.Utils;
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public final class TestVipVideoV4 extends CommonMethod{
-//    private UiDevice uiDevice;
-//    private CommonMethod commonMethod;
-//    private UiActions uiActions;
 
-    //初始化
-    private long m_Time;
-    private UiObject2 mObject = null;
-    private UiObject2 m_uiObj = null;
-    private String m_ObjId = "";
-    private String m_Expect = "";
-    private String m_Actual = "";
-    private String resultStr = "";
-    private boolean resultFlag = true;
-    private boolean m_Pass = false;
-    private Context mainContext;
+    @BeforeClass
+    public static void BeforeClass() {
 
-//
-//    @BeforeClass
-//    public static void BeforeClass() {
-//
-//    }
+    }
 
     @Before
+    @Override
     public void setUp() {
-        uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-//        commonMethod = new CommonMethod();
-//        uiActions = new UiActions();
+        super.setUp();
         m_Time = Utils.getCurSecond();   //耗时
+        output("用例开始执行");
 
 //        uiDevice.pressHome();
         uiDevice.waitForIdle();
-//        UiObject2 VipArea = commonMethod.getTabFromLauncherHomeByText(uiDevice, "金卡会员");
-//        commonMethod.openTabFromLauncherHomeByText(uiDevice,VipArea);
-    }
-
-
-    @After
-    public void clearUp() {
-//        uiDevice.pressBack(); //退出最深层级
         Configurator configurator = Configurator.getInstance();
         configurator.setActionAcknowledgmentTimeout(5000);
     }
 
-    @AfterClass
-    public static void AfterClass(){
 
-        System.gc();
+    @After
+    @Override
+    public void tearDown() {
+        super.tearDown();
+        output("用例执行完毕");
     }
+
+//    @AfterClass
+//    public static void AfterClass(){
+//
+//        System.gc();
+//    }
 
     @Test  //获取用例名
     public void test(){
@@ -84,7 +72,7 @@ public final class TestVipVideoV4 extends CommonMethod{
     }
 
     @Test //fix
-    public void LC_VIP_01_EnterVipPage() throws UiObjectNotFoundException {
+    public void LC_VIP_01_EnterVipPage() {
         try {
             Thread.sleep(1000);
 //            Runtime.getRuntime().exec("am force-stop tv.fun.weather");
@@ -100,6 +88,7 @@ public final class TestVipVideoV4 extends CommonMethod{
             Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurDate());
             Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurMonthOfDay(2018,1));
             Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurWeekOfDayInYear(2018,1,25));
+            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+"李".equals("李"));
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -113,27 +102,9 @@ public final class TestVipVideoV4 extends CommonMethod{
     }
 
     @Test //全屏播放会员小窗口fix
-    public void LC_VIP_02_HatchToFullScreenPlay() {
-//        try {
-            if("续费会员".equals(checkVip())){
-                sleep(50000);
-            }else {
-                uiDevice.pressDPadDown();
-                uiDevice.pressEnter();
-                sleep(10000);
-            }
-//            uiDevice.pressEnter();
-//            m_uiObj = uiDevice.findObject(By.res("com.bestv.ott:id/detail_enter"));
-//            Utils.writeCaseResult("进入全屏播放时失败，无法抓取到控件", m_uiObj != null, m_Time);
-//        }catch(Throwable e){
-//            e.printStackTrace();
-//            resultFlag = false;
-//            resultStr += e.toString();
-//        }finally {
-//            if (resultStr != null) {
-//                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
-//            }
-//        }
+    public void LC_VIP_02_HatchToFullScreenPlay() throws UiObjectNotFoundException,RemoteException{
+        uiDevice.wakeUp();
+        uiDevice.click(300,800);
     }
 
     @Test
@@ -144,21 +115,17 @@ public final class TestVipVideoV4 extends CommonMethod{
             int tabShowCount = tabShow.getChildCount();
             super.pressRight(tabShowCount-3);
             uiDevice.pressDPadCenter();
-            uiDevice.waitForIdle();
+            systemWait(2);
             UiObject2 tabSin = uiDevice.findObject(By.clazz("android.widget.RelativeLayout").focused(true));
             int tabView = tabSin.getChildCount();
-            for (int i = 1; i <= tabShowCount-4; i++) {
-              sleep(1000);
+            for (int i = 1; i <= tabShowCount-3; i++) {
+                systemWait(1);
                 if (tabView == 3) {
                     uiDevice.pressEnter();
                 }
                 uiDevice.pressBack();
                 uiDevice.waitForIdle();
                 uiDevice.pressEnter();
-//                if (tabView == 1) {
-//                    uiActions.pressBack(1);
-//                    break;
-//                }
             }
             if (tabView == 1) {
                 uiDevice.waitForIdle();
@@ -177,6 +144,52 @@ public final class TestVipVideoV4 extends CommonMethod{
             uiDevice.pressHome();
         }
     }
+
+    final static String url1 = "http://jm.funtv.bestv.com.cn/media/detailtab/v3?id=316267&mac=28:76:CD:00:00:01";
+    @Test
+    public void testUrl() throws NullPointerException{
+       try{
+        URL url = new URL(url1);
+//        Log.d(TAG, "URL: "+url.toString());
+//        Log.d(TAG, "协议: "+url.getProtocol());
+//        Log.d(TAG, "验证信息: "+url.getAuthority());
+//        Log.d(TAG, "文件名: "+url.getFile());
+//        Log.d(TAG, "主机名: "+url.getHost());
+//        Log.d(TAG, "路径：" + url.getPath());
+//        Log.d(TAG, "端口：" + url.getPort());
+//        Log.d(TAG, "默认端口：" + url.getDefaultPort());
+//        Log.d(TAG, "请求参数：" + url.getQuery());
+//        Log.d(TAG, "定位位置：" + url.getRef());
+        try {
+            //通过URL的openStream方法获取URL对象所表示的资源字节输入流
+            InputStream is = url.openStream();
+            InputStreamReader isr = new InputStreamReader(is, "utf-8");
+
+            //字符输入流添加缓冲
+            BufferedReader br = new BufferedReader(isr);
+            String data = br.readLine();//读取数据
+            while (data != null) {//循环读取数据
+                Log.d(TAG, "testUrl: "+data); //输出数据
+                Log.d(TAG, "testUrl: "+data.length());
+                Log.d(TAG, "testUrl: "+data.indexOf("u76f8"));
+                if(data.contains("200")){
+                    Log.d(TAG, "testUrl: "+data.substring(data.indexOf("u76f8")-1,data.indexOf("u76f8")+24));
+                    String q1 = data.substring(data.indexOf("u76f8")-1,data.indexOf("u76f8")+23);
+                    Log.d(TAG, "testUrl: "+ascii2Native(q1));
+                }
+                data = br.readLine();
+            }
+            br.close();
+            isr.close();
+            is.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        }catch(MalformedURLException e){
+            e.printStackTrace();
+        }
+    }
+
 //    @Test //小窗口跳转媒体页
 //    public void LC_VIP_03_PlayCompleteVideo() {
 //        try {
@@ -955,14 +968,14 @@ public final class TestVipVideoV4 extends CommonMethod{
 //        SystemClock.sleep(seconds * 1000);
 //    } //等待时间设定
 //
-    private void rightMoveMethod(int RightMove){
-        int i = 1;
-        while (i <= RightMove){
-            i++;
-            uiDevice.pressDPadRight();
-            SystemClock.sleep(1000);
-        }
-    } //Right*
+//    private void rightMoveMethod(int RightMove){
+//        int i = 1;
+//        while (i <= RightMove){
+//            i++;
+//            uiDevice.pressDPadRight();
+//            SystemClock.sleep(1000);
+//        }
+//    } //Right*
 //
 //    private void downMoveMethod(int DownMove){
 //        int i = 1;
