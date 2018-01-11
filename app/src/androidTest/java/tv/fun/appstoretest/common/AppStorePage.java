@@ -15,6 +15,8 @@ public class AppStorePage extends Common {
     public String currentTabName = "";
     public String launcherVideoTab = "视频";
     public String launcherAppTab = "应用";
+    public String[] textInSearchWindow = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+            "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 
     /**
      * Method for navigating to Launcher App tab page
@@ -293,9 +295,11 @@ public class AppStorePage extends Common {
      * @throws InterruptedException
      */
     public void installAppInDetailPage() throws InterruptedException {
-        device.pressDPadDown();
-        device.pressDPadUp();
-        device.pressEnter();
+        //installBtn.click();不能实现点击安装按钮操作，故使用pressEnter
+        moveDown();
+        moveUp();
+        //点击安装按钮，安装应用
+        enter();
         Thread.sleep(30000);
         waitForElementNotPresentByID("tv.fun.appstore:id/progressState");
         waitForElementPresentByIDAndText("tv.fun.appstore:id/titleContainer", "打开");
@@ -415,7 +419,76 @@ public class AppStorePage extends Common {
             confirmBtn.click();
             waitForElementNotPresentByID("com.android.packageinstaller:id/uninstall_confirm");
         }
-        device.pressBack();
+        back();
+    }
+
+    /**
+     * Uninstall All App from App Clean page and back
+     *
+     * @throws InterruptedException
+     */
+    public void uninstallAllAppFromAppCleanPage() throws InterruptedException, UiObjectNotFoundException {
+        String appNumStr = findElementByID("tv.fun.master:id/appNumber").getText().replace("应用数量 ", "").replace(" 个", "");
+        int appNum = stringToInt(appNumStr);
+        UiObject eachAppObj = null;
+        moveRightForMultiple(2);
+        for (int i = 0; i < appNum; ) {
+            UiObject appList = findElementByID("tv.fun.master:id/listView");
+            int displayedAppCount = appList.getChildCount();
+            int loopMaxTimes = (new Double(Math.floor(appNum/4))).intValue();
+            if(loopMaxTimes>1&&appNum%4>0){
+                loopMaxTimes=loopMaxTimes+1;
+            }else if(loopMaxTimes==0&&appNum>0){
+                loopMaxTimes=loopMaxTimes+1;
+            }
+            for(int j=0; j< loopMaxTimes; j++) {
+                int h=0;
+                for (int k = 0; k < displayedAppCount; k++) {
+                    i++;
+                    UiObject appListObj = findElementByID("tv.fun.master:id/listView");
+                    eachAppObj = appListObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(h));
+                    UiObject appObj = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/appNameView"));
+                    String appName =appObj.getText();
+                    if(appName.toLowerCase().contains("tv.")||appName.toLowerCase().contains("auto")||appName.toLowerCase().contains("test")){
+                        moveDown();
+                        moveRight();
+                        h++;
+                       continue;
+                    }else {
+                        //点击卸载按钮，卸载应用
+                        UiObject uninstallBtnOfApp = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
+                        device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);//cannot use click method in here
+                        waitForElementPresentByID("com.android.packageinstaller:id/uninstall_confirm");
+                        //卸载弹框弹出后，点击“确定”
+                        UiObject confirmBtn = device.findObject(new UiSelector().resourceId("com.android.packageinstaller:id/ok_button"));
+                        UiObject cancelBtn = device.findObject(new UiSelector().resourceId("com.android.packageinstaller:id/cancel_button"));
+                        confirmBtn.click();
+                        waitForElementNotPresentByID("com.android.packageinstaller:id/uninstall_confirm");
+//                     if(h>0){
+//                            moveDown();
+//                        }
+                    }
+                    moveDown();
+                    moveRight();
+                }
+            }
+        }
+        back();
+    }
+
+    /**
+     * Goto App clean page from myApp/myGame/AppUninstall Page By appclean btn in Menu pop-up
+     * @throws InterruptedException
+     * @throws UiObjectNotFoundException
+     */
+    public void gotoAppCleanPageFromAppListByMenu() throws InterruptedException, UiObjectNotFoundException {
+        moveDown();
+        menu();
+        waitForElementPresentByID("android:id/tv_fun_menu_text");
+        UiObject appCleanObj = device.findObject(new UiSelector().resourceId("android:id/tv_fun_menu_text").text("清理数据"));
+        appCleanObj.clickAndWaitForNewWindow();
+        waitForElementPresentByID("tv.fun.master:id/uninstall");
+        waitForElementPresentByID("tv.fun.master:id/clearData");
     }
 
     /**

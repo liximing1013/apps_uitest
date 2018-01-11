@@ -21,7 +21,7 @@ import tv.fun.common.Utils;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestTVMaster extends MasterApp {
-    public int optionNumOfNetworkCheck = 10;
+    public int optionNumOfNetworkCheck = 11;
 
     /**
      * 验证可以通过点击Launcher应用页面“电视助手”卡片，进入电视助手页面
@@ -1352,9 +1352,9 @@ public class TestTVMaster extends MasterApp {
             UiObject firstOptionText = firstOptionObj.getChild(new UiSelector().resourceId("tv.fun.master:id/check_network_result_text"));
             verifyElementPresent("", firstOptionIcon);
             verifyElementPresent("", firstOptionText);
-            UiObject retryObj = findElementByID("tv.fun.master:id/check_network_again");
+            UiObject checkDnsObj = findElementByID("tv.fun.master:id/check_network_again");
             UiObject finishObj = findElementByID("tv.fun.master:id/check_network_finish");
-            verifyString("", retryObj.getText(), "重新检测");
+            verifyString("", checkDnsObj.getText(), "查看 DNS");
             verifyString("", finishObj.getText(), "完成");
         }catch (Throwable e) {
             e.printStackTrace();
@@ -1384,11 +1384,15 @@ public class TestTVMaster extends MasterApp {
             UiObject checkingObj = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
             waitForElementNotPresent(checkingObj);
             waitForElementPresentByID("tv.fun.master:id/check_network_again");
-            UiObject retryObj = findElementByID("tv.fun.master:id/check_network_again");
-            verifyString("", retryObj.getText(), "重新检测");
-            retryObj.click();
-            UiObject retryChecking = findElementByText("检测中...", "tv.fun.master:id/check_network_title");
-            verifyElementPresent("", retryChecking);
+            UiObject checkDNSObj = findElementByID("tv.fun.master:id/check_network_again");
+            verifyString("", checkDNSObj.getText(), "查看 DNS");
+            checkDNSObj.click();
+            waitForElementPresentByID("com.android.browser:id/url");
+            Thread.sleep(500);
+            UiObject dnsCheckingPageObj = findElementByID("com.android.browser:id/title");
+            verifyElementPresent("", dnsCheckingPageObj);
+            verifyIncludeString("", dnsCheckingPageObj.getText(), "本地DNS优化诊断");
+            back();
         }catch (Throwable e) {
             e.printStackTrace();
             resultFlag = false;

@@ -639,6 +639,21 @@ public class Common {
     }
 
     /**
+     * Move to target tab from current tab
+     * @param tabs
+     * @param currentTab
+     * @param targetTab
+     */
+    public void moveFromCurrentTabToTargetTab(String[] tabs, String currentTab, String targetTab){
+        int needStep = stepFromCurrentTabToTargetTab(tabs, currentTab, targetTab);
+        if (needStep > 0) {
+            moveRightForMultiple(needStep);
+        } else {
+            moveLeftForMultiple(needStep);
+        }
+    }
+
+    /**
      * Use to get the step need to move from the first tab to target tab
      *
      * @param targetTab
@@ -732,7 +747,7 @@ public class Common {
             moveLeftForMultiple(stepFromCurrent);
         }
         device.pressEnter();
-        waitForElementPresentByIDAndText("com.bestv.ott:id/tab_manager_title", "设置桌面频道");
+        waitForElementPresentByID("com.bestv.ott:id/tab_manager_title");
         UiObject appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
         appTabInList.click();
         appTabInList = findElementByText(appTabName, "com.bestv.ott:id/tab_title");
@@ -797,7 +812,7 @@ public class Common {
      * @throws UiObjectNotFoundException
      */
     public void moveToLauncherTargetTab(String targetTab, String tabResouceID, int step) throws UiObjectNotFoundException, InterruptedException {
-        moveUp();
+//        moveUp();
         cancelLauncherPopupDisplay();
         UiObject tab = device.findObject(new UiSelector().resourceId(tabResouceID).text(targetTab));
         if (!tab.exists()) {
