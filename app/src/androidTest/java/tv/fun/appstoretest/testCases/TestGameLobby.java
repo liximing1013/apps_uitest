@@ -1511,7 +1511,7 @@ public class TestGameLobby extends GameLobbyPage{
             //移动焦点到设置tab
             moveFromCurrentTabToTargetTab(tabsOfGameLobby[3]);
             //Assert
-            UiObject gameLobbySettingsPageObj = findElementByID(gameLobbyPageLocatorID).getChild(new UiSelector().className(childNodeNormalClassName));
+            UiObject gameLobbySettingsPageObj = findElementByID(gameLobbyPageLocatorID).getChild(new UiSelector().className(childNodeNormalClassName).index(3));
             int cardNumUnderGameSettingsTab = gameLobbySettingsPageObj.getChildCount();
             UiObject sdkLoginObj = findElementByID(gameLobbySDKLoginCardLocatorID);
             UiObject myGameObj = findElementByID(gameLobbyMyGameCardLocatorID);

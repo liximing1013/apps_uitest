@@ -172,7 +172,7 @@ public class GameLobbyPage extends AppStorePage{
      */
     public void gotoAppDetailPageFromPHBUnderGameTab() throws UiObjectNotFoundException, InterruptedException {
         UiObject phbListObj = findElementByID("com.bestv.ott:id/rank_scroll_list");
-        UiObject phbListChildsObj = phbListObj.getChild(new UiSelector().className("android.widget.LinearLayout"));
+        UiObject phbListChildsObj = phbListObj.getChild(new UiSelector().className("android.widget.LinearLayout").index(0));
         UiObject phbListChildEle = phbListChildsObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
         phbListChildEle.click();
         phbListChildEle.click();
@@ -185,7 +185,10 @@ public class GameLobbyPage extends AppStorePage{
      * Method for navigating to Game Lobby by clicking gamelobby card under game tab page
      */
     public void gotoGameLobbyPage() throws InterruptedException, UiObjectNotFoundException {
-        UiObject gameLobbyEle = findElementByText("游戏大厅", "com.bestv.ott:id/title");
+        if(!findElementByText(gameLobbyCardName, "com.bestv.ott:id/title").exists()){
+            navigateToLauncherGameTab();
+        }
+        UiObject gameLobbyEle = findElementByText(gameLobbyCardName, "com.bestv.ott:id/title");
         gameLobbyEle.click();
         gameLobbyEle.clickAndWaitForNewWindow();
     }
