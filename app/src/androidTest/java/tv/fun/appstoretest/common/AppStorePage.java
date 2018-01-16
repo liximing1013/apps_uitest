@@ -409,7 +409,7 @@ public class AppStorePage extends Common {
             }
             break;
         }
-        if (targetAppIndex > 0) {
+        if (targetAppIndex >= 0) {
             UiObject uninstallBtnOfApp = eachAppObj.getChild(new UiSelector().resourceId("tv.fun.master:id/uninstall"));
             device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);//cannot use click method in here
             waitForElementPresentByID("com.android.packageinstaller:id/uninstall_confirm");

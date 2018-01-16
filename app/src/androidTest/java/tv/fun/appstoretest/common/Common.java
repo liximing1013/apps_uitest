@@ -74,8 +74,8 @@ public class Common {
 
     @After
     public void tearDown() throws IOException {
-//        device.pressHome();
-        executeAdbShellCommond("am force-stop tv.fun.appstore");
+        device.pressHome();
+//        executeAdbShellCommond("am force-stop tv.fun.appstore");
     }
 
     public void longPressHomeByCommand() throws IOException {

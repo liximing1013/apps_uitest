@@ -3,6 +3,7 @@ package tv.fun.appstoretest.common;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.view.KeyEvent;
 
 /**
  * Created by liuqing on 2018/1/5.
@@ -28,6 +29,7 @@ public class GameLobbyPage extends AppStorePage{
     public String gameSearchIconLocatorID = "tv.fun.appstore:id/game_search";
     public String nodeNormalClassName = "android.widget.RelativeLayout";
     public String childNodeNormalClassName = "android.widget.LinearLayout";
+    public String childEleNormalClassName = "android.widget.FrameLayout";
     public String menuPopupLocatorID = "android:id/tv_fun_menu";
     public String btnTextInMenuPopupLocatorID = "android:id/tv_fun_menu_text";
     public int orderOfMyGameCardInPage = 4;
@@ -40,6 +42,7 @@ public class GameLobbyPage extends AppStorePage{
     //YKQ tab element or locator id
     public int childEnterNumUnderYKQTab = 6;
     public String[] childEntersNameUnderYKQ = {"动作","角色", "棋牌", "射击", "体育", "休闲"};
+    public String childEnterOfEdu = "儿歌";
 
     //App detail page element locator info
     public String appDetailPageAppNameLocatorID = "tv.fun.appstore:id/title";
@@ -56,12 +59,17 @@ public class GameLobbyPage extends AppStorePage{
     public String appDetailPageDownProgressObjLocator = "tv.fun.appstore:id/progressNum";
     public String appDetailPageAppStopInstallStatus = "已暂停";
     //My game page element name or locator id
+    public String myGamePageTitleLocatorID = "tv.fun.appstore:id/title";
     public String myGamePageSubTitleLocatorID = "tv.fun.appstore:id/subTitle";
     public String[] myGamePageSubTitleChildStrs = {"有", "个游戏"};
     public String myGameNoAppPageLocatorID = "tv.fun.appstore:id/emptyView";
     public String myGamePageListLocatorID = "tv.fun.appstore:id/listview";
     public String myGameNoAppPageMsg = "未安装任何游戏，快去安装吧";
     public String myGamePageAppNameLocator = "tv.fun.appstore:id/appName";
+    public String myGamePageMenuIconLocator = "android:id/tv_fun_menu_icon";
+    public String myGamePageMenuPopupBtnLocator = "android:id/tv_fun_menu_text";
+    public String[] btnsNameInMenuPopup = {"详情", "卸载", "清理数据"};
+
     //Game Lobby page PHB tab element name or locator id
     //Download PHB
     public String gameLobbyDPHBColLocatorID = "tv.fun.appstore:id/game_download_rank_container";
@@ -136,6 +144,11 @@ public class GameLobbyPage extends AppStorePage{
     public String sdkLoginPagePsdForgetBtnLocatorID = "tv.fun.appstore:id/pwd_forget";
     public String sdkLoginPagLPwdForgetBtnText = "忘记密码";
 
+    //专题页element
+    public String topicPageAppListLocatorID = "tv.fun.appstore:id/topic_app_list";
+    public String topicPageBackgroundObjLocatorID = "tv.fun.appstore:id/topic_poster";
+    public String topicPageContentLocatorID = "android:id/content";
+
 
 
 
@@ -176,6 +189,22 @@ public class GameLobbyPage extends AppStorePage{
         UiObject phbListChildEle = phbListChildsObj.getChild(new UiSelector().className("android.widget.RelativeLayout").index(0));
         phbListChildEle.click();
         phbListChildEle.click();
+        enter();
+        waitForAppDetailPageDisplay();
+    }
+
+    /**
+     * Goto App detail page by pressing enter btn on app card
+     */
+    public void gotoAppDetailPageByKeyEvent() throws InterruptedException {
+        device.pressKeyCode(KeyEvent.KEYCODE_DPAD_CENTER);
+        waitForAppDetailPageDisplay();
+    }
+
+    /**
+     * Goto App detail page by pressing enter btn on app card
+     */
+    public void gotoAppDetailPageByEnter() throws InterruptedException {
         enter();
         waitForAppDetailPageDisplay();
     }
@@ -274,5 +303,16 @@ public class GameLobbyPage extends AppStorePage{
         UiObject sdkLoginObj = findElementByID(gameLobbySDKLoginCardLocatorID);
         sdkLoginObj.click();
         waitForElementPresentByID(sdkLoginPageTitleLocatorID);
+    }
+
+    /**
+     * Get installed game app num from subtitle in my game page
+     */
+    public int getInstalledGameAppNumFromMyGameSubTitle() throws UiObjectNotFoundException {
+        UiObject subTitleObj = findElementByID(myGamePageSubTitleLocatorID);
+        String subTitle = subTitleObj.getText();
+        String countStr = subTitle.replace(myGamePageSubTitleChildStrs[1], "").replace(myGamePageSubTitleChildStrs[0], "");
+        int appNum = Integer.valueOf(countStr);
+        return appNum;
     }
 }
