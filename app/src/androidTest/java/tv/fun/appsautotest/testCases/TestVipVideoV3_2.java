@@ -80,7 +80,9 @@ public final class TestVipVideoV3_2 extends TestCase{
     } //测试项目开始前运行（仅一次），如清除缓存数据、安装应用等
 
     @Before
-    public void setUp() {
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
         instrument = InstrumentationRegistry.getInstrumentation();
         uiDevice = UiDevice.getInstance(instrument);
         m_Time=Utils.getCurSecond();   //耗时
@@ -286,7 +288,7 @@ public final class TestVipVideoV3_2 extends TestCase{
             }else {
                 Assert.assertTrue("兑换",false);
             }
-        }catch(Throwable e){
+        }catch(Exception e){
             e.printStackTrace();
             resultStr = e.toString();
             resultFlag = false;

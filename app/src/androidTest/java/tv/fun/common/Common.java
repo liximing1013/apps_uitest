@@ -128,6 +128,12 @@ public class Common {
         device.pressMenu();
     }
 
+    public void Menu(int iTimes){
+        for(int i = 0; i < iTimes; ++i){
+            Menu();
+        }
+    }
+
     public void Back(){
         device.pressBack();
     }

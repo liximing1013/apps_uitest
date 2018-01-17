@@ -10,10 +10,6 @@ import tv.fun.appsautotest.common.TvCommon;
 import tv.fun.common.Infos;
 import tv.fun.common.Utils;
 
-/**
- * Created by lixm on 2017/2/12.
- */
-
 public class TestAutoDataReport {
     private int m_iOneSecond = 1000;
     private int m_iWaitSec = 8 * m_iOneSecond;

@@ -27,7 +27,7 @@ public class TestEnterPage {
     int iWaitSec = 8 * iOneSecond;
     TvCommon m_com = new TvCommon();
 
-    boolean m_bPass = false;
+    boolean m_bPass = true;
     long m_lConsumeTime = -1;
     String m_sVersion = Infos.S_TV_VERSION;
     String m_sExpect = "";
@@ -50,7 +50,7 @@ public class TestEnterPage {
     }
 
     @Test
-    public void LC_TB_01_enterHomePage(){
+    public void COM_Enter_01_enterHomePage(){
         try {
             m_com.Home(2);
 
@@ -72,7 +72,7 @@ public class TestEnterPage {
     }
     @Test
     // 焦点选择电视Tab页
-    public void LC_TB_02_enterTvTabPage(){
+    public void COM_Enter_02_enterTvTabPage(){
         try {
             enterTvTabPage();
 
@@ -95,7 +95,7 @@ public class TestEnterPage {
 
     @Test
     // 焦点选择体育Tab页
-    public void LC_TB_03_enterSportsTabPage(){
+    public void COM_Enter_03_enterSportsTabPage(){
         try {
             enterSportsTabPage();
 
@@ -118,7 +118,7 @@ public class TestEnterPage {
         m_com.Navigation("hh99249999");
     }
     @Test
-    public void LC_TB_04_enterFilmPage(){
+    public void COM_Enter_04_enterFilmPage(){
         try {
             enterFilmPage();
 
@@ -166,7 +166,7 @@ public class TestEnterPage {
         m_com.Navigation("hh992149999");
     }
     @Test
-    public void LC_TB_05_enterTVPlayPage(){
+    public void COM_Enter_05_enterTVPlayPage(){
         try{
             enterTVPlayPage();
 
@@ -214,7 +214,7 @@ public class TestEnterPage {
         m_com.Navigation("hh9914"); //new int[]{-1, -1, 1, 4});
     }
     @Test
-    public void LC_TB_06_enterHistoryPage(){
+    public void COM_Enter_06_enterHistoryPage(){
         try {
             enterHistoryPage();
 
@@ -232,7 +232,6 @@ public class TestEnterPage {
         }finally {
             Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
         }
-
     }
 
 
@@ -240,7 +239,7 @@ public class TestEnterPage {
         m_com.Navigation("hh992114");
     }
     @Test
-    public void LC_TB_07_enterChildPage(){
+    public void COM_Enter_07_enterChildPage(){
         try{
             enterChildPage();
             m_sObjId = "tv.fun.children:id/tab_title_children"; // 少儿标签id
@@ -262,7 +261,7 @@ public class TestEnterPage {
         m_com.Navigation("hh99124"); // 视频-金卡会员页小窗口自动播放
     }
     @Test
-    public void LC_TB_08_enterVIPPage(){
+    public void COM_Enter_08_enterVIPPage(){
         try {
             enterVIPPage();
 
@@ -287,7 +286,7 @@ public class TestEnterPage {
         m_com.Navigation("hh991224");
     }
     @Test
-    public void LC_TB_09_enterVideoClassificationPage(){
+    public void COM_Enter_09_enterVideoClassificationPage(){
         try {
             enterVideoClassificationPage();
 
@@ -312,7 +311,7 @@ public class TestEnterPage {
         m_com.Navigation("hh990122224");
     }
     @Test
-    public void LC_TB_10_enterBestvLivePage(){ // 百视通直播大厅
+    public void COM_Enter_10_enterBestvLivePage(){ // 百视通直播大厅
         try {
             enterBestvLivePage();
 
@@ -369,7 +368,7 @@ public class TestEnterPage {
     }
 
     @Test
-    public void LC_TB_11_enterCustomTabsPage(){
+    public void COM_Enter_11_enterCustomTabsPage(){
         try {
             m_bPass = enterCustomTabsPage();
             m_sResult = String.format("进入设置桌面频道页失败，没有[%s]字样！", m_sExpect);
@@ -391,7 +390,7 @@ public class TestEnterPage {
 
     public void enterSettingPage(){
         m_com.Home(2);
-        m_com.Menu();
+        m_com.Menu(2);
         m_com.Right(2);
         m_com.Enter();
     }
@@ -404,6 +403,85 @@ public class TestEnterPage {
         m_com.Up(10);
         m_com.Down(2);
         m_com.Enter();
+    }
+
+    public void enterCommonSettingPage(){
+        enterSettingPage();
+        m_com.Right(2);
+        m_com.Down(2);
+        m_com.Enter();
+        m_com.Up(10);
+    }
+
+    public void enterAdvanceSettingPage(){
+        enterCommonSettingPage();
+        m_com.Down(4);
+        m_com.Enter();
+        m_com.Up(5);
+    }
+
+    public void enterOnTimePowerOffPage(){
+        enterAdvanceSettingPage();
+        m_com.Down();
+        m_com.Enter();
+    }
+
+    @Test
+    public void COM_Set_setOnTimePowerOff(){
+        try {
+            enterOnTimePowerOffPage();
+            m_com.Left();
+            m_com.Right();
+
+            m_uiObj = m_com.getUiObjByResId("tv.fun.settings:id/item_value");
+            m_sExpect = "已开启";
+            m_sActual = m_com.checkExpectResult(m_uiObj, m_sExpect);
+            if(!m_sActual.equalsIgnoreCase("OK")){
+                m_sResult += m_sActual;
+                m_bPass = false;
+            }
+
+            m_com.Down(); // slect hour 2点
+            m_uiObj = m_com.getUiObjByResId("tv.fun.settings:id/lrswitch_hour_time");
+            m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_RESID,
+                    "tv.fun.settings:id/setting_item_value", 0);
+            UiObject uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS,
+                    "android.widget.TextView", 0);
+            Utils.Print(uiObj.getBounds().toString() + "1: " + uiObj.getText());
+            while (!uiObj.getText().equalsIgnoreCase("2点")){
+                m_com.Left();
+            }
+
+            m_com.Down(); // slect minute 35分
+            m_uiObj = m_com.getUiObjByResId("tv.fun.settings:id/lrswitch_minute_time");
+            m_uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_RESID,
+                    "tv.fun.settings:id/setting_item_value", 0);
+            uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_CLASS,
+                    "android.widget.TextView", 0);
+            Utils.Print(uiObj.getBounds().toString() + "2: " + uiObj.getText());
+            while (!uiObj.getText().equalsIgnoreCase("35分")){
+                m_com.Left();
+            }
+
+            m_com.Back(); // check if the poweroff time is 2:35
+            m_uiObj = m_com.getFocusedUiObject();
+//            m_uiObj = m_com.getUiObjByResId("tv.fun.settings:id/setting_item_screen_shutdown_time");
+            uiObj = m_com.getUiObjChild(m_uiObj, m_com.BY_RESID,
+                    "tv.fun.settings:id/linear_text_image_com", 0);
+            uiObj = m_com.getUiObjChild(uiObj, m_com.BY_CLASS,
+                    "android.widget.TextView", 0);
+            Utils.Print(uiObj.getBounds().toString() + "3: " + uiObj.getText());
+            if(!uiObj.getText().equalsIgnoreCase("02:35关机")){
+                m_bPass = false;
+                m_sResult = "设置的定时关机时间不是【02:35】！";
+            }
+        }catch(Throwable e){
+            e.printStackTrace();
+            m_bPass = false;
+            m_sResult += e.toString();
+        }finally {
+            Utils.writeCaseResult(m_sResult, m_bPass, m_lConsumeTime);
+        }
     }
 
 //    @Test

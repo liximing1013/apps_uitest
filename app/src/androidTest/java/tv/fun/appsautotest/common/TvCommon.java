@@ -100,6 +100,16 @@ public class TvCommon extends Common{
         return exists;
     }
 
+    public UiObject getFocusedUiObject(){
+        UiObject uiObj = null;
+        try {
+            uiObj = new UiObject(new UiSelector().focused(true));
+        } catch (Exception e) {
+            Utils.writeLogs(String.format("没有找到焦点选中的对象\r\n", e), ERR_CODE);
+        }
+        return uiObj;
+    }
+
     public UiObject getUiObjByResId(String resId){
         UiObject uiObj = null;
         try {
