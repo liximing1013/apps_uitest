@@ -1769,6 +1769,149 @@ public class TestGameLobby extends GameLobbyPage{
     }
 
     /**
+     *Game_Setting_6:可以成功注册账号
+     */
+    @Test
+    public void Game_Setting_06_testRegSdkAccountInGameLobby() {
+        try {
+            //移动焦点到Launcher游戏tab
+            navigateToLauncherGameTab();
+            //进入游戏大厅
+            gotoGameLobbyPage();
+            //移动焦点到设置tab
+            moveFromCurrentTabToTargetTab(tabsOfGameLobby[3]);
+            if(!findElementByText("已登录", "tv.fun.appstore:id/game_settings_login_type").exists()) {
+            //点击设置tab下sdk登录卡片
+            gotoSDKLoginPageFromGameLobby();
+            //点击“立即注册”
+            UiObject regBtnObj = findElementByText("立即注册", "tv.fun.appstore:id/register");
+            regBtnObj.click();
+            if(!findElementByID("tv.fun.appstore:id/dial_delete").exists()) {
+                back();
+                regBtnObj.click();
+            }
+            //Assert
+            UiObject titleObj = findElementByID("tv.fun.appstore:id/setting_title");
+            verifyString("", titleObj.getText(), "风行账号注册");
+            UiObject subTitleObj = findElementByID("tv.fun.appstore:id/setting_subtitle");
+            verifyIncludeString("", subTitleObj.getText(), "有问题请拨打客服电话 400-600-6258");
+            UiObject inputBoxObj = findElementByID("tv.fun.appstore:id/edittext_1");
+            verifyElementPresent("", inputBoxObj);
+            UiObject getCodeBtnObj = findElementByID("tv.fun.appstore:id/button_1");
+            verifyString("", getCodeBtnObj.getText(), "获取验证码");
+            UiObject delBtnObj = findElementByID("tv.fun.appstore:id/dial_delete");
+            verifyElementPresent("", delBtnObj);
+            UiObject btnInKeyBoardObj  = findElementByID("tv.fun.appstore:id/dial_container");
+            int btnCount = btnInKeyBoardObj.getChildCount();
+            verifyNumber("", btnCount, 11);
+        }else{
+            UiObject loginStatusObj = findElementByID("tv.fun.appstore:id/game_settings_login_type");
+            verifyString("", loginStatusObj.getText(), "已登录");
+        }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Game_Setting_7:可以成功修改风行账号密码
+     */
+    @Test
+    public void Game_Setting_07_testRegSdkAccountInGameLobby() {
+        try {
+            //移动焦点到Launcher游戏tab
+            navigateToLauncherGameTab();
+            //进入游戏大厅
+            gotoGameLobbyPage();
+            //移动焦点到设置tab
+            moveFromCurrentTabToTargetTab(tabsOfGameLobby[3]);
+            if(!findElementByText("已登录", "tv.fun.appstore:id/game_settings_login_type").exists()) {
+                //点击设置tab下sdk登录卡片
+                gotoSDKLoginPageFromGameLobby();
+                //点击“忘记密码”
+                UiObject psdForgetBtnObj = findElementByID("tv.fun.appstore:id/pwd_forget");
+                psdForgetBtnObj.click();
+                if (!findElementByID("tv.fun.appstore:id/dial_delete").exists()) {
+                    back();
+                    psdForgetBtnObj.click();
+                }
+                //Assert
+                UiObject titleObj = findElementByID("tv.fun.appstore:id/setting_title");
+                verifyString("", titleObj.getText(), "重置风行账号密码");
+                UiObject subTitleObj = findElementByID("tv.fun.appstore:id/setting_subtitle");
+                verifyIncludeString("", subTitleObj.getText(), "有问题请拨打客服电话 400-600-6258");
+                UiObject inputBoxObj = findElementByID("tv.fun.appstore:id/edittext_1");
+                verifyElementPresent("", inputBoxObj);
+                UiObject getCodeBtnObj = findElementByID("tv.fun.appstore:id/button_1");
+                verifyString("", getCodeBtnObj.getText(), "获取验证码");
+                UiObject delBtnObj = findElementByID("tv.fun.appstore:id/dial_delete");
+                verifyElementPresent("", delBtnObj);
+                UiObject btnInKeyBoardObj = findElementByID("tv.fun.appstore:id/dial_container");
+                int btnCount = btnInKeyBoardObj.getChildCount();
+                verifyNumber("", btnCount, 11);
+            }else{
+                UiObject loginStatusObj = findElementByID("tv.fun.appstore:id/game_settings_login_type");
+                verifyString("", loginStatusObj.getText(), "已登录");
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
+     *Game_Setting_8:可以成功登录sdk
+     */
+    @Test
+    public void Game_Setting_08_testLoginSdkInGameLobby() {
+        try {
+            //移动焦点到Launcher游戏tab
+            navigateToLauncherGameTab();
+            //进入游戏大厅
+            gotoGameLobbyPage();
+            //移动焦点到设置tab
+            moveFromCurrentTabToTargetTab(tabsOfGameLobby[3]);
+            //点击设置tab下sdk登录卡片
+            gotoSDKLoginPageFromGameLobby();
+            if(!findElementByText("已登录", "tv.fun.appstore:id/game_settings_login_type").exists()) {
+                //输入账号密码，登录
+                UiObject nameInputObj = findElementByID("tv.fun.appstore:id/edittext_username");
+                nameInputObj.setText(sdkLoginUsername);
+                back();
+                moveDown();
+                UiObject passwordInputObj = findElementByID("tv.fun.appstore:id/edittext_password");
+                passwordInputObj.setText(sdkLoginPassword);
+                UiObject loginBtn = findElementByText("立即登录", "tv.fun.appstore:id/login");
+                loginBtn.click();
+                waitForElementNotPresent("tv.fun.appstore:id/login");
+            }
+            //Assert
+            UiObject loginBtnObj = findElementByText("立即登录", "tv.fun.appstore:id/login");
+            verifyElementNotPresent("", loginBtnObj);
+            UiObject loginStatusObj = findElementByID("tv.fun.appstore:id/game_settings_login_type");
+            verifyString("", loginStatusObj.getText(), "已登录");
+            UiObject loginAccountObj = findElementByID("tv.fun.appstore:id/game_settings_login_name");
+            verifyString("", loginAccountObj.getText(), sdkLoginUsername);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            resultFlag = false;
+            resultStr = e.toString();
+        } finally {
+            Utils.writeCaseResult(resultStr,
+                    resultFlag, execTime);
+        }
+    }
+
+    /**
      *Game_Setting_9:可以正常进入我的游戏页面
      */
     @Test

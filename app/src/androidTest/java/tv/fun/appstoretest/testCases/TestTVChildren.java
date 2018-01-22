@@ -28,10 +28,8 @@ public class TestTVChildren extends ChildrenPage {
                 navigateToChildrenByChildrenCardUnderVideo();
                 waitForElementPresentByID("tv.fun.children:id/tab_title_setting");
                 //断言：少儿页面正确显示
-                UiObject childrenTab = findElementByID("tv.fun.children:id/tab_title_children");
                 UiObject childrenSetting = findElementByID("tv.fun.children:id/tab_title_setting");
                 UiObject searchBtnObj = findElementByID("tv.fun.children:id/tab_title_search");
-                verifyElementPresent("点击视频tab页面少儿卡片后没有正常进入少儿页面", childrenTab);
                 verifyElementPresent("设置图标没有显示在少儿页面", childrenSetting);
                 verifyElementPresent("", searchBtnObj);
             } catch (Throwable e) {
@@ -47,7 +45,7 @@ public class TestTVChildren extends ChildrenPage {
         /**
          * Navigate to TV Children page via Children card in video category page
          */
-        @Test
+//        @Test
         public void Child_Home_03_testNavigateToChildrenFromVideoCategory() {
             try {
                 //在launcher页面点击“视频分类”卡片
@@ -133,9 +131,9 @@ public class TestTVChildren extends ChildrenPage {
                     desktopIconObj.click();
                 }
                 desktopIconObj.click();
-                waitForElementPresentByID("tv.fun.settings:id/title");
+                waitForElementPresentByID("com.android.systemui:id/title");
                 //点击智能桌面弹框上儿童桌面
-                UiObject childDesktopObj = findElementByText("儿童桌面", "tv.fun.settings:id/title");
+                UiObject childDesktopObj = findElementByText("儿童桌面", "com.android.systemui:id/title");
                 moveRight();
                 if(!childDesktopObj.isSelected()) {
                     moveUp();
@@ -144,9 +142,7 @@ public class TestTVChildren extends ChildrenPage {
                 enter();
                 //断言：少儿页面正确显示
                 waitForElementPresentByID("tv.fun.children:id/tab_title");
-                UiObject childrenTab = findElementByID("tv.fun.children:id/tab_title_children");
                 UiObject childrenSetting = findElementByID("tv.fun.children:id/tab_title_setting");
-                verifyElementPresent("点击视频tab页面少儿卡片后没有正常进入少儿页面", childrenTab);
                 verifyElementPresent("设置图标没有显示在少儿页面", childrenSetting);
             }catch (Throwable e) {
                 e.printStackTrace();

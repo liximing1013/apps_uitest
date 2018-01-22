@@ -143,6 +143,8 @@ public class GameLobbyPage extends AppStorePage{
     public String sdkLoginPagRegisterBtnText = "立即注册";
     public String sdkLoginPagePsdForgetBtnLocatorID = "tv.fun.appstore:id/pwd_forget";
     public String sdkLoginPagLPwdForgetBtnText = "忘记密码";
+    public String sdkLoginUsername = "18602766907";
+    public String sdkLoginPassword = "123456";
 
     //专题页element
     public String topicPageAppListLocatorID = "tv.fun.appstore:id/topic_app_list";
