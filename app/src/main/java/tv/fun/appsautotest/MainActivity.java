@@ -11,17 +11,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "xuzx";
     Button buttonStart, buttonStop;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        startService(new Intent(this, TestService.class));
-        stopService(new Intent(this, TestService.class));
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//        startService(new Intent(this, TestService.class));
+//        stopService(new Intent(this, TestService.class));
 //        buttonStart = (Button) findViewById(R.id.buttonStart);
 //        buttonStop = (Button) findViewById(R.id.buttonStop);
 //        buttonStart.setOnClickListener(this);
 //        buttonStop.setOnClickListener(this);
-    }
+//    }
 
     public void onClick(View src) {
         switch (src.getId()) {
@@ -34,5 +34,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 stopService(new Intent(this, TestService.class));
                 break;
         }
+    }
+    //1.12
+    @Override
+    public void onCreate(Bundle saveInstanceState){
+        super.onCreate(saveInstanceState);
+        setContentView(R.layout.activity_main);
+        Button bn = (Button) findViewById(R.id.buttonStart);
+        bn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NbaHomeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

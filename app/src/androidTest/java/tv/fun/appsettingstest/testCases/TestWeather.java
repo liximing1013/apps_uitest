@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject2;
+import android.util.Log;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -24,10 +24,6 @@ import java.util.Locale;
 import tv.fun.appsettingstest.common.TaskWeather;
 import tv.fun.common.Constants;
 import tv.fun.common.Utils;
-
-import static tv.fun.common.Constants.LAUNCHER_PKG_NAME;
-import static tv.fun.common.Constants.WEATHER_HOME_ACTIVITY;
-import static tv.fun.common.Constants.WEATHER_PKG_NAME;
 
 /**
  * Created by zhengjin on 2016/11/11.
@@ -63,23 +59,24 @@ public final class TestWeather {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         mTask = TaskWeather.getInstance();
         mExecTime = Utils.getCurSecond();
-
-        mDevice.pressHome();
-        Utils.waitForPackageOpened(mDevice, LAUNCHER_PKG_NAME);
-        Utils.startActivity(WEATHER_PKG_NAME, WEATHER_HOME_ACTIVITY);
-        SystemClock.sleep(Constants.LONG_WAIT);
+//
+//        mDevice.pressHome();
+//        Utils.waitForPackageOpened(mDevice, LAUNCHER_PKG_NAME);
+//        Utils.startActivity(WEATHER_PKG_NAME, WEATHER_HOME_ACTIVITY);
+//        SystemClock.sleep(Constants.LONG_WAIT);
     }
 
-    @After
-    public void clearUp() {
-        Utils.stopProcess(WEATHER_PKG_NAME);
-    }
+//    @After
+//    public void clearUp() {
+//        Utils.stopProcess(WEATHER_PKG_NAME);
+//    }
 
     @Test
     public void WEA_Home_01_01_testDefaultLocatedCity() {
         try {
             UiObject2 location =
                     mDevice.findObject(By.res("tv.fun.weather:id/tv_weather_day_addr"));
+            Log.d(TAG, "WEA_Home_01_01_testDefaultLocatedCity: "+location.getText());
             Utils.writeCaseResult("Verify the default location on weather home.",
                     String.format("%s(默认)", INIT_CITY).equals(location.getText()), mExecTime);
         } catch (Exception e) {

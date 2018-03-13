@@ -1,17 +1,18 @@
 package tv.fun.appsautotest.testCases;
 
+import android.app.Instrumentation;
+import android.content.Context;
+import android.content.Intent;
 import android.os.RemoteException;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.By;
-import android.support.test.uiautomator.Configurator;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -37,27 +38,29 @@ public final class TestVipVideoV4 extends CommonMethod{
     public static void BeforeClass() {
 
     }
-
-    @Before
-    @Override
-    public void setUp() {
-        super.setUp();
-        m_Time = Utils.getCurSecond();   //耗时
-        output("用例开始执行");
-
-//        uiDevice.pressHome();
-        uiDevice.waitForIdle();
-        Configurator configurator = Configurator.getInstance();
-        configurator.setActionAcknowledgmentTimeout(5000);
-    }
-
-
-    @After
-    @Override
-    public void tearDown() {
-        super.tearDown();
-        output("用例执行完毕");
-    }
+//
+//    @Before
+//    @Override
+//    public void setUp() {
+//        super.setUp();
+//        m_Time = Utils.getCurSecond();   //耗时
+//        output("用例开始执行");
+//        myWatcher = new MyWatcher(uiDevice);
+//        uiDevice.registerWatcher("testwatcher",myWatcher);
+//
+////        uiDevice.pressHome();
+//        uiDevice.waitForIdle();
+//        Configurator configurator = Configurator.getInstance();
+//        configurator.setActionAcknowledgmentTimeout(5000);
+//    }
+//
+//
+//    @After
+//    @Override
+//    public void tearDown() {
+//        super.tearDown();
+//        output("用例执行完毕");
+//    }
 
 //    @AfterClass
 //    public static void AfterClass(){
@@ -74,21 +77,24 @@ public final class TestVipVideoV4 extends CommonMethod{
     @Test //fix
     public void LC_VIP_01_EnterVipPage() {
         try {
+            uiDevice.wakeUp();
             Thread.sleep(1000);
 //            Runtime.getRuntime().exec("am force-stop tv.fun.weather");
 //            uiDevice.waitForWindowUpdate("com.bestv.ott",12000);
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getLauncherPackageName());//com.bestv.ott
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getProductName());//aosp_almond
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getDisplaySizeDp());//Point(1280, 720)
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getCurrentPackageName());//tv.fun.weather
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getCurrentActivityName());//风行天气
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getDisplayHeight());//1080
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getDisplayWidth());//1920
-            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getLastTraversedText());//null
-            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurDate());
-            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurMonthOfDay(2018,1));
-            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurWeekOfDayInYear(2018,1,25));
-            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+"李".equals("李"));
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getLauncherPackageName());//com.bestv.ott
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getProductName());//aosp_almond
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getDisplaySizeDp());//Point(1280, 720)
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getCurrentPackageName());//tv.fun.weather
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getCurrentActivityName());//风行天气
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getDisplayHeight());//1080
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getDisplayWidth());//1920
+//            Log.d("lxm", "LC_VIP_01_EnterVipPage: "+uiDevice.getLastTraversedText());//null
+//            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurDate());
+//            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurMonthOfDay(2018,1));
+//            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+getCurWeekOfDayInYear(2018,1,25));
+//            Log.d(TAG, "LC_VIP_01_EnterVipPage: "+"李".equals("李"));
+            String ss = "com.funshion.xiriassist/com.funshion.xiriassist.MainActivity";
+            startApp(ss);
         }catch (Throwable e){
             e.printStackTrace();
             resultFlag = false;
@@ -102,9 +108,13 @@ public final class TestVipVideoV4 extends CommonMethod{
     }
 
     @Test //全屏播放会员小窗口fix
-    public void LC_VIP_02_HatchToFullScreenPlay() throws UiObjectNotFoundException,RemoteException{
-        uiDevice.wakeUp();
-        uiDevice.click(300,800);
+    public void LC_VIP_02_HatchToFullScreenPlay() throws UiObjectNotFoundException,RemoteException,NullPointerException{
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+//        UiDevice uiDevice = UiDevice.getInstance(instrumentation);
+        Context context = instrumentation.getContext();
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage("tv.fun.weather");
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 
     @Test
@@ -113,12 +123,12 @@ public final class TestVipVideoV4 extends CommonMethod{
             UiObject tab = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/indicator"));
             UiObject tabShow = tab.getChild(new UiSelector().className("android.widget.LinearLayout"));
             int tabShowCount = tabShow.getChildCount();
-            super.pressRight(tabShowCount-3);
+            super.pressRight(tabShowCount - 3);
             uiDevice.pressDPadCenter();
             systemWait(2);
             UiObject2 tabSin = uiDevice.findObject(By.clazz("android.widget.RelativeLayout").focused(true));
             int tabView = tabSin.getChildCount();
-            for (int i = 1; i <= tabShowCount-3; i++) {
+            for (int i = 2; i <= tabShowCount - 3; i++) {
                 systemWait(1);
                 if (tabView == 3) {
                     uiDevice.pressEnter();
@@ -145,9 +155,9 @@ public final class TestVipVideoV4 extends CommonMethod{
         }
     }
 
-    final static String url1 = "http://jm.funtv.bestv.com.cn/media/detailtab/v3?id=316267&mac=28:76:CD:00:00:01";
     @Test
     public void testUrl() throws NullPointerException{
+        String url1 = "http://jm.funtv.bestv.com.cn/media/detailtab/v3?id=316267&mac=28:76:CD:00:00:01";
        try{
         URL url = new URL(url1);
 //        Log.d(TAG, "URL: "+url.toString());
@@ -188,6 +198,52 @@ public final class TestVipVideoV4 extends CommonMethod{
         }catch(MalformedURLException e){
             e.printStackTrace();
         }
+    }
+
+    @Test //新闻title
+    public void testIndex() throws UiObjectNotFoundException {
+        if(uiDevice.hasObject(By.res("com.bestv.ott:id/icon"))){
+            UiObject container = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/container").index(2));
+            UiObject title = container.getChild(new UiSelector().resourceId("com.bestv.ott:id/title").className("android.widget.TextView"));
+            Log.d(TAG, "testIndex: "+title.getText());
+        }
+    }
+
+    @Test
+    public void my() throws UiObjectNotFoundException{
+        UiObject view = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/list_view"));
+        int card = view.getChildCount();
+        Log.d(TAG, "my: "+card); //9
+        UiObject qq = view.getChild(new UiSelector().text("网络设置"));
+        qq.clickAndWaitForNewWindow();
+    }
+
+    @Test //电视
+    public void down(){
+        if(uiDevice.hasObject(By.res("com.bestv.ott:id/add_icon"))){
+            pressDown(3);
+        }
+    }
+
+    @Test //搜索
+    public void down1(){
+//        if(uiDevice.hasObject(By.res("com.bestv.ott:id/search").text("搜索片名、演员、导演"))){
+//            pressDown(3);
+//            pressEnter(1);
+
+        int total = 0;
+        int[] qwe = new int[3];
+        qwe[0]= 1;
+        qwe[1]= 12;
+        qwe[2]= 3;
+        Log.d(TAG, "down1: "+qwe.length);
+//        for(int i =0;i<qwe.length;i++){
+//            total += qwe[i];
+//        }
+//        for (int i:qwe) {
+//            total += qwe[i];
+//        }
+        Log.d(TAG, "down1: "+total);
     }
 
 //    @Test //小窗口跳转媒体页

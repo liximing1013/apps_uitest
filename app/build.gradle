@@ -34,6 +34,11 @@ android {
 }
 
 dependencies {
+    /**
+     *compile：参与编译，并且会打包到debug/release apk中
+     *testCompile：只参与单元测试编译，不会打包到debug/release apk包中，不需要设备支持
+     * androidTestCompile：只参与UI测试编译，不会打包到debug/release apk包中，需要设备支持
+     */
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.0.0'

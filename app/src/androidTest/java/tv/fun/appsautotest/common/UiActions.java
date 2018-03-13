@@ -66,6 +66,13 @@ public class UiActions {
     protected final int DOCUMENTARY_INDEX = 11;//纪录片
     protected final int NBA_INDEX = 12;//NBA
     protected final int LIST_INDEX = 14;//排行榜
+    //launcher_index
+    protected final int LAUNCHER_RECORD_INDEX = 6; //播放记录
+    protected final int LAUNCHER_FILM_INDEX = 7; //电影
+    protected final int LAUNCHER_TELEPLAY_INDEX= 8; //电视剧
+    protected final int LAUNCHER_CHILD_INDEX= 9; //少儿
+    protected final int LAUNCHER_VARIETY_INDEX= 10; //游戏竞技
+    protected final int LAUNCHER_CLASSIF_INDEX = 11;//视频分类
 
 
     public UiDevice getDevice() {

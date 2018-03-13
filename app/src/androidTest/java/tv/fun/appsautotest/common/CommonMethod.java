@@ -100,14 +100,15 @@ public class CommonMethod extends UiActions {
     }
 
     //验证是否进入媒体页
-    public void verifyEnterDetailsPage(long time) {
-        getDevice().wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), time*1000);
+    protected void verifyEnterDetailsPage(int time) {
+//        getDevice().wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), time*1000);
+        sleep(1000*time);
         if (getDevice().hasObject(By.text("全屏").res("com.bestv.ott:id/discripse"))) {
             output("Enter Details Page Success");
         } else {
-            output("Enter Details Page Failed");
+//            output("Enter Details Page Failed");
             takeScreenToFile(getDevice(),"DetailsPage");
-            Assert.assertTrue(false);
+            Assert.assertTrue("Enter Details Page Failed",false);
         }
     }
 
@@ -159,7 +160,6 @@ public class CommonMethod extends UiActions {
         else{
             iSecs = Integer.parseInt(lsTime[0]);
         }
-
         iTime = 3600 * iHour + 60 * iMins + iSecs;
         return iTime;
     }
@@ -246,14 +246,14 @@ public class CommonMethod extends UiActions {
     /**
      * 百分百图片相同断言-.-
      */
-    public  static void AssertBitmapEqual(Bitmap bitmap0, Bitmap bitmap1){
+    public static void AssertBitmapEqual(Bitmap bitmap0, Bitmap bitmap1){
 
         Assert.assertEquals(100, ImageCompare(bitmap0,bitmap1));
     }
     /**
      * 百分之零图片相同断言
      */
-    public  static void AssertBitmapNotEqual(Bitmap bitmap0, Bitmap bitmap1){
+    public static void AssertBitmapNotEqual(Bitmap bitmap0, Bitmap bitmap1){
 
         Assert.assertEquals(0, ImageCompare(bitmap0,bitmap1));
     }
@@ -359,11 +359,14 @@ public class CommonMethod extends UiActions {
     }
 
     //获取launcher首页视频Tab卡片数=23
-    public void getCardCount() throws UiObjectNotFoundException {
-        UiObject grid = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/scrollview")
+    public int getCardCount() throws UiObjectNotFoundException {
+        UiObject grid = uiDevice.findObject(new UiSelector().resourceId("com.bestv.ott:id/inner_recyclerview")
                 .packageName("com.bestv.ott"));
-        UiObject card = grid.getChild(new UiSelector().className("android.widget.FrameLayout"));
-        int tabShowCount = card.getChildCount();
+        UiObject card = grid.getChild(new UiSelector()
+                .resourceId("com.bestv.ott:id/container"));
+        return card.getChildCount();
+//        List<UiObject2> tt = uiDevice.findObjects(By.res("com.bestv.ott:id/container"));
+//        int size = tt.size();
     }
 
     //获取电视剧列表页Tab数量
@@ -595,6 +598,20 @@ public class CommonMethod extends UiActions {
         for (File f:files) {
             Log.d(TAG, "test1: "+f.getAbsolutePath()); //打印绝对路径
         }
+    }
+
+    protected int startApp(String sName){
+        StringBuffer sBuffer = new StringBuffer();
+        sBuffer.append("am start -n");
+        sBuffer.append(sName);
+        int ret = -1;
+        try {
+            Process process = Runtime.getRuntime().exec(sBuffer.toString());
+            ret = process.waitFor();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ret;
     }
 
 }

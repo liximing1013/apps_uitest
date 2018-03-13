@@ -13,7 +13,6 @@ import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -41,7 +40,7 @@ import static android.support.test.uiautomator.By.text;
 
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestMenuFunctionOnEveryPageV3_2 extends TestCase{
+public class TestMenuFunctionOnEveryPageV3_2{
     private Instrumentation instrument;
     private UiDevice uiDevice;
     //设定等待时间
@@ -68,7 +67,7 @@ public class TestMenuFunctionOnEveryPageV3_2 extends TestCase{
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception{
         instrument = InstrumentationRegistry.getInstrumentation();
         uiDevice = UiDevice.getInstance(instrument);
         m_Time= Utils.getCurSecond();   //耗时
