@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "tv.fun.appsautotest"
@@ -39,14 +39,14 @@ dependencies {
      *testCompile：只参与单元测试编译，不会打包到debug/release apk包中，不需要设备支持
      * androidTestCompile：只参与UI测试编译，不会打包到debug/release apk包中，需要设备支持
      */
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:support-v4:23.+'
-    androidTestCompile 'com.android.support:support-annotations:23.+'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.+'
-    androidTestCompile 'com.squareup.okhttp:okhttp:2.7.5'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:23.0.0'
+    implementation 'com.android.support:support-v4:23.+'
+    androidTestImplementation 'com.android.support:support-annotations:23.+'
+    androidTestImplementation 'com.android.support.test:runner:0.4.1'
+    androidTestImplementation 'com.android.support.test:rules:0.4.1'
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.+'
+    androidTestImplementation 'com.squareup.okhttp:okhttp:2.7.5'
     //compile files('src/main/libs/usc.jar')
 }
