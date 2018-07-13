@@ -1,10 +1,18 @@
 package tv.banban.appsautotest.common;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiCollection;
 import android.support.test.uiautomator.UiDevice;
@@ -27,6 +35,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -36,6 +45,7 @@ import java.util.Random;
  */
 
 public class CommonMethod extends UiActions {
+    private String path;
 //    public UiDevice uiDevice;
 
 //
@@ -172,6 +182,70 @@ public class CommonMethod extends UiActions {
             return ;
         }
         sleep(1000);
+    }
+
+    private void init(){
+        Context context= InstrumentationRegistry.getTargetContext();
+        path=context.getExternalCacheDir().getPath();
+        Log.i(TAG, "init: path = " + path);
+    }
+
+    @Nullable
+    private File createFile(String path, String fileName){
+        File file=new File(path,fileName);
+
+        try {
+            if (file.exists()){
+                file.delete();
+            }
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return file;
+    }
+
+    protected void ScreenShot(String name){
+        //取得当前时间
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        String dat = calendar.get(Calendar.HOUR_OF_DAY) + "_" + calendar.get(Calendar.MINUTE) + "_" + calendar.get(Calendar.SECOND);
+        init();
+        File file =createFile(path,name);
+        systemWait(2);
+        uiDevice.takeScreenshot(file,1.0f,10);
+        uiDevice.waitForIdle();
+    }
+
+    public String getAppVersion(Context context,String packname){
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packinfo = pm.getPackageInfo(packname, 0);
+            return packinfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return packname;
+    }
+    /**
+     * 获取程序的名字
+     * @param context
+     * @param packname
+     * @return
+     */
+    public String getAppName(Context context,String packname){
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(packname, 0);
+            return info.loadLabel(pm).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return packname;
     }
 
     //等待对象消失
@@ -623,5 +697,37 @@ public class CommonMethod extends UiActions {
             }
         }
     }
+
+    // 启动应用
+    protected void startApp(String packageName,String className, int starTime) {
+        Context context = InstrumentationRegistry.getContext();
+        Intent launchIntent = new Intent();
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //启动应用
+        launchIntent.setComponent(new ComponentName(packageName,className));
+        context.startActivity(launchIntent);
+        systemWait(starTime);
+        uiDevice.waitForIdle();
+    }
+
+    protected void startBanBan() {
+        Context context = InstrumentationRegistry.getContext();
+        Intent launchIntent = new Intent();
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //启动应用
+        launchIntent.setComponent(new ComponentName("com.ee.xianshi.android", "com.ee.xianshi.android.MainActivity"));
+        context.startActivity(launchIntent);
+    }
+
+    // 清理图片
+    protected static void clearFiles(String filePath){
+        File scFileDir = new File(filePath);
+        File TrxFiles[] = scFileDir.listFiles();
+        for(File curFile:TrxFiles ){
+            curFile.delete();
+        }
+    }
+
+
 
 }
