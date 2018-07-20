@@ -26,12 +26,6 @@ import java.util.Locale;
 import java.util.Random;
 
 import tv.banban.appsautotest.testSuites.Group24x7TestCases;
-
-/**
- * Created by zhengjin on 2016/7/28.
- *
- * Test playing film video.
- */
 @RunWith(AndroidJUnit4.class)
 public final class TestFunTvFilm {
 

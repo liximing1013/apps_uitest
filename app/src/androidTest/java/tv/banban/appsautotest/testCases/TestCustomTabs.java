@@ -12,10 +12,6 @@ import tv.banban.appsautotest.common.TvCommon;
 import tv.banban.common.Infos;
 import tv.banban.common.Utils;
 
-/**
- * Created by xuzx on 2017/3/24.
- */
-
 public class TestCustomTabs {
     int iOneSecond = 1000;
     int iWaitSec = 8 * iOneSecond;

@@ -12,11 +12,6 @@ import tv.banban.appsautotest.common.TvCommon;
 import tv.banban.common.Infos;
 import tv.banban.common.Utils;
 
-/**
- * Created by xuzx on 2016/8/10.
- * Include the test cases for plays.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class TestFunTvTVPlay {
     int iOneSecond = 1000;

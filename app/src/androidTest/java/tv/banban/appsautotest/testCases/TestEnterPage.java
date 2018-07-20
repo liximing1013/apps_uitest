@@ -16,11 +16,6 @@ import tv.banban.appsautotest.common.TvCommon;
 import tv.banban.common.HttpUtils;
 import tv.banban.common.Infos;
 import tv.banban.common.Utils;
-
-/**
- * Created by xuzx on 2016/8/17.
- * Include the test cases for enter page.
- */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestEnterPage {
     int iOneSecond = 1000;

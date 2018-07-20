@@ -30,6 +30,8 @@ public class UiActions {
     public UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
     public final String TAG = "lxm";
     private final static String PREFIX_UNICODE = "\\u";
+    protected static  String filePath = "storage/emulated/0/Android/data/tv.fun.appsautotest/cache";
+
 
     //设定等待时间
     public static final int WAIT = 5;
@@ -51,29 +53,6 @@ public class UiActions {
     private final int CLICK_ID = 1000;
     private final int CLICK_text = 1001;
     private final int CLICK_clazz = 1002;
-    //视频分类_index
-    protected final int NEWS_INDEX = 0; //看看新闻
-    protected final int COMIC_INDEX = 1; //动漫
-    protected final int MUSIC_INDEX = 2; //歌曲
-    protected final int CHILD_INDEX = 3; //少儿
-    protected final int FILM_INDEX = 4; //电影
-    protected final int TELEPLAY_INDEX = 5; //电视剧
-    protected final int VARIETY_INDEX = 6; //综艺
-    protected final int VIP_INDEX = 7; //金卡专区
-    protected final int LIVE_INDEX= 8; //直播
-    protected final int NEWEST_INDEX= 9; //最新
-    protected final int GAME_INDEX= 10; //游戏竞技
-    protected final int DOCUMENTARY_INDEX = 11;//纪录片
-    protected final int NBA_INDEX = 12;//NBA
-    protected final int LIST_INDEX = 14;//排行榜
-    //launcher_index
-    protected final int LAUNCHER_RECORD_INDEX = 6; //播放记录
-    protected final int LAUNCHER_FILM_INDEX = 7; //电影
-    protected final int LAUNCHER_TELEPLAY_INDEX= 8; //电视剧
-    protected final int LAUNCHER_CHILD_INDEX= 9; //少儿
-    protected final int LAUNCHER_VARIETY_INDEX= 10; //游戏竞技
-    protected final int LAUNCHER_CLASSIF_INDEX = 11;//视频分类
-
 
     public UiDevice getDevice() {
 
@@ -165,7 +144,7 @@ public class UiActions {
         if (!file.exists()) {
             file.mkdirs();
         }
-        device.takeScreenshot(file);
+        device.takeScreenshot(file,1.0f,10);
     }
 
     //截图

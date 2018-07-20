@@ -25,6 +25,8 @@ import android.util.Log;
 
 import junit.framework.Assert;
 
+import org.junit.Test;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,6 +37,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -110,7 +113,7 @@ public class CommonMethod extends UiActions {
     }
 
     //验证是否进入媒体页
-    protected void verifyEnterDetailsPage(int time) {
+    private void verifyEnterDetailsPage(int time) {
 //        getDevice().wait(Until.findObject(By.res("com.bestv.ott:id/detail_karma")), time*1000);
         sleep(1000*time);
         if (getDevice().hasObject(By.text("全屏").res("com.bestv.ott:id/discripse"))) {
@@ -184,7 +187,7 @@ public class CommonMethod extends UiActions {
         sleep(1000);
     }
 
-    private void init(){
+    private void init() throws NullPointerException{
         Context context= InstrumentationRegistry.getTargetContext();
         path=context.getExternalCacheDir().getPath();
         Log.i(TAG, "init: path = " + path);
@@ -218,7 +221,7 @@ public class CommonMethod extends UiActions {
         uiDevice.waitForIdle();
     }
 
-    public String getAppVersion(Context context,String packname){
+    private String getAppVersion(Context context,String packname){
         //包管理操作管理类
         PackageManager pm = context.getPackageManager();
         try {
@@ -235,7 +238,7 @@ public class CommonMethod extends UiActions {
      * @param packname
      * @return
      */
-    public String getAppName(Context context,String packname){
+    protected String getAppName(Context context,String packname){
         //包管理操作管理类
         PackageManager pm = context.getPackageManager();
         try {
@@ -357,7 +360,7 @@ public class CommonMethod extends UiActions {
      * 相似度为1~100
      * 原理是提取每一个像素点比较，整张图相似度取决于像素点相同个数，所以还是比较准确的
      */
-    public static int ImageCompare(Bitmap bitmap0, Bitmap bitmap1) {
+    private static int ImageCompare(Bitmap bitmap0, Bitmap bitmap1) {
 
         int picPct = 0;
         int picCount = 0;
@@ -728,6 +731,60 @@ public class CommonMethod extends UiActions {
         }
     }
 
+    // 得到当前路径下文件
+    protected static ArrayList<String> getFiles(String path) {
+        ArrayList<String> files = new ArrayList<String>();
+        File file = new File(path);
+        File[] tempList = file.listFiles();
+        for (File file1:tempList) {
+            if (file1.isFile()) {
+                Log.i("lxm", "getFiles: "+file1);
+                files.add(file1.toString());
+            }
+        }
+        return files;
+    }
 
+    //根据坐标
+    protected void clickByCoordinate(int x, int y, int waitTime){
+        uiDevice.click(x,y);
+        uiDevice.waitForIdle();
+        systemWait(waitTime);
+    }
+
+    //text和Clazz定位
+    protected void clickByTextAndClazz(String text,String clazz){
+        UiObject2 obj  = uiDevice.findObject(By.text(text).clazz(clazz));
+        obj.click();
+        uiDevice.waitForIdle();
+    }
+
+    //判断模拟器app状态并启动
+    protected void stopApp(){
+        uiDevice.pressHome();
+        systemWait(2);
+        UiObject2 settings = uiDevice.findObject(By.text("设置"));
+        settings.clickAndWait(Until.newWindow(),3000);
+        systemWait(2);
+        clickByTextAndClazz("应用","android.widget.TextView");
+        systemWait(2);
+        UiObject2 ban = uiDevice.findObject(By.text("伴伴").res("com.android.settings:id/app_name")
+                .pkg("com.android.settings"));
+        ban.clickAndWait(Until.newWindow(),3000);
+        systemWait(2);
+        if(uiDevice.hasObject(By.text("应用信息").res("android:id/action_bar_title"))){
+            UiObject2 forceStop = uiDevice.findObject(By.text("强行停止").res("com.android.settings:id/left_button"));
+            if(forceStop.isFocusable()){
+                forceStop.clickAndWait(Until.newWindow(),1);
+                systemWait(2);
+                UiObject2 sure = uiDevice.findObject(By.text("确定"));
+                sure.click();
+                systemWait(2);
+            }else {
+                uiDevice.pressHome();
+            }
+        }
+        uiDevice.pressHome();
+    }
 
 }

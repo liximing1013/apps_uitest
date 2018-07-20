@@ -12,11 +12,6 @@ import tv.banban.appsautotest.common.TvCommon;
 import tv.banban.common.Infos;
 import tv.banban.common.Utils;
 
-/**
- * Created by xuzx on 2016/8/17.
- * Include the test cases for data report.
- */
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestDataReport {
     private int m_iOneSecond = 1000;
