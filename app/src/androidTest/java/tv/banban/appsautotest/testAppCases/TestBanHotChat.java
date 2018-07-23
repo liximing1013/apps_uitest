@@ -46,7 +46,7 @@ public class TestBanHotChat extends CommonMethod{
     @Test
     public void test_01_HotChatPage(){
         try {
-            startApp("com.ee.xianshi.android", "com.imbb.banban.android.MainActivity", 8);
+            startApp(x86_PACKNAME,x86_CLASSNAME);
             if("com.ee.xianshi.android".equals(uiDevice.getCurrentPackageName())){
                 clickByTextAndClazz("热聊","android.widget.TextView");
                 ScreenShot("_test_11_.png");
@@ -97,8 +97,6 @@ public class TestBanHotChat extends CommonMethod{
         }finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
-
     }
-
 
 }
