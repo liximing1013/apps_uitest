@@ -26,10 +26,7 @@ import tv.banban.appsautotest.common.CommonMethod;
 public class TestBanBanLogin extends CommonMethod{
     @Before
     public void setUp(){
-//        Context context = InstrumentationRegistry.getContext();
-//        Log.i(TAG, "setUp: "+getAppVersion(context, "com.imbb.banban.android")); //1.0.0.5
-//        Log.i(TAG, "setUp: "+getAppName(context, "com.imbb.banban.android")); //伴伴
-//        startApp("com.ee.xianshi.android","com.imbb.banban.android.MainActivity",8);
+
     }
 
     @After
