@@ -52,10 +52,10 @@ public class TestBanSetting extends CommonMethod {
 
     @After
     public void cleanUp(){
-        pressBack(1); //返回我的页面
-        uiDevice.waitForIdle();
-        UiObject2 me = uiDevice.findObject(By.text("我").clazz("android.widget.TextView"));
-        if(me != null){
+        pressBack(1);
+        waitForIdle(2);
+        UiObject2 page = uiDevice.findObject(By.text("我").clazz("android.widget.TextView"));
+        if(page != null){
             systemWait(1);
         }else {
             Assert.fail("未返回我的页面");
@@ -63,300 +63,310 @@ public class TestBanSetting extends CommonMethod {
     }
 
     @Test //个人资料页面
-    public void test_01_MyPagePersonInformation(){
+    public void test_settings_01_MyPagePersonInformation(){
         try {
-            //adb shell dumpsys window w |findstr \/ |findstr name=
-            stopApp();
-            startApp("com.ee.xianshi.android", "com.imbb.banban.android.MainActivity", 8);
+            stopApp();  //adb shell dumpsys window w |findstr \/ |findstr name=
+            startApp(x86_PACKNAME, x86_CLASSNAME); //启动x86模拟器
+            appIsRunning();
             if("com.ee.xianshi.android".equals(uiDevice.getCurrentPackageName())){
-                clickByTextAndClazz("我","android.widget.TextView");
-                systemWait(1);
-                clickByCoordinate(433,112,2);
-                ScreenShot("_test_1_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+                clickByTextAndClazz("我","android.widget.TextView"); //1s
+                clickByCoordinate(433,112,2); //2s
+                ScreenShot("test_settings_01.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
                 UiObject2 page = uiDevice.findObject(By.text("个人资料").clazz("android.widget.TextView"));
-                m_Actual = page.getText();
-                m_Expect = "个人资料";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转个人资料页面错误", m_Pass, m_Time);
+                m_Actual = page.getText(); //实际结果
+                m_Expect = "个人资料"; //预期结果
+                Assert.assertEquals("跳转个人资料页面错误",m_Expect,m_Actual);
             }
-        }catch (Throwable e){
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //交友动态页面
-    public void test_02_EditPersonInformation() {
+    public void test_settings_02_EditPersonInformation() {
         try {
             clickByTextAndClazz("交友动态","android.widget.TextView");
-            ScreenShot("_test_2_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_02.png");
             UiObject2 page = uiDevice.findObject(By.text("标签"));
             m_Actual = page.getText();
             m_Expect = "标签";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转交友动态页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转交友动态页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //活动礼包页面
-    public void test_03_ActivityPackagePage(){
+    public void test_settings_03_ActivityPackagePage(){
         try {
             clickByTextAndClazz("活动礼包","android.widget.TextView");
-            ScreenShot("_test_3_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_03.png");
             UiObject2 page = uiDevice.findObject(By.text("活动"));
             m_Actual = page.getText();
             m_Expect = "活动";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转活动页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转活动页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //钱包页面
-    public void test_04_WalletAndRecharge(){
+    public void test_settings_04_WalletAndRecharge(){
         try {
             clickByTextAndClazz("钱包","android.widget.TextView");
-            ScreenShot("_test_4_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_04.png");
             UiObject2 page = uiDevice.findObject(By.text("立即充值").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "立即充值";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转活动页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转活动页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //会员页面
-    public void test_05_VipAndNobilityPage(){
+    public void test_settings_05_VipAndNobilityPage(){
         try {
             clickByTextAndClazz("会员","android.widget.TextView");
-            ScreenShot("_test_5_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_05.png");
             UiObject2 page = uiDevice.findObject(By.text("贵族身份").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "贵族身份";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转会员页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转会员页面错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //邀约页面
-    public void test_06_InviteAndOrderPage(){
+    public void test_settings_06_InviteAndOrderPage(){
         try {
             clickByTextAndClazz("邀约","android.widget.TextView");
-            ScreenShot("_test_6_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_06.png");
             UiObject2 page = uiDevice.findObject(By.text("接单记录").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "接单记录";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转邀约页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转邀约页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //资质页面
-    public void test_07_AptitudePage(){
+    public void test_settings_07_AptitudePage(){
         try {
             clickByTextAndClazz("资质","android.widget.TextView");
-            ScreenShot("_test_7_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_07.png");
             UiObject2 page = uiDevice.findObject(By.text("资质设置").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "资质设置";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转资质页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转资质页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //账号设置页面
-    public void test_08_AccountSettingsPage(){
+    public void test_settings_08_AccountSettingsPage(){
         try {
             clickByTextAndClazz("账号设置","android.widget.TextView");
-            ScreenShot("_test_8_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_08.png");
             UiObject2 page = uiDevice.findObject(By.text("手机号").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "手机号";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转账号设置页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转账号设置页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //在线客服弹框
-    public void test_09_ServicePage(){
+    public void test_settings_09_ServicePage(){
         try {
             clickByTextAndClazz("在线客服","android.widget.TextView");
-            ScreenShot("_test_9_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_09.png");
             UiObject2 page = uiDevice.findObject(By.text("客服(咨询)").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "客服(咨询)";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("弹出客服弹框错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("弹出客服弹框错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //分享
-    public void test_10_ShareToThirdApp(){
+    public void test_settings_10_ShareToThirdApp() {
         try {
-            clickByTextAndClazz("分享","android.widget.TextView");
-            ScreenShot("_test_10_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            clickByTextAndClazz("分享", "android.widget.TextView");
+            ScreenShot("test_settings_10.png");
             UiObject2 page = uiDevice.findObject(By.text("选择分享方式").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "选择分享方式";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("弹出分享弹框错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("弹出分享弹框错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        } catch (Exception e) {
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
-        }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        } finally {
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
         }
     }
 
     @Test //帮助
-    public void test_11_HelpDocs(){
+    public void test_settings_11_HelpDocs(){
         try {
             clickByTextAndClazz("帮助","android.widget.TextView");
-            ScreenShot("_test_11_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_11.png");
             UiObject2 page = uiDevice.findObject(By.text("帮助分类").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "帮助分类";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转到帮助页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转到帮助页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //关于我们
-    public void test_12_AboutUs(){
+    public void test_settings_12_AboutUs(){
         try {
             clickByTextAndClazz("关于我们","android.widget.TextView");
-            ScreenShot("_test_12_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_12.png");
             UiObject2 page = uiDevice.findObject(By.text("伴伴").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "伴伴";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转关于我们页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //编辑个人资料页面
-    public void test_13_EditPersonalDataPage(){
+    public void test_settings_13_EditPersonalDataPage(){
         try {
             clickByCoordinate(600,150,2);
             UiObject2 edit = uiDevice.findObject(By.text("编辑"));
             edit.clickAndWait(Until.newWindow(), 3000);
-            ScreenShot("_test_13_.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+            ScreenShot("test_settings_13.png");
             UiObject2 page = uiDevice.findObject(By.text("编辑个人资料").clazz("android.widget.TextView"));
             m_Actual = page.getText();
             m_Expect = "编辑个人资料";
-            m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-            Utils.writeCaseResult("跳转个人资料页面错误", m_Pass, m_Time);
-        }catch (Throwable e){
+            Utils.writeCaseResult("跳转个人资料页面错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
-            pressBack(1); //回到最上一级页面
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
+            pressBack(1);
         }
     }
 
     @Test //开启接单
-    public void test_14_OpenOrderButton() {
+    public void test_settings_14_OpenOrderButton() {
         try {
             UiObject2 recoveryOrder = uiDevice.findObject(By.text("恢复接单"));
             if (recoveryOrder == null) {
                 UiObject2 Switch = uiDevice.findObject(By.clazz("android.widget.Switch"));
                 Switch.click();
-                uiDevice.waitForIdle();
-                systemWait(2);
+                waitForIdle(2);
                 UiObject2 recovery = uiDevice.findObject(By.text("不自动恢复"));
                 recovery.clickAndWait(Until.newWindow(), 3000);
-                ScreenShot("_test_14_1.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+                ScreenShot("test_settings_14_1.png");
                 UiObject2 page = uiDevice.findObject(By.text("选择多久后自动恢复").clazz("android.widget.TextView"));
                 m_Actual = page.getText();
                 m_Expect = "选择多久后自动恢复";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("错误", m_Pass, m_Time);
+                Utils.writeCaseResult("错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
             } else {
                 UiObject2 recovery = uiDevice.findObject(By.text("不自动恢复"));
                 recovery.clickAndWait(Until.newWindow(), 3000);
-                ScreenShot("_test_14_2.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+                ScreenShot("test_settings_14_2.png");
                 UiObject2 page = uiDevice.findObject(By.text("选择多久后自动恢复").clazz("android.widget.TextView"));
                 m_Actual = page.getText();
                 m_Expect = "选择多久后自动恢复";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("错误", m_Pass, m_Time);
+                Utils.writeCaseResult("错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
             }
-        } catch (Throwable e) {
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
-        } finally {
-            Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+        }finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
         }
     }
 
     @Test //提现到余额
-    public void test_15_PutForwardToBalance(){
+    public void test_settings_15_PutForwardToBalance(){
         try {
             UiObject2 wallet = uiDevice.findObject(By.text("钱包").clazz("android.widget.TextView"));
             wallet.clickAndWait(Until.newWindow(),2000);
@@ -367,34 +377,39 @@ public class TestBanSetting extends CommonMethod {
                 UiObject2 make = uiDevice.findObject(By.text("可消费余额"));
                 make.clickAndWait(Until.newWindow(),2000);
                 systemWait(2);
-                ScreenShot("_test_15_1.png");
+                ScreenShot("test_settings_15_1.png");
                 UiObject2 page1 = uiDevice.findObject(By.text("提现到可消费余额").clazz("android.widget.TextView"));
                 m_Actual = page1.getText();
                 m_Expect = "提现到可消费余额";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转页面错误", m_Pass, m_Time);
+                Utils.writeCaseResult("跳转页面错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
                 pressBack(1);
                 clickByCoordinate(400,320,2);
                 UiObject2 card = uiDevice.findObject(By.text("银行卡/支付宝"));
                 card.clickAndWait(Until.newWindow(),2000);
                 systemWait(2);
-                ScreenShot("_test_15_2.png");
+                ScreenShot("test_settings_15_2.png");
                 UiObject2 page2 = uiDevice.findObject(By.text("提现到银行卡/支付宝").clazz("android.widget.TextView"));
                 m_Actual = page2.getText();
                 m_Expect = "提现到银行卡/支付宝";
-                m_Pass = m_Actual.equalsIgnoreCase(m_Expect);
-                Utils.writeCaseResult("跳转页面错误", m_Pass, m_Time);
+                Utils.writeCaseResult("跳转页面错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
             }else {
-                output(" don't have money");
+                Assert.assertTrue("Don't Have Money",true);
             }
-        }catch (Throwable e){
+        }catch (Exception e){
             e.printStackTrace();
+            resultStr = e.toString();
             resultFlag = false;
-            resultStr += toString();
         }finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
             pressBack(1);
-            Utils.writeCaseResult(resultStr,resultFlag,m_Time);
         }
+    }
+
+    @Test //
+    public void test_settings_16_HelpDocsClassification(){
+
     }
 
     private void banBan(){

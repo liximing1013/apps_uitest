@@ -25,16 +25,12 @@ public class TestBanHotChat extends CommonMethod{
 
     @BeforeClass
     public static void BeforeClass(){
-        // 清理当前路径下图片
-        clearFiles(filePath); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
+
     }
 
     // 模拟器
     @Before
     public void setUp(){
-        Context context = InstrumentationRegistry.getContext();
-        Log.i(TAG, "setUp: "+getAppVersion(context, "com.ee.xianshi.android")); //1.0.1.4
-        Log.i(TAG, "setUp: "+getAppName(context, "com.ee.xianshi.android")); //伴伴
     }
 
     @After
@@ -96,6 +92,20 @@ public class TestBanHotChat extends CommonMethod{
             resultStr += toString();
         }finally {
             Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+        }
+    }
+
+    @Test //聊天页面循环发送消息
+    public void test(){
+        UiObject2 edit = uiDevice.findObject(By.text("请输入内容...").clazz("android.widget.EditText"));
+        edit.clear();
+        for(int i = 0; i<=100; i++){
+            edit.click();
+            edit.setText("123");
+            UiObject2 enter = uiDevice.findObject(By.text("发送"));
+            enter.click(1000);
+            systemWait(5);
+            Log.i(TAG, ""+i);
         }
     }
 

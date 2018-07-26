@@ -18,68 +18,6 @@ import tv.banban.common.Utils;
 public class TvCommon extends Common{
     private int m_iDelay = 1000;
     private UiDevice device = getDevice();
-//	public UiObject getUiObjByResId(String resId){
-//		UiObject uiObj = null;
-//		try {
-//			uiObj = new UiObject(new UiSelector().resourceId(resId));
-//		} catch (Exception e) {
-//			Utils.writeLogs(String.format("没有找到resource_id为[%s]的对象\r\n%s", resId, e), ERR_CODE);
-//		}
-//		return uiObj;
-//	}
-//
-//	public UiObject2 getUiObjByDesc(String sDesc){
-//		UiObject2 uiObj = null;
-//		try {
-//			//uiObj = new UiObject(new UiSelector().description(sDesc));
-//            uiObj = device.findObject(By.desc(sDesc));
-//		} catch (Exception e) {
-//			Utils.writeLogs(String.format("没有找到content-desc为[%s]的对象\r\n%s", sDesc, e), ERR_CODE);
-//		}
-//		return uiObj;
-//	}
-//
-//	public UiObject2 getUiObjByText(String sText){
-//		UiObject2 uiObj = null;
-//		try {
-//			//uiObj = new UiObject(new UiSelector().text(sText));
-//            uiObj = device.findObject(By.text(sText));
-//		} catch (Exception e) {
-//			Utils.writeLogs(String.format("没有找到text为[%s]的对象\r\n%s", sText, e), ERR_CODE);
-//		}
-//		return uiObj;
-//	}
-//
-//	public UiObject2 getUiObjByClass(String sClass){
-//		UiObject2 uiObj = null;
-//		try {
-//			//uiObj = new UiObject(new UiSelector().className(sClass));
-//            uiObj = device.findObject(By.clazz(sClass));
-//		} catch (Exception e) {
-//			Utils.writeLogs(String.format("没有找到class为[%s]的对象\r\n%s", sClass, e), ERR_CODE);
-//		}
-//		return uiObj;
-//	}
-
-// iType: 0-class 1-text 2-desc
-//public UiObject2 getUiObject(int iType, String sContent){
-//    UiObject2 uiObj = null;
-//    switch (iType) {
-//        case BY_CLASS:
-//            uiObj = getUiObjByClass(sContent);  // 根据class查找obj
-//            break;
-//        case BY_TEXT:
-//            uiObj = getUiObjByText(sContent);  // 根据text查找obj
-//            break;
-//        case BY_DESC:
-//            uiObj = getUiObjByDesc(sContent);  // 根据desc查找obj
-//            break;
-//        default:
-//            uiObj = getUiObjByResId(sContent);  // 根据id查找obj
-//            break;
-//    }
-//    return uiObj;
-//}
 
     public boolean isUiObjExists(String sResId){
         UiObject uiObj;
@@ -188,44 +126,6 @@ public class TvCommon extends Common{
 		}
 		return false;
 	}
-	
-//	public void uiObjClickByType(int iType, String sContent, int iTimes){
-//		UiObject uiObj = null;
-//		switch (iType) {
-//		case BY_CLASS:
-//			uiObj = getUiObjByClass(sContent);  // 根据class查找obj
-//			break;
-//		case BY_TEXT:
-//			uiObj = getUiObjByText(sContent);  // 根据text查找obj
-//			break;
-//		case BY_DESC:
-//			uiObj = getUiObjByDesc(sContent);  // 根据desc查找obj
-//			break;
-//		default:
-//			uiObj = getUiObjByResId(sContent);  // 根据id查找obj
-//			break;
-//		}
-//		if(isUiObjExists(iType, sContent, "")){
-//			for(int i = 0; i < iTimes; ++i){
-//				uiObjClick(uiObj);
-//			}
-//		}
-//	}
-	
-//	public boolean uiObjClickById(String resId){
-//		UiObject uiObj = getUiObjByResId(resId);
-//		return uiObjClick(uiObj);
-//	}
-//
-//	public boolean uiObjClickByDesc(String sDesc){
-//		UiObject uiObj = getUiObjByDesc(sDesc);
-//		return uiObjClick(uiObj);
-//	}
-//
-//	public boolean uiObjClickByText(String sText){
-//		UiObject uiObj = getUiObjByText(sText);
-//		return uiObjClick(uiObj);
-//	}
 	
 	public UiObject getUiObject(int iType, String sContent, int index){
         UiObject uiObj = null;

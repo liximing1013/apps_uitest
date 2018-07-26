@@ -31,17 +31,20 @@ public class UiActions {
     public final String TAG = "lxm";
     private final static String PREFIX_UNICODE = "\\u";
     protected static  String filePath = "storage/emulated/0/Android/data/tv.fun.appsautotest/cache";
+    protected static String x86_PACKNAME = "com.ee.xianshi.android";
+    protected static String x86_CLASSNAME = "com.imbb.banban.android.MainActivity";
 
 
     //设定等待时间
     public static final int WAIT = 5;
+    public static final int SHORT_WAIT = 2;
     //初始化
     protected long m_Time;
-    public String m_Expect = "";
-    public String m_Actual = "";
-    public boolean m_Pass = false;
-    public String resultStr = "";
-    public boolean resultFlag = true;
+    protected String m_Expect = "";
+    protected String m_Actual = "";
+    protected boolean m_Pass = false;
+    protected String resultStr = "";
+    protected boolean resultFlag = true;
 
 
     //得到当前方法的名字
@@ -65,14 +68,8 @@ public class UiActions {
     }
 
     public UiActions(UiDevice uiDevice){
+
         this.uiDevice = uiDevice;
-    }
-
-    protected void setUp(){
-    }
-
-    protected void tearDown(){
-
     }
 
     //id
@@ -116,7 +113,7 @@ public class UiActions {
         int i = 0;
         while (!uiobject.exists() && i < 5) {
             SolveProblems();
-            sleep(500);
+            sleep();
             if (i == 4) {
                 takeScreenToFile(uiDevice, str + "not find");
                 return false;
@@ -133,7 +130,7 @@ public class UiActions {
     }
 
     //截图
-    public static void takeScreenToFile(UiDevice device, String des) {
+    protected static void takeScreenToFile(UiDevice device, String des) {
         //取得当前时间
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -147,18 +144,6 @@ public class UiActions {
         device.takeScreenshot(file,1.0f,10);
     }
 
-    //截图
-    public String screenShot(String name) {//截图并命名
-        File file = new File("/mnt/sdcard/123/");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        File files = new File("/mnt/sdcard/123/"+name+".png");
-        UiDevice.getInstance().takeScreenshot(files);
-        String path = "/mnt/sdcard/123/" + name + ".png";
-        return path;
-    }
-
     private void SolveProblems() {
         try {
             initToastListener();
@@ -167,9 +152,9 @@ public class UiActions {
         }
     } //NULL
 
-    private void sleep(int time) {
+    protected void sleep() {
         try {
-            Thread.sleep(time);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -194,7 +179,6 @@ public class UiActions {
                     if (!(parcelable instanceof Notification)) {
                         String toastMessage = (String) event.getText().get(0);
                         long toastOccurTime = event.getEventTime();
-                        Log.i("autotest", "信息名称:" + toastMessage);
                         if (toastMessage.contains("")) {
                             JSONObject.quote(""); //jsonObject,put("")
                         } else if (toastMessage.contains("")) {
@@ -394,24 +378,6 @@ public class UiActions {
             SystemClock.sleep(500);
         }
     } //Enter*
-
-    public void videoClassificationByIndexClick(int index,String cls) throws UiObjectNotFoundException{
-        UiObject title = uiDevice.findObject(new UiSelector().text("视频分类").resourceId("com.bestv.ott:id/top_title"));
-        if(title.exists()){
-            UiObject obj = uiDevice.findObject(new UiSelector().index(index).className("android.widget.RelativeLayout"));
-            obj.clickAndWaitForNewWindow();
-            UiObject newPage = uiDevice.findObject(new UiSelector().className(cls));
-            while (!newPage.exists()){
-                UiObject newPage1 = uiDevice.findObject(new UiSelector().className(cls));
-                if(!newPage1.exists()){
-                    sleep(2000);
-                }
-            }
-        }else{
-            output("不在视频分类");
-            screenShot("videoClassificationByIndexClick");
-        }
-    }
 
     //明显输出
     protected void output(String text) {
