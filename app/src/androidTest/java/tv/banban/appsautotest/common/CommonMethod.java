@@ -19,6 +19,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.util.Log;
@@ -627,6 +628,19 @@ public class CommonMethod extends UiActions {
         }
         systemWait(time);
         uiDevice.waitForIdle();
+    }
+
+    // 滚动
+    public void scroll() throws UiObjectNotFoundException{
+        UiScrollable scroll = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
+        UiSelector data = new UiSelector().text("个人资料");
+        UiSelector gift = new UiSelector().text("收到的礼物");
+        UiSelector video = new UiSelector().text("视频动态");
+        UiSelector[] list = {data,gift,video};
+        for(int i = 0;i<=list.length-1;i++){
+            scroll.scrollIntoView(list[i]);
+            systemWait(1);
+        }
     }
 
 }

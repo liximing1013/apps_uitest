@@ -96,7 +96,7 @@ public class TestBanHotChat extends CommonMethod{
     }
 
     @Test //聊天页面循环发送消息
-    public void test(){
+    public void testRY(){
         UiObject2 edit = uiDevice.findObject(By.text("请输入内容...").clazz("android.widget.EditText"));
         edit.clear();
         for(int i = 0; i<=100; i++){

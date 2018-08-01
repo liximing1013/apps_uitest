@@ -33,6 +33,7 @@ public class UiActions {
     protected static  String filePath = "storage/emulated/0/Android/data/tv.fun.appsautotest/cache";
     protected static String x86_PACKNAME = "com.ee.xianshi.android";
     protected static String x86_CLASSNAME = "com.imbb.banban.android.MainActivity";
+    protected static String ANDROID_PACKNAME = "com.imbb.banban.android";
 
 
     //设定等待时间
@@ -45,7 +46,6 @@ public class UiActions {
     protected boolean m_Pass = false;
     protected String resultStr = "";
     protected boolean resultFlag = true;
-
 
     //得到当前方法的名字
     public String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
