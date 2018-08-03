@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.uiautomator.By;
@@ -576,7 +577,7 @@ public class CommonMethod extends UiActions {
         waitForIdle(1);
     }
 
-    //判断模拟器app状态并杀掉进程
+    //判断模拟器app状态并重启进程
     protected void stopApp(){
         uiDevice.pressHome();
         systemWait(SHORT_WAIT);
@@ -592,7 +593,7 @@ public class CommonMethod extends UiActions {
         if(uiDevice.hasObject(By.text("应用信息").res("android:id/action_bar_title"))){
             UiObject2 forceStop = uiDevice.findObject(By.text("强行停止").res("com.android.settings:id/left_button"));
             if(forceStop.isFocusable()){
-                forceStop.clickAndWait(Until.newWindow(),1);
+                forceStop.clickAndWait(Until.newWindow(),3000);
                 systemWait(SHORT_WAIT);
                 UiObject2 sure = uiDevice.findObject(By.text("确定"));
                 sure.click();
@@ -621,7 +622,7 @@ public class CommonMethod extends UiActions {
         systemWait(2);
     }
 
-    // 页面Idle + 等待时间限制
+    //页面Idle + 等待时间限制
     protected void waitForIdle(int time) {
         if (time > 3) {
             systemWait(3);
@@ -630,7 +631,7 @@ public class CommonMethod extends UiActions {
         uiDevice.waitForIdle();
     }
 
-    // 滚动
+    //滚动
     public void scroll() throws UiObjectNotFoundException{
         UiScrollable scroll = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
         UiSelector data = new UiSelector().text("个人资料");
@@ -642,5 +643,16 @@ public class CommonMethod extends UiActions {
             systemWait(1);
         }
     }
+
+    // 滚动到指定位置
+    protected void scrollToView(String text) throws UiObjectNotFoundException{
+        UiScrollable scroll = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
+        UiSelector reception = new UiSelector().text(text);
+        scroll.scrollIntoView(reception);
+        if(reception != null){
+            Verification(text);
+        }
+    }
+
 
 }
