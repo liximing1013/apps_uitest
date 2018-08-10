@@ -359,10 +359,10 @@ public class CommonMethod extends UiActions {
             .index(3));
             int hotVideo = searchCell.getChildCount();//3
             if(viewShowCount == 8&&hotVideo == 3){
-                output("True");
+                Log.i(TAG, "getSearchPageView: True");
             }
         }else{
-            output("大家都在搜显示为空");
+            Log.i(TAG, "getSearchPageView: 大家都在搜显示为空");
         }
     }
 
@@ -375,7 +375,7 @@ public class CommonMethod extends UiActions {
                 .packageName("android.widget.RelativeLayout"));
         win.clickAndWaitForNewWindow();
         if(i >window-1){
-            output("please input 0-6");
+            Log.i(TAG, "getNewsPageViewAndClick: please input 0-6");
         }
     }
 
@@ -484,7 +484,7 @@ public class CommonMethod extends UiActions {
         //新建一张图片
         Bitmap image = BitmapFactory.decodeFile(path);
         //通过坐标截取图片
-        image = image.createBitmap(image,rect.left,rect.top,rect.width(),rect.height());
+        image = Bitmap.createBitmap(image,rect.left,rect.top,rect.width(),rect.height());
         //保存图片
         saveBitmap(image,"Image");
     }
@@ -538,6 +538,7 @@ public class CommonMethod extends UiActions {
         //启动应用
         launchIntent.setComponent(new ComponentName(packageName,className));
         context.startActivity(launchIntent);
+        uiDevice.waitForIdle();
         systemWait(8);
     }
 
@@ -624,7 +625,7 @@ public class CommonMethod extends UiActions {
 
     //页面Idle + 等待时间限制
     protected void waitForIdle(int time) {
-        if (time > 3) {
+        if(time > 3) {
             systemWait(3);
         }
         systemWait(time);
@@ -653,6 +654,4 @@ public class CommonMethod extends UiActions {
             Verification(text);
         }
     }
-
-
 }

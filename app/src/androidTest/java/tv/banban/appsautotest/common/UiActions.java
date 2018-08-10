@@ -50,9 +50,6 @@ public class UiActions {
     //得到当前方法的名字
     public String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 
-    //存放tab List
-    public List tabToSelect;
-
     private final int CLICK_ID = 1000;
     private final int CLICK_text = 1001;
     private final int CLICK_clazz = 1002;
@@ -62,9 +59,8 @@ public class UiActions {
         return uiDevice;
     }
 
+    // 构造器
     public UiActions() {
-
-        this.tabToSelect = new ArrayList();
     }
 
     public UiActions(UiDevice uiDevice){
@@ -184,6 +180,7 @@ public class UiActions {
                         } else if (toastMessage.contains("")) {
                             JSONObject.quote(""); //jsonObject,put("")
                         } else {
+                            Log.i(TAG, "onAccessibilityEvent: TT");
                         }
                     }
                 } catch (Throwable e) {

@@ -28,6 +28,12 @@ import tv.banban.common.Utils;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestBanSquare extends CommonMethod{
 
+    @BeforeClass
+    public static void BeforeClass(){
+        // 清理当前路径下图片
+        clearFiles(filePath);
+    }
+
     // 模拟器
     @Before
     public void setUp(){
@@ -74,12 +80,19 @@ public class TestBanSquare extends CommonMethod{
     public void test_square_02_ReceptionHallJump(){
         try{
             scrollToView("接待大厅");
-            clickByCoordinate(688,1058,2);
-            ScreenShot("test_square_02.png");
-            UiObject2 page = uiDevice.findObject(By.text("活跃").clazz("android.widget.TextView"));
-            m_Actual = page.getText();
-            m_Expect = "活跃";
-            Utils.writeCaseResult("跳转页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            UiObject2 recep = uiDevice.findObject(By.textContains("接待大厅"));
+            if(recep!=null){
+                recep.clickAndWait(Until.newWindow(),5000);
+                systemWait(2);
+                ScreenShot("test_square_02.png");
+                UiObject2 page = uiDevice.findObject(By.text("活跃").clazz("android.widget.TextView"));
+                m_Actual = page.getText();
+                m_Expect = "活跃";
+                Utils.writeCaseResult("跳转页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            }else {
+                ScreenShot("test_square_02_error.png");
+                Assert.fail("接待大厅模块不能为空");
+            }
         }catch (Exception e){
             e.printStackTrace();
             resultStr = e.toString();
@@ -395,6 +408,114 @@ public class TestBanSquare extends CommonMethod{
             }
             pressBack(1);
             clickByTextAndClazz("交友","android.widget.TextView");
+        }
+    }
+
+    @Test //消息‘+’——发起群聊
+    public void test_square_12_MessageAddIconToGroupChat(){
+        try{
+            clickByTextAndClazz("消息","android.widget.TextView");
+            clickByCoordinate(594,113,2); //模拟器分辨率
+            UiObject2 groupChat = uiDevice.findObject(By.textContains("发起群聊"));
+            if(groupChat != null){
+                groupChat.clickAndWait(Until.newWindow(),3000);
+                ScreenShot("test_square_12.png");
+                UiObject2 page = uiDevice.findObject(By.text("创建群").clazz("android.widget.TextView"));
+                m_Actual = page.getText();
+                m_Expect = "创建群";
+                Utils.writeCaseResult("跳转群聊页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }finally {
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
+            pressBack(1);
+        }
+    }
+
+    @Test //消息‘+’——创建家族群
+    public void test_square_13_MessageAddIconToFamily(){
+        try{
+            clickByTextAndClazz("消息","android.widget.TextView");
+            clickByCoordinate(594,113,2); //模拟器分辨率
+            UiObject2 family = uiDevice.findObject(By.textContains("创建家族群"));
+            if(family != null){
+                family.clickAndWait(Until.newWindow(),3000);
+                clickByCoordinate(660,70,2); //模拟器分辨率
+                ScreenShot("test_square_13.png");
+                UiObject2 page = uiDevice.findObject(By.text("家族设置"));
+                m_Actual = page.getText();
+                m_Expect = "家族设置";
+                Utils.writeCaseResult("跳转家族页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }finally {
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
+            pressBack(2);
+        }
+    }
+
+    @Test //消息‘+’——创建房间
+    public void test_square_14_MessageAddIconToCreateRoom(){
+        try{
+            clickByTextAndClazz("消息","android.widget.TextView");
+            clickByCoordinate(594,113,2); //模拟器分辨率
+            UiObject2 room = uiDevice.findObject(By.textContains("创建房间"));
+            if(room != null){
+                room.clickAndWait(Until.newWindow(),3000);
+                ScreenShot("test_square_14.png");
+                UiObject2 page = uiDevice.findObject(By.text("购买爵位或者通过官方考核才能创建聊天室"));
+                m_Actual = page.getText();
+                m_Expect = "购买爵位或者通过官方考核才能创建聊天室";
+                Utils.writeCaseResult("跳转房间页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }finally {
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
+            pressBack(1);
+        }
+    }
+
+    @Test //联系人
+    public void test_square_15_Contacts(){
+        try{
+            clickByTextAndClazz("消息","android.widget.TextView");
+            clickByCoordinate(660,113,2); //模拟器分辨率
+            if(uiDevice.hasObject(By.textContains("联系人"))){
+                UiObject2 friends = uiDevice.findObject(By.text("好友"));
+                Assert.assertEquals("好友",friends.getText());
+                UiObject2 follow = uiDevice.findObject(By.text("关注"));
+                Assert.assertEquals("关注",follow.getText());
+                UiObject2 follower = uiDevice.findObject(By.text("粉丝"));
+                Assert.assertEquals("粉丝",follower.getText());
+                UiObject2 group = uiDevice.findObject(By.text("群组"));
+                Assert.assertEquals("群组",group.getText());
+                UiObject2 room = uiDevice.findObject(By.text("房间"));
+                Assert.assertEquals("房间",room.getText());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }finally {
+            if (resultStr != null) {
+                Utils.writeCaseResult(resultStr, resultFlag, m_Time);
+            }
+            pressBack(1);
         }
     }
 
