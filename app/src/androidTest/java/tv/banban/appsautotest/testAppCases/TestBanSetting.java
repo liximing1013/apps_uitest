@@ -13,6 +13,7 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
+import android.test.suitebuilder.annotation.Smoke;
 import android.util.Log;
 
 import com.squareup.okhttp.internal.Util;
@@ -68,10 +69,11 @@ public class TestBanSetting extends CommonMethod {
         try {
             stopApp();  //adb shell dumpsys window w |findstr \/ |findstr name=
             startApp(x86_PACKNAME, x86_CLASSNAME); //启动x86模拟器
+//            startApp(ANDROID_PACKNAME,x86_CLASSNAME); //启动Android版伴伴
             appIsRunning();
-            if(x86_PACKNAME.equals(uiDevice.getCurrentPackageName())){
+            if(x86_PACKNAME.equalsIgnoreCase(uiDevice.getCurrentPackageName())){
                 clickByTextAndClazz("我","android.widget.TextView"); //1s
-                clickByCoordinate(433,112,2); //2s
+                clickByCoordinate(433,112, SHORT_WAIT); //2s
                 ScreenShot("test_settings_01.png"); //storage/emulated/0/Android/data/tv.fun.appsautotest/cache
                 UiObject2 page = uiDevice.findObject(By.text("个人资料").clazz("android.widget.TextView"));
                 m_Actual = page.getText(); //实际结果
@@ -85,23 +87,22 @@ public class TestBanSetting extends CommonMethod {
                 m_Expect = "520";
                 Utils.writeCaseResult("礼物墙模块错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
             }
-//            if(ANDROID_PACKNAME.equals(uiDevice.getCurrentPackageName())){
-//                clickByTextAndClazz("我","android.widget.TextView");
-//                clickByCoordinate(433,112,2);
-//                ScreenShot("test_settings_01.png");
-//                UiObject2 page = uiDevice.findObject(By.text("个人资料").clazz("android.widget.TextView"));
-//                m_Actual = page.getText();
-//                m_Expect = "个人资料";
-//                Assert.assertEquals("跳转个人资料页面错误",m_Expect,m_Actual);
-//                UiScrollable scroll = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
-//                UiSelector gift = new UiSelector().text("收到的礼物");
-//                scroll.scrollIntoView(gift);
-//                UiObject2 giftTotal = uiDevice.findObject(By.textContains("520"));
-//                m_Actual = giftTotal.getText();
-//                Log.i(TAG, "test_settings_01_MyPagePersonInformation: "+m_Actual);
-//                m_Expect = "520";
-//                Utils.writeCaseResult("礼物墙模块错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
-//            }
+            else if(ANDROID_PACKNAME.equalsIgnoreCase(uiDevice.getCurrentPackageName())){
+                clickByTextAndClazz("我","android.widget.TextView");
+                clickByCoordinate(433,112,SHORT_WAIT);
+                ScreenShot("test_settings_01.png");
+                UiObject2 page = uiDevice.findObject(By.text("个人资料").clazz("android.widget.TextView"));
+                m_Actual = page.getText();
+                m_Expect = "个人资料";
+                Assert.assertEquals("跳转个人资料页面错误",m_Expect,m_Actual);
+                UiScrollable scroll = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
+                UiSelector gift = new UiSelector().text("收到的礼物");
+                scroll.scrollIntoView(gift);
+                UiObject2 giftTotal = uiDevice.findObject(By.textContains("520"));
+                m_Actual = giftTotal.getText();
+                m_Expect = "520";
+                Utils.writeCaseResult("礼物墙模块错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            }
         }catch (Exception e){
             e.printStackTrace();
             resultStr = e.toString();
@@ -158,9 +159,9 @@ public class TestBanSetting extends CommonMethod {
         try {
             clickByTextAndClazz("钱包","android.widget.TextView");
             ScreenShot("test_settings_04.png");
-            UiObject2 page = uiDevice.findObject(By.text("立即充值").clazz("android.widget.TextView"));
+            UiObject2 page = uiDevice.findObject(By.textContains("交易").clazz("android.widget.TextView"));
             m_Actual = page.getText();
-            m_Expect = "立即充值";
+            m_Expect = "交易";
             Utils.writeCaseResult("跳转钱包页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
         }catch (Exception e){
             e.printStackTrace();
@@ -209,6 +210,8 @@ public class TestBanSetting extends CommonMethod {
                 m_Actual = page.getText();
                 m_Expect = "接单记录";
                 Utils.writeCaseResult("跳转邀约页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+            }else{
+                Log.i(TAG, "test_settings_06_InviteAndOrderPage: "+"用户是大神");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -268,25 +271,48 @@ public class TestBanSetting extends CommonMethod {
             ScreenShot("test_settings_08.png");
             UiObject2 accountPage = uiDevice.findObject(By.text("手机号").clazz("android.widget.TextView"));
             Assert.assertEquals("跳转账号设置页面错误","手机号",accountPage.getText());
+            UiObject2 auth = uiDevice.findObject(By.text("身份认证"));
+            if(auth != null){
+                clickByTextAndClazz("身份认证","android.widget.TextView");
+                ScreenShot("test_settings_08_1.png");
+                UiObject2 id = uiDevice.findObject(By.text("身份证号"));
+                m_Actual = id.getText();
+                m_Expect = "身份证号";
+                Utils.writeCaseResult("跳转认证页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
+                pressBack(1);
+            }else{
+                Assert.assertFalse(true);
+                Log.i(TAG, "test_settings_08_AccountSettingsPage: "+auth.getText());
+            }
             UiObject2 cashMoney = uiDevice.findObject(By.text("提现账号"));
             if(cashMoney != null){
                 clickByTextAndClazz("提现账号","android.widget.TextView");
-                ScreenShot("test_settings_08_1.png");
+                ScreenShot("test_settings_08_2.png");
                 UiObject2 cashPage = uiDevice.findObject(By.text("提现到银行卡/支付宝"));
                 m_Actual = cashPage.getText();
                 m_Expect = "提现到银行卡/支付宝";
                 Utils.writeCaseResult("跳转提现页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
                 pressBack(1);
+            }else{
+                Assert.assertFalse(true);
+                Log.i(TAG, "test_settings_08_AccountSettingsPage: "+cashMoney.getText());
             }
+
+            UiObject2 guild = uiDevice.findObject(By.text("公会ID"));
+            Assert.assertEquals("ID","公会ID",guild.getText());
+
             UiObject2 Hot = uiDevice.findObject(By.text("红人认证"));
             if(Hot != null){
                 clickByTextAndClazz("红人认证","android.widget.TextView");
-                ScreenShot("test_settings_08_2.png");
+                ScreenShot("test_settings_08_3.png");
                 UiObject2 cashPage = uiDevice.findObject(By.text("通过红人认证后您将享有以下特权"));
                 m_Actual = cashPage.getText();
                 m_Expect = "通过红人认证后您将享有以下特权";
                 Utils.writeCaseResult("跳转红人认证页面错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
                 pressBack(1);
+            }else{
+                Assert.assertFalse(true);
+                Log.i(TAG, "test_settings_08_AccountSettingsPage: "+Hot.getText());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -382,9 +408,9 @@ public class TestBanSetting extends CommonMethod {
     @Test //编辑个人资料页面
     public void test_settings_13_EditPersonalDataPage(){
         try {
-            clickByCoordinate(600,150,2);
+            clickByCoordinate(600,150,SHORT_WAIT);
             UiObject2 edit = uiDevice.findObject(By.text("编辑"));
-            edit.clickAndWait(Until.newWindow(), 3000);
+            edit.clickAndWait(Until.newWindow(), WAIT);
             ScreenShot("test_settings_13.png");
             UiObject2 page = uiDevice.findObject(By.text("编辑个人资料").clazz("android.widget.TextView"));
             m_Actual = page.getText();
@@ -405,13 +431,13 @@ public class TestBanSetting extends CommonMethod {
     @Test //开启接单
     public void test_settings_14_OpenOrderButton() {
         try {
-            UiObject2 recoveryOrder = uiDevice.findObject(By.text("恢复接单"));
+            UiObject2 recoveryOrder = uiDevice.findObject(By.text("自动恢复"));
             if (recoveryOrder == null) {
                 UiObject2 Switch = uiDevice.findObject(By.clazz("android.widget.Switch"));
                 Switch.click();
-                waitForIdle(2);
+                waitForIdle(SHORT_WAIT);
                 UiObject2 recovery = uiDevice.findObject(By.text("不自动恢复"));
-                recovery.clickAndWait(Until.newWindow(), 3000);
+                recovery.clickAndWait(Until.newWindow(), WAIT);
                 ScreenShot("test_settings_14_1.png");
                 UiObject2 page = uiDevice.findObject(By.text("选择多久后自动恢复").clazz("android.widget.TextView"));
                 m_Actual = page.getText();
@@ -419,7 +445,7 @@ public class TestBanSetting extends CommonMethod {
                 Utils.writeCaseResult("错误", m_Actual.equalsIgnoreCase(m_Expect), m_Time);
             } else {
                 UiObject2 recovery = uiDevice.findObject(By.text("不自动恢复"));
-                recovery.clickAndWait(Until.newWindow(), 3000);
+                recovery.clickAndWait(Until.newWindow(), WAIT);
                 ScreenShot("test_settings_14_2.png");
                 UiObject2 page = uiDevice.findObject(By.text("选择多久后自动恢复").clazz("android.widget.TextView"));
                 m_Actual = page.getText();
@@ -441,31 +467,53 @@ public class TestBanSetting extends CommonMethod {
     public void test_settings_15_PutForwardToBalance(){
         try {
             UiObject2 wallet = uiDevice.findObject(By.text("钱包").clazz("android.widget.TextView"));
-            wallet.clickAndWait(Until.newWindow(),2000);
-            systemWait(2);
+            wallet.clickAndWait(Until.newWindow(),WAIT);
+            systemWait(SHORT_WAIT);
             UiObject2 putForward = uiDevice.findObject(By.textContains("可提现余额"));
             if(putForward != null){
-                clickByCoordinate(400,320,2);
-                UiObject2 make = uiDevice.findObject(By.text("可消费余额"));
-                make.clickAndWait(Until.newWindow(),2000);
-                systemWait(2);
-                ScreenShot("test_settings_15_1.png");
-                UiObject2 page1 = uiDevice.findObject(By.text("提现到可消费余额").clazz("android.widget.TextView"));
-                m_Actual = page1.getText();
-                m_Expect = "提现到可消费余额";
-                Utils.writeCaseResult("跳转页面错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
-                pressBack(1);
-                clickByCoordinate(400,320,2);
+                putForward.clickAndWait(Until.newWindow(),WAIT);
+                systemWait(SHORT_WAIT);
                 UiObject2 card = uiDevice.findObject(By.text("银行卡/支付宝"));
-                card.clickAndWait(Until.newWindow(),2000);
-                systemWait(2);
-                ScreenShot("test_settings_15_2.png");
+                card.clickAndWait(Until.newWindow(),WAIT);
+                systemWait(SHORT_WAIT);
+                ScreenShot("test_settings_15_1.png");
                 UiObject2 page2 = uiDevice.findObject(By.text("提现到银行卡/支付宝").clazz("android.widget.TextView"));
                 m_Actual = page2.getText();
                 m_Expect = "提现到银行卡/支付宝";
                 Utils.writeCaseResult("跳转页面错误",m_Actual.equalsIgnoreCase(m_Expect), m_Time);
             }else {
                 Assert.assertTrue("Don't Have Money",true);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            resultStr = e.toString();
+            resultFlag = false;
+        }finally {
+            if(resultStr != null){
+                Utils.writeCaseResult(resultStr,resultFlag,m_Time);
+            }
+            pressBack(1);
+        }
+    }
+
+    @Test //立即充值
+    public void test_settings_16_Recharge(){
+        try {
+            UiObject2 wallet = uiDevice.findObject(By.text("钱包").clazz("android.widget.TextView"));
+            wallet.clickAndWait(Until.newWindow(),SHORT_WAIT);
+            systemWait(SHORT_WAIT);
+            UiObject2 recharge = uiDevice.findObject(By.textContains("立即充值"));
+            if(recharge != null){
+                recharge.clickAndWait(Until.newWindow(),WAIT);
+                systemWait(SHORT_WAIT);
+                if(uiDevice.hasObject(By.text("用户充值"))){
+                    UiObject2 aPay = uiDevice.findObject(By.text("支付宝"));
+                    Assert.assertEquals(" ","支付宝",aPay.getText());
+                    UiObject2 wxPay = uiDevice.findObject(By.text("微信"));
+                    Assert.assertEquals(" ","微信",wxPay.getText());
+                }
+            }else {
+                Assert.assertFalse("Don't have recharge entrance",true);
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -46,11 +46,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertThat;
+
 /**
  * Created by lixm on 2017/12/1.
  */
 
-public class CommonMethod extends UiActions {
+public class CommonMethod extends UiActions{
     private String path;
 
 //    public UiDevice uiDevice;
@@ -380,7 +383,7 @@ public class CommonMethod extends UiActions {
     }
 
     //获取文件MD5值
-    public static String getMd5(File file) throws FileNotFoundException {
+    public static String getMd5(File file){
         String value = null;
         FileInputStream in = null;
         try {
@@ -421,7 +424,7 @@ public class CommonMethod extends UiActions {
     }
 
     //图片比较
-    public boolean imageComapre() throws UiObjectNotFoundException {
+    public boolean imageComapre(){
 
         String path = "/data/local/tmp/";
         String imageName1 = "image1.png";
@@ -452,7 +455,7 @@ public class CommonMethod extends UiActions {
     }
 
     //获取某种搜索条件组件的数量
-    public void collectCount() throws UiObjectNotFoundException{
+    public void collectCount(){
         UiCollection collection = new UiCollection(new UiSelector().resourceId("com.bestv.ott:id/live_against_list"));
         int we = collection.getChildCount(new UiSelector().resourceId("com.bestv.ott:id/container"));
         Log.d(TAG, "selectLocation: "+we);
@@ -480,7 +483,7 @@ public class CommonMethod extends UiActions {
     }
 
     //截图一张保存
-    private void ImageCapture(Rect rect,String path) throws UiObjectNotFoundException{
+    private void ImageCapture(Rect rect,String path){
         //新建一张图片
         Bitmap image = BitmapFactory.decodeFile(path);
         //通过坐标截取图片
@@ -539,7 +542,7 @@ public class CommonMethod extends UiActions {
         launchIntent.setComponent(new ComponentName(packageName,className));
         context.startActivity(launchIntent);
         uiDevice.waitForIdle();
-        systemWait(8);
+        systemWait(WAIT*2);
     }
 
     //清理图片
@@ -583,27 +586,37 @@ public class CommonMethod extends UiActions {
         uiDevice.pressHome();
         systemWait(SHORT_WAIT);
         UiObject2 settings = uiDevice.findObject(By.text("设置"));
-        settings.clickAndWait(Until.newWindow(),3000);
+        settings.clickAndWait(Until.newWindow(), WAIT);
         systemWait(SHORT_WAIT);
-        clickByTextAndClazz("应用","android.widget.TextView");
+        clickByTextAndClazz("应用", "android.widget.TextView");
         systemWait(SHORT_WAIT);
+        // 有x86包和安卓包时判断
         UiObject2 ban = uiDevice.findObject(By.text("伴伴").res("com.android.settings:id/app_name")
                 .pkg("com.android.settings"));
-        ban.clickAndWait(Until.newWindow(),3000);
+//        UiObject ban = uiDevice.findObject(new UiSelector().text("伴伴").resourceId("com.android.settings:id/app_name").index(1));
+//        ban.clickAndWaitForNewWindow();
+//        UiObject2 listView = uiDevice.findObject(By.clazz("android.widget.ListView").res("android:id/list"));
+//        int grid = listView.getChildCount();
+        ban.clickAndWait(Until.newWindow(), WAIT);
         systemWait(SHORT_WAIT);
-        if(uiDevice.hasObject(By.text("应用信息").res("android:id/action_bar_title"))){
-            UiObject2 forceStop = uiDevice.findObject(By.text("强行停止").res("com.android.settings:id/left_button"));
-            if(forceStop.isFocusable()){
-                forceStop.clickAndWait(Until.newWindow(),3000);
-                systemWait(SHORT_WAIT);
-                UiObject2 sure = uiDevice.findObject(By.text("确定"));
-                sure.click();
-                systemWait(SHORT_WAIT);
-            }else {
-                uiDevice.pressHome();
+        UiObject2 appSize = uiDevice.findObject(By.res("com.android.settings:id/app_size").text("版本 1.0.1.2"));
+        if (appSize.getText().equalsIgnoreCase("版本 1.0.1.2")) {
+            pressBack(1);
+            clickByCoordinate(300,300,SHORT_WAIT);
+            if (uiDevice.hasObject(By.text("应用信息").res("android:id/action_bar_title"))) {
+                UiObject2 forceStop = uiDevice.findObject(By.text("强行停止").res("com.android.settings:id/left_button"));
+                if (forceStop.isFocusable()) {
+                    forceStop.clickAndWait(Until.newWindow(), WAIT);
+                    systemWait(SHORT_WAIT);
+                    UiObject2 sure = uiDevice.findObject(By.text("确定"));
+                    sure.click();
+                    systemWait(SHORT_WAIT);
+                } else {
+                    uiDevice.pressHome();
+                }
             }
+            uiDevice.pressHome();
         }
-        uiDevice.pressHome();
     }
 
     //判断在app
@@ -620,7 +633,7 @@ public class CommonMethod extends UiActions {
     protected void Verification(String str){
         UiObject2 rec = uiDevice.findObject(By.text(str));
         Assert.assertEquals(str, rec.getText());
-        systemWait(2);
+        systemWait(SHORT_WAIT);
     }
 
     //页面Idle + 等待时间限制
@@ -645,13 +658,18 @@ public class CommonMethod extends UiActions {
         }
     }
 
-    // 滚动到指定位置
+    //滚动到指定位置
     protected void scrollToView(String text) throws UiObjectNotFoundException{
         UiScrollable scroll = new UiScrollable(new UiSelector().className("android.widget.ScrollView"));
-        UiSelector reception = new UiSelector().text(text);
+        UiSelector reception = new UiSelector().textContains(text);
         scroll.scrollIntoView(reception);
         if(reception != null){
             Verification(text);
         }
+    }
+
+    //检测测试条件是不是为空
+    public void checkPreconditions() {
+        assertThat(uiDevice, notNullValue());
     }
 }

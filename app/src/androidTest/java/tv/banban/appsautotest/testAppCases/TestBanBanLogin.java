@@ -36,11 +36,7 @@ public class TestBanBanLogin extends CommonMethod{
 
     @Test
     public void TestWXLogin(){
-        if(checkLoginStatus()){
-            Log.i(TAG, "TestWXLogin: "+"T");
-        }else {
-            Log.i(TAG, "TestWXLogin: "+"F");
-        }
+
     }
 
     @Test
@@ -53,18 +49,8 @@ public class TestBanBanLogin extends CommonMethod{
 
     }
 
-    private boolean checkLoginStatus() {
-        Boolean status = true;
-        UiObject2 message = uiDevice.findObject(By.text("消息").clazz("android.widget.TextView"));
-        message.click();
-        systemWait(1);
-        if (uiDevice.hasObject(By.text("请使用以下方式登录").clazz("android.widget.TextView"))) {
-            return status;
-        }
-        return false;
-    }
-
-    private void loginOut(){
+    @Test
+    public void loginOut(){
         UiObject2 my = uiDevice.findObject(By.text("我").clazz("android.widget.TextView"));
         my.clickAndWait(Until.newWindow(), 2);
         systemWait(2);
@@ -81,6 +67,8 @@ public class TestBanBanLogin extends CommonMethod{
         Assert.assertEquals("请使用以下方式登录",text.getText());
         uiDevice.click(320,100);
         pressBack(2);
+        UiObject2 nox = uiDevice.findObject(By.text("文件管理器"));
+        Assert.assertEquals("","文件管理器",nox.getText());
     }
 
     @Test
